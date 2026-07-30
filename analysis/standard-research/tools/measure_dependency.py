@@ -194,9 +194,15 @@ def main():
         print(f"{sysname:14s} {d['components_measured']:4d} {d['avg_loose']:7.1f}% {st:>8s} {rg:>14s} {doc:>8s}")
     errs = [r for r in rows if "error" in r]
     if errs:
+        # 경고만 찍고 넘어가면 그 컴포넌트가 집계에서 빠진 채 더 작은 분모로 리포트가
+        # 만들어지고, 커밋된 측정값을 부분 결과로 덮어쓴다. 고정 소스에서 대상 파일이
+        # 사라졌다는 것은 소스 구조가 바뀐 것이므로 세우는 게 맞다.
         print("\n측정 실패:")
         for r in errs:
             print(f"  {r['system']:14s} {r['component']:10s} {r['error']}")
+        raise FileNotFoundError(
+            f"대상 파일 {len(errs)}개를 찾지 못했습니다 — 소스 구조가 바뀐 것 같습니다. "
+            f"TARGETS 경로를 갱신하세요.")
     print(f"\n-> {out_path}")
 
 

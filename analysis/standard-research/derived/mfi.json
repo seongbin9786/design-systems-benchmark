@@ -23,11 +23,11 @@
    "figma_component_sets": 177,
    "figma_unique_after_norm": 124,
    "code_components": 125,
-   "matched": 49,
-   "component_match_rate": 39.2,
+   "matched": 47,
+   "component_match_rate": 37.6,
    "naming_similarity": 77.2,
-   "naming_similarity_matched_only": 99.2,
-   "mfi_partial": 54.4,
+   "naming_similarity_matched_only": 99.8,
+   "mfi_partial": 53.5,
    "matched_sample": [
     {
      "code": "AILabel",

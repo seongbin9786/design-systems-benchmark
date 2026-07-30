@@ -101,23 +101,43 @@ def main():
         inv = comps["inventory"][system]
         code_names = sorted({r for names in inv["canonical"].values() for r in names} | set(inv["unmapped"]))
 
-        matched, unmatched, sims, all_best = [], [], [], []
+        # 로드맵 §2.1 은 1:1 대응을 정의한다. 코드 이름마다 독립적으로 최근접을 고르면
+        # 같은 Figma SET 을 여러 코드가 함께 소비한다 (Carbon 의 Pagination·PaginationNav 가
+        # 같은 SET 을, Tab·Tabs 가 같은 SET 을 먹었다). 점수 높은 쌍부터 확정하고
+        # 이미 쓴 SET 은 재사용하지 않는다 (greedy 1:1).
+        cands = []
+        best_of = {}
         for c in code_names:
             cn = norm(c)
             if not cn:
                 continue
-            best, score = None, 0.0
+            top, top_score = None, 0.0
             for fn, orig in figma_norm.items():
-                s = sim(cn, fn)
-                if s > score:
-                    best, score = (fn, orig), s
-            all_best.append(score)
-            if score >= 0.85:
-                matched.append({"code": c, "figma": best[1], "similarity": round(score, 3)})
-                sims.append(score)
-            else:
-                unmatched.append({"code": c, "closest": best[1] if best else None,
-                                  "similarity": round(score, 3)})
+                sc = sim(cn, fn)
+                cands.append((sc, c, fn, orig))
+                if sc > top_score:
+                    top, top_score = orig, sc
+            best_of[c] = (top, top_score)
+
+        matched, unmatched, sims = [], [], []
+        all_best = [v[1] for v in best_of.values()]
+        taken_code, taken_figma = set(), set()
+        for sc, c, fn, orig in sorted(cands, key=lambda x: -x[0]):
+            if sc < 0.85:
+                break
+            if c in taken_code or fn in taken_figma:
+                continue
+            taken_code.add(c)
+            taken_figma.add(fn)
+            matched.append({"code": c, "figma": orig, "similarity": round(sc, 3)})
+            sims.append(sc)
+        for c in best_of:
+            if c not in taken_code:
+                top, top_score = best_of[c]
+                unmatched.append({"code": c, "closest": top,
+                                  "similarity": round(top_score, 3)})
+        matched.sort(key=lambda m: m["code"])
+        unmatched.sort(key=lambda u: u["code"])
 
         n_code = len([c for c in code_names if norm(c)])
         match_rate = len(matched) / n_code if n_code else 0.0

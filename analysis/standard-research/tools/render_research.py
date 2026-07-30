@@ -54,11 +54,15 @@ def build():
         seg["기타"] = round(max(0.0, 100 - sum(seg.values())), 1)
         comp_rows.append((s, seg, f'{vocab["composition"][s]["total"]}개'))
     chart_b = (legend(COMP_SLOTS, COMP_LABEL) + stacked(comp_rows, slots, COMP_LABEL, residual="기타"))
+    # `기타·미분류` 는 이미 고정 슬롯을 뺀 잔여이므로 미분류를 포함한다.
+    # 별도 열로 또 더하면 합계가 100% 를 넘는다 (Carbon 이 139.6% 였다).
+    # 잔여의 내부 구성을 괄호로 덧붙여 두 번 세지 않고 드러낸다.
     table_b = table_view(
-        ["시스템", "추출 총수"] + [COMP_LABEL[k] for k in slots] + ["미분류"],
+        ["시스템", "추출 총수"] + [COMP_LABEL[k] for k in slots[:-1]]
+        + ["기타·미분류 (그중 미분류)"],
         [[e(s), vocab["composition"][s]["total"]]
-         + [f'{seg.get(k, 0):.1f}%' for k in slots]
-         + [f'{vocab["composition"][s]["pct"].get("미분류", 0):.1f}%']
+         + [f'{seg.get(k, 0):.1f}%' for k in slots[:-1]]
+         + [f'{seg.get("기타", 0):.1f}% ({vocab["composition"][s]["pct"].get("미분류", 0):.1f}%)']
          for s, seg, _ in comp_rows],
         "토큰 구성비")
 
@@ -357,7 +361,8 @@ def build_md():
         pct = vocab["composition"][s]["pct"]
         seg = {k: pct.get(k, 0) for k in COMP_SLOTS}
         seg["기타"] = round(max(0.0, 100 - sum(seg.values())), 1)
-        rows.append([s, d["count"]] + [f"{seg[k]:.0f}%" if seg[k] else "—" for k in cslots])
+        # 정수 반올림은 8개 열을 더하면 ±4% 흔들려 계산 오류처럼 보인다
+        rows.append([s, d["count"]] + [f"{seg[k]:.1f}%" if seg[k] else "—" for k in cslots])
     L.append(md_table(["시스템", "토큰 수"] + [COMP_LABEL[k] for k in cslots], rows,
                       "lr" + "r" * len(cslots)))
     L.append("")
