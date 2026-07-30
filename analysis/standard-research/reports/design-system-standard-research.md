@@ -1,3 +1,6 @@
+<!-- 생성물입니다. 직접 편집하지 마세요 — 다음 빌드에 덮어써집니다.
+     고치려면 analysis/standard-research/tools/ 의 스크립트를 고치고
+     `python3 analysis/standard-research/run.py` 를 다시 실행하세요. -->
 # 디자인 시스템에서 표준화할 수 있는 것
 
 > 8개 컴포넌트 라이브러리의 **실제 소스**에서 semantic 토큰 3177개와 컴포넌트 인벤토리를 추출해, 어느 개념이 예외 없이 공통이고 어느 개념이 갈리는지 셌다.
@@ -302,5 +305,5 @@
 
 ---
 
-생성: `python3 analysis/build_report.py` — 데이터는 `analysis/data/*.json` 에서 읽는다.  
+생성: `python3 analysis/standard-research/run.py` — 데이터는 `measured/` · `derived/` · `curated/` 에서 읽는다.  
 측정 스크립트: `extract_tokens.py` · `classify_tokens.py` · `extract_components.py` · `measure_dependency.py` · `mfi.py`

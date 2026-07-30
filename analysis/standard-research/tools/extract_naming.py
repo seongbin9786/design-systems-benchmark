@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """토큰 *이름의 문법*을 측정한다 — 표기법, 구분자, 접두사, 세그먼트 깊이, 어순.
 
-입력: analysis/data/tokens.json (+ 원본 표기를 위해 sources/)
-출력: analysis/data/naming.json
+입력: measured/tokens.json (+ 원본 표기를 위해 sources/)
+출력: derived/naming.json
 
 왜 따로 재는가
   커버리지(어떤 개념이 있는가)와 별개로, *같은 개념을 어떤 문법으로 적는가*가 표준화의
@@ -17,10 +17,12 @@
 import json
 import re
 from collections import Counter
+import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "analysis" / "data"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import paths  # noqa: E402
+
 
 # 원본 표기(추출 전 형태) — tokens.json 은 kebab 정규화를 거쳤으므로 별도로 기록한다
 NATIVE = {
@@ -66,7 +68,7 @@ def classify_order(parts):
 
 
 def main():
-    tokens = json.loads((DATA / "tokens.json").read_text())
+    tokens = paths.read_json("tokens")
     result = {}
     for system, info in tokens.items():
         names = info["names"]
@@ -109,14 +111,14 @@ def main():
         "IRI": "의미 → 역할 → 의미",
     }
     out = {"_note": __doc__.strip().splitlines()[0], "order_legend": order_legend, "systems": result}
-    (DATA / "naming.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
+    out_path = paths.write_json("naming", out)
 
     print(f"{'시스템':14s} {'표기':6s} {'접두사':12s} {'깊이(평균/최대)':>14s}  어순 1위")
     for s, d in result.items():
         top = d["order_top"][0] if d["order_top"] else {"pattern": "—", "pct": 0}
         print(f"{s:14s} {d['native_case']:6s} {d['native_prefix']:12s} "
               f"{d['depth_avg']:>7.2f}/{d['depth_max']:<6d} {top['pattern']} ({top['pct']}%)")
-    print(f"\n-> {DATA / 'naming.json'}")
+    print(f"\n-> {out_path}")
 
 
 if __name__ == "__main__":

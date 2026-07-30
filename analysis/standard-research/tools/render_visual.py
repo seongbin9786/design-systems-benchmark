@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """확장판 리포트 — 기존 리포트의 모든 차트 + 아직 시각화하지 않았던 측정 6종.
 
-입력: analysis/data/*.json  (naming.json 포함)
-출력: analysis/design-system-standard-research-visual.html
+입력: measured/ + derived/ + curated/ (계층 판정은 paths.py)
+출력: reports/design-system-standard-research-visual.html
 
-기존판(design-system-standard-research.{md,html})은 그대로 둔다. 이 파일은 상위집합이다.
+기본판(reports/design-system-standard-research.{md,html})은 그대로 둔다. 이 파일은 상위집합이다.
 
 추가된 것
   9  네이밍 문법 — 토큰 이름 해부, 어순 진영, 상태 접미사 규약, 세그먼트 깊이
@@ -14,7 +14,7 @@
   13 어휘 밀도 히트맵 — 존재 여부가 아니라 *토큰 몇 개를 썼는가*
   14 MFI 매칭 근거 — 실제 매칭·미매칭 쌍
 
-색상 — dataviz 레퍼런스 팔레트를 이 문서 surface 로 재검증해 사용 (build_report.py 주석 참조).
+색상 — dataviz 레퍼런스 팔레트를 이 문서 surface 로 재검증해 사용 (viz.py 주석 참조).
   sequential 히트맵은 문서화된 blue 램프 100→650 을 그대로 쓴다 (단일 hue, 단조 명도).
 """
 import json
@@ -22,14 +22,13 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_report import (  # noqa: E402  — 프리미티브·상수는 기존 빌더와 공유한다
+import paths  # noqa: E402
+from viz import (  # noqa: E402  — 프리미티브는 viz.py 가 단일 출처 (렌더러끼리 결합하지 않는다)
     AXIS_TITLE, CODE, COMP_LABEL, COMP_SLOTS, TIER_LABEL,
     dumbbell, e, hbars, legend, load, matrix, stacked, table_view,
 )
 
-ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "analysis" / "data"
-OUT = ROOT / "analysis" / "design-system-standard-research-visual.html"
+OUT = "design-system-standard-research-visual.html"
 
 ROLE_WORDS = {"surface", "background", "bg", "foreground", "fg", "text", "border", "stroke",
               "outline", "icon", "fill", "divider", "split", "container", "layer", "shadow"}
@@ -176,9 +175,9 @@ def build():
     comps = load("components")
     mfi = load("mfi")
     dep = load("dependency")
-    bapi = load("button_api")
+    bapi = load("button-api")
     naming = load("naming")
-    manifest = (ROOT / "sources" / "MANIFEST.md").read_text().splitlines()
+    manifest = (paths.SOURCES / "MANIFEST.md").read_text().splitlines()
     systems = vocab["systems"]
     n = len(systems)
 
@@ -465,13 +464,13 @@ def build():
     )
 
 
-TMPL = Path(__file__).resolve().parent / "report_visual.tmpl.html"
+TMPL_NAME = "visual.tmpl.html"
 
 
 def render(**kw):
     """`{{name}}` 치환. str.format 을 쓰면 템플릿의 CSS 중괄호를 전부 이중화해야 해서 위험하다."""
     import re as _re
-    txt = TMPL.read_text(encoding="utf-8")
+    txt = paths.template(TMPL_NAME)
     missing = set()
 
     def sub(m):
@@ -491,5 +490,5 @@ def render(**kw):
 
 
 if __name__ == "__main__":
-    OUT.write_text(build(), encoding="utf-8")
-    print(f"-> {OUT}  ({OUT.stat().st_size:,} bytes)")
+    p = paths.write_report(OUT, build())
+    print(f"-> {p}  ({p.stat().st_size:,} bytes)")

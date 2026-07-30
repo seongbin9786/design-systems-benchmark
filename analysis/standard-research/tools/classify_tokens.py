@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """추출된 토큰 이름을 정규 어휘(canonical vocabulary)로 분류하고 시스템 간 교집합을 구한다.
 
-입력: analysis/data/tokens.json
-출력: analysis/data/vocabulary.json
+입력: measured/tokens.json
+출력: derived/vocabulary.json
 
 분류 축 4개
   category — 값의 종류 (color / spacing / radius / typography / elevation / motion / ...)
@@ -20,10 +20,12 @@
 import json
 import re
 from collections import defaultdict
+import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "analysis" / "data"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import paths  # noqa: E402
+
 
 # ── 축 1: category ──────────────────────────────────────────────────────────
 # (canonical, [정규식 조각들]) — 순서가 우선순위. 먼저 맞는 것이 이긴다.
@@ -141,7 +143,7 @@ def classify(raw):
 
 
 def main():
-    tokens = json.loads((DATA / "tokens.json").read_text())
+    tokens = paths.read_json("tokens")
     systems = list(tokens)
     n = len(systems)
 
@@ -216,7 +218,7 @@ def main():
 
     result["unclassified"] = {s: {"count": len(v), "sample": sorted(v)[:15]} for s, v in unclassified.items()}
     result["hue_named_status"] = {s: {"count": len(v), "sample": sorted(v)[:8]} for s, v in hue_named.items()}
-    (DATA / "vocabulary.json").write_text(json.dumps(result, ensure_ascii=False, indent=1))
+    out_path = paths.write_json("vocabulary", result)
 
     for axis in ("category", "role", "intent", "state"):
         print(f"\n=== {axis} ===")
@@ -228,7 +230,7 @@ def main():
     for s, v in result["unclassified"].items():
         if v["count"]:
             print(f"  {s}: {v['count']}  예: {', '.join(v['sample'][:5])}")
-    print(f"\n-> {DATA / 'vocabulary.json'}")
+    print(f"\n-> {out_path}")
 
 
 if __name__ == "__main__":

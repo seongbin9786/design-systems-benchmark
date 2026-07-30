@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """실물 견본 시트 — 8개 시스템의 컴포넌트를 각자의 *실제 값*으로 렌더링한다.
 
-입력: analysis/data/values.json (extract_values.py 출력)
-출력: analysis/design-system-specimens.html
+입력: measured/values.json (extract_values.py 출력)
+출력: reports/design-system-specimens.html
 
 앞선 리포트들은 차트로 원리를 보여줬다. 이 문서는 실물을 나란히 놓는다.
 색·크기·radius·굵기 전부 각 시스템 소스에서 해석한 값이고, 근거 경로를 함께 적는다.
@@ -17,13 +17,14 @@
           원본 컴포넌트의 모든 세부(내부 패딩·아이콘·전이)를 재현한 것은 아니다.
 """
 import html
-import json
 import re
+import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "analysis" / "data"
-OUT = ROOT / "analysis" / "design-system-specimens.html"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import paths  # noqa: E402
+
+OUT = "design-system-specimens.html"
 
 SLOT_LABEL = {
     "surface": "surface", "surface-raised": "surface 상위", "text-primary": "text 주",
@@ -197,7 +198,7 @@ def ui_specimen(system, d):
 
 
 def render(**kw):
-    txt = (Path(__file__).resolve().parent / "specimens.tmpl.html").read_text(encoding="utf-8")
+    txt = paths.template("specimens.tmpl.html")
     missing = set()
 
     def sub(m):
@@ -214,7 +215,7 @@ def render(**kw):
 
 
 def main():
-    d = json.loads((DATA / "values.json").read_text())
+    d = paths.read_json("values")
     slots, systems = d["slots"], d["systems"]
     order = ["Spectrum", "Material Web", "MUI", "Fluent 2", "Carbon", "Polaris",
              "shadcn/ui", "Ant Design"]
@@ -248,5 +249,5 @@ def main():
 
 
 if __name__ == "__main__":
-    OUT.write_text(main(), encoding="utf-8")
-    print(f"-> {OUT}  ({OUT.stat().st_size:,} bytes)")
+    p = paths.write_report(OUT, main())
+    print(f"-> {p}  ({p.stat().st_size:,} bytes)")

@@ -2,7 +2,7 @@
 """각 시스템 소스에서 semantic 토큰 이름을 추출해 정규화한다.
 
 입력: sources/<repo>/... (sources/MANIFEST.md 의 고정 커밋)
-출력: analysis/data/tokens.json  — {system: {"names": [...], "source": "...", "layer": "..."}}
+출력: measured/tokens.json  — {system: {"names": [...], "source": "...", "layer": "..."}}
 
 집계 규칙
 - semantic(alias) 계층만 수집한다. primitive 램프(gray-100 등)는 제외 — 표준화 대상이 아니다.
@@ -10,14 +10,14 @@
   (접두사 제거는 classify_tokens.py 가 담당)
 """
 import json
-import os
 import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "sources"
-OUT = ROOT / "analysis" / "data"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import paths  # noqa: E402
+
+SRC = paths.SOURCES
 
 
 def read(p):
@@ -231,7 +231,6 @@ EXTRACTORS = {
 
 
 def main():
-    OUT.mkdir(parents=True, exist_ok=True)
     result = {}
     for name, fn in EXTRACTORS.items():
         try:
@@ -246,8 +245,8 @@ def main():
             "names": sorted(names),
         }
         print(f"{name:14s} {len(names):5d}  {layer:22s} {source}")
-    (OUT / "tokens.json").write_text(json.dumps(result, ensure_ascii=False, indent=1))
-    print(f"\n-> {OUT / 'tokens.json'}")
+    p = paths.write_json("tokens", result)
+    print(f"\n-> {p}")
 
 
 if __name__ == "__main__":

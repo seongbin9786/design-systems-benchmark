@@ -18,11 +18,13 @@
 import json
 import re
 from difflib import SequenceMatcher
+import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-FIGMA = ROOT / "figma" / "raw"
-DATA = ROOT / "analysis" / "data"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import paths  # noqa: E402
+
+FIGMA = paths.FIGMA_RAW
 
 KITS = {  # 시스템 -> (figma 파일 접두사, 코드 인벤토리 키)
     "Carbon": "carbon",
@@ -70,7 +72,7 @@ def sim(a, b):
 
 
 def main():
-    comps = json.loads((DATA / "components.json").read_text())
+    comps = paths.read_json("components")
     out = {"note": __doc__.strip().splitlines()[0], "weights_measured": WEIGHTS,
            "weights_unmeasured": {k: {"weight": w, "reason": r} for k, (w, r) in UNMEASURED.items()},
            "systems": {}}
@@ -133,7 +135,7 @@ def main():
             "unmatched_sample": unmatched[:12],
         }
 
-    (DATA / "mfi.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
+    out_path = paths.write_json("mfi", out)
 
     print("=== MFI-partial (측정 가중치 0.50 재정규화) ===")
     print(f"{'시스템':14s} {'Figma SET':>9s} {'정규화후':>7s} {'코드':>5s} {'매칭':>5s} {'매칭률':>7s} {'네이밍':>7s} {'MFI-p':>7s}")
@@ -144,7 +146,7 @@ def main():
     print("\n미측정 항목 (가중치 0.50):")
     for k, (w, r) in UNMEASURED.items():
         print(f"  {k:12s} {w:.2f}  {r}")
-    print(f"\n-> {DATA / 'mfi.json'}")
+    print(f"\n-> {out_path}")
 
 
 if __name__ == "__main__":

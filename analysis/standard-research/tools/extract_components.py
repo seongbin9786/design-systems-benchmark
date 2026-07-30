@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """컴포넌트 인벤토리를 추출해 정규 개념(canonical component)으로 매핑하고 교집합을 구한다.
 
-입력: sources/<repo>/... + figma/raw/*-components-extracted.json
-출력: analysis/data/components.json
+입력: sources/ + figma/raw/*-components-extracted.json
+출력: measured/components.json
 
 집계 규칙
 - 코드 인벤토리는 "공개 컴포넌트 디렉터리/파일 1개 = 1건". 내부 유틸(`_`, `internal`, `utils`,
@@ -13,12 +13,14 @@
 import json
 import re
 from collections import defaultdict
+import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "sources"
-FIGMA = ROOT / "figma" / "raw"
-DATA = ROOT / "analysis" / "data"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import paths  # noqa: E402
+
+SRC = paths.SOURCES
+FIGMA = paths.FIGMA_RAW
 
 EXCLUDE = re.compile(
     r"^(_|\.)|internal|utils?$|test|spec|stories|types?$|constants?$|styles?$|hooks?$|"
@@ -211,7 +213,6 @@ def figma_variant_axes():
 
 
 def main():
-    DATA.mkdir(parents=True, exist_ok=True)
     inv = code_inventory()
     systems = [s for s in inv if "error" not in inv[s]]
 
@@ -235,7 +236,7 @@ def main():
         "coverage": coverage,
         "figma_variant_axes": figma_variant_axes(),
     }
-    (DATA / "components.json").write_text(json.dumps(result, ensure_ascii=False, indent=1))
+    out_path = paths.write_json("components", result)
 
     print("=== 코드 인벤토리 ===")
     for s in systems:
@@ -250,7 +251,7 @@ def main():
     for s, d in result["figma_variant_axes"].items():
         top = list(d["axes"].items())[:6]
         print(f"  {s:14s} ({d['component_sets']} sets): " + ", ".join(f"{a}({v['pct']}%)" for a, v in top))
-    print(f"\n-> {DATA / 'components.json'}")
+    print(f"\n-> {out_path}")
 
 
 if __name__ == "__main__":

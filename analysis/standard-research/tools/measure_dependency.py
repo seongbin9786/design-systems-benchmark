@@ -15,11 +15,13 @@
 """
 import json
 import re
+import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "sources"
-DATA = ROOT / "analysis" / "data"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import paths  # noqa: E402
+
+SRC = paths.SOURCES
 
 # component -> {system: (경로, 표기 방식)}
 TARGETS = {
@@ -182,7 +184,7 @@ def main():
            "_rule": "토큰 의존율 = 토큰 참조 / (토큰 참조 + hardcoded) × 100",
            "_caveat": "시스템 간 절대 수치 비교 불가 — 표현 단위가 다름. 패턴만 비교.",
            "summary": summary, "rows": rows}
-    (DATA / "dependency.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
+    out_path = paths.write_json("dependency", out)
 
     print(f"{'시스템':14s} {'측정':>4s} {'느슨평균':>8s} {'엄격평균':>8s} {'범위(느슨)':>14s} {'문서평균':>8s}")
     for sysname, d in sorted(summary.items(), key=lambda kv: -kv[1]["avg_loose"]):
@@ -195,7 +197,7 @@ def main():
         print("\n측정 실패:")
         for r in errs:
             print(f"  {r['system']:14s} {r['component']:10s} {r['error']}")
-    print(f"\n-> {DATA / 'dependency.json'}")
+    print(f"\n-> {out_path}")
 
 
 if __name__ == "__main__":

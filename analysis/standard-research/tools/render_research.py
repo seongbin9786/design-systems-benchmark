@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """측정 결과를 자기 완결 HTML 한 장으로 렌더링한다.
 
-입력: analysis/data/{tokens,vocabulary,components,mfi,dependency,button_api}.json
-출력: analysis/design-system-standard-research.{html,md}
+입력: measured/ + derived/ + curated/ (계층 판정은 paths.py)
+출력: reports/design-system-standard-research.{html,md}
 
 playbook.md §7 G-2 의 규칙을 따른다 — 외부 의존 없는 단일 파일. 데이터를 JSON 에서 읽어
 생성하므로 측정값과 문서가 어긋날 수 없다.
@@ -11,149 +11,18 @@ playbook.md §7 G-2 의 규칙을 따른다 — 외부 의존 없는 단일 파�
   categorical 7슬롯  light #f6f7f8 / dark #14171a  → 전 항목 PASS (light 대비 WARN → 직접 라벨 + 표 병기로 해소)
   ordinal 4단계(tier) light #184f95→#6da7ec, dark #cde2fb→#2a78d6 → 전 항목 PASS
 """
-import html
-import json
+import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "analysis" / "data"
-OUT_HTML = ROOT / "analysis" / "design-system-standard-research.html"
-OUT_MD = ROOT / "analysis" / "design-system-standard-research.md"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import paths  # noqa: E402
+from viz import (  # noqa: E402  — 프리미티브는 viz.py 가 단일 출처
+    AXIS_TITLE, CODE, COMP_LABEL, COMP_SLOTS, TIER_LABEL,
+    dumbbell, e, hbars, legend, load, matrix, stacked, table_view,
+)
 
-TIER_LABEL = {
-    "standard": "표준",
-    "prevalent": "우세",
-    "divergent": "분기",
-    "system-specific": "고유",
-}
-AXIS_TITLE = {
-    "category": ("값의 종류", "토큰이 무엇을 담는가"),
-    "role": ("색이 칠해지는 자리", "같은 색을 어디에 쓰는가"),
-    "intent": ("의미와 강조도", "그 색이 무슨 뜻인가"),
-    "state": ("상호작용 상태", "상태에 따라 값이 바뀌는가"),
-}
-# 3글자 코드 — 매트릭스 열 머리글이 8개라 풀네임이 들어가지 않는다
-CODE = {
-    "Spectrum": "SPE", "Material Web": "MTW", "MUI": "MUI", "Fluent 2": "FLU",
-    "Carbon": "CAR", "Polaris": "POL", "shadcn/ui": "SCN", "Ant Design": "ANT",
-}
-# 누적 막대 고정 슬롯 (전체 볼륨 상위 6개 + 기타). 순서 고정 — 절대 순환시키지 않는다.
-COMP_SLOTS = ["color", "typography", "spacing", "sizing", "elevation", "motion", "radius"]
-COMP_LABEL = {
-    "color": "색상", "typography": "타이포그래피", "spacing": "간격",
-    "sizing": "크기", "elevation": "elevation", "motion": "모션", "radius": "radius",
-    "기타": "기타", "rest": "미달",
-}
-
-
-def e(x):
-    return html.escape(str(x), quote=True)
-
-
-def load(name):
-    return json.loads((DATA / f"{name}.json").read_text())
-
-
-# ── 차트 프리미티브 ──────────────────────────────────────────────────────────
-def hbars(rows, unit="", maxv=None):
-    """가로 막대. rows = [(label, value, tip)]. 단일 시리즈이므로 범례 없음."""
-    mx = maxv or max((r[1] for r in rows), default=1)
-    out = []
-    for label, val, tip in rows:
-        w = val / mx * 100 if mx else 0
-        out.append(f"""<div class="hb" data-tip="{e(tip)}" tabindex="0">
-<span class="hb-l">{e(label)}</span>
-<span class="hb-t"><i style="width:{w:.2f}%"></i></span>
-<span class="hb-v">{e(val)}{e(unit)}</span></div>""")
-    return f'<div class="hbars">{"".join(out)}</div>'
-
-
-def stacked(rows, slots, labels, residual=None):
-    """100% 누적 가로 막대. 세그먼트 사이 2px surface 간극, 8% 이상은 직접 라벨.
-
-    residual 로 지정한 슬롯은 *시리즈가 아니다* — 잔여/미달 버킷이므로 중립 트랙 색을 쓰고
-    직접 라벨도 붙이지 않는다. 시리즈 색을 주면 없는 계열이 하나 있는 것처럼 읽힌다.
-    """
-    out = []
-    for label, seg, tip in rows:
-        parts = []
-        for i, k in enumerate(slots):
-            pct = seg.get(k, 0)
-            if pct <= 0:
-                continue
-            is_res = k == residual
-            cls = "res" if is_res else f"s{i + 1}"
-            txt = "" if is_res else (f"{pct:.0f}" if pct >= 8 else "")
-            parts.append(
-                f'<i class="{cls}" style="flex:{pct}" data-tip="{e(label)} · {e(labels.get(k, k))} {pct}%"'
-                f' tabindex="0"><b>{txt}</b></i>')
-        out.append(f'<div class="sb" data-row="{e(label)}">'
-                   f'<span class="sb-l">{e(label)}</span>'
-                   f'<span class="sb-t">{"".join(parts)}</span>'
-                   f'<span class="sb-v">{e(tip)}</span></div>')
-    return f'<div class="stacks">{"".join(out)}</div>'
-
-
-def legend(slots, labels):
-    items = "".join(
-        f'<span class="lg"><i class="s{i + 1}"></i>{e(labels.get(k, k))}</span>'
-        for i, k in enumerate(slots))
-    return f'<div class="legend-row" role="list">{items}</div>'
-
-
-def matrix(rows, systems, group_key=None):
-    """존재 여부 매트릭스. 행 = 정규 어휘, 열 = 시스템. 채워진 칸 = 이름에 그 개념이 있음."""
-    head = "".join(f'<span class="mx-ch" title="{e(s)}">{e(CODE[s])}</span>' for s in systems)
-    body = []
-    last_group = None
-    for r in rows:
-        if group_key and r.get("_group") != last_group:
-            last_group = r.get("_group")
-            body.append(f'<div class="mx-group"><span>{e(last_group)}</span></div>')
-        cells = "".join(
-            f'<span class="mx-c{" on" if s in r["systems"] else ""}" tabindex="0"'
-            f' data-tip="{e(r["value"])} · {e(s)} — {"보유" if s in r["systems"] else "미보유"}'
-            f'{(" · " + e(r["examples"][s])) if s in r.get("examples", {}) else ""}"></span>'
-            for s in systems)
-        tier = r["tier"]
-        body.append(f"""<div class="mx-r t-{tier}">
-<span class="mx-rl"><b>{e(r['value'])}</b></span>
-<span class="mx-cells">{cells}</span>
-<span class="mx-n">{r['coverage']}</span>
-<span class="mx-t t-{tier}">{TIER_LABEL[tier]}</span></div>""")
-    return f"""<div class="mx">
-<div class="mx-head"><span></span><span class="mx-chs">{head}</span><span></span><span></span></div>
-{"".join(body)}
-</div>"""
-
-
-def dumbbell(rows):
-    """문서값 → 재측정값. 두 시리즈이므로 범례 필수. 20pt 이상 벌어진 행은 상태 아이콘+라벨로 표시."""
-    out = []
-    for label, a, b, gap, big in rows:
-        lo, hi = min(a, b), max(a, b)
-        out.append(f"""<div class="db{' big' if big else ''}">
-<span class="db-l">{e(label)}</span>
-<span class="db-t">
-  <span class="db-line" style="left:{lo}%;width:{hi - lo}%"></span>
-  <span class="db-p a" style="left:{a}%" tabindex="0" data-tip="{e(label)} · 기존 문서값 {a}%"></span>
-  <span class="db-p b" style="left:{b}%" tabindex="0" data-tip="{e(label)} · 재측정 {b}%"></span>
-</span>
-<span class="db-v">{gap:+.0f}pt{' <span class="flag">⚠ 기준 차이</span>' if big else ''}</span></div>""")
-    axis = "".join(f'<span style="left:{v}%">{v}</span>' for v in (0, 25, 50, 75, 100))
-    return (f'<div class="dbs">{"".join(out)}'
-            f'<div class="db-axis"><span class="db-l"></span><span class="db-t">{axis}</span>'
-            f'<span class="db-v"></span></div></div>')
-
-
-def table_view(headers, rows, caption):
-    th = "".join(f'<th scope="col">{e(h)}</th>' for h in headers)
-    tr = "".join("<tr>" + "".join(
-        f'<{"th" if i == 0 else "td"}{" scope=\"row\"" if i == 0 else ""} class="{"" if i == 0 else "num"}">{c}</{"th" if i == 0 else "td"}>'
-        for i, c in enumerate(r)) + "</tr>" for r in rows)
-    return (f'<details class="tv"><summary>{e(caption)} — 표로 보기</summary>'
-            f'<div class="scroll"><table><thead><tr>{th}</tr></thead><tbody>{tr}</tbody></table></div></details>')
-
+OUT_HTML = "design-system-standard-research.html"
+OUT_MD = "design-system-standard-research.md"
 
 # ── 본문 조립 ────────────────────────────────────────────────────────────────
 def build():
@@ -162,8 +31,8 @@ def build():
     comps = load("components")
     mfi = load("mfi")
     dep = load("dependency")
-    bapi = load("button_api")
-    manifest = (ROOT / "sources" / "MANIFEST.md").read_text().splitlines()
+    bapi = load("button-api")
+    manifest = (paths.SOURCES / "MANIFEST.md").read_text().splitlines()
     systems = vocab["systems"]
 
     # ── A. 토큰 규모 ────────────────────────────────────────────────────
@@ -379,8 +248,8 @@ def build_md():
     comps = load("components")
     mfi = load("mfi")
     dep = load("dependency")
-    bapi = load("button_api")
-    manifest = (ROOT / "sources" / "MANIFEST.md").read_text().splitlines()
+    bapi = load("button-api")
+    manifest = (paths.SOURCES / "MANIFEST.md").read_text().splitlines()
     systems = vocab["systems"]
     n = len(systems)
     L = []
@@ -658,7 +527,7 @@ def build_md():
     L.append("")
     L.append("---")
     L.append("")
-    L.append("생성: `python3 analysis/build_report.py` — 데이터는 `analysis/data/*.json` 에서 읽는다.  \n"
+    L.append("생성: `python3 analysis/standard-research/run.py` — 데이터는 `measured/` · `derived/` · `curated/` 에서 읽는다.  \n"
              "측정 스크립트: `extract_tokens.py` · `classify_tokens.py` · `extract_components.py` · "
              "`measure_dependency.py` · `mfi.py`")
     return "\n".join(L) + "\n"
@@ -1091,8 +960,8 @@ Carbon 은 radius 토큰이 <i>아예 없다</i> — 각진 형태를 부재로 
 <tbody>{man_html}</tbody></table></div>
 
 <footer>
-<p>생성: <code>python3 analysis/build_report.py</code> — 데이터는 <code>analysis/data/*.json</code> 에서 읽는다.
-측정 스크립트: <code>extract_tokens.py</code> · <code>classify_tokens.py</code> ·
+<p>생성: <code>python3 analysis/standard-research/run.py</code> — 데이터는 <code>measured/</code> · <code>derived/</code> · <code>curated/</code> 에서 읽는다.
+측정 스크립트: <code>tools/extract_tokens.py</code> · <code>classify_tokens.py</code> ·
 <code>extract_components.py</code> · <code>measure_dependency.py</code> · <code>mfi.py</code>.</p>
 <p>차트 색상은 dataviz 레퍼런스 팔레트를 이 문서의 surface(<code>#f6f7f8</code> / <code>#14171a</code>)에
 맞춰 재검증해 사용했다 — categorical 7슬롯·ordinal 4단계 모두 전 항목 PASS.
@@ -1135,7 +1004,6 @@ light 모드 대비 WARN 항목은 직접 라벨과 표 병기로 완화했다.<
 
 
 if __name__ == "__main__":
-    OUT_HTML.write_text(build(), encoding="utf-8")
-    OUT_MD.write_text(build_md(), encoding="utf-8")
-    for f in (OUT_HTML, OUT_MD):
-        print(f"-> {f}  ({f.stat().st_size:,} bytes)")
+    for name, body in ((OUT_HTML, build()), (OUT_MD, build_md())):
+        p = paths.write_report(name, body)
+        print(f"-> {p}  ({p.stat().st_size:,} bytes)")

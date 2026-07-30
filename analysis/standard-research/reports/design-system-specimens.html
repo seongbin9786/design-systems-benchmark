@@ -1,3 +1,6 @@
+<!-- 생성물입니다. 직접 편집하지 마세요 — 다음 빌드에 덮어써집니다.
+     고치려면 analysis/standard-research/tools/ 의 스크립트나 템플릿을 고치고
+     `python3 analysis/standard-research/run.py` 를 다시 실행하세요. -->
 <meta charset="utf-8">
 <title>실물 견본 시트 — 8개 디자인 시스템 컴포넌트 나란히 보기</title>
 <style>
@@ -193,7 +196,7 @@ tbody tr + tr th, tbody tr + tr td { border-top: 1px solid var(--rule-2); }
 <div class="scroll" style="margin-top:.5rem"><table>
 <thead><tr><th scope="col">시스템</th><th scope="col">높이</th><th scope="col">radius</th>
 <th scope="col">패딩</th><th scope="col">글자</th><th scope="col">근거 경로</th></tr></thead>
-<tbody><tr><th scope="row">Spectrum</th><td class="num">32px</td><td class="num">16px</td><td class="num">0 18px</td><td class="num">14px / 700</td><td class="path">spectrum-css/components/button/index.css · react-spectrum s2/src/Button.tsx</td></tr><tr><th scope="row">Material Web</th><td class="num">40px</td><td class="num">999px</td><td class="num">0 24px</td><td class="num">0.875rem / 500</td><td class="path">material-web/button/internal/_filled-button.scss · _shared.scss</td></tr><tr><th scope="row">MUI</th><td class="num">36.5px</td><td class="num">4px</td><td class="num">6px 16px</td><td class="num">0.875rem / 500</td><td class="path">material-ui/packages/mui-material/src/Button/Button.js</td></tr><tr><th scope="row">Fluent 2</th><td class="num">32px</td><td class="num">4px</td><td class="num">0 12px</td><td class="num">14px / 600</td><td class="path">fluentui/.../react-button/library/src/components/Button/useButtonStyles.styles.ts</td></tr><tr><th scope="row">Carbon</th><td class="num">48px</td><td class="num">0</td><td class="num">0 63px 0 15px</td><td class="num">14px / 400</td><td class="path">carbon/packages/styles/scss/components/button/_button.scss</td></tr><tr><th scope="row">Polaris</th><td class="num">32px</td><td class="num">8px</td><td class="num">0 12px</td><td class="num">13px / 650</td><td class="path">polaris/polaris-react/src/components/Button/Button.module.css</td></tr><tr><th scope="row">shadcn/ui</th><td class="num">36px</td><td class="num">calc(0.625rem - 2px)</td><td class="num">0 16px</td><td class="num">0.875rem / 500</td><td class="path">shadcn-ui/apps/v4/registry/new-york-v4/ui/button.tsx (cva)</td></tr><tr><th scope="row">Ant Design</th><td class="num">32px</td><td class="num">6px</td><td class="num">0 15px</td><td class="num">14px / 400</td><td class="path">ant-design/components/button/style/index.ts · theme/themes/seed.ts</td></tr></tbody></table></div>
+<tbody><tr><th scope="row">Spectrum</th><td class="num">32px</td><td class="num">16px</td><td class="num">0 18px</td><td class="num">14px / 700</td><td class="path">spectrum-css/components/button/index.css · react-spectrum/packages/@react-spectrum/s2/src/Button.tsx</td></tr><tr><th scope="row">Material Web</th><td class="num">40px</td><td class="num">999px</td><td class="num">0 24px</td><td class="num">0.875rem / 500</td><td class="path">material-web/button/internal/_filled-button.scss · _shared.scss</td></tr><tr><th scope="row">MUI</th><td class="num">36.5px</td><td class="num">4px</td><td class="num">6px 16px</td><td class="num">0.875rem / 500</td><td class="path">material-ui/packages/mui-material/src/Button/Button.js</td></tr><tr><th scope="row">Fluent 2</th><td class="num">32px</td><td class="num">4px</td><td class="num">0 12px</td><td class="num">14px / 600</td><td class="path">fluentui/packages/react-components/react-button/library/src/components/Button/useButtonStyles.styles.ts</td></tr><tr><th scope="row">Carbon</th><td class="num">48px</td><td class="num">0</td><td class="num">0 63px 0 15px</td><td class="num">14px / 400</td><td class="path">carbon/packages/styles/scss/components/button/_button.scss</td></tr><tr><th scope="row">Polaris</th><td class="num">32px</td><td class="num">8px</td><td class="num">0 12px</td><td class="num">13px / 650</td><td class="path">polaris/polaris-react/src/components/Button/Button.module.css</td></tr><tr><th scope="row">shadcn/ui</th><td class="num">36px</td><td class="num">calc(0.625rem - 2px)</td><td class="num">0 16px</td><td class="num">0.875rem / 500</td><td class="path">shadcn-ui/apps/v4/registry/new-york-v4/ui/button.tsx (cva)</td></tr><tr><th scope="row">Ant Design</th><td class="num">32px</td><td class="num">6px</td><td class="num">0 15px</td><td class="num">14px / 400</td><td class="path">ant-design/components/button/style/index.ts · theme/themes/seed.ts</td></tr></tbody></table></div>
 </details>
 <div class="callout">
 <p><b>Carbon 만 유일하게 각지고(radius 0) 크다(48px).</b> 패딩도 좌우 비대칭이다
@@ -250,9 +253,9 @@ Material Web 의 알약형 40px 버튼은 같은 화면을 전혀 다른 물건�
 </div>
 
 <footer style="margin-top:4rem;padding-top:1.4rem;border-top:1px solid var(--rule);color:var(--ink-3);font-size:var(--step--1)">
-<p>생성: <code>python3 analysis/extract_values.py &amp;&amp; python3 analysis/build_specimens.py</code> —
-값은 <code>analysis/data/values.json</code>, 소스 커밋은 <code>sources/MANIFEST.md</code>.</p>
-<p>원리·측정 리포트는 <code>design-system-standard-research.md</code> 와
+<p>생성: <code>python3 analysis/standard-research/run.py</code> —
+값은 <code>measured/values.json</code>, 소스 커밋은 <code>sources/MANIFEST.md</code>.</p>
+<p>원리·측정 리포트는 <code>reports/design-system-standard-research.md</code> 와
 <code>design-system-standard-research-visual.html</code>.</p>
 </footer>
 </div>

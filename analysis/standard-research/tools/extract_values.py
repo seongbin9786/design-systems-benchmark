@@ -2,7 +2,7 @@
 """토큰의 *값*을 추출한다 — 이름이 아니라 실제 색·크기. 실물 컴포넌트를 그리기 위한 재료.
 
 입력: sources/<repo>/...
-출력: analysis/data/values.json
+출력: measured/values.json
 
 앞선 스크립트들은 이름만 봤다. 실물을 렌더링하려면 값이 필요하다.
 각 시스템의 alias 체인을 원시 팔레트까지 따라가 hex/oklch 로 해석한다.
@@ -20,20 +20,20 @@
 """
 import json
 import re
+import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "sources"
-OUT = ROOT / "analysis" / "data"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import paths  # noqa: E402
+
 
 # 우리가 그릴 정규 슬롯 — 8개 시스템에서 같은 자리를 찾아 채운다
 SLOTS = ["surface", "surface-raised", "text-primary", "text-secondary", "border",
          "brand-bg", "brand-fg", "danger-bg", "success-bg", "warning-bg"]
 
 
-def txt(rel):
-    p = SRC / rel
-    return p.read_text(encoding="utf-8", errors="replace") if p.exists() else ""
+SRC = paths.SOURCES
+txt = paths.src  # sources/ 아래 파일 읽기 — 경로 정의는 paths.py 한 곳
 
 
 def _num(s):
@@ -541,17 +541,40 @@ def antd():
     }
 
 
+def merge_geometry(system, d):
+    """수기 지오메트리(curated) + 토큰에서 해석한 값(스크립트) 을 합친다.
+
+    curated 쪽 값이 null 이면 스크립트가 채운 값을 쓴다 — 예: Ant Design 의 높이는
+    seed 토큰 `controlHeight` 에서 나오므로 손으로 적을 값이 아니다.
+    """
+    g = GEOMETRY["systems"].get(system, {})
+    b = d["button"]
+    for k in ("evidence", "height", "padding", "radius", "font_size",
+              "font_weight", "border_width"):
+        v = g.get(k)
+        if v is not None:
+            b[k] = v
+    if g.get("uppercase"):
+        b["uppercase"] = True
+    missing = [k for k in ("height", "padding", "radius", "font_size") if not b.get(k)]
+    if missing:
+        raise ValueError(f"{system}: 지오메트리 {missing} 를 수기·토큰 어느 쪽에서도 얻지 못했다")
+    return d
+
+
 EXTRACTORS = {
     "Spectrum": spectrum, "Material Web": material_web, "MUI": mui, "Fluent 2": fluent,
     "Carbon": carbon, "Polaris": polaris, "shadcn/ui": shadcn, "Ant Design": antd,
 }
 
 
+GEOMETRY = paths.read_json("button-geometry")
+
+
 def main():
-    OUT.mkdir(parents=True, exist_ok=True)
     result, missing = {}, []
     for name, fn in EXTRACTORS.items():
-        d = fn()
+        d = merge_geometry(name, fn())
         result[name] = d
         gaps = [k for k in SLOTS if not d["palette"].get(k)]
         if gaps:
@@ -559,13 +582,12 @@ def main():
         print(f"{name:14s} palette {len(SLOTS) - len(gaps)}/{len(SLOTS)}  "
               f"type {len(d['type'])}  radius {len(d['radius'])}  space {len(d['space'])}  "
               f"button {len(d['button']['variants'])}")
-    (OUT / "values.json").write_text(json.dumps({"slots": SLOTS, "systems": result},
-                                                ensure_ascii=False, indent=1))
+    out_path = paths.write_json("values", {"slots": SLOTS, "systems": result})
     if missing:
         print("\n해석 못한 슬롯 (해당 시스템에 그 개념이 없거나 별칭 체인이 끊긴 경우):")
         for name, gaps in missing:
             print(f"  {name:14s} {', '.join(gaps)}")
-    print(f"\n-> {OUT / 'values.json'}")
+    print(f"\n-> {out_path}")
 
 
 if __name__ == "__main__":

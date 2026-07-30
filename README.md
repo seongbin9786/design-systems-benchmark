@@ -45,25 +45,21 @@ Figma ↔ Code 매핑 충실도를 중심으로 주요 컴포넌트 라이브러
 ## 표준화 가능한 요소 (실측 리포트)
 
 "디자인 시스템이 반드시 갖춰야 할 것"을 8개 시스템 소스에서 직접 세어 판정한 결과.
-같은 데이터에서 두 형식으로 생성된다 — 읽기용 MD, 시각화용 HTML.
+파이프라인과 계층 구조는 → [**analysis/standard-research/README.md**](analysis/standard-research/README.md)
 
-- [**analysis/design-system-standard-research.md**](analysis/design-system-standard-research.md) — 본문
-- [**analysis/design-system-standard-research.html**](analysis/design-system-standard-research.html) —
-  커버리지 히트맵·덤벨 차트 등 8종, 자기 완결 단일 파일
-- [**analysis/design-system-specimens.html**](analysis/design-system-specimens.html) —
-  **실물 견본 시트**. 8개 시스템의 Button·팔레트·타이포·radius·간격·elevation·조립 UI 를
-  각자의 *실제 토큰 값*으로 렌더링. 원리 설명이 아니라 실물 비교.
-- [**analysis/design-system-standard-research-visual.html**](analysis/design-system-standard-research-visual.html) —
-  **확장판**. 위의 상위집합 + 네이밍 문법(이름 해부·어순 진영·상태 접미사) · 어휘 밀도 히트맵 ·
-  variant 조합 폭발 · 분해 단위 · 컴포넌트별 의존율 히트맵 · MFI 매칭 근거
+리포트 (전부 생성물 — 직접 편집하지 말 것):
 
-- 토큰 어휘 4축(값의 종류 / 색이 칠해지는 자리 / 의미 / 상태)별 8/8 교집합
-- 정규 컴포넌트 커버리지 + 시스템별 실제 이름 대조표
-- Button variant 축 8종 실측 (강조도·의미·크기·형태)
-- 재감사: 토큰 의존율 재측정 · MFI-partial
+- [**본문**](analysis/standard-research/reports/design-system-standard-research.md) — 읽기용 MD
+- [**시각화**](analysis/standard-research/reports/design-system-standard-research.html) — 커버리지 히트맵·덤벨 차트 등 8종
+- [**확장판**](analysis/standard-research/reports/design-system-standard-research-visual.html) —
+  위의 상위집합 + 네이밍 문법(이름 해부·어순 진영) · 어휘 밀도 · variant 폭발 · 분해 단위
+- [**실물 견본**](analysis/standard-research/reports/design-system-specimens.html) —
+  Button 32개·팔레트 80칸·타이포·radius·간격·elevation·조립 UI 를 각 시스템의 *실제 값*으로 렌더링
 
-생성: `python3 analysis/{extract_tokens,classify_tokens,extract_naming,extract_components,extract_values,measure_dependency,mfi,build_report,build_report_visual,build_specimens}.py`
-(선행: `bash sources/clone.sh` — 분석 대상 소스 얕은 클론)
+```bash
+bash sources/clone.sh                        # 선행: 분석 대상 소스 얕은 클론
+python3 analysis/standard-research/run.py    # 전체 재생성
+```
 
 ## 구조
 
@@ -83,27 +79,18 @@ Figma ↔ Code 매핑 충실도를 중심으로 주요 컴포넌트 라이브러
 │   ├── token-analysis-framework.md # 토큰 분석 프레임워크
 │   ├── component-mapping.md # Figma↔Code 매핑 비교
 │   └── dependency-audit-summary.md # 의존성 전수 조사 종합
-├── analysis/             # 리뷰, 다음 단계, 실측 스크립트
+├── analysis/             # 리뷰·다음 단계 문서 + 실측 연구
 │   ├── review-and-next-steps.md # 문서 리뷰 (유용성/학습/고도화/심화)
 │   ├── learning-guide.md # 학습 가이드
 │   ├── advancement-roadmap.md # 고도화 로드맵
-│   ├── design-system-standard-research.md   # 표준화 가능 요소 리포트 (생성물)
-│   ├── design-system-standard-research.html # 같은 리포트 시각화판 (생성물)
-│   ├── design-system-standard-research-visual.html # 확장판 (생성물)
-│   ├── design-system-specimens.html # 실물 견본 시트 (생성물)
-│   ├── specimens.tmpl.html     # 견본 시트 템플릿
-│   ├── extract_values.py      # 토큰 *값* 추출 (alias 체인 → hex/oklch)
-│   ├── build_specimens.py     # values.json → 견본 시트 html
-│   ├── report_visual.tmpl.html # 확장판 HTML 템플릿
-│   ├── extract_naming.py      # 토큰 이름의 문법(표기·어순·깊이) 측정
-│   ├── build_report_visual.py # data/*.json → 확장판 html
-│   ├── extract_tokens.py      # 소스 → semantic 토큰 이름 추출
-│   ├── classify_tokens.py     # 토큰 이름 → 정규 어휘 4축 분류·교집합
-│   ├── extract_components.py  # 컴포넌트 인벤토리 + Figma variant 축
-│   ├── measure_dependency.py  # 토큰 의존율 재측정 (느슨/엄격 2기준)
-│   ├── mfi.py                 # Mapping Fidelity Index (부분)
-│   ├── build_report.py        # data/*.json → 리포트 md + html
-│   └── data/             # 측정 결과 JSON (스크립트 출력)
+│   └── standard-research/ # 표준화 가능 요소 실측 (계층 분리)
+│       ├── README.md     # 파이프라인·의존 그래프·계층 규칙
+│       ├── run.py        # 전체 실행 (의존 순서 강제)
+│       ├── tools/        # 측정·렌더 스크립트 + paths.py + viz.py + templates/
+│       ├── curated/      # 수기 입력 (스크립트가 덮어쓰지 않음)
+│       ├── measured/     # 1차 측정 (sources·figma 직접)
+│       ├── derived/      # 2차 파생 (measured 입력)
+│       └── reports/      # 최종 생성물 (편집 금지)
 ├── figma/                # Figma API 추출 데이터
 │   ├── extract.py        # 추출 스크립트
 │   ├── figma-mapping-results.md # 실측 매핑 분석
