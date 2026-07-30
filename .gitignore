@@ -1,0 +1,4 @@
+# 분석 대상 라이브러리 소스 — 얕은 클론, 커밋하지 않음
+# 재현: sources/clone.sh (고정 커밋은 sources/MANIFEST.md 참조)
+sources/*/
+__pycache__/
