@@ -12,7 +12,7 @@
 
 | 예외 없이 공통인 토큰 어휘 | 8개 시스템 전부에 있는 컴포넌트 | 추출한 semantic 토큰 총수 | category 축을 못 붙인 잔여 |
 |---:|---:|---:|---:|
-| 8 | 9 | 3177 | 4.9% |
+| 8 | 10 | 3177 | 4.9% |
 
 ## 측정 방법과 한계
 
@@ -123,6 +123,7 @@
 | **Dialog** | ● | ● | ● | ● | ● | ● | ● | ● | 8/8 | — |
 | **Menu** | ● | ● | ● | ● | ● | ● | ● | ● | 8/8 | — |
 | **Progress** | ● | ● | ● | ● | ● | ● | ● | ● | 8/8 | — |
+| **Radio** | ● | ● | ● | ● | ● | ● | ● | ● | 8/8 | — |
 | **Select** | ● | ● | ● | ● | ● | ● | ● | ● | 8/8 | — |
 | **Slider** | ● | ● | ● | ● | ● | ● | ● | ● | 8/8 | — |
 | **Tabs** | ● | ● | ● | ● | ● | ● | ● | ● | 8/8 | — |
@@ -146,7 +147,6 @@
 | **Label** | ● | · | ● | ● | ● | ● | ● | · | 6/8 | Material Web, Ant Design |
 | **Link** | ● | · | ● | ● | ● | ● | · | ● | 6/8 | Material Web, shadcn/ui |
 | **Popover** | · | · | ● | ● | ● | ● | ● | ● | 6/8 | Spectrum, Material Web |
-| **Radio** | ● | ● | ● | ● | · | · | ● | ● | 6/8 | Carbon, Polaris |
 | **ButtonGroup** | ● | · | ● | · | · | ● | ● | ● | 5/8 | Material Web, Fluent 2, Carbon |
 | **Drawer** | · | · | ● | ● | · | ● | ● | ● | 5/8 | Spectrum, Material Web, Carbon |
 | **Layout** | ● | · | ● | · | ● | ● | · | ● | 5/8 | Material Web, Fluent 2, shadcn/ui |
@@ -174,11 +174,12 @@
 
 | 정규 컴포넌트 | SPE | MTW | MUI | FLU | CAR | POL | SCN | ANT |
 |:---|:---|:---|:---|:---|:---|:---|:---|:---|
-| **Button** | `button` | `button` | `Button`, `ListItemButton`, `StepButton` | `button` | `Button`, `ChatButton`, `ComboButton` | `Button`, `CheckableButton`, `RadioButton` | `button` | `button`, `float-button` |
+| **Button** | `button` | `button` | `Button`, `ListItemButton`, `StepButton` | `button` | `Button`, `ChatButton`, `ComboButton` | `Button`, `CheckableButton`, `UnstyledButton` | `button` | `button`, `float-button` |
 | **Checkbox** | `checkbox` | `checkbox` | `Checkbox` | `checkbox` | `Checkbox` | `Checkbox` | `checkbox` | `checkbox` |
 | **Dialog** | `dialog` | `dialog` | `Dialog`, `Modal` | `dialog` | `Dialog`, `Modal` | `Modal` | `alert-dialog`, `dialog` | `modal` |
 | **Menu** | `menu` | `menu` | `Menu` | `menu` | `ContextMenu`, `Menu`, `OverflowMenu` | `ActionList`, `ActionMenu` | `context-menu`, `dropdown-menu` | `menu` |
 | **Progress** | `meter`, `progress` | `progress` | `CircularProgress`, `LinearProgress` | `progress` | `ProgressBar` | `ProgressBar` | `progress` | `progress` |
+| **Radio** | `radio` | `radio` | `Radio`, `RadioGroup` | `radio` | `RadioButton` | `RadioButton` | `radio-group` | `radio` |
 | **Select** | `picker` | `select` | `NativeSelect`, `Select` | `select` | `Dropdown`, `Select` | `Picker`, `Select` | `native-select`, `select` | `dropdown`, `select` |
 | **Slider** | `slider` | `slider` | `Slider` | `slider` | `Slider` | `RangeSlider` | `slider` | `slider` |
 | **Tabs** | `tabs` | `tabs` | `Tab`, `Tabs` | `tabs` | `Tab`, `Tabs` | `Tabs` | `tabs` | `tabs` |
@@ -270,7 +271,7 @@
 3. **상태를 토큰으로 만든다** — hover · focus · active 는 7/8. 미보유는 shadcn/ui — 그 대가로 상태 표현이 컴포넌트 코드에 흩어진다.
 4. **타이포그래피 스케일을 토큰화한다** — 8/8. 색상과 함께 유일하게 예외가 없는 값 종류다.
 5. **Elevation·radius 는 7/8** — 미보유는 shadcn/ui · Carbon 로 예외다 (shadcn 은 Tailwind 유틸리티, Carbon 은 radius 토큰이 *아예 없다*).
-6. **컴포넌트는 9개부터** — Button · Checkbox · Dialog · Menu · Progress · Select · Slider · Tabs · TextInput.
+6. **컴포넌트는 10개부터** — Button · Checkbox · Dialog · Menu · Progress · Radio · Select · Slider · Tabs · TextInput.
 7. **Button 의 variant 축은 강조도와 의미를 분리한다** — 합치면 값이 곱으로 폭발한다.
 8. **상태는 Figma 와 코드가 원리상 어긋난다** — Figma 킷의 1위 축이 `state` 인데 코드에서는 prop 이 아니라 의사클래스다. 자동 동기화를 시도하지 말고 계약 문서로 남긴다.
 

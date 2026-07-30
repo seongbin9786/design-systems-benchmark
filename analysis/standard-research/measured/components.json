@@ -624,7 +624,6 @@
      "DangerButton",
      "MenuButton",
      "PrimaryButton",
-     "RadioButton",
      "SecondaryButton"
     ],
     "Card": [
@@ -702,6 +701,9 @@
     ],
     "Progress": [
      "ProgressBar"
+    ],
+    "Radio": [
+     "RadioButton"
     ],
     "SearchInput": [
      "Search"
@@ -836,7 +838,6 @@
     "Button": [
      "Button",
      "CheckableButton",
-     "RadioButton",
      "UnstyledButton"
     ],
     "ButtonGroup": [
@@ -916,6 +917,9 @@
     ],
     "Progress": [
      "ProgressBar"
+    ],
+    "Radio": [
+     "RadioButton"
     ],
     "Select": [
      "Picker",
@@ -1369,13 +1373,11 @@
      "DangerButton",
      "MenuButton",
      "PrimaryButton",
-     "RadioButton",
      "SecondaryButton"
     ],
     "Polaris": [
      "Button",
      "CheckableButton",
-     "RadioButton",
      "UnstyledButton"
     ],
     "shadcn/ui": [
@@ -1557,6 +1559,48 @@
     ],
     "Ant Design": [
      "progress"
+    ]
+   }
+  },
+  {
+   "component": "Radio",
+   "coverage": 8,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [],
+   "aliases": {
+    "Spectrum": [
+     "radio"
+    ],
+    "Material Web": [
+     "radio"
+    ],
+    "MUI": [
+     "Radio",
+     "RadioGroup"
+    ],
+    "Fluent 2": [
+     "radio"
+    ],
+    "Carbon": [
+     "RadioButton"
+    ],
+    "Polaris": [
+     "RadioButton"
+    ],
+    "shadcn/ui": [
+     "radio-group"
+    ],
+    "Ant Design": [
+     "radio"
     ]
    }
   },
@@ -2481,43 +2525,6 @@
     ],
     "Ant Design": [
      "popover"
-    ]
-   }
-  },
-  {
-   "component": "Radio",
-   "coverage": 6,
-   "systems": [
-    "Spectrum",
-    "Material Web",
-    "MUI",
-    "Fluent 2",
-    "shadcn/ui",
-    "Ant Design"
-   ],
-   "missing": [
-    "Carbon",
-    "Polaris"
-   ],
-   "aliases": {
-    "Spectrum": [
-     "radio"
-    ],
-    "Material Web": [
-     "radio"
-    ],
-    "MUI": [
-     "Radio",
-     "RadioGroup"
-    ],
-    "Fluent 2": [
-     "radio"
-    ],
-    "shadcn/ui": [
-     "radio-group"
-    ],
-    "Ant Design": [
-     "radio"
     ]
    }
   },

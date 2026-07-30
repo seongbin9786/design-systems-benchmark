@@ -35,10 +35,9 @@ EXCLUDE = re.compile(
 )
 
 # 정규 개념 -> 별칭 정규식. 다수 시스템이 같은 개념을 다른 이름으로 부른다.
-# ⚠️ 순서가 우선순위다 (canonicalize 가 첫 일치를 택한다).
-# 넓은 패턴이 먼저 오면 전문 개념을 삼킨다 — `.*-button` 이 IconButton·ToggleButton 을
-# 가로채 IconButton 이 1/8, ToggleButton 이 0/8 로 잡히는 사고가 있었다.
-# 전문 개념을 반드시 넓은 패턴보다 위에 둔다.
+# canonicalize 는 좁은 패턴(`.*` 없음)을 전부 시도한 뒤 넓은 패턴으로 넘어간다.
+# 그래서 `.*-button` 이 IconButton·ToggleButton·Radio 를 삼키지 않는다.
+# 같은 표 안에서는 위에 있는 것이 이긴다 — 겹치는 좁은 패턴끼리는 순서를 신경 써야 한다.
 CANON = {
     "IconButton":      r"^icon-?button$",
     "ToggleButton":    r"^(toggle-?button|switch-?button)$",
@@ -128,11 +127,19 @@ def kebab(s):
     return s.lower()
 
 
+# `.*` 가 든 패턴은 넓다 (`.*-button`). 좁은 패턴을 먼저 다 시도한 뒤 넓은 것으로 넘어간다.
+# 순서만 조정하면 `RadioButton` 처럼 나중에 추가되는 전문 개념이 또 삼켜진다 —
+# 우선순위를 사람이 기억해야 하는 구조 자체를 없앤다.
+SPECIFIC = {k: v for k, v in CANON.items() if ".*" not in v}
+BROAD = {k: v for k, v in CANON.items() if ".*" in v}
+
+
 def canonicalize(raw):
     n = kebab(raw)
-    for canon, pat in CANON.items():
-        if re.match(pat, n):
-            return canon
+    for table in (SPECIFIC, BROAD):
+        for canon, pat in table.items():
+            if re.match(pat, n):
+                return canon
     return None
 
 
