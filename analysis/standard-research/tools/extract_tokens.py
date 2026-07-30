@@ -242,11 +242,12 @@ EXTRACTORS = {
 def main():
     result = {}
     for name, fn in EXTRACTORS.items():
-        try:
-            names, source, layer = fn()
-        except Exception as e:  # 소스 구조 변경 시 조용히 실패하지 않게
-            print(f"ERROR {name}: {e}", file=sys.stderr)
-            names, source, layer = set(), f"ERROR: {e}", "-"
+        # 예외를 삼키고 빈 집합을 넣으면 한 시스템이 0개인 채로 "8개 시스템 리포트" 가
+        # 만들어진다. 고정 소스의 구조가 바뀐 것이므로 파이프라인을 세우는 게 맞다.
+        names, source, layer = fn()
+        if not names:
+            raise ValueError(f"{name}: 토큰을 하나도 추출하지 못했습니다 — "
+                             f"소스 구조가 바뀐 것 같습니다 ({source})")
         result[name] = {
             "count": len(names),
             "layer": layer,

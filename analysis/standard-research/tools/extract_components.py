@@ -23,15 +23,21 @@ SRC = paths.SOURCES
 FIGMA = paths.FIGMA_RAW
 
 EXCLUDE = re.compile(
-    r"^(_|\.)|internal|utils?$|test|spec|stories|types?$|constants?$|styles?$|hooks?$|"
-    r"context$|index|shared|helpers?$|locales?$|version$|theme$|tokens?$|color[s]?$|"
-    r"typography-tokens|deprecated|legacy|experimental$|next$|unstable|"
+    # ⚠️ 경계 없는 조각은 실제 컴포넌트를 잡는다. 아래는 그 사고를 겪고 좁힌 결과다.
+    #   `spec`  → A**spec**tRatio · aspect-ratio 를 버렸다      → (^|-)spec
+    #   `index` → Polaris IndexTable · IndexFilters 를 버렸다   → ^index$
+    #   `colors?$` → Spectrum 의 color(ColorPicker 계열)를 버렸다 → ^colors$ (복수만)
+    #   `images?` → Image 컴포넌트를 버렸다                      → 제거
+    r"^(_|\.)|internal|(^|-|\.)spec(s|$|-|\.)|test|stories|legacy|unstable|deprecated|"
+    r"^(index|types?|constants?|styles?|hooks?|context|shared|helpers?|locales?|"
+    r"version|theme|themes|tokens?|colors|typography-tokens|experimental|next|"
+    r"utils?|util)$|"
     # 컴포넌트가 아닌 인프라/문서 디렉터리 (material-web: catalog, docs, labs, focus, ripple …)
     r"^(catalog|docs?|labs?|focus|ripple|elevation|css|scripts?|testing|tools?|"
-    r"node_modules|dist|build|examples?|demo|site|assets?|images?|fonts?|"
-    r"polyfills?|patches?|config|codemod.*|migration.*|template.*|locale.*|"
+    r"node_modules|dist|build|examples?|demo|site|assets?|fonts?|"
+    r"polyfills?|patches?|config|codemod.*|migration.*|template.*|"
     r"transitions?|zero-styled|generate-utility-class.*|class-name.*|"
-    r"use-[a-z-]+|with-[a-z-]+|create-[a-z-]+)$"
+    r"use-[a-z-]+|with-[a-z-]+|create-[a-z-]+|sass|scss|aria|positioning|tabster)$"
 )
 
 # 정규 개념 -> 별칭 정규식. 다수 시스템이 같은 개념을 다른 이름으로 부른다.
@@ -155,10 +161,17 @@ def code_inventory():
             raw = [p.stem for p in base.glob("*.tsx")]
         elif mode.startswith("dir:"):
             pre = mode.split(":", 1)[1]
-            raw = [p.name[len(pre):] for p in base.iterdir() if p.is_dir() and p.name.startswith(pre)]
+            # 이름으로 인프라를 걸러내면 목록을 계속 손봐야 한다. 구조로 판정한다 —
+            # Fluent v9 는 컴포넌트를 내보내는 패키지에만 library/src/components 가 있다.
+            # aria · utilities · positioning · tabster · jsx-runtime · storybook-addon ·
+            # conformance-griffel · theme-sass 에는 이 디렉터리가 없다.
+            raw = [p.name[len(pre):] for p in base.iterdir()
+                   if p.is_dir() and p.name.startswith(pre)
+                   and (p / "library/src/components").is_dir()]
         else:
             raw = [p.name for p in base.iterdir() if p.is_dir()]
-        raw = [r for r in raw if not EXCLUDE.search(kebab(r))]
+        dropped = {r for r in raw if EXCLUDE.search(kebab(r))}
+        raw = [r for r in raw if r not in dropped]
         mapped = defaultdict(list)
         unmapped = []
         for r in raw:
@@ -166,6 +179,7 @@ def code_inventory():
             (mapped[c].append(r) if c else unmapped.append(r))
         out[system] = {
             "raw_count": len(raw),
+            "dropped_infra": sorted(dropped),  # 조용히 버리지 않는다
             "source": rel,
             "canonical": {k: sorted(v) for k, v in sorted(mapped.items())},
             "unmapped": sorted(unmapped),

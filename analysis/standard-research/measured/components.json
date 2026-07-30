@@ -12,7 +12,10 @@
  "system_count": 8,
  "inventory": {
   "Spectrum": {
-   "raw_count": 56,
+   "raw_count": 58,
+   "dropped_infra": [
+    "utils"
+   ],
    "source": "react-spectrum/packages/@adobe/react-spectrum/src",
    "canonical": {
     "Accordion": [
@@ -68,6 +71,9 @@
     ],
     "Icon": [
      "icon"
+    ],
+    "Image": [
+     "image"
     ],
     "Label": [
      "label"
@@ -139,6 +145,7 @@
     ]
    },
    "unmapped": [
+    "color",
     "dnd",
     "illustratedmessage",
     "labeledvalue",
@@ -155,6 +162,23 @@
   },
   "Material Web": {
    "raw_count": 20,
+   "dropped_infra": [
+    ".git",
+    ".github",
+    "catalog",
+    "docs",
+    "elevation",
+    "focus",
+    "internal",
+    "labs",
+    "migrations",
+    "ripple",
+    "sass",
+    "scripts",
+    "testing",
+    "tokens",
+    "types"
+   ],
    "source": "material-web",
    "canonical": {
     "Button": [
@@ -213,12 +237,32 @@
     ]
    },
    "unmapped": [
-    "fab",
-    "sass"
+    "color",
+    "fab"
    ]
   },
   "MUI": {
-   "raw_count": 135,
+   "raw_count": 136,
+   "dropped_infra": [
+    "Unstable_TrapFocus",
+    "className",
+    "colors",
+    "generateUtilityClass",
+    "generateUtilityClasses",
+    "internal",
+    "locale",
+    "styles",
+    "transitions",
+    "types",
+    "useAutocomplete",
+    "useLazyRipple",
+    "useMediaQuery",
+    "usePagination",
+    "useScrollTrigger",
+    "utils",
+    "version",
+    "zero-styled"
+   ],
    "source": "material-ui/packages/mui-material/src",
    "canonical": {
     "Accordion": [
@@ -390,6 +434,7 @@
     "FilledInput",
     "FormControlLabel",
     "FormHelperText",
+    "GlobalStyles",
     "Grow",
     "ImageList",
     "ImageListItem",
@@ -443,7 +488,11 @@
    ]
   },
   "Fluent 2": {
-   "raw_count": 71,
+   "raw_count": 57,
+   "dropped_infra": [
+    "migration-v0-v9",
+    "migration-v8-v9"
+   ],
    "source": "fluentui/packages/react-components",
    "canonical": {
     "Accordion": [
@@ -491,6 +540,9 @@
     ],
     "Field": [
      "field"
+    ],
+    "Image": [
+     "image"
     ],
     "Label": [
      "label"
@@ -566,41 +618,29 @@
     ]
    },
    "unmapped": [
-    "aria",
     "calendar-compat",
-    "colorpicker-compat",
-    "components",
-    "conformance-griffel",
-    "context-selector",
     "datepicker-compat",
     "headless-components-preview",
-    "icons-compat",
     "infolabel",
-    "jsx-runtime",
     "menu-grid-preview",
     "motion",
     "motion-components-preview",
     "overflow",
     "portal",
-    "portal-compat",
-    "positioning",
     "provider",
     "spinbutton",
-    "storybook-addon",
-    "storybook-addon-export-to-sandbox",
     "swatch-picker",
-    "tabster",
     "tag-picker",
     "tags",
     "teaching-popover",
-    "theme-sass",
-    "timepicker-compat",
-    "utilities",
-    "utilities-compat"
+    "timepicker-compat"
    ]
   },
   "Carbon": {
-   "raw_count": 124,
+   "raw_count": 125,
+   "dropped_infra": [
+    "Theme"
+   ],
    "source": "carbon/packages/react/src/components",
    "canonical": {
     "Accordion": [
@@ -763,6 +803,7 @@
     "AILabel",
     "AISkeleton",
     "AccordionItem",
+    "AspectRatio",
     "BadgeIndicator",
     "BreadcrumbItem",
     "ButtonSet",
@@ -818,7 +859,15 @@
    ]
   },
   "Polaris": {
-   "raw_count": 111,
+   "raw_count": 115,
+   "dropped_infra": [
+    "Focus",
+    "LegacyCard",
+    "LegacyFilters",
+    "LegacyStack",
+    "LegacyTabs",
+    "PolarisTestProvider"
+   ],
    "source": "polaris/polaris-react/src/components",
    "canonical": {
     "Alert": [
@@ -883,6 +932,7 @@
      "Icon"
     ],
     "Image": [
+     "Image",
      "Thumbnail"
     ],
     "Label": [
@@ -974,6 +1024,9 @@
     "FooterHelp",
     "Frame",
     "FullscreenBar",
+    "IndexFilters",
+    "IndexProvider",
+    "IndexTable",
     "Indicator",
     "InlineCode",
     "InlineError",
@@ -1013,7 +1066,8 @@
    ]
   },
   "shadcn/ui": {
-   "raw_count": 60,
+   "raw_count": 61,
+   "dropped_infra": [],
    "source": "shadcn-ui/apps/v4/registry/new-york-v4/ui",
    "canonical": {
     "Accordion": [
@@ -1144,6 +1198,7 @@
     ]
    },
    "unmapped": [
+    "aspect-ratio",
     "attachment",
     "bubble",
     "collapsible",
@@ -1161,7 +1216,15 @@
    ]
   },
   "Ant Design": {
-   "raw_count": 75,
+   "raw_count": 76,
+   "dropped_infra": [
+    "__tests__",
+    "_util",
+    "locale",
+    "style",
+    "theme",
+    "version"
+   ],
    "source": "ant-design/components",
    "canonical": {
     "Accordion": [
@@ -1230,6 +1293,9 @@
     ],
     "Icon": [
      "icon"
+    ],
+    "Image": [
+     "image"
     ],
     "Layout": [
      "col",
@@ -2800,6 +2866,37 @@
    }
   },
   {
+   "component": "Image",
+   "coverage": 4,
+   "systems": [
+    "Spectrum",
+    "Fluent 2",
+    "Polaris",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web",
+    "MUI",
+    "Carbon",
+    "shadcn/ui"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "image"
+    ],
+    "Fluent 2": [
+     "image"
+    ],
+    "Polaris": [
+     "Image",
+     "Thumbnail"
+    ],
+    "Ant Design": [
+     "image"
+    ]
+   }
+  },
+  {
    "component": "Spinner",
    "coverage": 4,
    "systems": [
@@ -3324,27 +3421,6 @@
    "aliases": {
     "shadcn/ui": [
      "command"
-    ]
-   }
-  },
-  {
-   "component": "Image",
-   "coverage": 1,
-   "systems": [
-    "Polaris"
-   ],
-   "missing": [
-    "Spectrum",
-    "Material Web",
-    "MUI",
-    "Fluent 2",
-    "Carbon",
-    "shadcn/ui",
-    "Ant Design"
-   ],
-   "aliases": {
-    "Polaris": [
-     "Thumbnail"
     ]
    }
   },

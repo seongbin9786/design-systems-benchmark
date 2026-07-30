@@ -86,7 +86,9 @@ INTENT = [
     ("secondary",       r"secondary|subdued|muted|subtle|weak|tertiary|placeholder|quiet"),
     ("inverse",         r"inverse|\bon-\b|invert|contrast-text|-inverted"),
     ("disabled",        r"disabled"),
-    ("neutral",         r"neutral|default|\bgray\b|\bgrey\b|standard"),
+    # `default`·`standard` 는 어디에나 붙는다 — corner-radius-large-default,
+    # motion-easing-standard, transitions-duration-standard 를 neutral 로 잡았다.
+    ("neutral",         r"neutral|\bgray\b|\bgrey\b"),
 ]
 
 # ── 축 4: state ─────────────────────────────────────────────────────────────
@@ -136,6 +138,9 @@ def classify(raw):
     else:
         cat = match_axis(name, CATEGORY)
     intent = match_axis(name, INTENT)
+    # 일반어(default/standard)는 *색상 토큰에 한해서만* neutral 로 인정한다
+    if intent is None and cat == "color" and re.search(r"default|standard", name):
+        intent = "neutral"
     hue_named = False
     if intent is None:
         for hue, st in HUE_STATUS.items():

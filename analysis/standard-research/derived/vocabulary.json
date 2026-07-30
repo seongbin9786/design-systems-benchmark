@@ -882,37 +882,6 @@
     }
    },
    {
-    "value": "neutral",
-    "systems": [
-     "Carbon",
-     "Fluent 2",
-     "MUI",
-     "Material Web",
-     "Spectrum"
-    ],
-    "coverage": 5,
-    "tier": "prevalent",
-    "missing": [
-     "Ant Design",
-     "Polaris",
-     "shadcn/ui"
-    ],
-    "examples": {
-     "Spectrum": "gray-visual-color",
-     "Material Web": "motion-easing-standard",
-     "MUI": "palette-background-default",
-     "Fluent 2": "color-neutral-stroke1",
-     "Carbon": "syntax-standard"
-    },
-    "counts": {
-     "Spectrum": 44,
-     "Material Web": 3,
-     "MUI": 2,
-     "Fluent 2": 78,
-     "Carbon": 1
-    }
-   },
-   {
     "value": "status:info",
     "systems": [
      "Ant Design",
@@ -970,6 +939,33 @@
      "Fluent 2": 20,
      "Carbon": 15,
      "Polaris": 21
+    }
+   },
+   {
+    "value": "neutral",
+    "systems": [
+     "Fluent 2",
+     "MUI",
+     "Spectrum"
+    ],
+    "coverage": 3,
+    "tier": "divergent",
+    "missing": [
+     "Ant Design",
+     "Carbon",
+     "Material Web",
+     "Polaris",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "gray-visual-color",
+     "MUI": "palette-background-default",
+     "Fluent 2": "color-neutral-stroke1"
+    },
+    "counts": {
+     "Spectrum": 33,
+     "MUI": 1,
+     "Fluent 2": 78
     }
    }
   ],

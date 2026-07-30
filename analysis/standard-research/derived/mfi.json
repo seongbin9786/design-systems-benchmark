@@ -22,12 +22,12 @@
   "Carbon": {
    "figma_component_sets": 177,
    "figma_unique_after_norm": 124,
-   "code_components": 124,
+   "code_components": 125,
    "matched": 49,
-   "component_match_rate": 39.5,
-   "naming_similarity": 77.5,
+   "component_match_rate": 39.2,
+   "naming_similarity": 77.2,
    "naming_similarity_matched_only": 99.2,
-   "mfi_partial": 54.7,
+   "mfi_partial": 54.4,
    "matched_sample": [
     {
      "code": "AILabel",
@@ -102,6 +102,11 @@
      "similarity": 0.818
     },
     {
+     "code": "AspectRatio",
+     "closest": "_Slider left rail",
+     "similarity": 0.48
+    },
+    {
      "code": "BadgeIndicator",
      "closest": "Progress indicator",
      "similarity": 0.71
@@ -145,23 +150,18 @@
      "code": "CopyButton",
      "closest": "Combo button",
      "similarity": 0.762
-    },
-    {
-     "code": "DangerButton",
-     "closest": "_Tag close button",
-     "similarity": 0.692
     }
    ]
   },
   "Fluent 2": {
    "figma_component_sets": 104,
    "figma_unique_after_norm": 94,
-   "code_components": 71,
+   "code_components": 57,
    "matched": 34,
-   "component_match_rate": 47.9,
-   "naming_similarity": 77.0,
+   "component_match_rate": 59.6,
+   "naming_similarity": 83.7,
    "naming_similarity_matched_only": 99.6,
-   "mfi_partial": 59.5,
+   "mfi_partial": 69.3,
    "matched_sample": [
     {
      "code": "accordion",
@@ -226,11 +226,6 @@
    ],
    "unmatched_sample": [
     {
-     "code": "aria",
-     "closest": ".Card media",
-     "similarity": 0.615
-    },
-    {
      "code": "calendar-compat",
      "closest": ".Secondary action",
      "similarity": 0.483
@@ -241,29 +236,9 @@
      "similarity": 0.609
     },
     {
-     "code": "colorpicker-compat",
-     "closest": "TagPicker/Secondary action",
-     "similarity": 0.488
-    },
-    {
      "code": "combobox",
      "closest": "Checkbox",
      "similarity": 0.5
-    },
-    {
-     "code": "components",
-     "closest": "Compound button",
-     "similarity": 0.583
-    },
-    {
-     "code": "conformance-griffel",
-     "closest": "InfoLabel",
-     "similarity": 0.444
-    },
-    {
-     "code": "context-selector",
-     "closest": ".Content header",
-     "similarity": 0.643
     },
     {
      "code": "datepicker-compat",
@@ -276,14 +251,39 @@
      "similarity": 0.444
     },
     {
-     "code": "icons-compat",
-     "closest": "Input",
+     "code": "image",
+     "closest": "Badge",
+     "similarity": 0.6
+    },
+    {
+     "code": "list",
+     "closest": ".ListItem",
+     "similarity": 0.667
+    },
+    {
+     "code": "menu-grid-preview",
+     "closest": ".Images Preview Step",
+     "similarity": 0.562
+    },
+    {
+     "code": "motion",
+     "closest": "Menu section",
+     "similarity": 0.588
+    },
+    {
+     "code": "motion-components-preview",
+     "closest": ".Images Preview Step",
      "similarity": 0.5
     },
     {
-     "code": "jsx-runtime",
-     "closest": ".ListItem",
-     "similarity": 0.444
+     "code": "nav",
+     "closest": "NavNode - medium",
+     "similarity": 0.6
+    },
+    {
+     "code": "overflow",
+     "closest": ".Overlay drawer",
+     "similarity": 0.571
     }
    ]
   },
@@ -355,6 +355,11 @@
      "similarity": 0.667
     },
     {
+     "code": "color",
+     "closest": "Toolbar",
+     "similarity": 0.5
+    },
+    {
      "code": "divider",
      "closest": "Dial picker",
      "similarity": 0.588
@@ -380,11 +385,6 @@
      "similarity": 0.615
     },
     {
-     "code": "sass",
-     "closest": "Shape Set",
-     "similarity": 0.5
-    },
-    {
      "code": "select",
      "closest": "Side Sheet",
      "similarity": 0.533
@@ -404,12 +404,12 @@
   "Spectrum": {
    "figma_component_sets": 462,
    "figma_unique_after_norm": 44,
-   "code_components": 56,
+   "code_components": 58,
    "matched": 21,
-   "component_match_rate": 37.5,
+   "component_match_rate": 36.2,
    "naming_similarity": 71.2,
    "naming_similarity_matched_only": 99.1,
-   "mfi_partial": 51.0,
+   "mfi_partial": 50.2,
    "matched_sample": [
     {
      "code": "actionbar",
@@ -499,6 +499,11 @@
      "similarity": 0.526
     },
     {
+     "code": "color",
+     "closest": "Color Area - Desktop - Light",
+     "similarity": 0.714
+    },
+    {
      "code": "contextualhelp",
      "closest": "Text Field - Desktop - Light",
      "similarity": 0.522
@@ -527,11 +532,6 @@
      "code": "form",
      "closest": "_Figma Frame",
      "similarity": 0.429
-    },
-    {
-     "code": "icon",
-     "closest": "Quick Action - Desktop - Light",
-     "similarity": 0.533
     }
    ]
   }

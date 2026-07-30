@@ -90,9 +90,9 @@
 | `disabled` | ● | · | ● | ● | ● | ● | · | ● | 6/8 | 우세 | Material Web, shadcn/ui |
 | `status:success` | ● | · | ● | ● | ● | ● | · | ● | 6/8 | 우세 | Material Web, shadcn/ui |
 | `status:warning` | ● | · | ● | ● | ● | ● | · | ● | 6/8 | 우세 | Material Web, shadcn/ui |
-| `neutral` | ● | ● | ● | ● | ● | · | · | · | 5/8 | 우세 | Ant Design, Polaris, shadcn/ui |
 | `status:info` | ● | · | ● | · | ● | ● | · | ● | 5/8 | 우세 | Fluent 2, Material Web, shadcn/ui |
 | `inverse` | · | ● | · | ● | ● | ● | · | · | 4/8 | 분기 | Ant Design, MUI, Spectrum, shadcn/ui |
+| `neutral` | ● | · | ● | ● | · | · | · | · | 3/8 | 분기 | Ant Design, Carbon, Material Web, Polaris, shadcn/ui |
 
 ### 상호작용 상태 — 상태에 따라 값이 바뀌는가
 
@@ -154,6 +154,7 @@
 | **DatePicker** | ● | · | · | · | ● | ● | · | ● | 4/8 | Material Web, MUI, Fluent 2, shadcn/ui |
 | **Field** | · | ● | ● | ● | · | · | ● | · | 4/8 | Spectrum, Carbon, Polaris, Ant Design |
 | **FileUpload** | ● | · | · | · | ● | ● | · | ● | 4/8 | Material Web, MUI, Fluent 2, shadcn/ui |
+| **Image** | ● | · | · | ● | · | ● | · | ● | 4/8 | Material Web, MUI, Carbon, shadcn/ui |
 | **Spinner** | · | · | · | ● | ● | ● | ● | · | 4/8 | Spectrum, Material Web, MUI, Ant Design |
 | **Toast** | ● | · | ● | ● | · | ● | · | · | 4/8 | Material Web, Carbon, shadcn/ui, Ant Design |
 | **Tree** | ● | · | · | ● | ● | · | · | ● | 4/8 | Material Web, MUI, Polaris, shadcn/ui |
@@ -250,14 +251,14 @@
 
 | 시스템 | Figma SET | 정규화 후 | 코드 | 매칭 | 매칭률 | 네이밍 근접도 | MFI-partial |
 |:---|---:|---:|---:|---:|---:|---:|---:|
+| Fluent 2 | 104 | 94 | 57 | 34 | 59.6% | 83.7% | **69.3** |
 | Material Web | 171 | 149 | 20 | 10 | 50.0% | 77.4% | **61.0** |
-| Fluent 2 | 104 | 94 | 71 | 34 | 47.9% | 77.0% | **59.5** |
-| Carbon | 177 | 124 | 124 | 49 | 39.5% | 77.5% | **54.7** |
-| Spectrum | 462 | 44 | 56 | 21 | 37.5% | 71.2% | **51.0** |
+| Carbon | 177 | 124 | 125 | 49 | 39.2% | 77.2% | **54.4** |
+| Spectrum | 462 | 44 | 58 | 21 | 36.2% | 71.2% | **50.2** |
 
 
 > [!WARNING]
-> **이 수치는 매칭 규칙에 극도로 민감하다.** 이름 매칭에 "한쪽이 다른 쪽을 포함하면 매칭" 이라는 보정을 넣었을 때 Carbon 매칭률이 74.2%, 제거했을 때 39.5% 였다. 보정판은 `context-selector`↔`.Text`, `icon`↔`Icon button` 같은 무관한 쌍을 세고 있었다. 지금은 보정 없는 순수 문자열 유사도만 쓴다 — 사람 눈에는 대응하는 쌍(`radio`↔`Radio buttons`)도 놓치지만, 과대평가보다 과소평가가 정직하다. 의존율과 같은 교훈이다: **집계 규칙을 밝히지 않은 수치는 비교 불가다.**
+> **이 수치는 매칭 규칙에 극도로 민감하다.** 이름 매칭에 "한쪽이 다른 쪽을 포함하면 매칭" 이라는 보정을 넣었을 때 Carbon 매칭률이 74.2%, 제거했을 때 39.2% 였다. 보정판은 `context-selector`↔`.Text`, `icon`↔`Icon button` 같은 무관한 쌍을 세고 있었다. 지금은 보정 없는 순수 문자열 유사도만 쓴다 — 사람 눈에는 대응하는 쌍(`radio`↔`Radio buttons`)도 놓치지만, 과대평가보다 과소평가가 정직하다. 의존율과 같은 교훈이다: **집계 규칙을 밝히지 않은 수치는 비교 불가다.**
 계산하지 못한 항목 (가중치 0.50):
 
 - `variant` (가중치 0.20) — 코드 prop 축 자동 추출 미구현 (Button 만 수동 실측 — button_api.json)
