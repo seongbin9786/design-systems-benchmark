@@ -49,6 +49,10 @@ def preflight():
     빈 값을 돌려주고 성공으로 끝나므로, 일부만 받은 상태에서도 리포트가 나온다 —
     토큰은 8개 시스템, 컴포넌트는 6개 시스템 같은 뒤섞인 결과가 만들어진다.
     clone.sh 가 키 단위 클론을 지원하니 실제로 일어날 수 있는 상황이다.
+
+    SHA 만 봐서도 안 된다. 소스를 들여다보다 파일을 고치면 HEAD 는 그대로이므로
+    "매니페스트 커밋을 재면 이 결과가 나온다" 는 주장이 거짓이 된다. 작업 트리가
+    깨끗한지도 확인한다 (추적 파일 변경 · 미추적 파일 둘 다).
     """
     import re
     import subprocess
@@ -73,13 +77,23 @@ def preflight():
                              capture_output=True, text=True).stdout.strip()
         if cur != sha:
             bad.append((key, f"HEAD {cur[:7]} ≠ 매니페스트 {sha[:7]}"))
+            continue
+        # sparse-checkout 을 쓰므로 `--porcelain` 은 체크아웃 밖 파일을 보고하지 않는다.
+        dirty = subprocess.run(["git", "-C", str(d), "status", "--porcelain",
+                                "--untracked-files=normal"],
+                               capture_output=True, text=True).stdout.strip()
+        if dirty:
+            n = len(dirty.splitlines())
+            first = dirty.splitlines()[0].strip()
+            bad.append((key, f"로컬 변경 {n}건 (예: {first}) — HEAD 는 맞지만 내용이 다르다"))
 
     if bad:
         print(f"  ✗ 소스 {len(bad)}/{len(want)}개가 매니페스트와 어긋납니다:")
         for key, why in bad:
             print(f"      {key:18s} {why}")
-        print("    `bash sources/clone.sh` 로 맞추세요. 이 상태로 측정하면 시스템별로")
-        print("    다른 소스를 섞어 재는 리포트가 나옵니다.")
+        print("    `bash sources/clone.sh` 로 맞추거나, 로컬 변경은 `git -C sources/<key>`")
+        print("    에서 되돌리세요. 이 상태로 측정하면 리포트가 주장하는 커밋과 실제로 잰")
+        print("    내용이 어긋납니다.")
         return False
     print(f"  ✓ 소스 {len(want)}/{len(want)}개가 매니페스트 SHA 와 일치")
     return True

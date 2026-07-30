@@ -38,11 +38,11 @@
      "Ant Design": "color-fill"
     },
     "counts": {
-     "Spectrum": 244,
+     "Spectrum": 246,
      "Material Web": 50,
      "MUI": 38,
      "Fluent 2": 366,
-     "Carbon": 67,
+     "Carbon": 84,
      "Polaris": 226,
      "shadcn/ui": 78,
      "Ant Design": 106
@@ -221,37 +221,6 @@
     }
    },
    {
-    "value": "z-index",
-    "systems": [
-     "Ant Design",
-     "Carbon",
-     "MUI",
-     "Polaris",
-     "Spectrum"
-    ],
-    "coverage": 5,
-    "tier": "prevalent",
-    "missing": [
-     "Fluent 2",
-     "Material Web",
-     "shadcn/ui"
-    ],
-    "examples": {
-     "Spectrum": "background-layer-1-color",
-     "MUI": "z-index-fab",
-     "Carbon": "layer-01",
-     "Polaris": "zIndex-0",
-     "Ant Design": "z-index-base"
-    },
-    "counts": {
-     "Spectrum": 2,
-     "MUI": 8,
-     "Carbon": 3,
-     "Polaris": 26,
-     "Ant Design": 2
-    }
-   },
-   {
     "value": "border",
     "systems": [
      "Ant Design",
@@ -363,6 +332,33 @@
      "Polaris": 5,
      "shadcn/ui": 2,
      "Ant Design": 20
+    }
+   },
+   {
+    "value": "z-index",
+    "systems": [
+     "Ant Design",
+     "MUI",
+     "Polaris"
+    ],
+    "coverage": 3,
+    "tier": "divergent",
+    "missing": [
+     "Carbon",
+     "Fluent 2",
+     "Material Web",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "MUI": "z-index-fab",
+     "Polaris": "zIndex-0",
+     "Ant Design": "z-index-base"
+    },
+    "counts": {
+     "MUI": 8,
+     "Polaris": 26,
+     "Ant Design": 2
     }
    },
    {
@@ -507,7 +503,7 @@
      "Material Web": "color-surface",
      "MUI": "palette-background-paper",
      "Fluent 2": "color-brand-background",
-     "Carbon": "background",
+     "Carbon": "layer-01",
      "Polaris": "color-bg",
      "shadcn/ui": "surface",
      "Ant Design": "color-fill"
@@ -1230,23 +1226,21 @@
    "total": 921,
    "counts": {
     "typography": 305,
-    "color": 244,
+    "color": 246,
     "spacing": 224,
     "elevation": 43,
     "sizing": 32,
     "radius": 30,
     "icon-size": 30,
     "opacity": 6,
-    "border": 5,
-    "z-index": 2
+    "border": 5
    },
    "pct": {
-    "color": 26.5,
+    "color": 26.7,
     "typography": 33.1,
     "elevation": 4.7,
     "radius": 3.3,
     "spacing": 24.3,
-    "z-index": 0.2,
     "border": 0.5,
     "opacity": 0.7,
     "sizing": 3.5,
@@ -1291,8 +1285,8 @@
     "radius": 0.9,
     "motion": 10.1,
     "spacing": 0.9,
-    "z-index": 7.3,
-    "opacity": 4.6
+    "opacity": 4.6,
+    "z-index": 7.3
    }
   },
   "Fluent 2": {
@@ -1317,28 +1311,26 @@
    }
   },
   "Carbon": {
-   "total": 201,
+   "total": 215,
    "counts": {
-    "color": 67,
+    "color": 84,
     "typography": 54,
     "domain": 42,
     "spacing": 20,
     "motion": 6,
     "sizing": 6,
-    "z-index": 3,
     "icon-size": 2,
     "elevation": 1
    },
    "pct": {
-    "color": 33.3,
-    "typography": 26.9,
+    "color": 39.1,
+    "typography": 25.1,
     "elevation": 0.5,
-    "motion": 3.0,
-    "spacing": 10.0,
-    "z-index": 1.5,
-    "sizing": 3.0,
-    "icon-size": 1.0,
-    "domain": 20.9
+    "motion": 2.8,
+    "spacing": 9.3,
+    "sizing": 2.8,
+    "icon-size": 0.9,
+    "domain": 19.5
    }
   },
   "Polaris": {
@@ -1362,10 +1354,10 @@
     "radius": 1.9,
     "motion": 7.9,
     "spacing": 4.2,
-    "z-index": 5.0,
     "border": 2.7,
     "sizing": 7.7,
-    "breakpoint": 1.0
+    "breakpoint": 1.0,
+    "z-index": 5.0
    }
   },
   "shadcn/ui": {
@@ -1394,8 +1386,8 @@
     "elevation": 14,
     "motion": 10,
     "radius": 5,
-    "z-index": 2,
     "opacity": 2,
+    "z-index": 2,
     "border": 1
    },
    "pct": {
@@ -1405,16 +1397,16 @@
     "radius": 2.2,
     "motion": 4.4,
     "spacing": 10.1,
-    "z-index": 0.9,
     "border": 0.4,
     "opacity": 0.9,
     "sizing": 8.8,
-    "breakpoint": 8.8
+    "breakpoint": 8.8,
+    "z-index": 0.9
    }
   }
  },
  "category_volume": {
-  "color": 1175,
+  "color": 1194,
   "typography": 638,
   "spacing": 312,
   "elevation": 124,
@@ -1422,7 +1414,7 @@
   "sizing": 98,
   "radius": 77,
   "domain": 42,
-  "z-index": 41,
+  "z-index": 36,
   "icon-size": 32,
   "breakpoint": 27,
   "border": 24,
@@ -1449,7 +1441,7 @@
    ]
   },
   "Carbon": {
-   "count": 140,
+   "count": 126,
    "sample": [
     "code01",
     "code02",

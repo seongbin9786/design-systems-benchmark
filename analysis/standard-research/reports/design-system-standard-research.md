@@ -12,7 +12,7 @@
 
 | 예외 없이 공통인 토큰 어휘 | 8개 시스템 전부에 있는 컴포넌트 | 추출한 semantic 토큰 총수 | category 축을 못 붙인 잔여 |
 |---:|---:|---:|---:|
-| 8 | 10 | 2876 | 5.5% |
+| 8 | 10 | 2876 | 5.0% |
 
 ## 측정 방법과 한계
 
@@ -21,7 +21,7 @@
 - **수집 범위** — 각 시스템의 *semantic(alias) 계층*만. primitive 램프(`gray-100` 류)는 제외했다. 표준화 대상이 아니다.
 - **판정** — 토큰 이름을 4개 축(값의 종류 / 자리 / 의미 / 상태)으로 분류하고, 각 값이 8개 중 몇 개 시스템에 등장하는지 센다.
 - **이름이 곧 근거** — 값이 아니라 *이름*을 본다. 이름에 개념이 드러나지 않으면 그 시스템은 실제로 그 개념을 구분하지 않는다고 본다.
-- **잔여 157개(5.5%)** 는 *값의 종류* 축만 못 붙은 것이다 (다른 축은 기록됐다). 대부분 Carbon 의 `code01`/`container01` 같은 시스템 고유 스케일이다.
+- **잔여 143개(5.0%)** 는 *값의 종류* 축만 못 붙은 것이다 (다른 축은 기록됐다). 대부분 Carbon 의 `code01`/`container01` 같은 시스템 고유 스케일이다.
 
 > [!WARNING]
 > **이름이 같아야 개념이 같은 것은 아니다.** Fluent 2 는 상태색을 `status` 가 아니라 *색조* 이름으로 부른다 — `colorPaletteCranberryForeground1` 이 위험색이다. 이 문서는 `statusColorMapping.ts`(success→green, warning→orange, danger→cranberry)를 읽어 매핑한 뒤 커버리지에 넣었다. 해당 사례: Spectrum 3개, Fluent 2 45개
@@ -32,10 +32,10 @@
 
 | 시스템 | 토큰 수 | 색상 | 타이포그래피 | 간격 | 크기 | elevation | 모션 | radius | 기타 |
 |:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Spectrum | 935 | 26% | 33% | 24% | 4% | 5% | — | 3% | 5% |
+| Spectrum | 935 | 27% | 33% | 24% | 4% | 5% | — | 3% | 4% |
 | Polaris | 519 | 44% | 22% | 4% | 8% | 4% | 8% | 2% | 9% |
 | Fluent 2 | 459 | 80% | 6% | 5% | — | 3% | 4% | 2% | 1% |
-| Carbon | 341 | 33% | 27% | 10% | 3% | 0% | 3% | — | 23% |
+| Carbon | 341 | 39% | 25% | 9% | 3% | 0% | 3% | — | 20% |
 | Ant Design | 228 | 47% | 11% | 10% | 9% | 6% | 4% | 2% | 11% |
 | Material Web | 192 | 26% | 48% | — | — | 3% | 14% | 6% | 2% |
 | MUI | 109 | 35% | 18% | 1% | — | 23% | 10% | 1% | 12% |
@@ -59,11 +59,11 @@
 | `radius` | ● | ● | ● | ● | · | ● | ● | ● | 7/8 | 우세 | Carbon |
 | `motion` | · | ● | ● | ● | ● | ● | · | ● | 6/8 | 우세 | Spectrum, shadcn/ui |
 | `spacing` | ● | · | ● | ● | ● | ● | · | ● | 6/8 | 우세 | Material Web, shadcn/ui |
-| `z-index` | ● | · | ● | · | ● | ● | · | ● | 5/8 | 우세 | Fluent 2, Material Web, shadcn/ui |
 | `border` | ● | · | · | ● | · | ● | · | ● | 4/8 | 분기 | Carbon, MUI, Material Web, shadcn/ui |
 | `opacity` | ● | ● | ● | · | · | · | · | ● | 4/8 | 분기 | Carbon, Fluent 2, Polaris, shadcn/ui |
 | `sizing` | ● | · | · | · | ● | ● | · | ● | 4/8 | 분기 | Fluent 2, MUI, Material Web, shadcn/ui |
 | `breakpoint` | · | · | · | · | · | ● | ● | ● | 3/8 | 분기 | Carbon, Fluent 2, MUI, Material Web, Spectrum |
+| `z-index` | · | · | ● | · | · | ● | · | ● | 3/8 | 분기 | Carbon, Fluent 2, Material Web, Spectrum, shadcn/ui |
 | `icon-size` | ● | · | · | · | ● | · | · | · | 2/8 | 분기 | Ant Design, Fluent 2, MUI, Material Web, Polaris, shadcn/ui |
 | `domain` | · | · | · | · | ● | · | · | · | 1/8 | 고유 | Ant Design, Fluent 2, MUI, Material Web, Polaris, Spectrum, shadcn/ui |
 

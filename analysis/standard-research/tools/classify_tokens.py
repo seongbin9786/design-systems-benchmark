@@ -41,14 +41,16 @@ CATEGORY = [
     ("motion",     r"motion|duration|easing|curve|transition|animation|delay"),
     ("radius",     r"radius|corner|rounded|shape"),
     ("border",     r"border-width|stroke-width|border-\d|outline-width|thickness"),
-    ("z-index",    r"z-index|zindex|layer-\d|stacking"),
+    # `layer-\d` 는 Spectrum 의 background-layer-1-color, Carbon 의 layer-01~03 —
+    # 둘 다 *배경색* 이다. 실제 스택 토큰만 인정한다.
+    ("z-index",    r"z-index|zindex|stacking|^layer$"),
     ("breakpoint", r"breakpoint|viewport|screen-"),
     ("opacity",    r"opacity|alpha"),
     ("icon-size",  r"icon-size|icon-\d|workflow-icon"),
     ("blur",       r"blur|backdrop"),
     ("spacing",    r"spacing|space|gap|padding|margin|inset|edge-to|to-text|to-visual|to-icon|to-field|to-component|to-alert|to-validation|to-disclosure|to-control|text-to-|visual-to-"),
     ("sizing",     r"size|height|width|min-|max-|density|track|thumb|scale"),
-    ("color",      r"color|bg|background|fg|foreground|surface|border|text|icon|fill|stroke|overlay|scrim|link|divider|split|outline|primary|secondary|accent|brand|neutral|\bring\b|card|popover|input|muted|destructive|sidebar|palette|chart|aura|gradient|swatch|highlight|selection|scrollbar|transparent|compound"),
+    ("color",      r"color|bg|background|fg|foreground|surface|border|text|icon|fill|stroke|overlay|scrim|link|divider|split|outline|primary|secondary|accent|brand|neutral|\bring\b|card|popover|input|muted|destructive|sidebar|palette|chart|aura|gradient|swatch|highlight|selection|scrollbar|transparent|compound|layer"),
 ]
 
 # Fluent 2 는 상태색을 status 가 아니라 *색조* 이름으로 부른다 (statusColorMapping.ts).
