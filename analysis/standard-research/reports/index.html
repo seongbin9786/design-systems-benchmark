@@ -1,0 +1,115 @@
+<!-- 생성물입니다. 직접 편집하지 마세요 — 다음 빌드에 덮어써집니다.
+     고치려면 analysis/standard-research/tools/ 의 스크립트나 템플릿을 고치고
+     `python3 analysis/standard-research/run.py` 를 다시 실행하세요. -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>디자인 시스템 표준화 연구 — 8개 시스템 소스 실측</title>
+<meta name="description" content="Spectrum · Material · MUI · Fluent 2 · Carbon · Polaris · shadcn/ui · Ant Design 의 실제 소스에서 토큰과 컴포넌트를 세어 무엇이 표준화 가능한지 판정한 리포트.">
+<style>
+:root {
+  --ink: #16191d; --ink-2: #4a5157; --ink-3: #767f87;
+  --paper: #f6f7f8; --card: #fff; --rule: #dfe3e6; --rule-2: #eceff1;
+  --accent: #2f5d8a; --accent-soft: #e8eff6;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard",
+          "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --ink: #e6eaee; --ink-2: #a8b2bb; --ink-3: #7b858e;
+    --paper: #14171a; --card: #1b1f23; --rule: #2c3238; --rule-2: #23282d;
+    --accent: #7fb0dd; --accent-soft: #1e2a35;
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #e6eaee; --ink-2: #a8b2bb; --ink-3: #7b858e;
+  --paper: #14171a; --card: #1b1f23; --rule: #2c3238; --rule-2: #23282d;
+  --accent: #7fb0dd; --accent-soft: #1e2a35;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans);
+  font-size: clamp(.9rem,.87rem + .15vw,.95rem); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 62rem; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+.eyebrow { font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent); margin: 0 0 .9rem; }
+h1 { font-size: clamp(1.9rem,1.6rem + 1.4vw,2.9rem); line-height: 1.1; letter-spacing: -.025em;
+  font-weight: 660; margin: 0 0 1rem; text-wrap: balance; max-width: 26ch; }
+.lede { font-size: clamp(1.05rem,1rem + .3vw,1.2rem); color: var(--ink-2); margin: 0 0 1.4rem; max-width: 58ch; }
+.meta { font-size: .8rem; color: var(--ink-3); margin: 0 0 2.4rem; max-width: 62ch; }
+.meta b { color: var(--ink-2); font-weight: 600; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit,minmax(9rem,1fr)); gap: 1px;
+  background: var(--rule); border: 1px solid var(--rule); border-radius: 5px; overflow: hidden; margin: 0 0 3rem; }
+.kpi { background: var(--card); padding: 1.05rem 1.1rem; }
+.kpi .k { font-size: 2rem; line-height: 1; font-weight: 600; letter-spacing: -.035em; }
+.kpi .k small { font-size: .95rem; font-weight: 500; color: var(--ink-3); letter-spacing: 0; }
+.kpi .l { font-size: .78rem; color: var(--ink-2); margin-top: .45rem; }
+h2.sec { font-size: 1.35rem; font-weight: 640; letter-spacing: -.015em; margin: 0 0 1rem;
+  padding-top: 1.6rem; border-top: 1px solid var(--rule); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(17rem,1fr)); gap: 1rem; margin: 0 0 3rem; }
+.card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--rule);
+  border-radius: 6px; padding: 1.2rem 1.25rem 1.1rem; text-decoration: none; color: inherit;
+  transition: border-color .12s, transform .12s; }
+.card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.card .ico { font-size: 1.5rem; line-height: 1; }
+.card h2 { font-size: 1.05rem; font-weight: 640; margin: .55rem 0 .35rem; }
+.card p { font-size: .82rem; color: var(--ink-2); margin: 0 0 .7rem; }
+.card ul { list-style: none; margin: 0 0 .9rem; padding: 0; }
+.card li { font-size: .76rem; color: var(--ink-3); padding-left: .8rem; position: relative; line-height: 1.6; }
+.card li::before { content: "·"; position: absolute; left: .15rem; color: var(--accent); }
+.card .go { margin-top: auto; font-size: .78rem; color: var(--accent); font-weight: 600; }
+.finds { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule);
+  border-radius: 5px; overflow: hidden; margin: 0 0 3rem; }
+.f { background: var(--card); padding: 1.05rem 1.15rem; }
+.f h3 { font-size: .95rem; font-weight: 640; margin: 0 0 .35rem; }
+.f p { font-size: .82rem; color: var(--ink-2); margin: 0; max-width: 68ch; }
+.how { background: var(--card); border: 1px solid var(--rule); border-radius: 5px; padding: 1.15rem 1.25rem; }
+.how h3 { font-size: .95rem; font-weight: 640; margin: 0 0 .6rem; }
+.how p { font-size: .82rem; color: var(--ink-2); margin: 0 0 .6rem; max-width: 68ch; }
+.how code { font-family: var(--mono); font-size: .78rem; background: var(--rule-2);
+  padding: .1rem .3rem; border-radius: 3px; }
+.how pre { font-family: var(--mono); font-size: .74rem; background: var(--rule-2); color: var(--ink-2);
+  padding: .7rem .8rem; border-radius: 4px; overflow-x: auto; margin: 0 0 .6rem; }
+footer { margin-top: 3rem; padding-top: 1.3rem; border-top: 1px solid var(--rule);
+  font-size: .76rem; color: var(--ink-3); }
+footer a { color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } }
+</style>
+
+<div class="wrap">
+<p class="eyebrow">design-systems-benchmark · 실측</p>
+<h1>디자인 시스템에서 표준화할 수 있는 것</h1>
+<p class="lede">8개 컴포넌트 라이브러리의 <b>실제 소스</b>에서 semantic 토큰 2,876개와
+컴포넌트 인벤토리를 추출해, 어느 개념이 예외 없이 공통이고 어느 개념이 갈리는지 셌다.
+공통인 것만이 표준화 가능하다.</p>
+<p class="meta"><b>대상</b> Spectrum · Material Web · MUI · Fluent 2 · Carbon · Polaris · shadcn/ui · Ant Design &nbsp;·&nbsp; <b>기준일</b> 2026-07-30 &nbsp;·&nbsp;
+<b>소스</b> 고정 커밋 (각 리포트 부록)</p>
+
+<div class="kpis"><div class="kpi"><div class="k">8</div><div class="l">예외 없이 공통인<br>토큰 어휘</div></div><div class="kpi"><div class="k">10</div><div class="l">8개 시스템 전부에<br>있는 컴포넌트</div></div><div class="kpi"><div class="k">2<small> vs 6</small></div><div class="l">어순이 갈린<br>두 진영</div></div><div class="kpi"><div class="k">420</div><div class="l">Figma 한 컴포넌트의<br>최대 variant 수</div></div></div>
+
+<h2 class="sec">리포트</h2>
+<div class="cards"><a class="card" href="design-system-standard-research.html"><span class="ico">📐</span><h2>본문 (시각화)</h2><p>커버리지 히트맵 · 덤벨 차트 · 100% 누적 막대 등 8종. 무엇이 표준화 가능한지 판정한다.</p><ul><li>토큰 어휘 4축 커버리지</li><li>컴포넌트 교집합</li><li>Button variant 축</li><li>재감사: 의존율 · MFI</li></ul><span class="go">열기 →</span></a><a class="card" href="design-system-standard-research-visual.html"><span class="ico">📊</span><h2>확장판</h2><p>본문의 상위집합. 이름의 *문법* 까지 파고든다.</p><ul><li>토큰 이름 해부 · 어순 진영</li><li>어휘 밀도 히트맵</li><li>variant 조합 폭발</li><li>분해 단위 · 매칭 근거</li></ul><span class="go">열기 →</span></a><a class="card" href="design-system-specimens.html"><span class="ico">🎨</span><h2>실물 견본</h2><p>차트가 아니라 실물. 각 시스템의 실제 토큰 값으로 컴포넌트를 렌더링했다.</p><ul><li>Button 32개 나란히</li><li>색 팔레트 80칸</li><li>타이포 · radius · 간격 · elevation</li><li>같은 화면을 8개 시스템으로</li></ul><span class="go">열기 →</span></a><a class="card" href="design-system-standard-research.md"><span class="ico">📄</span><h2>본문 (마크다운)</h2><p>읽기용 원문. 히트맵은 ●/· 표기.</p><ul><li>GitHub · 에디터에서 그대로</li><li>표 14개</li></ul><span class="go">열기 →</span></a></div>
+
+<h2 class="sec">핵심 발견</h2>
+<div class="finds"><div class="f"><h3>색상은 세 자리로 나뉜다</h3><p>면(surface) · 글자(foreground) · 선(border) — 8개 시스템 예외 없이 전부. 하나로 뭉치면 다크 테마에서 반드시 깨진다.</p></div><div class="f"><h3>어순이 두 진영으로 갈린다</h3><p>의미→역할 6개 vs 역할→의미 2개(Carbon · Polaris). 개념이 같아도 이름 문법이 달라 사전 하나로 변환할 수 없다.</p></div><div class="f"><h3>축을 합치면 값이 곱으로 폭발한다</h3><p>강조도와 의미를 한 축에 합친 결과가 Figma 에서 최대 420 variant 로 전개된다.</p></div><div class="f"><h3>집계 규칙을 밝히지 않은 수치는 비교 불가다</h3><p>기존 감사의 토큰 의존율을 다시 재니 2개 시스템(Polaris · shadcn/ui)에서 20pt 이상 벌어졌다. 소스가 아니라 계수 규칙 때문이다.</p></div></div>
+
+<h2 class="sec">어떻게 측정했나</h2>
+<div class="how">
+<p>추정이 아니라 소스를 읽어 센다. 분석 대상 라이브러리를 매니페스트에 적힌 <b>고정 커밋</b>으로
+받고, 측정·분류·렌더를 스크립트로 돌린다. 리포트는 전부 생성물이며 데이터에서 만들어지므로
+본문 수치와 차트가 어긋날 수 없다.</p>
+<pre>bash sources/clone.sh                      # 고정 커밋으로 소스 확보
+python3 analysis/standard-research/run.py  # 측정 → 파생 → 렌더
+python3 ... run.py --check                 # 재현성 검사 (출력 == 커밋된 것)</pre>
+<p>사전 검사가 소스의 커밋 · 로컬 변경 · sparse 경로를 대조해, 일부만 받은 상태나 변조된
+상태로는 측정이 시작되지 않는다. 수기로 확인한 값(<code>curated/</code>)은 스크립트가 덮어쓰지 못한다.</p>
+<p><b>한계도 문서에 적혀 있다.</b> Figma Variables API 가 403 이라 MFI 의 토큰 정합성은 계산할 수 없고,
+토큰 의존율은 집계 기준에 극도로 민감해 느슨·엄격 두 값을 병기한다.</p>
+</div>
+
+<footer>
+<p>8/8 컴포넌트: Button · Checkbox · Dialog · Menu · Progress · Radio · Select · Slider · Tabs · TextInput</p>
+<p>측정 대상은 모두 오픈소스 공개 저장소이며, 각 리포트 부록에 커밋 SHA 와 파일 경로를 남겼다.
+생성: <code>python3 analysis/standard-research/run.py</code></p>
+</footer>
+</div>
