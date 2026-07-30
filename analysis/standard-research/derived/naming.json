@@ -205,43 +205,42 @@
    "native_case": "kebab",
    "native_prefix": "--p-",
    "native_sample": "`--p-color-bg-fill-brand-hover`",
-   "total": 820,
-   "depth_avg": 4.33,
-   "depth_max": 10,
+   "total": 519,
+   "depth_avg": 3.72,
+   "depth_max": 9,
    "depth_hist": {
-    "2": 117,
-    "3": 143,
-    "4": 195,
-    "5": 173,
-    "6": 126,
-    "7": 49,
-    "8": 14,
-    "9": 2,
-    "10": 1
+    "2": 130,
+    "3": 119,
+    "4": 107,
+    "5": 112,
+    "6": 36,
+    "7": 13,
+    "8": 1,
+    "9": 1
    },
    "order_top": [
     {
      "pattern": "RI",
-     "count": 134,
+     "count": 67,
      "pct": 35.6
     },
     {
      "pattern": "RIS",
-     "count": 126,
+     "count": 63,
      "pct": 33.5
     },
     {
      "pattern": "RS",
-     "count": 96,
+     "count": 48,
      "pct": 25.5
     },
     {
      "pattern": "RIR",
-     "count": 12,
+     "count": 6,
      "pct": 3.2
     }
    ],
-   "state_tokens": 230,
+   "state_tokens": 115,
    "state_suffix_pct": 99.1
   },
   "shadcn/ui": {

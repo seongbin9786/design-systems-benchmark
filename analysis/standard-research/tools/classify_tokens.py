@@ -29,6 +29,11 @@ import paths  # noqa: E402
 
 # ── 축 1: category ──────────────────────────────────────────────────────────
 # (canonical, [정규식 조각들]) — 순서가 우선순위. 먼저 맞는 것이 이긴다.
+# `color-` 로 시작하면 색이다 — 이름 뒤쪽의 일반 단어(shadow·heading·thumb·alpha)에
+# 먼저 걸려 elevation·typography·sizing 으로 잡히던 문제를 막는다.
+# 단, `color-control-track-width` 처럼 *치수 명사로 끝나면* 그건 치수다.
+DIM_TAIL = r"(width|height|size|radius|duration|opacity|weight|spacing|gap|thickness|count|index)$"
+
 CATEGORY = [
     ("domain",     r"^(ai|chat)-|-aura|ai-gradient"),
     ("typography", r"^component-[a-z]{1,3}-(bold|medium|regular|italic)$|typescale|typography|font|text-style|heading|body|label|display|title|caption|line-height|letter-spacing|char-|cjk|text-(align|transform|decoration|overflow|wrap|indent)"),
@@ -126,7 +131,10 @@ def classify(raw):
     category 가 먼저 가로채는 이름은 role 집계에서 통째로 빠졌다.)
     """
     name = camel_to_kebab(raw)
-    cat = match_axis(name, CATEGORY)
+    if re.match(r"^colou?r(-|$)", name) and not re.search(DIM_TAIL, name):
+        cat = "color"
+    else:
+        cat = match_axis(name, CATEGORY)
     intent = match_axis(name, INTENT)
     hue_named = False
     if intent is None:

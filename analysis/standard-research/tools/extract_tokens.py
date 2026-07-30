@@ -182,12 +182,21 @@ def polaris():
         if p.stem in ("index", "types"):
             continue
         txt = p.read_text()
+
+        def qualify(key, stem=None):
+            """스템을 무조건 붙이면 안 된다 — color.ts 의 객체 키는 이미 `color-` 로 시작한다.
+            그대로 붙이면 `color-color-bg-fill-brand` 와 `color-bg-fill-brand` 가 둘 다 생겨
+            같은 토큰이 두 번 세어진다 (Polaris 가 820개로 부풀었던 원인).
+            """
+            stem = stem or p.stem
+            return key if key == stem or key.startswith(stem + "-") else f"{stem}-{key}"
+
         # 실제 토큰 객체 키: '  'token-name': {' 또는 "  'token-name': '"
         for m in re.finditer(r"^\s{2}'([a-z0-9][a-z0-9-]*)':", txt, re.M):
-            names.add(f"{p.stem}-{m.group(1)}")
+            names.add(qualify(m.group(1)))
         # union 타입 선언에서도 수집 (color.ts 는 타입으로만 나열)
         for m in re.finditer(r"^\s*\|\s*'([a-z0-9][a-z0-9-]*)'", txt, re.M):
-            names.add(f"{p.stem}-{m.group(1)}")
+            names.add(qualify(m.group(1)))
     return names, "polaris/polaris-tokens/src/themes/base/*.ts", "base theme(semantic)"
 
 

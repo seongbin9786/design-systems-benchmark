@@ -39,13 +39,13 @@
     },
     "counts": {
      "Spectrum": 244,
-     "Material Web": 49,
+     "Material Web": 50,
      "MUI": 38,
-     "Fluent 2": 349,
+     "Fluent 2": 366,
      "Carbon": 67,
-     "Polaris": 439,
+     "Polaris": 226,
      "shadcn/ui": 78,
-     "Ant Design": 102
+     "Ant Design": 106
     }
    },
    {
@@ -81,7 +81,7 @@
      "Carbon": 54,
      "Polaris": 112,
      "shadcn/ui": 3,
-     "Ant Design": 26
+     "Ant Design": 24
     }
    },
    {
@@ -102,21 +102,21 @@
     ],
     "examples": {
      "Spectrum": "drop-shadow-x",
-     "Material Web": "color-shadow",
+     "Material Web": "elevation-level0",
      "MUI": "shadows-0",
      "Fluent 2": "shadow2",
      "Carbon": "shadow",
-     "Polaris": "shadow-button",
+     "Polaris": "shadow-0",
      "Ant Design": "box-shadow"
     },
     "counts": {
      "Spectrum": 43,
-     "Material Web": 7,
+     "Material Web": 6,
      "MUI": 25,
-     "Fluent 2": 20,
+     "Fluent 2": 12,
      "Carbon": 1,
-     "Polaris": 36,
-     "Ant Design": 15
+     "Polaris": 23,
+     "Ant Design": 14
     }
    },
    {
@@ -140,7 +140,7 @@
      "Material Web": "shape-corner-full",
      "MUI": "shape-border-radius",
      "Fluent 2": "border-radius-none",
-     "Polaris": "border-border-radius-0",
+     "Polaris": "border-radius-0",
      "shadcn/ui": "radius",
      "Ant Design": "border-radius"
     },
@@ -183,7 +183,7 @@
      "MUI": 11,
      "Fluent 2": 17,
      "Carbon": 6,
-     "Polaris": 46,
+     "Polaris": 41,
      "Ant Design": 10
     }
    },
@@ -216,39 +216,8 @@
      "MUI": 1,
      "Fluent 2": 22,
      "Carbon": 20,
-     "Polaris": 40,
+     "Polaris": 22,
      "Ant Design": 23
-    }
-   },
-   {
-    "value": "opacity",
-    "systems": [
-     "Ant Design",
-     "Fluent 2",
-     "MUI",
-     "Material Web",
-     "Spectrum"
-    ],
-    "coverage": 5,
-    "tier": "prevalent",
-    "missing": [
-     "Carbon",
-     "Polaris",
-     "shadcn/ui"
-    ],
-    "examples": {
-     "Spectrum": "overlay-opacity",
-     "Material Web": "state-focus-state-layer-opacity",
-     "MUI": "palette-action-focus-opacity",
-     "Fluent 2": "color-neutral-stroke-alpha",
-     "Ant Design": "opacity-image"
-    },
-    "counts": {
-     "Spectrum": 6,
-     "Material Web": 4,
-     "MUI": 5,
-     "Fluent 2": 9,
-     "Ant Design": 2
     }
    },
    {
@@ -312,6 +281,35 @@
     }
    },
    {
+    "value": "opacity",
+    "systems": [
+     "Ant Design",
+     "MUI",
+     "Material Web",
+     "Spectrum"
+    ],
+    "coverage": 4,
+    "tier": "divergent",
+    "missing": [
+     "Carbon",
+     "Fluent 2",
+     "Polaris",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "overlay-opacity",
+     "Material Web": "state-focus-state-layer-opacity",
+     "MUI": "palette-action-focus-opacity",
+     "Ant Design": "opacity-image"
+    },
+    "counts": {
+     "Spectrum": 6,
+     "Material Web": 4,
+     "MUI": 5,
+     "Ant Design": 2
+    }
+   },
+   {
     "value": "sizing",
     "systems": [
      "Ant Design",
@@ -336,7 +334,7 @@
     "counts": {
      "Spectrum": 32,
      "Carbon": 6,
-     "Polaris": 90,
+     "Polaris": 40,
      "Ant Design": 20
     }
    },
@@ -357,7 +355,7 @@
      "Spectrum"
     ],
     "examples": {
-     "Polaris": "breakpoints-breakpoints-lg",
+     "Polaris": "breakpoints-lg",
      "shadcn/ui": "breakpoint-3xl",
      "Ant Design": "screen-lg"
     },
@@ -365,31 +363,6 @@
      "Polaris": 5,
      "shadcn/ui": 2,
      "Ant Design": 20
-    }
-   },
-   {
-    "value": "blur",
-    "systems": [
-     "Ant Design",
-     "Polaris"
-    ],
-    "coverage": 2,
-    "tier": "divergent",
-    "missing": [
-     "Carbon",
-     "Fluent 2",
-     "MUI",
-     "Material Web",
-     "Spectrum",
-     "shadcn/ui"
-    ],
-    "examples": {
-     "Polaris": "color-backdrop-bg",
-     "Ant Design": "color-bg-blur"
-    },
-    "counts": {
-     "Polaris": 2,
-     "Ant Design": 1
     }
    },
    {
@@ -473,7 +446,7 @@
      "MUI": 2,
      "Fluent 2": 111,
      "Carbon": 22,
-     "Polaris": 78,
+     "Polaris": 51,
      "shadcn/ui": 4,
      "Ant Design": 29
     }
@@ -509,7 +482,7 @@
      "MUI": 9,
      "Fluent 2": 111,
      "Carbon": 17,
-     "Polaris": 174,
+     "Polaris": 120,
      "shadcn/ui": 28,
      "Ant Design": 36
     }
@@ -545,7 +518,7 @@
      "MUI": 3,
      "Fluent 2": 133,
      "Carbon": 52,
-     "Polaris": 238,
+     "Polaris": 119,
      "shadcn/ui": 4,
      "Ant Design": 32
     }
@@ -570,10 +543,10 @@
      "Spectrum": "drop-shadow-x",
      "Material Web": "color-shadow",
      "MUI": "shadows-0",
-     "Fluent 2": "shadow2",
+     "Fluent 2": "color-brand-shadow-key",
      "Carbon": "shadow",
-     "Polaris": "shadow-button",
-     "Ant Design": "box-shadow"
+     "Polaris": "shadow-0",
+     "Ant Design": "color-shadow"
     },
     "counts": {
      "Spectrum": 42,
@@ -581,7 +554,7 @@
      "MUI": 25,
      "Fluent 2": 20,
      "Carbon": 5,
-     "Polaris": 36,
+     "Polaris": 23,
      "Ant Design": 15
     }
    },
@@ -613,7 +586,7 @@
      "Material Web": 1,
      "Fluent 2": 2,
      "Carbon": 2,
-     "Polaris": 2
+     "Polaris": 1
     }
    },
    {
@@ -641,7 +614,7 @@
     "counts": {
      "Spectrum": 85,
      "Carbon": 9,
-     "Polaris": 40,
+     "Polaris": 20,
      "Ant Design": 3
     }
    },
@@ -670,7 +643,7 @@
     "counts": {
      "Fluent 2": 12,
      "Carbon": 9,
-     "Polaris": 8,
+     "Polaris": 4,
      "Ant Design": 3
     }
    },
@@ -732,7 +705,7 @@
      "MUI": 5,
      "Fluent 2": 66,
      "Carbon": 15,
-     "Polaris": 76,
+     "Polaris": 38,
      "shadcn/ui": 16,
      "Ant Design": 10
     }
@@ -768,7 +741,7 @@
      "MUI": 5,
      "Fluent 2": 12,
      "Carbon": 11,
-     "Polaris": 60,
+     "Polaris": 30,
      "shadcn/ui": 8,
      "Ant Design": 8
     }
@@ -804,7 +777,7 @@
      "MUI": 4,
      "Fluent 2": 27,
      "Carbon": 4,
-     "Polaris": 38,
+     "Polaris": 19,
      "shadcn/ui": 4,
      "Ant Design": 14
     }
@@ -838,7 +811,7 @@
      "MUI": 4,
      "Fluent 2": 7,
      "Carbon": 4,
-     "Polaris": 18,
+     "Polaris": 9,
      "Ant Design": 4
     }
    },
@@ -871,7 +844,7 @@
      "MUI": 4,
      "Fluent 2": 31,
      "Carbon": 2,
-     "Polaris": 34,
+     "Polaris": 17,
      "Ant Design": 10
     }
    },
@@ -904,7 +877,7 @@
      "MUI": 4,
      "Fluent 2": 19,
      "Carbon": 5,
-     "Polaris": 56,
+     "Polaris": 28,
      "Ant Design": 12
     }
    },
@@ -966,7 +939,7 @@
      "Spectrum": 23,
      "MUI": 4,
      "Carbon": 2,
-     "Polaris": 28,
+     "Polaris": 14,
      "Ant Design": 10
     }
    },
@@ -996,7 +969,7 @@
      "Material Web": 5,
      "Fluent 2": 20,
      "Carbon": 15,
-     "Polaris": 42
+     "Polaris": 21
     }
    }
   ],
@@ -1032,7 +1005,7 @@
      "MUI": 98,
      "Fluent 2": 306,
      "Carbon": 285,
-     "Polaris": 590,
+     "Polaris": 404,
      "shadcn/ui": 93,
      "Ant Design": 178
     }
@@ -1068,7 +1041,7 @@
      "MUI": 1,
      "Fluent 2": 75,
      "Carbon": 9,
-     "Polaris": 86,
+     "Polaris": 43,
      "Ant Design": 17
     }
    },
@@ -1103,7 +1076,7 @@
      "MUI": 2,
      "Fluent 2": 2,
      "Carbon": 3,
-     "Polaris": 2,
+     "Polaris": 1,
      "Ant Design": 1
     }
    },
@@ -1138,7 +1111,7 @@
      "MUI": 2,
      "Fluent 2": 37,
      "Carbon": 22,
-     "Polaris": 102,
+     "Polaris": 51,
      "Ant Design": 28
     }
    },
@@ -1171,7 +1144,7 @@
      "MUI": 4,
      "Fluent 2": 10,
      "Carbon": 5,
-     "Polaris": 22,
+     "Polaris": 11,
      "Ant Design": 3
     }
    },
@@ -1203,7 +1176,7 @@
      "MUI": 2,
      "Fluent 2": 29,
      "Carbon": 11,
-     "Polaris": 18
+     "Polaris": 9
     }
    },
    {
@@ -1277,9 +1250,9 @@
     "elevation": 4.7,
     "radius": 3.3,
     "spacing": 24.3,
-    "opacity": 0.7,
     "z-index": 0.2,
     "border": 0.5,
+    "opacity": 0.7,
     "sizing": 3.5,
     "icon-size": 3.3
    }
@@ -1288,16 +1261,16 @@
    "total": 192,
    "counts": {
     "typography": 93,
-    "color": 49,
+    "color": 50,
     "motion": 27,
     "radius": 12,
-    "elevation": 7,
+    "elevation": 6,
     "opacity": 4
    },
    "pct": {
-    "color": 25.5,
+    "color": 26.0,
     "typography": 48.4,
-    "elevation": 3.6,
+    "elevation": 3.1,
     "radius": 6.2,
     "motion": 14.1,
     "opacity": 2.1
@@ -1322,30 +1295,28 @@
     "radius": 0.9,
     "motion": 10.1,
     "spacing": 0.9,
-    "opacity": 4.6,
-    "z-index": 7.3
+    "z-index": 7.3,
+    "opacity": 4.6
    }
   },
   "Fluent 2": {
    "total": 459,
    "counts": {
-    "color": 349,
+    "color": 366,
     "typography": 27,
     "spacing": 22,
-    "elevation": 20,
     "motion": 17,
+    "elevation": 12,
     "radius": 11,
-    "opacity": 9,
     "border": 4
    },
    "pct": {
-    "color": 76.0,
+    "color": 79.7,
     "typography": 5.9,
-    "elevation": 4.4,
+    "elevation": 2.6,
     "radius": 2.4,
     "motion": 3.7,
     "spacing": 4.8,
-    "opacity": 2.0,
     "border": 0.9
    }
   },
@@ -1375,32 +1346,30 @@
    }
   },
   "Polaris": {
-   "total": 820,
+   "total": 519,
    "counts": {
-    "color": 439,
+    "color": 226,
     "typography": 112,
-    "sizing": 90,
-    "motion": 46,
-    "spacing": 40,
-    "elevation": 36,
+    "motion": 41,
+    "sizing": 40,
     "z-index": 26,
+    "elevation": 23,
+    "spacing": 22,
     "border": 14,
     "radius": 10,
-    "breakpoint": 5,
-    "blur": 2
+    "breakpoint": 5
    },
    "pct": {
-    "color": 53.5,
-    "typography": 13.7,
+    "color": 43.5,
+    "typography": 21.6,
     "elevation": 4.4,
-    "radius": 1.2,
-    "motion": 5.6,
-    "spacing": 4.9,
-    "z-index": 3.2,
-    "border": 1.7,
-    "sizing": 11.0,
-    "breakpoint": 0.6,
-    "blur": 0.2
+    "radius": 1.9,
+    "motion": 7.9,
+    "spacing": 4.2,
+    "z-index": 5.0,
+    "border": 2.7,
+    "sizing": 7.7,
+    "breakpoint": 1.0
    }
   },
   "shadcn/ui": {
@@ -1421,50 +1390,47 @@
   "Ant Design": {
    "total": 227,
    "counts": {
-    "color": 102,
-    "typography": 26,
+    "color": 106,
+    "typography": 24,
     "spacing": 23,
     "sizing": 20,
     "breakpoint": 20,
-    "elevation": 15,
+    "elevation": 14,
     "motion": 10,
     "radius": 5,
-    "opacity": 2,
     "z-index": 2,
-    "border": 1,
-    "blur": 1
+    "opacity": 2,
+    "border": 1
    },
    "pct": {
-    "color": 44.9,
-    "typography": 11.5,
-    "elevation": 6.6,
+    "color": 46.7,
+    "typography": 10.6,
+    "elevation": 6.2,
     "radius": 2.2,
     "motion": 4.4,
     "spacing": 10.1,
-    "opacity": 0.9,
     "z-index": 0.9,
     "border": 0.4,
+    "opacity": 0.9,
     "sizing": 8.8,
-    "breakpoint": 8.8,
-    "blur": 0.4
+    "breakpoint": 8.8
    }
   }
  },
  "category_volume": {
-  "color": 1366,
-  "typography": 640,
-  "spacing": 330,
-  "sizing": 148,
-  "elevation": 147,
-  "motion": 117,
+  "color": 1175,
+  "typography": 638,
+  "spacing": 312,
+  "elevation": 124,
+  "motion": 112,
+  "sizing": 98,
   "radius": 77,
   "domain": 42,
   "z-index": 41,
   "icon-size": 32,
   "breakpoint": 27,
-  "opacity": 26,
   "border": 24,
-  "blur": 3
+  "opacity": 17
  },
  "uncategorized": {
   "Spectrum": {

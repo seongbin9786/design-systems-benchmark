@@ -3,7 +3,7 @@
      `python3 analysis/standard-research/run.py` 를 다시 실행하세요. -->
 # 디자인 시스템에서 표준화할 수 있는 것
 
-> 8개 컴포넌트 라이브러리의 **실제 소스**에서 semantic 토큰 3177개와 컴포넌트 인벤토리를 추출해, 어느 개념이 예외 없이 공통이고 어느 개념이 갈리는지 셌다.
+> 8개 컴포넌트 라이브러리의 **실제 소스**에서 semantic 토큰 2876개와 컴포넌트 인벤토리를 추출해, 어느 개념이 예외 없이 공통이고 어느 개념이 갈리는지 셌다.
 > 공통인 것만이 표준화 가능하다.
 >
 > **대상** Spectrum · Material Web · MUI · Fluent 2 · Carbon · Polaris · shadcn/ui · Ant Design  
@@ -12,7 +12,7 @@
 
 | 예외 없이 공통인 토큰 어휘 | 8개 시스템 전부에 있는 컴포넌트 | 추출한 semantic 토큰 총수 | category 축을 못 붙인 잔여 |
 |---:|---:|---:|---:|
-| 8 | 10 | 3177 | 4.9% |
+| 8 | 10 | 2876 | 5.5% |
 
 ## 측정 방법과 한계
 
@@ -21,7 +21,7 @@
 - **수집 범위** — 각 시스템의 *semantic(alias) 계층*만. primitive 램프(`gray-100` 류)는 제외했다. 표준화 대상이 아니다.
 - **판정** — 토큰 이름을 4개 축(값의 종류 / 자리 / 의미 / 상태)으로 분류하고, 각 값이 8개 중 몇 개 시스템에 등장하는지 센다.
 - **이름이 곧 근거** — 값이 아니라 *이름*을 본다. 이름에 개념이 드러나지 않으면 그 시스템은 실제로 그 개념을 구분하지 않는다고 본다.
-- **잔여 157개(4.9%)** 는 *값의 종류* 축만 못 붙은 것이다 (다른 축은 기록됐다). 대부분 Carbon 의 `code01`/`container01` 같은 시스템 고유 스케일이다.
+- **잔여 157개(5.5%)** 는 *값의 종류* 축만 못 붙은 것이다 (다른 축은 기록됐다). 대부분 Carbon 의 `code01`/`container01` 같은 시스템 고유 스케일이다.
 
 > [!WARNING]
 > **이름이 같아야 개념이 같은 것은 아니다.** Fluent 2 는 상태색을 `status` 가 아니라 *색조* 이름으로 부른다 — `colorPaletteCranberryForeground1` 이 위험색이다. 이 문서는 `statusColorMapping.ts`(success→green, warning→orange, danger→cranberry)를 읽어 매핑한 뒤 커버리지에 넣었다. 해당 사례: Spectrum 3개, Fluent 2 45개
@@ -33,11 +33,11 @@
 | 시스템 | 토큰 수 | 색상 | 타이포그래피 | 간격 | 크기 | elevation | 모션 | radius | 기타 |
 |:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | Spectrum | 935 | 26% | 33% | 24% | 4% | 5% | — | 3% | 5% |
-| Polaris | 820 | 54% | 14% | 5% | 11% | 4% | 6% | 1% | 6% |
-| Fluent 2 | 459 | 76% | 6% | 5% | — | 4% | 4% | 2% | 3% |
+| Polaris | 519 | 44% | 22% | 4% | 8% | 4% | 8% | 2% | 9% |
+| Fluent 2 | 459 | 80% | 6% | 5% | — | 3% | 4% | 2% | 1% |
 | Carbon | 341 | 33% | 27% | 10% | 3% | 0% | 3% | — | 23% |
-| Ant Design | 228 | 45% | 12% | 10% | 9% | 7% | 4% | 2% | 12% |
-| Material Web | 192 | 26% | 48% | — | — | 4% | 14% | 6% | 2% |
+| Ant Design | 228 | 47% | 11% | 10% | 9% | 6% | 4% | 2% | 11% |
+| Material Web | 192 | 26% | 48% | — | — | 3% | 14% | 6% | 2% |
 | MUI | 109 | 35% | 18% | 1% | — | 23% | 10% | 1% | 12% |
 | shadcn/ui | 93 | 86% | 3% | — | — | — | — | 9% | 2% |
 
@@ -59,12 +59,11 @@
 | `radius` | ● | ● | ● | ● | · | ● | ● | ● | 7/8 | 우세 | Carbon |
 | `motion` | · | ● | ● | ● | ● | ● | · | ● | 6/8 | 우세 | Spectrum, shadcn/ui |
 | `spacing` | ● | · | ● | ● | ● | ● | · | ● | 6/8 | 우세 | Material Web, shadcn/ui |
-| `opacity` | ● | ● | ● | ● | · | · | · | ● | 5/8 | 우세 | Carbon, Polaris, shadcn/ui |
 | `z-index` | ● | · | ● | · | ● | ● | · | ● | 5/8 | 우세 | Fluent 2, Material Web, shadcn/ui |
 | `border` | ● | · | · | ● | · | ● | · | ● | 4/8 | 분기 | Carbon, MUI, Material Web, shadcn/ui |
+| `opacity` | ● | ● | ● | · | · | · | · | ● | 4/8 | 분기 | Carbon, Fluent 2, Polaris, shadcn/ui |
 | `sizing` | ● | · | · | · | ● | ● | · | ● | 4/8 | 분기 | Fluent 2, MUI, Material Web, shadcn/ui |
 | `breakpoint` | · | · | · | · | · | ● | ● | ● | 3/8 | 분기 | Carbon, Fluent 2, MUI, Material Web, Spectrum |
-| `blur` | · | · | · | · | · | ● | · | ● | 2/8 | 분기 | Carbon, Fluent 2, MUI, Material Web, Spectrum, shadcn/ui |
 | `icon-size` | ● | · | · | · | ● | · | · | · | 2/8 | 분기 | Ant Design, Fluent 2, MUI, Material Web, Polaris, shadcn/ui |
 | `domain` | · | · | · | · | ● | · | · | · | 1/8 | 고유 | Ant Design, Fluent 2, MUI, Material Web, Polaris, Spectrum, shadcn/ui |
 
@@ -298,7 +297,7 @@
 | 시스템 | 토큰 수 | 계층 | 추출 경로 |
 |:---|---:|:---|:---|
 | Spectrum | 935 | alias(semantic) | `spectrum-tokens/packages/tokens/src/{color-aliases,semantic-color-palette,layout,typography}.json` |
-| Polaris | 820 | base theme(semantic) | `polaris/polaris-tokens/src/themes/base/*.ts` |
+| Polaris | 519 | base theme(semantic) | `polaris/polaris-tokens/src/themes/base/*.ts` |
 | Fluent 2 | 459 | alias(semantic) | `fluentui/packages/tokens/src/{alias/lightColor.ts,tokens.ts}` |
 | Carbon | 341 | theme(semantic, DTCG) + scale | `carbon/packages/{themes/src/dtcg/white.json, layout\|type\|motion\|elements/src/tokens.ts}` |
 | Ant Design | 228 | seed→map→alias | `ant-design/components/theme/interface/{seeds,alias,maps/*}.ts` |

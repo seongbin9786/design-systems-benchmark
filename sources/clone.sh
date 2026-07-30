@@ -73,7 +73,10 @@ clone_one() {
       return 0
     fi
     echo "PIN    $key (기존 클론을 매니페스트 SHA 로 맞춤)"
-    pin "$key" "$sha"
+    if ! pin "$key" "$sha"; then
+      echo "FAIL   $key — 매니페스트 SHA 로 맞추지 못했습니다. 이 상태로 측정하면 안 됩니다."
+      return 1
+    fi
     echo "OK     $key  $(du -sh "$key" | cut -f1)  $(git -C "$key" rev-parse --short HEAD)"
     return 0
   fi
@@ -90,14 +93,29 @@ clone_one() {
   else
     git clone --depth 1 --single-branch "$url" "$key" -q || { echo "FAIL   $key"; return 1; }
   fi
-  pin "$key" "$sha"
+  if ! pin "$key" "$sha"; then
+    echo "FAIL   $key — 클론은 됐지만 매니페스트 SHA 로 맞추지 못했습니다."
+    return 1
+  fi
   echo "OK     $key  $(du -sh "$key" | cut -f1)  $(git -C "$key" rev-parse --short HEAD)"
 }
 
 targets="${*:-}"
+# `echo | while` 은 서브셸이라 카운터 변수가 살아남지 못한다 — 실패를 임시 파일로 센다.
+fail_log=$(mktemp)
+trap 'rm -f "$fail_log"' EXIT
+
 echo "$REPOS" | while IFS='|' read -r key url sparse; do
   [ -z "${key:-}" ] && continue
   if [ -n "$targets" ]; then case " $targets " in *" $key "*) ;; *) continue;; esac; fi
-  clone_one "$key" "$url" "$sparse"
+  clone_one "$key" "$url" "$sparse" || echo "$key" >> "$fail_log"
 done
+
 echo "--- 완료. 여유: $(free_mb)MB ---"
+if [ -s "$fail_log" ]; then
+  echo
+  echo "실패: $(tr '\n' ' ' < "$fail_log")"
+  echo "이 소스는 MANIFEST.md 와 어긋난 상태입니다. 측정 파이프라인을 돌리지 마세요."
+  echo "MANIFEST 를 갱신하거나 해당 클론을 지우고 다시 받으세요."
+  exit 1
+fi
