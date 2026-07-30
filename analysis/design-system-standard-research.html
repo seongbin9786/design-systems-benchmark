@@ -1,0 +1,1005 @@
+<meta charset="utf-8">
+<title>디자인 시스템에서 표준화할 수 있는 것 — 8개 시스템 소스 실측</title>
+<style>
+:root {
+  --ink: #16191d; --ink-2: #4a5157; --ink-3: #767f87;
+  --paper: #f6f7f8; --card: #fdfdfd; --rule: #dfe3e6; --rule-2: #eceff1;
+  --accent: #2f5d8a; --accent-soft: #e8eff6;
+  /* tier — 검증된 ordinal 4단계 (단일 hue, monotone L, light-end 2.33:1) */
+  --t1: #184f95; --t2: #256abf; --t3: #3987e5; --t4: #6da7ec;
+  --t1-bg: #e4edf9; --t2-bg: #e8f0fb; --t3-bg: #edf3fc; --t4-bg: #f1f5fd;
+  /* categorical 7슬롯 — 검증된 레퍼런스 팔레트 (light) */
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+  --s5: #e87ba4; --s6: #008300; --s7: #4a3aa7;
+  --grid: #e6e9ec; --axis: #c9cfd4;
+  --warn: #d03b3b;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard",
+          "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --step--1: clamp(.75rem, .73rem + .1vw, .8rem);
+  --step-0: clamp(.9rem, .87rem + .15vw, .95rem);
+  --step-1: clamp(1.05rem, 1rem + .25vw, 1.15rem);
+  --step-2: clamp(1.3rem, 1.2rem + .5vw, 1.6rem);
+  --step-3: clamp(1.7rem, 1.5rem + 1vw, 2.4rem);
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --ink: #e6eaee; --ink-2: #a8b2bb; --ink-3: #7b858e;
+    --paper: #14171a; --card: #1b1f23; --rule: #2c3238; --rule-2: #23282d;
+    --accent: #7fb0dd; --accent-soft: #1e2a35;
+    --t1: #cde2fb; --t2: #9ec5f4; --t3: #6da7ec; --t4: #2a78d6;
+    --t1-bg: #1f2c38; --t2-bg: #1d2831; --t3-bg: #1b242b; --t4-bg: #192026;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+    --s5: #d55181; --s6: #008300; --s7: #9085e9;
+    --grid: #262c31; --axis: #383f45;
+    --warn: #e8846c;
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #e6eaee; --ink-2: #a8b2bb; --ink-3: #7b858e;
+  --paper: #14171a; --card: #1b1f23; --rule: #2c3238; --rule-2: #23282d;
+  --accent: #7fb0dd; --accent-soft: #1e2a35;
+  --t1: #cde2fb; --t2: #9ec5f4; --t3: #6da7ec; --t4: #2a78d6;
+  --t1-bg: #1f2c38; --t2-bg: #1d2831; --t3-bg: #1b242b; --t4-bg: #192026;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+  --s5: #d55181; --s6: #008300; --s7: #9085e9;
+  --grid: #262c31; --axis: #383f45;
+  --warn: #e8846c;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--sans); font-size: var(--step-0); line-height: 1.65;
+  -webkit-font-smoothing: antialiased; }
+.wrap { display: grid; grid-template-columns: 14rem minmax(0,1fr); gap: 2.5rem;
+  max-width: 88rem; margin: 0 auto; padding: 0 1.5rem; }
+@media (max-width: 62rem) { .wrap { grid-template-columns: 1fr; gap: 0; } nav.rail { display: none; } }
+nav.rail { position: sticky; top: 0; align-self: start; height: 100vh;
+  padding: 3.5rem 0 2rem; overflow-y: auto; }
+nav.rail ol { list-style: none; margin: 0; padding: 0; }
+nav.rail a { display: block; padding: .28rem .55rem; border-radius: 3px; color: var(--ink-2);
+  text-decoration: none; font-size: var(--step--1); line-height: 1.4; border-left: 2px solid transparent; }
+nav.rail a:hover { color: var(--ink); background: var(--rule-2); }
+nav.rail a:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+nav.rail .sub-a { padding-left: 1.3rem; color: var(--ink-3); }
+nav.rail .rail-t { font-family: var(--mono); font-size: .65rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink-3); padding: 0 .55rem; margin: 0 0 .6rem; }
+main { padding: 3.5rem 0 6rem; min-width: 0; }
+
+.eyebrow { font-family: var(--mono); font-size: .68rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--accent); margin: 0 0 .9rem; }
+h1 { font-size: var(--step-3); line-height: 1.14; letter-spacing: -.022em; font-weight: 660;
+  margin: 0 0 1rem; text-wrap: balance; max-width: 30ch; }
+.lede { font-size: var(--step-1); color: var(--ink-2); margin: 0 0 1.6rem; max-width: 62ch; }
+h2 { font-size: var(--step-2); letter-spacing: -.015em; font-weight: 640; line-height: 1.25;
+  margin: 4rem 0 .5rem; text-wrap: balance; padding-top: 1.6rem; border-top: 1px solid var(--rule); }
+h2 .h2n { font-family: var(--mono); font-size: .7rem; color: var(--ink-3); display: block;
+  letter-spacing: .1em; margin-bottom: .5rem; font-weight: 400; }
+h3 { font-size: var(--step-1); font-weight: 620; margin: 2.4rem 0 .4rem; letter-spacing: -.01em; }
+p { max-width: 68ch; margin: 0 0 1rem; }
+.sub { color: var(--ink-2); margin-bottom: 1.4rem; max-width: 68ch; }
+a { color: var(--accent); }
+code { font-family: var(--mono); font-size: .86em; }
+figure { margin: 0; }
+
+.meta { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; padding: .85rem 1.05rem;
+  background: var(--card); border: 1px solid var(--rule); border-radius: 4px;
+  font-size: var(--step--1); color: var(--ink-2); margin-bottom: 1.6rem; }
+.meta b { color: var(--ink); font-weight: 600; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem,1fr)); gap: 1px;
+  background: var(--rule); border: 1px solid var(--rule); border-radius: 4px;
+  overflow: hidden; margin: 0 0 2rem; }
+.kpi { background: var(--card); padding: 1rem 1.05rem; }
+.kpi .k { font-size: 2rem; line-height: 1; font-weight: 600; letter-spacing: -.035em; }
+.kpi .l { font-size: var(--step--1); color: var(--ink-2); margin-top: .45rem; }
+.kpi .k small { font-size: .95rem; font-weight: 500; color: var(--ink-3); letter-spacing: 0; }
+
+.callout { border-left: 3px solid var(--warn); background: var(--card); padding: .85rem 1.05rem;
+  margin: 1.3rem 0; border-radius: 0 4px 4px 0; }
+.callout p { margin: 0; font-size: var(--step--1); color: var(--ink-2); max-width: 72ch; }
+.callout p + p { margin-top: .5rem; }
+.callout b { color: var(--ink); }
+.panel { background: var(--card); border: 1px solid var(--rule); border-radius: 4px;
+  padding: 1.1rem 1.15rem; margin: 0 0 1rem; }
+
+/* ── 범례 ── */
+.legend-row { display: flex; flex-wrap: wrap; gap: .3rem .9rem; margin: 0 0 .8rem; }
+.lg { display: inline-flex; align-items: center; gap: .35rem; font-size: var(--step--1);
+  color: var(--ink-2); }
+.lg i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; flex: none; }
+.lg i.dot-a { border-radius: 50%; background: var(--card); border: 2px solid var(--s1); }
+.lg i.dot-b { border-radius: 50%; background: var(--s2); }
+.s1 { background: var(--s1); } .s2 { background: var(--s2); } .s3 { background: var(--s3); }
+.s4 { background: var(--s4); } .s5 { background: var(--s5); } .s6 { background: var(--s6); }
+.s7 { background: var(--s7); }
+
+/* ── 가로 막대 ── */
+.hbars { display: flex; flex-direction: column; gap: 5px; }
+.hb { display: grid; grid-template-columns: 7.5rem minmax(0,1fr) 4rem; gap: .6rem;
+  align-items: center; }
+.hb:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+.hb-l { font-size: var(--step--1); color: var(--ink-2); white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis; }
+.hb-t { height: 12px; background: var(--grid); border-radius: 2px; overflow: hidden; }
+.hb-t i { display: block; height: 100%; background: var(--s1); border-radius: 0 4px 4px 0; }
+.hb-v { font-family: var(--mono); font-size: var(--step--1); color: var(--ink);
+  font-variant-numeric: tabular-nums; text-align: right; }
+
+/* ── 100% 누적 ── */
+.stacks { display: flex; flex-direction: column; gap: 6px; }
+.sb { display: grid; grid-template-columns: 7.5rem minmax(0,1fr) 3.4rem; gap: .6rem; align-items: center; }
+.sb-l { font-size: var(--step--1); color: var(--ink-2); white-space: nowrap; }
+.sb-t { display: flex; gap: 2px; height: 20px; }
+.sb-t i { display: block; min-width: 2px; position: relative; border-radius: 2px; }
+.sb-t i:first-child { border-radius: 4px 2px 2px 4px; }
+.sb-t i:last-child { border-radius: 2px 4px 4px 2px; }
+.sb-t i:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.sb-t i b { position: absolute; inset: 0; display: grid; place-items: center;
+  font-family: var(--mono); font-size: .62rem; font-weight: 600; color: #fff;
+  text-shadow: 0 0 2px rgba(0,0,0,.45); }
+/* aqua·yellow·magenta 는 밝아서 흰 글자가 안 읽힌다 — 어두운 잉크 + 밝은 후광 */
+.sb-t i.s3 b, .sb-t i.s4 b, .sb-t i.s5 b { color: #16191d; text-shadow: 0 0 2px rgba(255,255,255,.5); }
+.sb-t i.res { background: var(--grid); }
+.sb-v { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-3);
+  text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ── 매트릭스 ── */
+.mx { background: var(--card); border: 1px solid var(--rule); border-radius: 4px;
+  padding: .5rem .7rem .7rem; overflow-x: auto; }
+.mx-head, .mx-r { display: grid; grid-template-columns: 12rem minmax(0,1fr) 2rem 3.2rem;
+  gap: .6rem; align-items: center; min-width: 32rem; }
+.mx-head { padding: .25rem 0 .4rem; border-bottom: 1px solid var(--rule); position: sticky; top: 0;
+  background: var(--card); z-index: 2; }
+.mx-chs { display: grid; grid-template-columns: repeat(8, 1fr); gap: 3px; }
+.mx-ch { font-family: var(--mono); font-size: .58rem; color: var(--ink-3); text-align: center;
+  letter-spacing: .02em; }
+.mx-group { margin: .9rem 0 .35rem; }
+.mx-group span { font-family: var(--mono); font-size: .63rem; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--accent); }
+.mx-r { padding: 1px 0; }
+.mx-rl { font-family: var(--mono); font-size: .72rem; color: var(--ink); white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis; padding-left: .45rem; border-left: 4px solid transparent; }
+.mx-r.t-standard .mx-rl { border-left-color: var(--t1); }
+.mx-r.t-prevalent .mx-rl { border-left-color: var(--t2); }
+.mx-r.t-divergent .mx-rl { border-left-color: var(--t3); }
+.mx-r.t-system-specific .mx-rl { border-left-color: var(--t4); }
+.mx-cells { display: grid; grid-template-columns: repeat(8, 1fr); gap: 3px; }
+.mx-c { height: 15px; border-radius: 2px; background: var(--grid);
+  box-shadow: inset 0 0 0 1px var(--rule-2); }
+.mx-c.on { background: var(--s1); box-shadow: none; }
+.mx-c:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.mx-n { font-family: var(--mono); font-size: .72rem; color: var(--ink-2); text-align: right;
+  font-variant-numeric: tabular-nums; }
+.mx-t { font-family: var(--mono); font-size: .6rem; text-align: center; padding: .1rem .25rem;
+  border-radius: 2px; }
+.mx-t.t-standard { color: var(--t1); background: var(--t1-bg); }
+.mx-t.t-prevalent { color: var(--t2); background: var(--t2-bg); }
+.mx-t.t-divergent { color: var(--t3); background: var(--t3-bg); }
+.mx-t.t-system-specific { color: var(--t4); background: var(--t4-bg); }
+.code-key { font-size: var(--step--1); color: var(--ink-3); margin: .5rem 0 1rem; }
+.code-key b { font-family: var(--mono); color: var(--ink-2); font-weight: 500; }
+
+/* ── 덤벨 ── */
+.dbs { display: flex; flex-direction: column; gap: 7px; }
+.db, .db-axis { display: grid; grid-template-columns: 7.5rem minmax(0,1fr) 7.5rem;
+  gap: .7rem; align-items: center; }
+.db-l { font-size: var(--step--1); color: var(--ink-2); white-space: nowrap; }
+.db-t { position: relative; height: 16px; }
+.db-t::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px;
+  background: var(--grid); }
+.db-line { position: absolute; top: 50%; height: 3px; transform: translateY(-50%);
+  background: var(--axis); border-radius: 2px; }
+.db-p { position: absolute; top: 50%; width: 11px; height: 11px; border-radius: 50%;
+  transform: translate(-50%,-50%); box-shadow: 0 0 0 2px var(--card); }
+.db-p.a { background: var(--card); border: 2px solid var(--s1); }
+.db-p.b { background: var(--s2); }
+.db-p:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.db-v { font-family: var(--mono); font-size: var(--step--1); color: var(--ink-2);
+  font-variant-numeric: tabular-nums; }
+.db.big .db-v { color: var(--warn); font-weight: 600; }
+.db .flag { font-family: var(--sans); font-size: .68rem; font-weight: 500; margin-left: .3rem; }
+.db-axis { margin-top: .2rem; }
+.db-axis .db-t { height: 1rem; }
+.db-axis .db-t span { position: absolute; top: 0; transform: translateX(-50%);
+  font-family: var(--mono); font-size: .62rem; color: var(--ink-3); }
+.db-axis .db-t::before { top: 0; }
+
+/* ── facet ── */
+.facets { display: grid; grid-template-columns: repeat(auto-fit, minmax(19rem,1fr)); gap: 1rem; }
+.facet { background: var(--card); border: 1px solid var(--rule); border-radius: 4px; padding: .95rem 1.05rem; }
+.facet figcaption { font-size: var(--step-0); font-weight: 620; margin-bottom: .7rem; }
+.facet figcaption small { display: block; font-weight: 400; color: var(--ink-3);
+  font-family: var(--mono); font-size: .66rem; margin-top: .12rem; }
+.facet .hb { grid-template-columns: 5.5rem minmax(0,1fr) 2.8rem; }
+
+/* ── Button 축 표 ── */
+.scroll { overflow-x: auto; border: 1px solid var(--rule); border-radius: 4px; background: var(--card); }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); }
+thead th { text-align: left; font-weight: 600; color: var(--ink-2); font-size: .68rem;
+  letter-spacing: .07em; text-transform: uppercase; padding: .55rem .75rem;
+  border-bottom: 1px solid var(--rule); white-space: nowrap; background: var(--card);
+  position: sticky; top: 0; }
+tbody th { text-align: left; font-weight: 500; padding: .5rem .75rem; white-space: nowrap; }
+tbody td { padding: .5rem .75rem; vertical-align: middle; }
+tbody tr + tr th, tbody tr + tr td { border-top: 1px solid var(--rule-2); }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.path { font-family: var(--mono); font-size: .74rem; color: var(--ink-3); word-break: break-all; }
+.ex { display: inline-block; font-size: .7rem; color: var(--ink-2); background: var(--rule-2);
+  padding: .06rem .3rem; border-radius: 2px; margin: 0 .16rem .12rem 0; }
+.bx { position: relative; }
+.bx code { font-size: .72rem; }
+.bx .cnt { display: inline-block; margin-left: .35rem; font-family: var(--mono); font-size: .64rem;
+  color: var(--ink-3); background: var(--rule-2); border-radius: 2px; padding: 0 .25rem; }
+.bx.merged code { background: var(--t3-bg); color: var(--t2); padding: .05rem .25rem; border-radius: 2px; }
+.bx.none .glyph, .bx .glyph { color: var(--ink-3); }
+.bstruct { font-size: .7rem; white-space: nowrap; }
+.bstruct.s-m { color: var(--warn); font-weight: 600; }
+.bstruct.s-s { color: var(--ink-2); }
+.bstruct.s-n { color: var(--ink-3); }
+.note { color: var(--ink-2); max-width: 24rem; font-size: .95em; line-height: 1.5; }
+
+/* ── 표 병기 (대비 WARN 완화 + 접근성) ── */
+.tv { margin: .8rem 0 0; }
+.tv summary { font-size: var(--step--1); color: var(--accent); cursor: pointer; padding: .25rem 0; }
+.tv summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tv[open] summary { margin-bottom: .5rem; }
+
+ul.plain { list-style: none; padding: 0; margin: 0 0 1rem; }
+ul.plain li { padding: .35rem 0; border-bottom: 1px solid var(--rule-2); font-size: var(--step--1);
+  color: var(--ink-2); max-width: 74ch; }
+ul.plain .w { font-family: var(--mono); font-size: .7rem; color: var(--ink-3); }
+ol.recipe { padding-left: 1.4rem; max-width: 70ch; counter-reset: r; list-style: none; }
+ol.recipe li { margin-bottom: .8rem; position: relative; }
+ol.recipe li::before { counter-increment: r; content: counter(r); position: absolute;
+  left: -1.6rem; top: .18rem; font-family: var(--mono); font-size: .66rem; color: var(--accent);
+  background: var(--accent-soft); width: 1.15rem; height: 1.15rem; border-radius: 2px;
+  display: grid; place-items: center; }
+ol.recipe b { font-weight: 620; }
+footer { margin-top: 4rem; padding-top: 1.4rem; border-top: 1px solid var(--rule);
+  color: var(--ink-3); font-size: var(--step--1); }
+
+#tip { position: fixed; z-index: 50; pointer-events: none; opacity: 0;
+  transform: translate(-50%, -130%); background: var(--ink); color: var(--paper);
+  font-size: .72rem; line-height: 1.45; padding: .35rem .5rem; border-radius: 3px;
+  max-width: 22rem; transition: opacity .08s linear; }
+#tip.on { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="wrap">
+<nav class="rail" aria-label="목차">
+  <p class="rail-t">목차</p>
+  <ol>
+    <li><a href="#how">측정 방법과 한계</a></li>
+    <li><a href="#scale">1. 토큰 규모와 구성</a></li>
+    <li><a href="#tokens">2. 어휘 커버리지 매트릭스</a></li>
+    <li><a href="#components">3. 컴포넌트 교집합</a></li>
+    <li><a href="#variants">4. Button variant 축</a></li>
+    <li><a href="#figma">5. Figma 쪽 축 분포</a></li>
+    <li><a href="#reaudit">6. 재감사</a></li>
+    <li><a href="#reaudit" class="sub-a">6-1 의존율 재측정</a></li>
+    <li><a href="#mfi" class="sub-a">6-2 MFI-partial</a></li>
+    <li><a href="#recipe">7. 최소 시스템 레시피</a></li>
+    <li><a href="#sources">부록 — 소스 커밋</a></li>
+  </ol>
+</nav>
+
+<main>
+<p class="eyebrow">design-systems-benchmark · 실측</p>
+<h1>디자인 시스템에서 표준화할 수 있는 것</h1>
+<p class="lede">8개 컴포넌트 라이브러리의 <b>실제 소스</b>에서 semantic 토큰 3177개와
+컴포넌트 인벤토리를 추출해, 어느 개념이 예외 없이 공통이고 어느 개념이 갈리는지 셌다.
+공통인 것만이 표준화 가능하다.</p>
+
+<div class="meta">
+  <span><b>대상</b> Spectrum · Material Web · MUI · Fluent 2 · Carbon · Polaris · shadcn/ui · Ant Design</span>
+  <span><b>기준일</b> 2026-07-30</span>
+  <span><b>소스</b> 고정 커밋 (부록)</span>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="k">8</div><div class="l">예외 없이 공통인<br>토큰 어휘</div></div>
+  <div class="kpi"><div class="k">9</div><div class="l">8개 시스템 전부에<br>있는 컴포넌트</div></div>
+  <div class="kpi"><div class="k">3177</div><div class="l">추출한 semantic<br>토큰 총수</div></div>
+  <div class="kpi"><div class="k">4.9<small>%</small></div><div class="l">정규 어휘로 분류<br>안 된 잔여</div></div>
+</div>
+
+<h2 id="how"><span class="h2n">방법</span>측정 방법과 한계</h2>
+<p class="sub">결론보다 이 문단이 먼저다. 이 저장소의 기존 감사가 남긴 교훈이
+"집계 기준을 명시하지 않은 감사는 비교 불가"이기 때문이다.</p>
+<ul class="plain">
+<li><b>수집 범위</b> — 각 시스템의 <i>semantic(alias) 계층</i>만. primitive 램프(<code>gray-100</code> 류)는 제외했다. 표준화 대상이 아니다.</li>
+<li><b>판정</b> — 토큰 이름을 4개 축(값의 종류 / 자리 / 의미 / 상태)으로 분류하고, 각 값이 8개 중 몇 개 시스템에 등장하는지 센다.</li>
+<li><b>이름이 곧 근거</b> — 값이 아니라 <i>이름</i>을 본다. 이름에 개념이 드러나지 않으면 그 시스템은 실제로 그 개념을 구분하지 않는다고 본다.</li>
+<li><b>잔여 157개(4.9%)</b>는 어느 축에도 걸리지 않았다. 대부분 Carbon 의 <code>code01</code>/<code>container01</code> 같은 시스템 고유 스케일이다.</li>
+</ul>
+<div class="callout">
+<p><b>이름이 같아야 개념이 같은 것은 아니다.</b> Fluent 2 는 상태색을 <code>status</code> 가 아니라
+<i>색조</i> 이름으로 부른다 — <code>colorPaletteCranberryForeground1</code> 이 위험색이다.
+이 문서는 <code>statusColorMapping.ts</code>(success→green, warning→orange, danger→cranberry)를
+읽어 매핑한 뒤 커버리지에 넣었다. 해당 사례:</p>
+<ul class="plain"><li><b>Spectrum</b> 3개 — <code>green-visual-color</code> 같은 이름</li><li><b>Fluent 2</b> 45개 — <code>color-palette-cranberry-background2</code> 같은 이름</li></ul>
+</div>
+
+<h2 id="scale"><span class="h2n">1</span>토큰 규모와 구성</h2>
+<p class="sub">먼저 규모. 최대와 최소가 <b>10배</b> 차이다. 토큰이 많은 게 좋은 것은 아니다 —
+아래 구성비를 보면 그 수가 어디에 쓰였는지가 갈린다.</p>
+<div class="panel"><div class="hbars"><div class="hb" data-tip="Spectrum — semantic 토큰 935개 · alias(semantic)" tabindex="0">
+<span class="hb-l">Spectrum</span>
+<span class="hb-t"><i style="width:100.00%"></i></span>
+<span class="hb-v">935개</span></div><div class="hb" data-tip="Polaris — semantic 토큰 820개 · base theme(semantic)" tabindex="0">
+<span class="hb-l">Polaris</span>
+<span class="hb-t"><i style="width:87.70%"></i></span>
+<span class="hb-v">820개</span></div><div class="hb" data-tip="Fluent 2 — semantic 토큰 459개 · alias(semantic)" tabindex="0">
+<span class="hb-l">Fluent 2</span>
+<span class="hb-t"><i style="width:49.09%"></i></span>
+<span class="hb-v">459개</span></div><div class="hb" data-tip="Carbon — semantic 토큰 341개 · theme(semantic, DTCG) + scale" tabindex="0">
+<span class="hb-l">Carbon</span>
+<span class="hb-t"><i style="width:36.47%"></i></span>
+<span class="hb-v">341개</span></div><div class="hb" data-tip="Ant Design — semantic 토큰 228개 · seed→map→alias" tabindex="0">
+<span class="hb-l">Ant Design</span>
+<span class="hb-t"><i style="width:24.39%"></i></span>
+<span class="hb-v">228개</span></div><div class="hb" data-tip="Material Web — semantic 토큰 192개 · sys(semantic)" tabindex="0">
+<span class="hb-l">Material Web</span>
+<span class="hb-t"><i style="width:20.53%"></i></span>
+<span class="hb-v">192개</span></div><div class="hb" data-tip="MUI — semantic 토큰 109개 · palette/typography/shape(semantic)" tabindex="0">
+<span class="hb-l">MUI</span>
+<span class="hb-t"><i style="width:11.66%"></i></span>
+<span class="hb-v">109개</span></div><div class="hb" data-tip="shadcn/ui — semantic 토큰 93개 · semantic(단층)" tabindex="0">
+<span class="hb-l">shadcn/ui</span>
+<span class="hb-t"><i style="width:9.95%"></i></span>
+<span class="hb-v">93개</span></div></div><details class="tv"><summary>토큰 규모 — 표로 보기</summary><div class="scroll"><table><thead><tr><th scope="col">시스템</th><th scope="col">토큰 수</th><th scope="col">계층</th><th scope="col">추출 경로</th></tr></thead><tbody><tr><th scope="row" class="">Spectrum</th><td class="num">935</td><td class="num">alias(semantic)</td><td class="num"><span class="path">spectrum-tokens/packages/tokens/src/{color-aliases,semantic-color-palette,layout,typography}.json</span></td></tr><tr><th scope="row" class="">Polaris</th><td class="num">820</td><td class="num">base theme(semantic)</td><td class="num"><span class="path">polaris/polaris-tokens/src/themes/base/*.ts</span></td></tr><tr><th scope="row" class="">Fluent 2</th><td class="num">459</td><td class="num">alias(semantic)</td><td class="num"><span class="path">fluentui/packages/tokens/src/{alias/lightColor.ts,tokens.ts}</span></td></tr><tr><th scope="row" class="">Carbon</th><td class="num">341</td><td class="num">theme(semantic, DTCG) + scale</td><td class="num"><span class="path">carbon/packages/{themes/src/dtcg/white.json, layout|type|motion|elements/src/tokens.ts}</span></td></tr><tr><th scope="row" class="">Ant Design</th><td class="num">228</td><td class="num">seed→map→alias</td><td class="num"><span class="path">ant-design/components/theme/interface/{seeds,alias,maps/*}.ts</span></td></tr><tr><th scope="row" class="">Material Web</th><td class="num">192</td><td class="num">sys(semantic)</td><td class="num"><span class="path">material-web/tokens/{,versions/v0_192/}_md-sys-*.scss</span></td></tr><tr><th scope="row" class="">MUI</th><td class="num">109</td><td class="num">palette/typography/shape(semantic)</td><td class="num"><span class="path">material-ui/packages/mui-material/src/styles/*.d.ts (타입 선언)</span></td></tr><tr><th scope="row" class="">shadcn/ui</th><td class="num">93</td><td class="num">semantic(단층)</td><td class="num"><span class="path">shadcn-ui/apps/v4/app/globals.css (:root CSS vars)</span></td></tr></tbody></table></div></details></div>
+
+<h3>무엇에 토큰을 쓰는가</h3>
+<p class="sub">같은 "디자인 토큰"이라도 시스템마다 무게중심이 다르다. shadcn/ui 는 거의 색상뿐이고,
+Material Web 은 절반이 타이포그래피, Spectrum 은 4분의 1이 간격이다.
+<b>간격을 토큰화하지 않은 시스템이 둘</b>(Material Web · shadcn/ui) 있다.</p>
+<div class="panel"><div class="legend-row" role="list"><span class="lg"><i class="s1"></i>색상</span><span class="lg"><i class="s2"></i>타이포그래피</span><span class="lg"><i class="s3"></i>간격</span><span class="lg"><i class="s4"></i>크기</span><span class="lg"><i class="s5"></i>elevation</span><span class="lg"><i class="s6"></i>모션</span><span class="lg"><i class="s7"></i>radius</span></div><div class="stacks"><div class="sb" data-row="Spectrum"><span class="sb-l">Spectrum</span><span class="sb-t"><i class="s1" style="flex:26.5" data-tip="Spectrum · 색상 26.5%" tabindex="0"><b>26</b></i><i class="s2" style="flex:33.1" data-tip="Spectrum · 타이포그래피 33.1%" tabindex="0"><b>33</b></i><i class="s3" style="flex:24.3" data-tip="Spectrum · 간격 24.3%" tabindex="0"><b>24</b></i><i class="s4" style="flex:3.5" data-tip="Spectrum · 크기 3.5%" tabindex="0"><b></b></i><i class="s5" style="flex:4.7" data-tip="Spectrum · elevation 4.7%" tabindex="0"><b></b></i><i class="s7" style="flex:3.3" data-tip="Spectrum · radius 3.3%" tabindex="0"><b></b></i><i class="res" style="flex:4.6" data-tip="Spectrum · 기타 4.6%" tabindex="0"><b></b></i></span><span class="sb-v">921개</span></div><div class="sb" data-row="Polaris"><span class="sb-l">Polaris</span><span class="sb-t"><i class="s1" style="flex:53.5" data-tip="Polaris · 색상 53.5%" tabindex="0"><b>54</b></i><i class="s2" style="flex:13.7" data-tip="Polaris · 타이포그래피 13.7%" tabindex="0"><b>14</b></i><i class="s3" style="flex:4.9" data-tip="Polaris · 간격 4.9%" tabindex="0"><b></b></i><i class="s4" style="flex:11.0" data-tip="Polaris · 크기 11.0%" tabindex="0"><b>11</b></i><i class="s5" style="flex:4.4" data-tip="Polaris · elevation 4.4%" tabindex="0"><b></b></i><i class="s6" style="flex:5.6" data-tip="Polaris · 모션 5.6%" tabindex="0"><b></b></i><i class="s7" style="flex:1.2" data-tip="Polaris · radius 1.2%" tabindex="0"><b></b></i><i class="res" style="flex:5.7" data-tip="Polaris · 기타 5.7%" tabindex="0"><b></b></i></span><span class="sb-v">820개</span></div><div class="sb" data-row="Fluent 2"><span class="sb-l">Fluent 2</span><span class="sb-t"><i class="s1" style="flex:76.0" data-tip="Fluent 2 · 색상 76.0%" tabindex="0"><b>76</b></i><i class="s2" style="flex:5.9" data-tip="Fluent 2 · 타이포그래피 5.9%" tabindex="0"><b></b></i><i class="s3" style="flex:4.8" data-tip="Fluent 2 · 간격 4.8%" tabindex="0"><b></b></i><i class="s5" style="flex:4.4" data-tip="Fluent 2 · elevation 4.4%" tabindex="0"><b></b></i><i class="s6" style="flex:3.7" data-tip="Fluent 2 · 모션 3.7%" tabindex="0"><b></b></i><i class="s7" style="flex:2.4" data-tip="Fluent 2 · radius 2.4%" tabindex="0"><b></b></i><i class="res" style="flex:2.8" data-tip="Fluent 2 · 기타 2.8%" tabindex="0"><b></b></i></span><span class="sb-v">459개</span></div><div class="sb" data-row="Carbon"><span class="sb-l">Carbon</span><span class="sb-t"><i class="s1" style="flex:33.3" data-tip="Carbon · 색상 33.3%" tabindex="0"><b>33</b></i><i class="s2" style="flex:26.9" data-tip="Carbon · 타이포그래피 26.9%" tabindex="0"><b>27</b></i><i class="s3" style="flex:10.0" data-tip="Carbon · 간격 10.0%" tabindex="0"><b>10</b></i><i class="s4" style="flex:3.0" data-tip="Carbon · 크기 3.0%" tabindex="0"><b></b></i><i class="s5" style="flex:0.5" data-tip="Carbon · elevation 0.5%" tabindex="0"><b></b></i><i class="s6" style="flex:3.0" data-tip="Carbon · 모션 3.0%" tabindex="0"><b></b></i><i class="res" style="flex:23.3" data-tip="Carbon · 기타 23.3%" tabindex="0"><b></b></i></span><span class="sb-v">201개</span></div><div class="sb" data-row="Ant Design"><span class="sb-l">Ant Design</span><span class="sb-t"><i class="s1" style="flex:44.9" data-tip="Ant Design · 색상 44.9%" tabindex="0"><b>45</b></i><i class="s2" style="flex:11.5" data-tip="Ant Design · 타이포그래피 11.5%" tabindex="0"><b>12</b></i><i class="s3" style="flex:10.1" data-tip="Ant Design · 간격 10.1%" tabindex="0"><b>10</b></i><i class="s4" style="flex:8.8" data-tip="Ant Design · 크기 8.8%" tabindex="0"><b>9</b></i><i class="s5" style="flex:6.6" data-tip="Ant Design · elevation 6.6%" tabindex="0"><b></b></i><i class="s6" style="flex:4.4" data-tip="Ant Design · 모션 4.4%" tabindex="0"><b></b></i><i class="s7" style="flex:2.2" data-tip="Ant Design · radius 2.2%" tabindex="0"><b></b></i><i class="res" style="flex:11.5" data-tip="Ant Design · 기타 11.5%" tabindex="0"><b></b></i></span><span class="sb-v">227개</span></div><div class="sb" data-row="Material Web"><span class="sb-l">Material Web</span><span class="sb-t"><i class="s1" style="flex:25.5" data-tip="Material Web · 색상 25.5%" tabindex="0"><b>26</b></i><i class="s2" style="flex:48.4" data-tip="Material Web · 타이포그래피 48.4%" tabindex="0"><b>48</b></i><i class="s5" style="flex:3.6" data-tip="Material Web · elevation 3.6%" tabindex="0"><b></b></i><i class="s6" style="flex:14.1" data-tip="Material Web · 모션 14.1%" tabindex="0"><b>14</b></i><i class="s7" style="flex:6.2" data-tip="Material Web · radius 6.2%" tabindex="0"><b></b></i><i class="res" style="flex:2.2" data-tip="Material Web · 기타 2.2%" tabindex="0"><b></b></i></span><span class="sb-v">192개</span></div><div class="sb" data-row="MUI"><span class="sb-l">MUI</span><span class="sb-t"><i class="s1" style="flex:34.9" data-tip="MUI · 색상 34.9%" tabindex="0"><b>35</b></i><i class="s2" style="flex:18.3" data-tip="MUI · 타이포그래피 18.3%" tabindex="0"><b>18</b></i><i class="s3" style="flex:0.9" data-tip="MUI · 간격 0.9%" tabindex="0"><b></b></i><i class="s5" style="flex:22.9" data-tip="MUI · elevation 22.9%" tabindex="0"><b>23</b></i><i class="s6" style="flex:10.1" data-tip="MUI · 모션 10.1%" tabindex="0"><b>10</b></i><i class="s7" style="flex:0.9" data-tip="MUI · radius 0.9%" tabindex="0"><b></b></i><i class="res" style="flex:12.0" data-tip="MUI · 기타 12.0%" tabindex="0"><b></b></i></span><span class="sb-v">109개</span></div><div class="sb" data-row="shadcn/ui"><span class="sb-l">shadcn/ui</span><span class="sb-t"><i class="s1" style="flex:85.7" data-tip="shadcn/ui · 색상 85.7%" tabindex="0"><b>86</b></i><i class="s2" style="flex:3.3" data-tip="shadcn/ui · 타이포그래피 3.3%" tabindex="0"><b></b></i><i class="s7" style="flex:8.8" data-tip="shadcn/ui · radius 8.8%" tabindex="0"><b>9</b></i><i class="res" style="flex:2.2" data-tip="shadcn/ui · 기타 2.2%" tabindex="0"><b></b></i></span><span class="sb-v">91개</span></div></div><details class="tv"><summary>토큰 구성비 — 표로 보기</summary><div class="scroll"><table><thead><tr><th scope="col">시스템</th><th scope="col">색상</th><th scope="col">타이포그래피</th><th scope="col">간격</th><th scope="col">크기</th><th scope="col">elevation</th><th scope="col">모션</th><th scope="col">radius</th><th scope="col">기타</th></tr></thead><tbody><tr><th scope="row" class="">Spectrum</th><td class="num">26.5%</td><td class="num">33.1%</td><td class="num">24.3%</td><td class="num">3.5%</td><td class="num">4.7%</td><td class="num">0.0%</td><td class="num">3.3%</td><td class="num">4.6%</td></tr><tr><th scope="row" class="">Polaris</th><td class="num">53.5%</td><td class="num">13.7%</td><td class="num">4.9%</td><td class="num">11.0%</td><td class="num">4.4%</td><td class="num">5.6%</td><td class="num">1.2%</td><td class="num">5.7%</td></tr><tr><th scope="row" class="">Fluent 2</th><td class="num">76.0%</td><td class="num">5.9%</td><td class="num">4.8%</td><td class="num">0.0%</td><td class="num">4.4%</td><td class="num">3.7%</td><td class="num">2.4%</td><td class="num">2.8%</td></tr><tr><th scope="row" class="">Carbon</th><td class="num">33.3%</td><td class="num">26.9%</td><td class="num">10.0%</td><td class="num">3.0%</td><td class="num">0.5%</td><td class="num">3.0%</td><td class="num">0.0%</td><td class="num">23.3%</td></tr><tr><th scope="row" class="">Ant Design</th><td class="num">44.9%</td><td class="num">11.5%</td><td class="num">10.1%</td><td class="num">8.8%</td><td class="num">6.6%</td><td class="num">4.4%</td><td class="num">2.2%</td><td class="num">11.5%</td></tr><tr><th scope="row" class="">Material Web</th><td class="num">25.5%</td><td class="num">48.4%</td><td class="num">0.0%</td><td class="num">0.0%</td><td class="num">3.6%</td><td class="num">14.1%</td><td class="num">6.2%</td><td class="num">2.2%</td></tr><tr><th scope="row" class="">MUI</th><td class="num">34.9%</td><td class="num">18.3%</td><td class="num">0.9%</td><td class="num">0.0%</td><td class="num">22.9%</td><td class="num">10.1%</td><td class="num">0.9%</td><td class="num">12.0%</td></tr><tr><th scope="row" class="">shadcn/ui</th><td class="num">85.7%</td><td class="num">3.3%</td><td class="num">0.0%</td><td class="num">0.0%</td><td class="num">0.0%</td><td class="num">0.0%</td><td class="num">8.8%</td><td class="num">2.2%</td></tr></tbody></table></div></details></div>
+
+<h2 id="tokens"><span class="h2n">2</span>어휘 커버리지 매트릭스</h2>
+<p class="sub">이 문서의 핵심. 행은 정규 어휘 하나, 열은 시스템 하나.
+<b>칸이 채워졌으면 그 시스템이 그 개념을 이름에 드러낸다</b>는 뜻이다.
+행을 가로로 읽으면 표준화 가능성, 열을 세로로 읽으면 그 시스템의 성향이 보인다.
+칸에 커서를 올리면 실제 토큰 이름이 나온다.</p>
+<p class="code-key"><b>SPE</b> Spectrum · <b>MTW</b> Material Web · <b>MUI</b> MUI · <b>FLU</b> Fluent 2 · <b>CAR</b> Carbon · <b>POL</b> Polaris · <b>SCN</b> shadcn/ui · <b>ANT</b> Ant Design</p>
+<div class="mx">
+<div class="mx-head"><span></span><span class="mx-chs"><span class="mx-ch" title="Spectrum">SPE</span><span class="mx-ch" title="Material Web">MTW</span><span class="mx-ch" title="MUI">MUI</span><span class="mx-ch" title="Fluent 2">FLU</span><span class="mx-ch" title="Carbon">CAR</span><span class="mx-ch" title="Polaris">POL</span><span class="mx-ch" title="shadcn/ui">SCN</span><span class="mx-ch" title="Ant Design">ANT</span></span><span></span><span></span></div>
+<div class="mx-group"><span>값의 종류 — 토큰이 무엇을 담는가</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>color</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="color · Spectrum — 보유 · code-color"></span><span class="mx-c on" tabindex="0" data-tip="color · Material Web — 보유 · color-error"></span><span class="mx-c on" tabindex="0" data-tip="color · MUI — 보유 · palette-divider"></span><span class="mx-c on" tabindex="0" data-tip="color · Fluent 2 — 보유 · color-brand-stroke1"></span><span class="mx-c on" tabindex="0" data-tip="color · Carbon — 보유 · overlay"></span><span class="mx-c on" tabindex="0" data-tip="color · Polaris — 보유 · color-bg"></span><span class="mx-c on" tabindex="0" data-tip="color · shadcn/ui — 보유 · card"></span><span class="mx-c on" tabindex="0" data-tip="color · Ant Design — 보유 · color-fill"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>typography</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="typography · Spectrum — 보유 · body-color"></span><span class="mx-c on" tabindex="0" data-tip="typography · Material Web — 보유 · typescale-body-large"></span><span class="mx-c on" tabindex="0" data-tip="typography · MUI — 보유 · typography-h1"></span><span class="mx-c on" tabindex="0" data-tip="typography · Fluent 2 — 보유 · font-family-base"></span><span class="mx-c on" tabindex="0" data-tip="typography · Carbon — 보유 · body01"></span><span class="mx-c on" tabindex="0" data-tip="typography · Polaris — 보유 · font-275"></span><span class="mx-c on" tabindex="0" data-tip="typography · shadcn/ui — 보유 · font-mono"></span><span class="mx-c on" tabindex="0" data-tip="typography · Ant Design — 보유 · font-size"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>elevation</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="elevation · Spectrum — 보유 · drop-shadow-x"></span><span class="mx-c on" tabindex="0" data-tip="elevation · Material Web — 보유 · color-shadow"></span><span class="mx-c on" tabindex="0" data-tip="elevation · MUI — 보유 · shadows-0"></span><span class="mx-c on" tabindex="0" data-tip="elevation · Fluent 2 — 보유 · shadow2"></span><span class="mx-c on" tabindex="0" data-tip="elevation · Carbon — 보유 · shadow"></span><span class="mx-c on" tabindex="0" data-tip="elevation · Polaris — 보유 · shadow-button"></span><span class="mx-c" tabindex="0" data-tip="elevation · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="elevation · Ant Design — 보유 · box-shadow"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>radius</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="radius · Spectrum — 보유 · corner-radius-0"></span><span class="mx-c on" tabindex="0" data-tip="radius · Material Web — 보유 · shape-corner-full"></span><span class="mx-c on" tabindex="0" data-tip="radius · MUI — 보유 · shape-border-radius"></span><span class="mx-c on" tabindex="0" data-tip="radius · Fluent 2 — 보유 · border-radius-none"></span><span class="mx-c" tabindex="0" data-tip="radius · Carbon — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="radius · Polaris — 보유 · border-border-radius-0"></span><span class="mx-c on" tabindex="0" data-tip="radius · shadcn/ui — 보유 · radius"></span><span class="mx-c on" tabindex="0" data-tip="radius · Ant Design — 보유 · border-radius"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>motion</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="motion · Spectrum — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="motion · Material Web — 보유 · motion-path"></span><span class="mx-c on" tabindex="0" data-tip="motion · MUI — 보유 · transitions-easing-sharp"></span><span class="mx-c on" tabindex="0" data-tip="motion · Fluent 2 — 보유 · curve-linear"></span><span class="mx-c on" tabindex="0" data-tip="motion · Carbon — 보유 · duration-fast01"></span><span class="mx-c on" tabindex="0" data-tip="motion · Polaris — 보유 · motion-0"></span><span class="mx-c" tabindex="0" data-tip="motion · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="motion · Ant Design — 보유 · motion-base"></span></span>
+<span class="mx-n">6</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>spacing</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="spacing · Spectrum — 보유 · spacing-25"></span><span class="mx-c" tabindex="0" data-tip="spacing · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="spacing · MUI — 보유 · spacing"></span><span class="mx-c on" tabindex="0" data-tip="spacing · Fluent 2 — 보유 · spacing-vertical-l"></span><span class="mx-c on" tabindex="0" data-tip="spacing · Carbon — 보유 · spacing01"></span><span class="mx-c on" tabindex="0" data-tip="spacing · Polaris — 보유 · space-0"></span><span class="mx-c" tabindex="0" data-tip="spacing · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="spacing · Ant Design — 보유 · margin"></span></span>
+<span class="mx-n">6</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>opacity</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="opacity · Spectrum — 보유 · overlay-opacity"></span><span class="mx-c on" tabindex="0" data-tip="opacity · Material Web — 보유 · state-focus-state-layer-opacity"></span><span class="mx-c on" tabindex="0" data-tip="opacity · MUI — 보유 · palette-action-focus-opacity"></span><span class="mx-c on" tabindex="0" data-tip="opacity · Fluent 2 — 보유 · color-neutral-stroke-alpha"></span><span class="mx-c" tabindex="0" data-tip="opacity · Carbon — 미보유"></span><span class="mx-c" tabindex="0" data-tip="opacity · Polaris — 미보유"></span><span class="mx-c" tabindex="0" data-tip="opacity · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="opacity · Ant Design — 보유 · opacity-image"></span></span>
+<span class="mx-n">5</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>z-index</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="z-index · Spectrum — 보유 · background-layer-1-color"></span><span class="mx-c" tabindex="0" data-tip="z-index · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="z-index · MUI — 보유 · z-index-fab"></span><span class="mx-c" tabindex="0" data-tip="z-index · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="z-index · Carbon — 보유 · layer-01"></span><span class="mx-c on" tabindex="0" data-tip="z-index · Polaris — 보유 · zIndex-0"></span><span class="mx-c" tabindex="0" data-tip="z-index · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="z-index · Ant Design — 보유 · z-index-base"></span></span>
+<span class="mx-n">5</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>border</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="border · Spectrum — 보유 · border-width-100"></span><span class="mx-c" tabindex="0" data-tip="border · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="border · MUI — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="border · Fluent 2 — 보유 · stroke-width-thin"></span><span class="mx-c" tabindex="0" data-tip="border · Carbon — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="border · Polaris — 보유 · border-0"></span><span class="mx-c" tabindex="0" data-tip="border · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="border · Ant Design — 보유 · control-outline-width"></span></span>
+<span class="mx-n">4</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>sizing</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="sizing · Spectrum — 보유 · code-size-l"></span><span class="mx-c" tabindex="0" data-tip="sizing · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="sizing · MUI — 미보유"></span><span class="mx-c" tabindex="0" data-tip="sizing · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="sizing · Carbon — 보유 · size-large"></span><span class="mx-c on" tabindex="0" data-tip="sizing · Polaris — 보유 · width-0"></span><span class="mx-c" tabindex="0" data-tip="sizing · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="sizing · Ant Design — 보유 · size"></span></span>
+<span class="mx-n">4</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>breakpoint</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="breakpoint · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="breakpoint · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="breakpoint · MUI — 미보유"></span><span class="mx-c" tabindex="0" data-tip="breakpoint · Fluent 2 — 미보유"></span><span class="mx-c" tabindex="0" data-tip="breakpoint · Carbon — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="breakpoint · Polaris — 보유 · breakpoints-breakpoints-lg"></span><span class="mx-c on" tabindex="0" data-tip="breakpoint · shadcn/ui — 보유 · breakpoint-3xl"></span><span class="mx-c on" tabindex="0" data-tip="breakpoint · Ant Design — 보유 · screen-lg"></span></span>
+<span class="mx-n">3</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>blur</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="blur · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="blur · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="blur · MUI — 미보유"></span><span class="mx-c" tabindex="0" data-tip="blur · Fluent 2 — 미보유"></span><span class="mx-c" tabindex="0" data-tip="blur · Carbon — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="blur · Polaris — 보유 · color-backdrop-bg"></span><span class="mx-c" tabindex="0" data-tip="blur · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="blur · Ant Design — 보유 · color-bg-blur"></span></span>
+<span class="mx-n">2</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>icon-size</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="icon-size · Spectrum — 보유 · workflow-icon-large"></span><span class="mx-c" tabindex="0" data-tip="icon-size · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="icon-size · MUI — 미보유"></span><span class="mx-c" tabindex="0" data-tip="icon-size · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="icon-size · Carbon — 보유 · icon-size01"></span><span class="mx-c" tabindex="0" data-tip="icon-size · Polaris — 미보유"></span><span class="mx-c" tabindex="0" data-tip="icon-size · shadcn/ui — 미보유"></span><span class="mx-c" tabindex="0" data-tip="icon-size · Ant Design — 미보유"></span></span>
+<span class="mx-n">2</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-system-specific">
+<span class="mx-rl"><b>domain</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="domain · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="domain · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="domain · MUI — 미보유"></span><span class="mx-c" tabindex="0" data-tip="domain · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="domain · Carbon — 보유 · ai-overlay"></span><span class="mx-c" tabindex="0" data-tip="domain · Polaris — 미보유"></span><span class="mx-c" tabindex="0" data-tip="domain · shadcn/ui — 미보유"></span><span class="mx-c" tabindex="0" data-tip="domain · Ant Design — 미보유"></span></span>
+<span class="mx-n">1</span>
+<span class="mx-t t-system-specific">고유</span></div><div class="mx-group"><span>색이 칠해지는 자리 — 같은 색을 어디에 쓰는가</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>border</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="border · Spectrum — 보유 · disabled-border-color"></span><span class="mx-c on" tabindex="0" data-tip="border · Material Web — 보유 · color-outline"></span><span class="mx-c on" tabindex="0" data-tip="border · MUI — 보유 · palette-divider"></span><span class="mx-c on" tabindex="0" data-tip="border · Fluent 2 — 보유 · color-brand-stroke1"></span><span class="mx-c on" tabindex="0" data-tip="border · Carbon — 보유 · border-inverse"></span><span class="mx-c on" tabindex="0" data-tip="border · Polaris — 보유 · color-border"></span><span class="mx-c on" tabindex="0" data-tip="border · shadcn/ui — 보유 · border"></span><span class="mx-c on" tabindex="0" data-tip="border · Ant Design — 보유 · color-split"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>foreground</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="foreground · Spectrum — 보유 · disabled-content-color"></span><span class="mx-c on" tabindex="0" data-tip="foreground · Material Web — 보유 · color-on-error"></span><span class="mx-c on" tabindex="0" data-tip="foreground · MUI — 보유 · palette-text-primary"></span><span class="mx-c on" tabindex="0" data-tip="foreground · Fluent 2 — 보유 · color-brand-foreground1"></span><span class="mx-c on" tabindex="0" data-tip="foreground · Carbon — 보유 · text-error"></span><span class="mx-c on" tabindex="0" data-tip="foreground · Polaris — 보유 · color-text"></span><span class="mx-c on" tabindex="0" data-tip="foreground · shadcn/ui — 보유 · foreground"></span><span class="mx-c on" tabindex="0" data-tip="foreground · Ant Design — 보유 · color-text"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>surface</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="surface · Spectrum — 보유 · background-base-color"></span><span class="mx-c on" tabindex="0" data-tip="surface · Material Web — 보유 · color-surface"></span><span class="mx-c on" tabindex="0" data-tip="surface · MUI — 보유 · palette-background-paper"></span><span class="mx-c on" tabindex="0" data-tip="surface · Fluent 2 — 보유 · color-brand-background"></span><span class="mx-c on" tabindex="0" data-tip="surface · Carbon — 보유 · background"></span><span class="mx-c on" tabindex="0" data-tip="surface · Polaris — 보유 · color-bg"></span><span class="mx-c on" tabindex="0" data-tip="surface · shadcn/ui — 보유 · surface"></span><span class="mx-c on" tabindex="0" data-tip="surface · Ant Design — 보유 · color-fill"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>shadow</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="shadow · Spectrum — 보유 · drop-shadow-x"></span><span class="mx-c on" tabindex="0" data-tip="shadow · Material Web — 보유 · color-shadow"></span><span class="mx-c on" tabindex="0" data-tip="shadow · MUI — 보유 · shadows-0"></span><span class="mx-c on" tabindex="0" data-tip="shadow · Fluent 2 — 보유 · shadow2"></span><span class="mx-c on" tabindex="0" data-tip="shadow · Carbon — 보유 · shadow"></span><span class="mx-c on" tabindex="0" data-tip="shadow · Polaris — 보유 · shadow-button"></span><span class="mx-c" tabindex="0" data-tip="shadow · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="shadow · Ant Design — 보유 · box-shadow"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>overlay</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="overlay · Spectrum — 보유 · overlay-color"></span><span class="mx-c on" tabindex="0" data-tip="overlay · Material Web — 보유 · color-scrim"></span><span class="mx-c" tabindex="0" data-tip="overlay · MUI — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="overlay · Fluent 2 — 보유 · color-scrollbar-overlay"></span><span class="mx-c on" tabindex="0" data-tip="overlay · Carbon — 보유 · overlay"></span><span class="mx-c on" tabindex="0" data-tip="overlay · Polaris — 보유 · color-backdrop-bg"></span><span class="mx-c" tabindex="0" data-tip="overlay · shadcn/ui — 미보유"></span><span class="mx-c" tabindex="0" data-tip="overlay · Ant Design — 미보유"></span></span>
+<span class="mx-n">5</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>icon</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="icon · Spectrum — 보유 · icon-color-notice"></span><span class="mx-c" tabindex="0" data-tip="icon · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="icon · MUI — 미보유"></span><span class="mx-c" tabindex="0" data-tip="icon · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="icon · Carbon — 보유 · icon-inverse"></span><span class="mx-c on" tabindex="0" data-tip="icon · Polaris — 보유 · color-icon"></span><span class="mx-c" tabindex="0" data-tip="icon · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="icon · Ant Design — 보유 · color-icon"></span></span>
+<span class="mx-n">4</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>link</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="link · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="link · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="link · MUI — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="link · Fluent 2 — 보유 · color-brand-foreground-link"></span><span class="mx-c on" tabindex="0" data-tip="link · Carbon — 보유 · syntax-link"></span><span class="mx-c on" tabindex="0" data-tip="link · Polaris — 보유 · color-text-link"></span><span class="mx-c" tabindex="0" data-tip="link · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="link · Ant Design — 보유 · color-link"></span></span>
+<span class="mx-n">4</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>focus-ring</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="focus-ring · Spectrum — 보유 · focus-indicator-color"></span><span class="mx-c" tabindex="0" data-tip="focus-ring · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="focus-ring · MUI — 보유 · transitions-duration-entering-screen"></span><span class="mx-c" tabindex="0" data-tip="focus-ring · Fluent 2 — 미보유"></span><span class="mx-c" tabindex="0" data-tip="focus-ring · Carbon — 미보유"></span><span class="mx-c" tabindex="0" data-tip="focus-ring · Polaris — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="focus-ring · shadcn/ui — 보유 · ring"></span><span class="mx-c" tabindex="0" data-tip="focus-ring · Ant Design — 미보유"></span></span>
+<span class="mx-n">3</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-group"><span>의미와 강조도 — 그 색이 무슨 뜻인가</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>brand</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="brand · Spectrum — 보유 · accent-color-100"></span><span class="mx-c on" tabindex="0" data-tip="brand · Material Web — 보유 · color-primary"></span><span class="mx-c on" tabindex="0" data-tip="brand · MUI — 보유 · palette-primary-dark"></span><span class="mx-c on" tabindex="0" data-tip="brand · Fluent 2 — 보유 · color-brand-stroke1"></span><span class="mx-c on" tabindex="0" data-tip="brand · Carbon — 보유 · icon-primary"></span><span class="mx-c on" tabindex="0" data-tip="brand · Polaris — 보유 · color-icon-brand"></span><span class="mx-c on" tabindex="0" data-tip="brand · shadcn/ui — 보유 · accent"></span><span class="mx-c on" tabindex="0" data-tip="brand · Ant Design — 보유 · color-primary"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>secondary</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="secondary · Spectrum — 보유 · neutral-subdued-content-color-down"></span><span class="mx-c on" tabindex="0" data-tip="secondary · Material Web — 보유 · color-tertiary"></span><span class="mx-c on" tabindex="0" data-tip="secondary · MUI — 보유 · palette-secondary-dark"></span><span class="mx-c on" tabindex="0" data-tip="secondary · Fluent 2 — 보유 · color-subtle-background"></span><span class="mx-c on" tabindex="0" data-tip="secondary · Carbon — 보유 · icon-secondary"></span><span class="mx-c on" tabindex="0" data-tip="secondary · Polaris — 보유 · color-icon-secondary"></span><span class="mx-c on" tabindex="0" data-tip="secondary · shadcn/ui — 보유 · muted"></span><span class="mx-c on" tabindex="0" data-tip="secondary · Ant Design — 보유 · color-fill-tertiary"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>status:critical</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="status:critical · Spectrum — 보유 · red-visual-color"></span><span class="mx-c on" tabindex="0" data-tip="status:critical · Material Web — 보유 · color-error"></span><span class="mx-c on" tabindex="0" data-tip="status:critical · MUI — 보유 · palette-error-dark"></span><span class="mx-c on" tabindex="0" data-tip="status:critical · Fluent 2 — 보유 · color-palette-red-border1"></span><span class="mx-c on" tabindex="0" data-tip="status:critical · Carbon — 보유 · text-error"></span><span class="mx-c on" tabindex="0" data-tip="status:critical · Polaris — 보유 · color-icon-critical"></span><span class="mx-c on" tabindex="0" data-tip="status:critical · shadcn/ui — 보유 · destructive"></span><span class="mx-c on" tabindex="0" data-tip="status:critical · Ant Design — 보유 · color-error"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>disabled</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="disabled · Spectrum — 보유 · disabled-border-color"></span><span class="mx-c" tabindex="0" data-tip="disabled · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="disabled · MUI — 보유 · palette-text-disabled"></span><span class="mx-c on" tabindex="0" data-tip="disabled · Fluent 2 — 보유 · color-neutral-stroke-disabled"></span><span class="mx-c on" tabindex="0" data-tip="disabled · Carbon — 보유 · icon-disabled"></span><span class="mx-c on" tabindex="0" data-tip="disabled · Polaris — 보유 · color-icon-disabled"></span><span class="mx-c" tabindex="0" data-tip="disabled · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="disabled · Ant Design — 보유 · color-text-disabled"></span></span>
+<span class="mx-n">6</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>status:success</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="status:success · Spectrum — 보유 · green-visual-color"></span><span class="mx-c" tabindex="0" data-tip="status:success · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="status:success · MUI — 보유 · palette-success-dark"></span><span class="mx-c on" tabindex="0" data-tip="status:success · Fluent 2 — 보유 · color-palette-green-border1"></span><span class="mx-c" tabindex="0" data-tip="status:success · Carbon — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="status:success · Polaris — 보유 · color-icon-success"></span><span class="mx-c" tabindex="0" data-tip="status:success · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="status:success · Ant Design — 보유 · color-success"></span></span>
+<span class="mx-n">5</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>status:warning</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="status:warning · Spectrum — 보유 · notice-color-100"></span><span class="mx-c" tabindex="0" data-tip="status:warning · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="status:warning · MUI — 보유 · palette-warning-dark"></span><span class="mx-c on" tabindex="0" data-tip="status:warning · Fluent 2 — 보유 · color-status-warning-border1"></span><span class="mx-c" tabindex="0" data-tip="status:warning · Carbon — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="status:warning · Polaris — 보유 · color-icon-caution"></span><span class="mx-c" tabindex="0" data-tip="status:warning · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="status:warning · Ant Design — 보유 · color-warning"></span></span>
+<span class="mx-n">5</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>inverse</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="inverse · Spectrum — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="inverse · Material Web — 보유 · color-on-surface"></span><span class="mx-c" tabindex="0" data-tip="inverse · MUI — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="inverse · Fluent 2 — 보유 · color-neutral-background-inverted"></span><span class="mx-c on" tabindex="0" data-tip="inverse · Carbon — 보유 · icon-inverse"></span><span class="mx-c on" tabindex="0" data-tip="inverse · Polaris — 보유 · color-bg-inverse"></span><span class="mx-c" tabindex="0" data-tip="inverse · shadcn/ui — 미보유"></span><span class="mx-c" tabindex="0" data-tip="inverse · Ant Design — 미보유"></span></span>
+<span class="mx-n">4</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>neutral</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="neutral · Spectrum — 보유 · gray-visual-color"></span><span class="mx-c on" tabindex="0" data-tip="neutral · Material Web — 보유 · motion-easing-standard"></span><span class="mx-c on" tabindex="0" data-tip="neutral · MUI — 보유 · palette-background-default"></span><span class="mx-c on" tabindex="0" data-tip="neutral · Fluent 2 — 보유 · color-neutral-stroke1"></span><span class="mx-c" tabindex="0" data-tip="neutral · Carbon — 미보유"></span><span class="mx-c" tabindex="0" data-tip="neutral · Polaris — 미보유"></span><span class="mx-c" tabindex="0" data-tip="neutral · shadcn/ui — 미보유"></span><span class="mx-c" tabindex="0" data-tip="neutral · Ant Design — 미보유"></span></span>
+<span class="mx-n">4</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>status:info</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="status:info · Spectrum — 보유 · informative-color-100"></span><span class="mx-c" tabindex="0" data-tip="status:info · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="status:info · MUI — 보유 · palette-info-dark"></span><span class="mx-c" tabindex="0" data-tip="status:info · Fluent 2 — 미보유"></span><span class="mx-c" tabindex="0" data-tip="status:info · Carbon — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="status:info · Polaris — 보유 · color-icon-info"></span><span class="mx-c" tabindex="0" data-tip="status:info · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="status:info · Ant Design — 보유 · color-info"></span></span>
+<span class="mx-n">4</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-group"><span>상호작용 상태 — 상태에 따라 값이 바뀌는가</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>active</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="active · Spectrum — 보유 · accent-content-color-down"></span><span class="mx-c on" tabindex="0" data-tip="active · Material Web — 보유 · state-pressed-state-layer-opacity"></span><span class="mx-c on" tabindex="0" data-tip="active · MUI — 보유 · palette-action-active"></span><span class="mx-c on" tabindex="0" data-tip="active · Fluent 2 — 보유 · color-brand-stroke2-pressed"></span><span class="mx-c on" tabindex="0" data-tip="active · Carbon — 보유 · background-active"></span><span class="mx-c on" tabindex="0" data-tip="active · Polaris — 보유 · color-icon-active"></span><span class="mx-c" tabindex="0" data-tip="active · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="active · Ant Design — 보유 · color-info-active"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>focus</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="focus · Spectrum — 보유 · focus-indicator-color"></span><span class="mx-c on" tabindex="0" data-tip="focus · Material Web — 보유 · state-focus-state-layer-opacity"></span><span class="mx-c on" tabindex="0" data-tip="focus · MUI — 보유 · palette-action-focus"></span><span class="mx-c on" tabindex="0" data-tip="focus · Fluent 2 — 보유 · color-stroke-focus1"></span><span class="mx-c on" tabindex="0" data-tip="focus · Carbon — 보유 · focus-inset"></span><span class="mx-c on" tabindex="0" data-tip="focus · Polaris — 보유 · color-border-focus"></span><span class="mx-c" tabindex="0" data-tip="focus · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="focus · Ant Design — 보유 · line-width-focus"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>hover</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="hover · Spectrum — 보유 · accent-content-color-hover"></span><span class="mx-c on" tabindex="0" data-tip="hover · Material Web — 보유 · state-hover-state-layer-opacity"></span><span class="mx-c on" tabindex="0" data-tip="hover · MUI — 보유 · palette-action-hover"></span><span class="mx-c on" tabindex="0" data-tip="hover · Fluent 2 — 보유 · color-brand-stroke2-hover"></span><span class="mx-c on" tabindex="0" data-tip="hover · Carbon — 보유 · background-hover"></span><span class="mx-c on" tabindex="0" data-tip="hover · Polaris — 보유 · color-icon-hover"></span><span class="mx-c" tabindex="0" data-tip="hover · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="hover · Ant Design — 보유 · color-icon-hover"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>disabled</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="disabled · Spectrum — 보유 · disabled-border-color"></span><span class="mx-c" tabindex="0" data-tip="disabled · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="disabled · MUI — 보유 · palette-text-disabled"></span><span class="mx-c on" tabindex="0" data-tip="disabled · Fluent 2 — 보유 · color-neutral-stroke-disabled"></span><span class="mx-c on" tabindex="0" data-tip="disabled · Carbon — 보유 · icon-disabled"></span><span class="mx-c on" tabindex="0" data-tip="disabled · Polaris — 보유 · color-icon-disabled"></span><span class="mx-c" tabindex="0" data-tip="disabled · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="disabled · Ant Design — 보유 · color-text-disabled"></span></span>
+<span class="mx-n">6</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>selected</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="selected · Spectrum — 보유 · accent-content-color-selected"></span><span class="mx-c" tabindex="0" data-tip="selected · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="selected · MUI — 보유 · palette-action-selected"></span><span class="mx-c on" tabindex="0" data-tip="selected · Fluent 2 — 보유 · color-neutral-stroke1-selected"></span><span class="mx-c on" tabindex="0" data-tip="selected · Carbon — 보유 · background-selected"></span><span class="mx-c on" tabindex="0" data-tip="selected · Polaris — 보유 · color-bg-fill-selected"></span><span class="mx-c" tabindex="0" data-tip="selected · shadcn/ui — 미보유"></span><span class="mx-c" tabindex="0" data-tip="selected · Ant Design — 미보유"></span></span>
+<span class="mx-n">5</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>loading</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="loading · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="loading · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="loading · MUI — 미보유"></span><span class="mx-c" tabindex="0" data-tip="loading · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="loading · Carbon — 보유 · skeleton-background"></span><span class="mx-c" tabindex="0" data-tip="loading · Polaris — 미보유"></span><span class="mx-c" tabindex="0" data-tip="loading · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="loading · Ant Design — 보유 · opacity-loading"></span></span>
+<span class="mx-n">2</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-system-specific">
+<span class="mx-rl"><b>visited</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="visited · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="visited · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="visited · MUI — 미보유"></span><span class="mx-c" tabindex="0" data-tip="visited · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="visited · Carbon — 보유 · link-visited"></span><span class="mx-c" tabindex="0" data-tip="visited · Polaris — 미보유"></span><span class="mx-c" tabindex="0" data-tip="visited · shadcn/ui — 미보유"></span><span class="mx-c" tabindex="0" data-tip="visited · Ant Design — 미보유"></span></span>
+<span class="mx-n">1</span>
+<span class="mx-t t-system-specific">고유</span></div>
+</div>
+<details class="tv"><summary>토큰 어휘 커버리지 — 표로 보기</summary><div class="scroll"><table><thead><tr><th scope="col">정규 어휘</th><th scope="col">축</th><th scope="col">보유</th><th scope="col">판정</th><th scope="col">미보유 시스템</th></tr></thead><tbody><tr><th scope="row" class=""><code>color</code></th><td class="num">값의 종류</td><td class="num">8/8</td><td class="num">표준</td><td class="num">—</td></tr><tr><th scope="row" class=""><code>typography</code></th><td class="num">값의 종류</td><td class="num">8/8</td><td class="num">표준</td><td class="num">—</td></tr><tr><th scope="row" class=""><code>elevation</code></th><td class="num">값의 종류</td><td class="num">7/8</td><td class="num">우세</td><td class="num">shadcn/ui</td></tr><tr><th scope="row" class=""><code>radius</code></th><td class="num">값의 종류</td><td class="num">7/8</td><td class="num">우세</td><td class="num">Carbon</td></tr><tr><th scope="row" class=""><code>motion</code></th><td class="num">값의 종류</td><td class="num">6/8</td><td class="num">우세</td><td class="num">Spectrum, shadcn/ui</td></tr><tr><th scope="row" class=""><code>spacing</code></th><td class="num">값의 종류</td><td class="num">6/8</td><td class="num">우세</td><td class="num">Material Web, shadcn/ui</td></tr><tr><th scope="row" class=""><code>opacity</code></th><td class="num">값의 종류</td><td class="num">5/8</td><td class="num">우세</td><td class="num">Carbon, Polaris, shadcn/ui</td></tr><tr><th scope="row" class=""><code>z-index</code></th><td class="num">값의 종류</td><td class="num">5/8</td><td class="num">우세</td><td class="num">Fluent 2, Material Web, shadcn/ui</td></tr><tr><th scope="row" class=""><code>border</code></th><td class="num">값의 종류</td><td class="num">4/8</td><td class="num">분기</td><td class="num">Carbon, MUI, Material Web, shadcn/ui</td></tr><tr><th scope="row" class=""><code>sizing</code></th><td class="num">값의 종류</td><td class="num">4/8</td><td class="num">분기</td><td class="num">Fluent 2, MUI, Material Web, shadcn/ui</td></tr><tr><th scope="row" class=""><code>breakpoint</code></th><td class="num">값의 종류</td><td class="num">3/8</td><td class="num">분기</td><td class="num">Carbon, Fluent 2, MUI, Material Web, Spectrum</td></tr><tr><th scope="row" class=""><code>blur</code></th><td class="num">값의 종류</td><td class="num">2/8</td><td class="num">분기</td><td class="num">Carbon, Fluent 2, MUI, Material Web, Spectrum, shadcn/ui</td></tr><tr><th scope="row" class=""><code>icon-size</code></th><td class="num">값의 종류</td><td class="num">2/8</td><td class="num">분기</td><td class="num">Ant Design, Fluent 2, MUI, Material Web, Polaris, shadcn/ui</td></tr><tr><th scope="row" class=""><code>domain</code></th><td class="num">값의 종류</td><td class="num">1/8</td><td class="num">고유</td><td class="num">Ant Design, Fluent 2, MUI, Material Web, Polaris, Spectrum, shadcn/ui</td></tr><tr><th scope="row" class=""><code>border</code></th><td class="num">색이 칠해지는 자리</td><td class="num">8/8</td><td class="num">표준</td><td class="num">—</td></tr><tr><th scope="row" class=""><code>foreground</code></th><td class="num">색이 칠해지는 자리</td><td class="num">8/8</td><td class="num">표준</td><td class="num">—</td></tr><tr><th scope="row" class=""><code>surface</code></th><td class="num">색이 칠해지는 자리</td><td class="num">8/8</td><td class="num">표준</td><td class="num">—</td></tr><tr><th scope="row" class=""><code>shadow</code></th><td class="num">색이 칠해지는 자리</td><td class="num">7/8</td><td class="num">우세</td><td class="num">shadcn/ui</td></tr><tr><th scope="row" class=""><code>overlay</code></th><td class="num">색이 칠해지는 자리</td><td class="num">5/8</td><td class="num">우세</td><td class="num">Ant Design, MUI, shadcn/ui</td></tr><tr><th scope="row" class=""><code>icon</code></th><td class="num">색이 칠해지는 자리</td><td class="num">4/8</td><td class="num">분기</td><td class="num">Fluent 2, MUI, Material Web, shadcn/ui</td></tr><tr><th scope="row" class=""><code>link</code></th><td class="num">색이 칠해지는 자리</td><td class="num">4/8</td><td class="num">분기</td><td class="num">MUI, Material Web, Spectrum, shadcn/ui</td></tr><tr><th scope="row" class=""><code>focus-ring</code></th><td class="num">색이 칠해지는 자리</td><td class="num">3/8</td><td class="num">분기</td><td class="num">Ant Design, Carbon, Fluent 2, Material Web, Polaris</td></tr><tr><th scope="row" class=""><code>brand</code></th><td class="num">의미와 강조도</td><td class="num">8/8</td><td class="num">표준</td><td class="num">—</td></tr><tr><th scope="row" class=""><code>secondary</code></th><td class="num">의미와 강조도</td><td class="num">8/8</td><td class="num">표준</td><td class="num">—</td></tr><tr><th scope="row" class=""><code>status:critical</code></th><td class="num">의미와 강조도</td><td class="num">8/8</td><td class="num">표준</td><td class="num">—</td></tr><tr><th scope="row" class=""><code>disabled</code></th><td class="num">의미와 강조도</td><td class="num">6/8</td><td class="num">우세</td><td class="num">Material Web, shadcn/ui</td></tr><tr><th scope="row" class=""><code>status:success</code></th><td class="num">의미와 강조도</td><td class="num">5/8</td><td class="num">우세</td><td class="num">Carbon, Material Web, shadcn/ui</td></tr><tr><th scope="row" class=""><code>status:warning</code></th><td class="num">의미와 강조도</td><td class="num">5/8</td><td class="num">우세</td><td class="num">Carbon, Material Web, shadcn/ui</td></tr><tr><th scope="row" class=""><code>inverse</code></th><td class="num">의미와 강조도</td><td class="num">4/8</td><td class="num">분기</td><td class="num">Ant Design, MUI, Spectrum, shadcn/ui</td></tr><tr><th scope="row" class=""><code>neutral</code></th><td class="num">의미와 강조도</td><td class="num">4/8</td><td class="num">분기</td><td class="num">Ant Design, Carbon, Polaris, shadcn/ui</td></tr><tr><th scope="row" class=""><code>status:info</code></th><td class="num">의미와 강조도</td><td class="num">4/8</td><td class="num">분기</td><td class="num">Carbon, Fluent 2, Material Web, shadcn/ui</td></tr><tr><th scope="row" class=""><code>active</code></th><td class="num">상호작용 상태</td><td class="num">7/8</td><td class="num">우세</td><td class="num">shadcn/ui</td></tr><tr><th scope="row" class=""><code>focus</code></th><td class="num">상호작용 상태</td><td class="num">7/8</td><td class="num">우세</td><td class="num">shadcn/ui</td></tr><tr><th scope="row" class=""><code>hover</code></th><td class="num">상호작용 상태</td><td class="num">7/8</td><td class="num">우세</td><td class="num">shadcn/ui</td></tr><tr><th scope="row" class=""><code>disabled</code></th><td class="num">상호작용 상태</td><td class="num">6/8</td><td class="num">우세</td><td class="num">Material Web, shadcn/ui</td></tr><tr><th scope="row" class=""><code>selected</code></th><td class="num">상호작용 상태</td><td class="num">5/8</td><td class="num">우세</td><td class="num">Ant Design, Material Web, shadcn/ui</td></tr><tr><th scope="row" class=""><code>loading</code></th><td class="num">상호작용 상태</td><td class="num">2/8</td><td class="num">분기</td><td class="num">Fluent 2, MUI, Material Web, Polaris, Spectrum, shadcn/ui</td></tr><tr><th scope="row" class=""><code>visited</code></th><td class="num">상호작용 상태</td><td class="num">1/8</td><td class="num">고유</td><td class="num">Ant Design, Fluent 2, MUI, Material Web, Polaris, Spectrum, shadcn/ui</td></tr></tbody></table></div></details>
+<div class="callout">
+<p><b>세로로 읽으면 shadcn/ui 열이 눈에 띄게 비어 있다.</b> 상태(hover·focus·active)와
+elevation·간격 토큰이 없다. 없어서 못 만든 게 아니라, 그 표현을 토큰이 아닌
+Tailwind 유틸리티로 옮긴 설계다 — 대가는 상태 표현이 컴포넌트 코드에 흩어진다는 것.</p>
+</div>
+
+<h2 id="components"><span class="h2n">3</span>컴포넌트 교집합</h2>
+<p class="sub">디렉터리·파일 인벤토리를 정규 개념으로 접은 결과. 시스템마다 분해 단위가 달라
+(Carbon 은 DataTable 하위를 개별 디렉터리로 둔다) 절대 개수는 비교하지 않고 <i>개념 커버리지</i>만 본다.
+칸에 커서를 올리면 그 시스템이 쓰는 실제 이름이 나온다 — 같은 개념을 얼마나 다르게 부르는지가 여기 다 있다.</p>
+<div class="mx">
+<div class="mx-head"><span></span><span class="mx-chs"><span class="mx-ch" title="Spectrum">SPE</span><span class="mx-ch" title="Material Web">MTW</span><span class="mx-ch" title="MUI">MUI</span><span class="mx-ch" title="Fluent 2">FLU</span><span class="mx-ch" title="Carbon">CAR</span><span class="mx-ch" title="Polaris">POL</span><span class="mx-ch" title="shadcn/ui">SCN</span><span class="mx-ch" title="Ant Design">ANT</span></span><span></span><span></span></div>
+<div class="mx-r t-standard">
+<span class="mx-rl"><b>Button</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Button · Spectrum — 보유 · button"></span><span class="mx-c on" tabindex="0" data-tip="Button · Material Web — 보유 · button"></span><span class="mx-c on" tabindex="0" data-tip="Button · MUI — 보유 · Button"></span><span class="mx-c on" tabindex="0" data-tip="Button · Fluent 2 — 보유 · button"></span><span class="mx-c on" tabindex="0" data-tip="Button · Carbon — 보유 · Button"></span><span class="mx-c on" tabindex="0" data-tip="Button · Polaris — 보유 · Button"></span><span class="mx-c on" tabindex="0" data-tip="Button · shadcn/ui — 보유 · button"></span><span class="mx-c on" tabindex="0" data-tip="Button · Ant Design — 보유 · button"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>Checkbox</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Checkbox · Spectrum — 보유 · checkbox"></span><span class="mx-c on" tabindex="0" data-tip="Checkbox · Material Web — 보유 · checkbox"></span><span class="mx-c on" tabindex="0" data-tip="Checkbox · MUI — 보유 · Checkbox"></span><span class="mx-c on" tabindex="0" data-tip="Checkbox · Fluent 2 — 보유 · checkbox"></span><span class="mx-c on" tabindex="0" data-tip="Checkbox · Carbon — 보유 · Checkbox"></span><span class="mx-c on" tabindex="0" data-tip="Checkbox · Polaris — 보유 · Checkbox"></span><span class="mx-c on" tabindex="0" data-tip="Checkbox · shadcn/ui — 보유 · checkbox"></span><span class="mx-c on" tabindex="0" data-tip="Checkbox · Ant Design — 보유 · checkbox"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>Dialog</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Dialog · Spectrum — 보유 · dialog"></span><span class="mx-c on" tabindex="0" data-tip="Dialog · Material Web — 보유 · dialog"></span><span class="mx-c on" tabindex="0" data-tip="Dialog · MUI — 보유 · Dialog"></span><span class="mx-c on" tabindex="0" data-tip="Dialog · Fluent 2 — 보유 · dialog"></span><span class="mx-c on" tabindex="0" data-tip="Dialog · Carbon — 보유 · Dialog"></span><span class="mx-c on" tabindex="0" data-tip="Dialog · Polaris — 보유 · Modal"></span><span class="mx-c on" tabindex="0" data-tip="Dialog · shadcn/ui — 보유 · alert-dialog"></span><span class="mx-c on" tabindex="0" data-tip="Dialog · Ant Design — 보유 · modal"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>Menu</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Menu · Spectrum — 보유 · menu"></span><span class="mx-c on" tabindex="0" data-tip="Menu · Material Web — 보유 · menu"></span><span class="mx-c on" tabindex="0" data-tip="Menu · MUI — 보유 · Menu"></span><span class="mx-c on" tabindex="0" data-tip="Menu · Fluent 2 — 보유 · menu"></span><span class="mx-c on" tabindex="0" data-tip="Menu · Carbon — 보유 · ContextMenu"></span><span class="mx-c on" tabindex="0" data-tip="Menu · Polaris — 보유 · ActionList"></span><span class="mx-c on" tabindex="0" data-tip="Menu · shadcn/ui — 보유 · context-menu"></span><span class="mx-c on" tabindex="0" data-tip="Menu · Ant Design — 보유 · menu"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>Progress</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Progress · Spectrum — 보유 · meter"></span><span class="mx-c on" tabindex="0" data-tip="Progress · Material Web — 보유 · progress"></span><span class="mx-c on" tabindex="0" data-tip="Progress · MUI — 보유 · CircularProgress"></span><span class="mx-c on" tabindex="0" data-tip="Progress · Fluent 2 — 보유 · progress"></span><span class="mx-c on" tabindex="0" data-tip="Progress · Carbon — 보유 · ProgressBar"></span><span class="mx-c on" tabindex="0" data-tip="Progress · Polaris — 보유 · ProgressBar"></span><span class="mx-c on" tabindex="0" data-tip="Progress · shadcn/ui — 보유 · progress"></span><span class="mx-c on" tabindex="0" data-tip="Progress · Ant Design — 보유 · progress"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>Select</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Select · Spectrum — 보유 · picker"></span><span class="mx-c on" tabindex="0" data-tip="Select · Material Web — 보유 · select"></span><span class="mx-c on" tabindex="0" data-tip="Select · MUI — 보유 · NativeSelect"></span><span class="mx-c on" tabindex="0" data-tip="Select · Fluent 2 — 보유 · select"></span><span class="mx-c on" tabindex="0" data-tip="Select · Carbon — 보유 · Dropdown"></span><span class="mx-c on" tabindex="0" data-tip="Select · Polaris — 보유 · Picker"></span><span class="mx-c on" tabindex="0" data-tip="Select · shadcn/ui — 보유 · native-select"></span><span class="mx-c on" tabindex="0" data-tip="Select · Ant Design — 보유 · dropdown"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>Slider</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Slider · Spectrum — 보유 · slider"></span><span class="mx-c on" tabindex="0" data-tip="Slider · Material Web — 보유 · slider"></span><span class="mx-c on" tabindex="0" data-tip="Slider · MUI — 보유 · Slider"></span><span class="mx-c on" tabindex="0" data-tip="Slider · Fluent 2 — 보유 · slider"></span><span class="mx-c on" tabindex="0" data-tip="Slider · Carbon — 보유 · Slider"></span><span class="mx-c on" tabindex="0" data-tip="Slider · Polaris — 보유 · RangeSlider"></span><span class="mx-c on" tabindex="0" data-tip="Slider · shadcn/ui — 보유 · slider"></span><span class="mx-c on" tabindex="0" data-tip="Slider · Ant Design — 보유 · slider"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>Tabs</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Tabs · Spectrum — 보유 · tabs"></span><span class="mx-c on" tabindex="0" data-tip="Tabs · Material Web — 보유 · tabs"></span><span class="mx-c on" tabindex="0" data-tip="Tabs · MUI — 보유 · Tab"></span><span class="mx-c on" tabindex="0" data-tip="Tabs · Fluent 2 — 보유 · tabs"></span><span class="mx-c on" tabindex="0" data-tip="Tabs · Carbon — 보유 · Tab"></span><span class="mx-c on" tabindex="0" data-tip="Tabs · Polaris — 보유 · Tabs"></span><span class="mx-c on" tabindex="0" data-tip="Tabs · shadcn/ui — 보유 · tabs"></span><span class="mx-c on" tabindex="0" data-tip="Tabs · Ant Design — 보유 · tabs"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-standard">
+<span class="mx-rl"><b>TextInput</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="TextInput · Spectrum — 보유 · textfield"></span><span class="mx-c on" tabindex="0" data-tip="TextInput · Material Web — 보유 · textfield"></span><span class="mx-c on" tabindex="0" data-tip="TextInput · MUI — 보유 · Input"></span><span class="mx-c on" tabindex="0" data-tip="TextInput · Fluent 2 — 보유 · input"></span><span class="mx-c on" tabindex="0" data-tip="TextInput · Carbon — 보유 · TextInput"></span><span class="mx-c on" tabindex="0" data-tip="TextInput · Polaris — 보유 · TextField"></span><span class="mx-c on" tabindex="0" data-tip="TextInput · shadcn/ui — 보유 · input"></span><span class="mx-c on" tabindex="0" data-tip="TextInput · Ant Design — 보유 · input"></span></span>
+<span class="mx-n">8</span>
+<span class="mx-t t-standard">표준</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Alert</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Alert · Spectrum — 보유 · inlinealert"></span><span class="mx-c" tabindex="0" data-tip="Alert · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Alert · MUI — 보유 · Alert"></span><span class="mx-c on" tabindex="0" data-tip="Alert · Fluent 2 — 보유 · message-bar"></span><span class="mx-c on" tabindex="0" data-tip="Alert · Carbon — 보유 · Notification"></span><span class="mx-c on" tabindex="0" data-tip="Alert · Polaris — 보유 · Banner"></span><span class="mx-c on" tabindex="0" data-tip="Alert · shadcn/ui — 보유 · alert"></span><span class="mx-c on" tabindex="0" data-tip="Alert · Ant Design — 보유 · alert"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Badge</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Badge · Spectrum — 보유 · badge"></span><span class="mx-c" tabindex="0" data-tip="Badge · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Badge · MUI — 보유 · Badge"></span><span class="mx-c on" tabindex="0" data-tip="Badge · Fluent 2 — 보유 · badge"></span><span class="mx-c on" tabindex="0" data-tip="Badge · Carbon — 보유 · Tag"></span><span class="mx-c on" tabindex="0" data-tip="Badge · Polaris — 보유 · Badge"></span><span class="mx-c on" tabindex="0" data-tip="Badge · shadcn/ui — 보유 · badge"></span><span class="mx-c on" tabindex="0" data-tip="Badge · Ant Design — 보유 · badge"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Breadcrumbs</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Breadcrumbs · Spectrum — 보유 · breadcrumbs"></span><span class="mx-c" tabindex="0" data-tip="Breadcrumbs · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Breadcrumbs · MUI — 보유 · Breadcrumbs"></span><span class="mx-c on" tabindex="0" data-tip="Breadcrumbs · Fluent 2 — 보유 · breadcrumb"></span><span class="mx-c on" tabindex="0" data-tip="Breadcrumbs · Carbon — 보유 · Breadcrumb"></span><span class="mx-c on" tabindex="0" data-tip="Breadcrumbs · Polaris — 보유 · Breadcrumbs"></span><span class="mx-c on" tabindex="0" data-tip="Breadcrumbs · shadcn/ui — 보유 · breadcrumb"></span><span class="mx-c on" tabindex="0" data-tip="Breadcrumbs · Ant Design — 보유 · breadcrumb"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Card</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Card · Spectrum — 보유 · card"></span><span class="mx-c" tabindex="0" data-tip="Card · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Card · MUI — 보유 · Card"></span><span class="mx-c on" tabindex="0" data-tip="Card · Fluent 2 — 보유 · card"></span><span class="mx-c on" tabindex="0" data-tip="Card · Carbon — 보유 · Tile"></span><span class="mx-c on" tabindex="0" data-tip="Card · Polaris — 보유 · Card"></span><span class="mx-c on" tabindex="0" data-tip="Card · shadcn/ui — 보유 · card"></span><span class="mx-c on" tabindex="0" data-tip="Card · Ant Design — 보유 · card"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Combobox</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Combobox · Spectrum — 보유 · autocomplete"></span><span class="mx-c" tabindex="0" data-tip="Combobox · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Combobox · MUI — 보유 · Autocomplete"></span><span class="mx-c on" tabindex="0" data-tip="Combobox · Fluent 2 — 보유 · combobox"></span><span class="mx-c on" tabindex="0" data-tip="Combobox · Carbon — 보유 · ComboBox"></span><span class="mx-c on" tabindex="0" data-tip="Combobox · Polaris — 보유 · Autocomplete"></span><span class="mx-c on" tabindex="0" data-tip="Combobox · shadcn/ui — 보유 · combobox"></span><span class="mx-c on" tabindex="0" data-tip="Combobox · Ant Design — 보유 · auto-complete"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Divider</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Divider · Spectrum — 보유 · divider"></span><span class="mx-c on" tabindex="0" data-tip="Divider · Material Web — 보유 · divider"></span><span class="mx-c on" tabindex="0" data-tip="Divider · MUI — 보유 · Divider"></span><span class="mx-c on" tabindex="0" data-tip="Divider · Fluent 2 — 보유 · divider"></span><span class="mx-c" tabindex="0" data-tip="Divider · Carbon — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Divider · Polaris — 보유 · Divider"></span><span class="mx-c on" tabindex="0" data-tip="Divider · shadcn/ui — 보유 · separator"></span><span class="mx-c on" tabindex="0" data-tip="Divider · Ant Design — 보유 · divider"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>List</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="List · Spectrum — 보유 · list"></span><span class="mx-c on" tabindex="0" data-tip="List · Material Web — 보유 · list"></span><span class="mx-c on" tabindex="0" data-tip="List · MUI — 보유 · List"></span><span class="mx-c on" tabindex="0" data-tip="List · Fluent 2 — 보유 · list"></span><span class="mx-c on" tabindex="0" data-tip="List · Carbon — 보유 · ListBox"></span><span class="mx-c on" tabindex="0" data-tip="List · Polaris — 보유 · List"></span><span class="mx-c" tabindex="0" data-tip="List · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="List · Ant Design — 보유 · list"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Navigation</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Navigation · Spectrum — 보유 · layout"></span><span class="mx-c" tabindex="0" data-tip="Navigation · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Navigation · MUI — 보유 · AppBar"></span><span class="mx-c on" tabindex="0" data-tip="Navigation · Fluent 2 — 보유 · nav"></span><span class="mx-c on" tabindex="0" data-tip="Navigation · Carbon — 보유 · Layout"></span><span class="mx-c on" tabindex="0" data-tip="Navigation · Polaris — 보유 · Layout"></span><span class="mx-c on" tabindex="0" data-tip="Navigation · shadcn/ui — 보유 · menubar"></span><span class="mx-c on" tabindex="0" data-tip="Navigation · Ant Design — 보유 · layout"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Switch</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Switch · Spectrum — 보유 · switch"></span><span class="mx-c on" tabindex="0" data-tip="Switch · Material Web — 보유 · switch"></span><span class="mx-c on" tabindex="0" data-tip="Switch · MUI — 보유 · Switch"></span><span class="mx-c on" tabindex="0" data-tip="Switch · Fluent 2 — 보유 · switch"></span><span class="mx-c on" tabindex="0" data-tip="Switch · Carbon — 보유 · Switch"></span><span class="mx-c" tabindex="0" data-tip="Switch · Polaris — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Switch · shadcn/ui — 보유 · switch"></span><span class="mx-c on" tabindex="0" data-tip="Switch · Ant Design — 보유 · switch"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Table</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Table · Spectrum — 보유 · table"></span><span class="mx-c" tabindex="0" data-tip="Table · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Table · MUI — 보유 · Table"></span><span class="mx-c on" tabindex="0" data-tip="Table · Fluent 2 — 보유 · table"></span><span class="mx-c on" tabindex="0" data-tip="Table · Carbon — 보유 · DataTable"></span><span class="mx-c on" tabindex="0" data-tip="Table · Polaris — 보유 · DataTable"></span><span class="mx-c on" tabindex="0" data-tip="Table · shadcn/ui — 보유 · table"></span><span class="mx-c on" tabindex="0" data-tip="Table · Ant Design — 보유 · table"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Tooltip</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Tooltip · Spectrum — 보유 · tooltip"></span><span class="mx-c" tabindex="0" data-tip="Tooltip · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Tooltip · MUI — 보유 · Tooltip"></span><span class="mx-c on" tabindex="0" data-tip="Tooltip · Fluent 2 — 보유 · tooltip"></span><span class="mx-c on" tabindex="0" data-tip="Tooltip · Carbon — 보유 · Tooltip"></span><span class="mx-c on" tabindex="0" data-tip="Tooltip · Polaris — 보유 · Tooltip"></span><span class="mx-c on" tabindex="0" data-tip="Tooltip · shadcn/ui — 보유 · tooltip"></span><span class="mx-c on" tabindex="0" data-tip="Tooltip · Ant Design — 보유 · tooltip"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Typography</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Typography · Spectrum — 보유 · text"></span><span class="mx-c on" tabindex="0" data-tip="Typography · Material Web — 보유 · typography"></span><span class="mx-c on" tabindex="0" data-tip="Typography · MUI — 보유 · Typography"></span><span class="mx-c on" tabindex="0" data-tip="Typography · Fluent 2 — 보유 · text"></span><span class="mx-c on" tabindex="0" data-tip="Typography · Carbon — 보유 · Heading"></span><span class="mx-c on" tabindex="0" data-tip="Typography · Polaris — 보유 · Text"></span><span class="mx-c" tabindex="0" data-tip="Typography · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Typography · Ant Design — 보유 · typography"></span></span>
+<span class="mx-n">7</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Accordion</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Accordion · Spectrum — 보유 · accordion"></span><span class="mx-c" tabindex="0" data-tip="Accordion · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Accordion · MUI — 보유 · Accordion"></span><span class="mx-c on" tabindex="0" data-tip="Accordion · Fluent 2 — 보유 · accordion"></span><span class="mx-c on" tabindex="0" data-tip="Accordion · Carbon — 보유 · Accordion"></span><span class="mx-c" tabindex="0" data-tip="Accordion · Polaris — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Accordion · shadcn/ui — 보유 · accordion"></span><span class="mx-c on" tabindex="0" data-tip="Accordion · Ant Design — 보유 · collapse"></span></span>
+<span class="mx-n">6</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Avatar</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Avatar · Spectrum — 보유 · avatar"></span><span class="mx-c" tabindex="0" data-tip="Avatar · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Avatar · MUI — 보유 · Avatar"></span><span class="mx-c on" tabindex="0" data-tip="Avatar · Fluent 2 — 보유 · avatar"></span><span class="mx-c" tabindex="0" data-tip="Avatar · Carbon — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Avatar · Polaris — 보유 · Avatar"></span><span class="mx-c on" tabindex="0" data-tip="Avatar · shadcn/ui — 보유 · avatar"></span><span class="mx-c on" tabindex="0" data-tip="Avatar · Ant Design — 보유 · avatar"></span></span>
+<span class="mx-n">6</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Form</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Form · Spectrum — 보유 · form"></span><span class="mx-c" tabindex="0" data-tip="Form · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Form · MUI — 보유 · FormGroup"></span><span class="mx-c" tabindex="0" data-tip="Form · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Form · Carbon — 보유 · Form"></span><span class="mx-c on" tabindex="0" data-tip="Form · Polaris — 보유 · Form"></span><span class="mx-c on" tabindex="0" data-tip="Form · shadcn/ui — 보유 · form"></span><span class="mx-c on" tabindex="0" data-tip="Form · Ant Design — 보유 · form"></span></span>
+<span class="mx-n">6</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Icon</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Icon · Spectrum — 보유 · icon"></span><span class="mx-c on" tabindex="0" data-tip="Icon · Material Web — 보유 · icon"></span><span class="mx-c on" tabindex="0" data-tip="Icon · MUI — 보유 · Icon"></span><span class="mx-c" tabindex="0" data-tip="Icon · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Icon · Carbon — 보유 · Icon"></span><span class="mx-c on" tabindex="0" data-tip="Icon · Polaris — 보유 · Icon"></span><span class="mx-c" tabindex="0" data-tip="Icon · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Icon · Ant Design — 보유 · icon"></span></span>
+<span class="mx-n">6</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Label</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Label · Spectrum — 보유 · label"></span><span class="mx-c" tabindex="0" data-tip="Label · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Label · MUI — 보유 · FormLabel"></span><span class="mx-c on" tabindex="0" data-tip="Label · Fluent 2 — 보유 · label"></span><span class="mx-c on" tabindex="0" data-tip="Label · Carbon — 보유 · FormLabel"></span><span class="mx-c on" tabindex="0" data-tip="Label · Polaris — 보유 · Label"></span><span class="mx-c on" tabindex="0" data-tip="Label · shadcn/ui — 보유 · label"></span><span class="mx-c" tabindex="0" data-tip="Label · Ant Design — 미보유"></span></span>
+<span class="mx-n">6</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Link</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Link · Spectrum — 보유 · link"></span><span class="mx-c" tabindex="0" data-tip="Link · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Link · MUI — 보유 · Link"></span><span class="mx-c on" tabindex="0" data-tip="Link · Fluent 2 — 보유 · link"></span><span class="mx-c on" tabindex="0" data-tip="Link · Carbon — 보유 · Link"></span><span class="mx-c on" tabindex="0" data-tip="Link · Polaris — 보유 · Link"></span><span class="mx-c" tabindex="0" data-tip="Link · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Link · Ant Design — 보유 · anchor"></span></span>
+<span class="mx-n">6</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Popover</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="Popover · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Popover · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Popover · MUI — 보유 · Popover"></span><span class="mx-c on" tabindex="0" data-tip="Popover · Fluent 2 — 보유 · popover"></span><span class="mx-c on" tabindex="0" data-tip="Popover · Carbon — 보유 · Popover"></span><span class="mx-c on" tabindex="0" data-tip="Popover · Polaris — 보유 · Popover"></span><span class="mx-c on" tabindex="0" data-tip="Popover · shadcn/ui — 보유 · popover"></span><span class="mx-c on" tabindex="0" data-tip="Popover · Ant Design — 보유 · popover"></span></span>
+<span class="mx-n">6</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Radio</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Radio · Spectrum — 보유 · radio"></span><span class="mx-c on" tabindex="0" data-tip="Radio · Material Web — 보유 · radio"></span><span class="mx-c on" tabindex="0" data-tip="Radio · MUI — 보유 · Radio"></span><span class="mx-c on" tabindex="0" data-tip="Radio · Fluent 2 — 보유 · radio"></span><span class="mx-c" tabindex="0" data-tip="Radio · Carbon — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Radio · Polaris — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Radio · shadcn/ui — 보유 · radio-group"></span><span class="mx-c on" tabindex="0" data-tip="Radio · Ant Design — 보유 · radio"></span></span>
+<span class="mx-n">6</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>ButtonGroup</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="ButtonGroup · Spectrum — 보유 · actiongroup"></span><span class="mx-c" tabindex="0" data-tip="ButtonGroup · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="ButtonGroup · MUI — 보유 · ButtonGroup"></span><span class="mx-c" tabindex="0" data-tip="ButtonGroup · Fluent 2 — 미보유"></span><span class="mx-c" tabindex="0" data-tip="ButtonGroup · Carbon — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="ButtonGroup · Polaris — 보유 · ButtonGroup"></span><span class="mx-c on" tabindex="0" data-tip="ButtonGroup · shadcn/ui — 보유 · button-group"></span><span class="mx-c on" tabindex="0" data-tip="ButtonGroup · Ant Design — 보유 · segmented"></span></span>
+<span class="mx-n">5</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>DatePicker</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="DatePicker · Spectrum — 보유 · calendar"></span><span class="mx-c" tabindex="0" data-tip="DatePicker · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="DatePicker · MUI — 미보유"></span><span class="mx-c" tabindex="0" data-tip="DatePicker · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="DatePicker · Carbon — 보유 · DatePicker"></span><span class="mx-c on" tabindex="0" data-tip="DatePicker · Polaris — 보유 · DatePicker"></span><span class="mx-c on" tabindex="0" data-tip="DatePicker · shadcn/ui — 보유 · calendar"></span><span class="mx-c on" tabindex="0" data-tip="DatePicker · Ant Design — 보유 · calendar"></span></span>
+<span class="mx-n">5</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Drawer</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="Drawer · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Drawer · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Drawer · MUI — 보유 · Drawer"></span><span class="mx-c on" tabindex="0" data-tip="Drawer · Fluent 2 — 보유 · drawer"></span><span class="mx-c" tabindex="0" data-tip="Drawer · Carbon — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Drawer · Polaris — 보유 · Sheet"></span><span class="mx-c on" tabindex="0" data-tip="Drawer · shadcn/ui — 보유 · drawer"></span><span class="mx-c on" tabindex="0" data-tip="Drawer · Ant Design — 보유 · drawer"></span></span>
+<span class="mx-n">5</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Layout</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Layout · Spectrum — 보유 · view"></span><span class="mx-c" tabindex="0" data-tip="Layout · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Layout · MUI — 보유 · Box"></span><span class="mx-c" tabindex="0" data-tip="Layout · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Layout · Carbon — 보유 · Grid"></span><span class="mx-c on" tabindex="0" data-tip="Layout · Polaris — 보유 · Box"></span><span class="mx-c" tabindex="0" data-tip="Layout · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Layout · Ant Design — 보유 · col"></span></span>
+<span class="mx-n">5</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Pagination</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="Pagination · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Pagination · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Pagination · MUI — 보유 · Pagination"></span><span class="mx-c" tabindex="0" data-tip="Pagination · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Pagination · Carbon — 보유 · Pagination"></span><span class="mx-c on" tabindex="0" data-tip="Pagination · Polaris — 보유 · Pagination"></span><span class="mx-c on" tabindex="0" data-tip="Pagination · shadcn/ui — 보유 · pagination"></span><span class="mx-c on" tabindex="0" data-tip="Pagination · Ant Design — 보유 · pagination"></span></span>
+<span class="mx-n">5</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-prevalent">
+<span class="mx-rl"><b>Skeleton</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="Skeleton · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Skeleton · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Skeleton · MUI — 보유 · Skeleton"></span><span class="mx-c on" tabindex="0" data-tip="Skeleton · Fluent 2 — 보유 · skeleton"></span><span class="mx-c on" tabindex="0" data-tip="Skeleton · Carbon — 보유 · SkeletonPlaceholder"></span><span class="mx-c" tabindex="0" data-tip="Skeleton · Polaris — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Skeleton · shadcn/ui — 보유 · skeleton"></span><span class="mx-c on" tabindex="0" data-tip="Skeleton · Ant Design — 보유 · skeleton"></span></span>
+<span class="mx-n">5</span>
+<span class="mx-t t-prevalent">우세</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>Field</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="Field · Spectrum — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Field · Material Web — 보유 · field"></span><span class="mx-c on" tabindex="0" data-tip="Field · MUI — 보유 · FormControl"></span><span class="mx-c on" tabindex="0" data-tip="Field · Fluent 2 — 보유 · field"></span><span class="mx-c" tabindex="0" data-tip="Field · Carbon — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Field · Polaris — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Field · shadcn/ui — 보유 · field"></span><span class="mx-c" tabindex="0" data-tip="Field · Ant Design — 미보유"></span></span>
+<span class="mx-n">4</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>FileUpload</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="FileUpload · Spectrum — 보유 · dropzone"></span><span class="mx-c" tabindex="0" data-tip="FileUpload · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="FileUpload · MUI — 미보유"></span><span class="mx-c" tabindex="0" data-tip="FileUpload · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="FileUpload · Carbon — 보유 · FileUploader"></span><span class="mx-c on" tabindex="0" data-tip="FileUpload · Polaris — 보유 · DropZone"></span><span class="mx-c" tabindex="0" data-tip="FileUpload · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="FileUpload · Ant Design — 보유 · upload"></span></span>
+<span class="mx-n">4</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>Spinner</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="Spinner · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Spinner · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Spinner · MUI — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Spinner · Fluent 2 — 보유 · spinner"></span><span class="mx-c on" tabindex="0" data-tip="Spinner · Carbon — 보유 · Loading"></span><span class="mx-c on" tabindex="0" data-tip="Spinner · Polaris — 보유 · Loading"></span><span class="mx-c on" tabindex="0" data-tip="Spinner · shadcn/ui — 보유 · spinner"></span><span class="mx-c" tabindex="0" data-tip="Spinner · Ant Design — 미보유"></span></span>
+<span class="mx-n">4</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>Toast</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Toast · Spectrum — 보유 · toast"></span><span class="mx-c" tabindex="0" data-tip="Toast · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Toast · MUI — 보유 · Snackbar"></span><span class="mx-c on" tabindex="0" data-tip="Toast · Fluent 2 — 보유 · toast"></span><span class="mx-c" tabindex="0" data-tip="Toast · Carbon — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Toast · Polaris — 보유 · Toast"></span><span class="mx-c" tabindex="0" data-tip="Toast · shadcn/ui — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Toast · Ant Design — 미보유"></span></span>
+<span class="mx-n">4</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>Tree</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Tree · Spectrum — 보유 · tree"></span><span class="mx-c" tabindex="0" data-tip="Tree · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Tree · MUI — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Tree · Fluent 2 — 보유 · tree"></span><span class="mx-c on" tabindex="0" data-tip="Tree · Carbon — 보유 · TreeView"></span><span class="mx-c" tabindex="0" data-tip="Tree · Polaris — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Tree · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Tree · Ant Design — 보유 · tree"></span></span>
+<span class="mx-n">4</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>Carousel</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="Carousel · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Carousel · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Carousel · MUI — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Carousel · Fluent 2 — 보유 · carousel"></span><span class="mx-c" tabindex="0" data-tip="Carousel · Carbon — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Carousel · Polaris — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Carousel · shadcn/ui — 보유 · carousel"></span><span class="mx-c on" tabindex="0" data-tip="Carousel · Ant Design — 보유 · carousel"></span></span>
+<span class="mx-n">3</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>ColorPicker</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="ColorPicker · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="ColorPicker · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="ColorPicker · MUI — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="ColorPicker · Fluent 2 — 보유 · color-picker"></span><span class="mx-c" tabindex="0" data-tip="ColorPicker · Carbon — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="ColorPicker · Polaris — 보유 · ColorPicker"></span><span class="mx-c" tabindex="0" data-tip="ColorPicker · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="ColorPicker · Ant Design — 보유 · color-picker"></span></span>
+<span class="mx-n">3</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>Empty</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="Empty · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Empty · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Empty · MUI — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Empty · Fluent 2 — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Empty · Carbon — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Empty · Polaris — 보유 · EmptySearchResult"></span><span class="mx-c on" tabindex="0" data-tip="Empty · shadcn/ui — 보유 · empty"></span><span class="mx-c on" tabindex="0" data-tip="Empty · Ant Design — 보유 · empty"></span></span>
+<span class="mx-n">3</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>NumberInput</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="NumberInput · Spectrum — 보유 · numberfield"></span><span class="mx-c" tabindex="0" data-tip="NumberInput · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="NumberInput · MUI — 미보유"></span><span class="mx-c" tabindex="0" data-tip="NumberInput · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="NumberInput · Carbon — 보유 · NumberInput"></span><span class="mx-c" tabindex="0" data-tip="NumberInput · Polaris — 미보유"></span><span class="mx-c" tabindex="0" data-tip="NumberInput · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="NumberInput · Ant Design — 보유 · input-number"></span></span>
+<span class="mx-n">3</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>Rating</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="Rating · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Rating · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Rating · MUI — 보유 · Rating"></span><span class="mx-c on" tabindex="0" data-tip="Rating · Fluent 2 — 보유 · rating"></span><span class="mx-c" tabindex="0" data-tip="Rating · Carbon — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Rating · Polaris — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Rating · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Rating · Ant Design — 보유 · rate"></span></span>
+<span class="mx-n">3</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>SearchInput</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="SearchInput · Spectrum — 보유 · searchfield"></span><span class="mx-c" tabindex="0" data-tip="SearchInput · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="SearchInput · MUI — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="SearchInput · Fluent 2 — 보유 · search"></span><span class="mx-c on" tabindex="0" data-tip="SearchInput · Carbon — 보유 · Search"></span><span class="mx-c" tabindex="0" data-tip="SearchInput · Polaris — 미보유"></span><span class="mx-c" tabindex="0" data-tip="SearchInput · shadcn/ui — 미보유"></span><span class="mx-c" tabindex="0" data-tip="SearchInput · Ant Design — 미보유"></span></span>
+<span class="mx-n">3</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>Stepper</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="Stepper · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Stepper · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Stepper · MUI — 보유 · Stepper"></span><span class="mx-c" tabindex="0" data-tip="Stepper · Fluent 2 — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Stepper · Carbon — 보유 · ProgressIndicator"></span><span class="mx-c" tabindex="0" data-tip="Stepper · Polaris — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Stepper · shadcn/ui — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Stepper · Ant Design — 보유 · steps"></span></span>
+<span class="mx-n">3</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>Textarea</b></span>
+<span class="mx-cells"><span class="mx-c" tabindex="0" data-tip="Textarea · Spectrum — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Textarea · Material Web — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Textarea · MUI — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Textarea · Fluent 2 — 보유 · textarea"></span><span class="mx-c on" tabindex="0" data-tip="Textarea · Carbon — 보유 · TextArea"></span><span class="mx-c" tabindex="0" data-tip="Textarea · Polaris — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Textarea · shadcn/ui — 보유 · textarea"></span><span class="mx-c" tabindex="0" data-tip="Textarea · Ant Design — 미보유"></span></span>
+<span class="mx-n">3</span>
+<span class="mx-t t-divergent">분기</span></div><div class="mx-r t-divergent">
+<span class="mx-rl"><b>Toolbar</b></span>
+<span class="mx-cells"><span class="mx-c on" tabindex="0" data-tip="Toolbar · Spectrum — 보유 · actionbar"></span><span class="mx-c" tabindex="0" data-tip="Toolbar · Material Web — 미보유"></span><span class="mx-c on" tabindex="0" data-tip="Toolbar · MUI — 보유 · Toolbar"></span><span class="mx-c on" tabindex="0" data-tip="Toolbar · Fluent 2 — 보유 · toolbar"></span><span class="mx-c" tabindex="0" data-tip="Toolbar · Carbon — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Toolbar · Polaris — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Toolbar · shadcn/ui — 미보유"></span><span class="mx-c" tabindex="0" data-tip="Toolbar · Ant Design — 미보유"></span></span>
+<span class="mx-n">3</span>
+<span class="mx-t t-divergent">분기</span></div>
+</div>
+<details class="tv"><summary>컴포넌트 커버리지 — 표로 보기</summary><div class="scroll"><table><thead><tr><th scope="col">정규 컴포넌트</th><th scope="col">보유</th><th scope="col">미보유</th><th scope="col">시스템별 실제 이름</th></tr></thead><tbody><tr><th scope="row" class=""><b>Button</b></th><td class="num">8/8</td><td class="num">—</td><td class="num"><code class="ex" title="Spectrum">button</code> <code class="ex" title="Material Web">button</code> <code class="ex" title="MUI">Button</code> <code class="ex" title="Fluent 2">button</code> <code class="ex" title="Carbon">Button</code> <code class="ex" title="Polaris">Button</code> <code class="ex" title="shadcn/ui">button</code> <code class="ex" title="Ant Design">button</code></td></tr><tr><th scope="row" class=""><b>Checkbox</b></th><td class="num">8/8</td><td class="num">—</td><td class="num"><code class="ex" title="Spectrum">checkbox</code> <code class="ex" title="Material Web">checkbox</code> <code class="ex" title="MUI">Checkbox</code> <code class="ex" title="Fluent 2">checkbox</code> <code class="ex" title="Carbon">Checkbox</code> <code class="ex" title="Polaris">Checkbox</code> <code class="ex" title="shadcn/ui">checkbox</code> <code class="ex" title="Ant Design">checkbox</code></td></tr><tr><th scope="row" class=""><b>Dialog</b></th><td class="num">8/8</td><td class="num">—</td><td class="num"><code class="ex" title="Spectrum">dialog</code> <code class="ex" title="Material Web">dialog</code> <code class="ex" title="MUI">Dialog</code> <code class="ex" title="Fluent 2">dialog</code> <code class="ex" title="Carbon">Dialog</code> <code class="ex" title="Polaris">Modal</code> <code class="ex" title="shadcn/ui">alert-dialog</code> <code class="ex" title="Ant Design">modal</code></td></tr><tr><th scope="row" class=""><b>Menu</b></th><td class="num">8/8</td><td class="num">—</td><td class="num"><code class="ex" title="Spectrum">menu</code> <code class="ex" title="Material Web">menu</code> <code class="ex" title="MUI">Menu</code> <code class="ex" title="Fluent 2">menu</code> <code class="ex" title="Carbon">ContextMenu</code> <code class="ex" title="Polaris">ActionList</code> <code class="ex" title="shadcn/ui">context-menu</code> <code class="ex" title="Ant Design">menu</code></td></tr><tr><th scope="row" class=""><b>Progress</b></th><td class="num">8/8</td><td class="num">—</td><td class="num"><code class="ex" title="Spectrum">meter</code> <code class="ex" title="Material Web">progress</code> <code class="ex" title="MUI">CircularProgress</code> <code class="ex" title="Fluent 2">progress</code> <code class="ex" title="Carbon">ProgressBar</code> <code class="ex" title="Polaris">ProgressBar</code> <code class="ex" title="shadcn/ui">progress</code> <code class="ex" title="Ant Design">progress</code></td></tr><tr><th scope="row" class=""><b>Select</b></th><td class="num">8/8</td><td class="num">—</td><td class="num"><code class="ex" title="Spectrum">picker</code> <code class="ex" title="Material Web">select</code> <code class="ex" title="MUI">NativeSelect</code> <code class="ex" title="Fluent 2">select</code> <code class="ex" title="Carbon">Dropdown</code> <code class="ex" title="Polaris">Picker</code> <code class="ex" title="shadcn/ui">native-select</code> <code class="ex" title="Ant Design">dropdown</code></td></tr><tr><th scope="row" class=""><b>Slider</b></th><td class="num">8/8</td><td class="num">—</td><td class="num"><code class="ex" title="Spectrum">slider</code> <code class="ex" title="Material Web">slider</code> <code class="ex" title="MUI">Slider</code> <code class="ex" title="Fluent 2">slider</code> <code class="ex" title="Carbon">Slider</code> <code class="ex" title="Polaris">RangeSlider</code> <code class="ex" title="shadcn/ui">slider</code> <code class="ex" title="Ant Design">slider</code></td></tr><tr><th scope="row" class=""><b>Tabs</b></th><td class="num">8/8</td><td class="num">—</td><td class="num"><code class="ex" title="Spectrum">tabs</code> <code class="ex" title="Material Web">tabs</code> <code class="ex" title="MUI">Tab</code> <code class="ex" title="Fluent 2">tabs</code> <code class="ex" title="Carbon">Tab</code> <code class="ex" title="Polaris">Tabs</code> <code class="ex" title="shadcn/ui">tabs</code> <code class="ex" title="Ant Design">tabs</code></td></tr><tr><th scope="row" class=""><b>TextInput</b></th><td class="num">8/8</td><td class="num">—</td><td class="num"><code class="ex" title="Spectrum">textfield</code> <code class="ex" title="Material Web">textfield</code> <code class="ex" title="MUI">Input</code> <code class="ex" title="Fluent 2">input</code> <code class="ex" title="Carbon">TextInput</code> <code class="ex" title="Polaris">TextField</code> <code class="ex" title="shadcn/ui">input</code> <code class="ex" title="Ant Design">input</code></td></tr><tr><th scope="row" class=""><b>Alert</b></th><td class="num">7/8</td><td class="num">Material Web</td><td class="num"><code class="ex" title="Spectrum">inlinealert</code> <code class="ex" title="MUI">Alert</code> <code class="ex" title="Fluent 2">message-bar</code> <code class="ex" title="Carbon">Notification</code> <code class="ex" title="Polaris">Banner</code> <code class="ex" title="shadcn/ui">alert</code> <code class="ex" title="Ant Design">alert</code></td></tr><tr><th scope="row" class=""><b>Badge</b></th><td class="num">7/8</td><td class="num">Material Web</td><td class="num"><code class="ex" title="Spectrum">badge</code> <code class="ex" title="MUI">Badge</code> <code class="ex" title="Fluent 2">badge</code> <code class="ex" title="Carbon">Tag</code> <code class="ex" title="Polaris">Badge</code> <code class="ex" title="shadcn/ui">badge</code> <code class="ex" title="Ant Design">badge</code></td></tr><tr><th scope="row" class=""><b>Breadcrumbs</b></th><td class="num">7/8</td><td class="num">Material Web</td><td class="num"><code class="ex" title="Spectrum">breadcrumbs</code> <code class="ex" title="MUI">Breadcrumbs</code> <code class="ex" title="Fluent 2">breadcrumb</code> <code class="ex" title="Carbon">Breadcrumb</code> <code class="ex" title="Polaris">Breadcrumbs</code> <code class="ex" title="shadcn/ui">breadcrumb</code> <code class="ex" title="Ant Design">breadcrumb</code></td></tr><tr><th scope="row" class=""><b>Card</b></th><td class="num">7/8</td><td class="num">Material Web</td><td class="num"><code class="ex" title="Spectrum">card</code> <code class="ex" title="MUI">Card</code> <code class="ex" title="Fluent 2">card</code> <code class="ex" title="Carbon">Tile</code> <code class="ex" title="Polaris">Card</code> <code class="ex" title="shadcn/ui">card</code> <code class="ex" title="Ant Design">card</code></td></tr><tr><th scope="row" class=""><b>Combobox</b></th><td class="num">7/8</td><td class="num">Material Web</td><td class="num"><code class="ex" title="Spectrum">autocomplete</code> <code class="ex" title="MUI">Autocomplete</code> <code class="ex" title="Fluent 2">combobox</code> <code class="ex" title="Carbon">ComboBox</code> <code class="ex" title="Polaris">Autocomplete</code> <code class="ex" title="shadcn/ui">combobox</code> <code class="ex" title="Ant Design">auto-complete</code></td></tr><tr><th scope="row" class=""><b>Divider</b></th><td class="num">7/8</td><td class="num">Carbon</td><td class="num"><code class="ex" title="Spectrum">divider</code> <code class="ex" title="Material Web">divider</code> <code class="ex" title="MUI">Divider</code> <code class="ex" title="Fluent 2">divider</code> <code class="ex" title="Polaris">Divider</code> <code class="ex" title="shadcn/ui">separator</code> <code class="ex" title="Ant Design">divider</code></td></tr><tr><th scope="row" class=""><b>List</b></th><td class="num">7/8</td><td class="num">shadcn/ui</td><td class="num"><code class="ex" title="Spectrum">list</code> <code class="ex" title="Material Web">list</code> <code class="ex" title="MUI">List</code> <code class="ex" title="Fluent 2">list</code> <code class="ex" title="Carbon">ListBox</code> <code class="ex" title="Polaris">List</code> <code class="ex" title="Ant Design">list</code></td></tr><tr><th scope="row" class=""><b>Navigation</b></th><td class="num">7/8</td><td class="num">Material Web</td><td class="num"><code class="ex" title="Spectrum">layout</code> <code class="ex" title="MUI">AppBar</code> <code class="ex" title="Fluent 2">nav</code> <code class="ex" title="Carbon">Layout</code> <code class="ex" title="Polaris">Layout</code> <code class="ex" title="shadcn/ui">menubar</code> <code class="ex" title="Ant Design">layout</code></td></tr><tr><th scope="row" class=""><b>Switch</b></th><td class="num">7/8</td><td class="num">Polaris</td><td class="num"><code class="ex" title="Spectrum">switch</code> <code class="ex" title="Material Web">switch</code> <code class="ex" title="MUI">Switch</code> <code class="ex" title="Fluent 2">switch</code> <code class="ex" title="Carbon">Switch</code> <code class="ex" title="shadcn/ui">switch</code> <code class="ex" title="Ant Design">switch</code></td></tr><tr><th scope="row" class=""><b>Table</b></th><td class="num">7/8</td><td class="num">Material Web</td><td class="num"><code class="ex" title="Spectrum">table</code> <code class="ex" title="MUI">Table</code> <code class="ex" title="Fluent 2">table</code> <code class="ex" title="Carbon">DataTable</code> <code class="ex" title="Polaris">DataTable</code> <code class="ex" title="shadcn/ui">table</code> <code class="ex" title="Ant Design">table</code></td></tr><tr><th scope="row" class=""><b>Tooltip</b></th><td class="num">7/8</td><td class="num">Material Web</td><td class="num"><code class="ex" title="Spectrum">tooltip</code> <code class="ex" title="MUI">Tooltip</code> <code class="ex" title="Fluent 2">tooltip</code> <code class="ex" title="Carbon">Tooltip</code> <code class="ex" title="Polaris">Tooltip</code> <code class="ex" title="shadcn/ui">tooltip</code> <code class="ex" title="Ant Design">tooltip</code></td></tr><tr><th scope="row" class=""><b>Typography</b></th><td class="num">7/8</td><td class="num">shadcn/ui</td><td class="num"><code class="ex" title="Spectrum">text</code> <code class="ex" title="Material Web">typography</code> <code class="ex" title="MUI">Typography</code> <code class="ex" title="Fluent 2">text</code> <code class="ex" title="Carbon">Heading</code> <code class="ex" title="Polaris">Text</code> <code class="ex" title="Ant Design">typography</code></td></tr><tr><th scope="row" class=""><b>Accordion</b></th><td class="num">6/8</td><td class="num">Material Web, Polaris</td><td class="num"><code class="ex" title="Spectrum">accordion</code> <code class="ex" title="MUI">Accordion</code> <code class="ex" title="Fluent 2">accordion</code> <code class="ex" title="Carbon">Accordion</code> <code class="ex" title="shadcn/ui">accordion</code> <code class="ex" title="Ant Design">collapse</code></td></tr><tr><th scope="row" class=""><b>Avatar</b></th><td class="num">6/8</td><td class="num">Material Web, Carbon</td><td class="num"><code class="ex" title="Spectrum">avatar</code> <code class="ex" title="MUI">Avatar</code> <code class="ex" title="Fluent 2">avatar</code> <code class="ex" title="Polaris">Avatar</code> <code class="ex" title="shadcn/ui">avatar</code> <code class="ex" title="Ant Design">avatar</code></td></tr><tr><th scope="row" class=""><b>Form</b></th><td class="num">6/8</td><td class="num">Material Web, Fluent 2</td><td class="num"><code class="ex" title="Spectrum">form</code> <code class="ex" title="MUI">FormGroup</code> <code class="ex" title="Carbon">Form</code> <code class="ex" title="Polaris">Form</code> <code class="ex" title="shadcn/ui">form</code> <code class="ex" title="Ant Design">form</code></td></tr><tr><th scope="row" class=""><b>Icon</b></th><td class="num">6/8</td><td class="num">Fluent 2, shadcn/ui</td><td class="num"><code class="ex" title="Spectrum">icon</code> <code class="ex" title="Material Web">icon</code> <code class="ex" title="MUI">Icon</code> <code class="ex" title="Carbon">Icon</code> <code class="ex" title="Polaris">Icon</code> <code class="ex" title="Ant Design">icon</code></td></tr><tr><th scope="row" class=""><b>Label</b></th><td class="num">6/8</td><td class="num">Material Web, Ant Design</td><td class="num"><code class="ex" title="Spectrum">label</code> <code class="ex" title="MUI">FormLabel</code> <code class="ex" title="Fluent 2">label</code> <code class="ex" title="Carbon">FormLabel</code> <code class="ex" title="Polaris">Label</code> <code class="ex" title="shadcn/ui">label</code></td></tr><tr><th scope="row" class=""><b>Link</b></th><td class="num">6/8</td><td class="num">Material Web, shadcn/ui</td><td class="num"><code class="ex" title="Spectrum">link</code> <code class="ex" title="MUI">Link</code> <code class="ex" title="Fluent 2">link</code> <code class="ex" title="Carbon">Link</code> <code class="ex" title="Polaris">Link</code> <code class="ex" title="Ant Design">anchor</code></td></tr><tr><th scope="row" class=""><b>Popover</b></th><td class="num">6/8</td><td class="num">Spectrum, Material Web</td><td class="num"><code class="ex" title="MUI">Popover</code> <code class="ex" title="Fluent 2">popover</code> <code class="ex" title="Carbon">Popover</code> <code class="ex" title="Polaris">Popover</code> <code class="ex" title="shadcn/ui">popover</code> <code class="ex" title="Ant Design">popover</code></td></tr><tr><th scope="row" class=""><b>Radio</b></th><td class="num">6/8</td><td class="num">Carbon, Polaris</td><td class="num"><code class="ex" title="Spectrum">radio</code> <code class="ex" title="Material Web">radio</code> <code class="ex" title="MUI">Radio</code> <code class="ex" title="Fluent 2">radio</code> <code class="ex" title="shadcn/ui">radio-group</code> <code class="ex" title="Ant Design">radio</code></td></tr><tr><th scope="row" class=""><b>ButtonGroup</b></th><td class="num">5/8</td><td class="num">Material Web, Fluent 2, Carbon</td><td class="num"><code class="ex" title="Spectrum">actiongroup</code> <code class="ex" title="MUI">ButtonGroup</code> <code class="ex" title="Polaris">ButtonGroup</code> <code class="ex" title="shadcn/ui">button-group</code> <code class="ex" title="Ant Design">segmented</code></td></tr><tr><th scope="row" class=""><b>DatePicker</b></th><td class="num">5/8</td><td class="num">Material Web, MUI, Fluent 2</td><td class="num"><code class="ex" title="Spectrum">calendar</code> <code class="ex" title="Carbon">DatePicker</code> <code class="ex" title="Polaris">DatePicker</code> <code class="ex" title="shadcn/ui">calendar</code> <code class="ex" title="Ant Design">calendar</code></td></tr><tr><th scope="row" class=""><b>Drawer</b></th><td class="num">5/8</td><td class="num">Spectrum, Material Web, Carbon</td><td class="num"><code class="ex" title="MUI">Drawer</code> <code class="ex" title="Fluent 2">drawer</code> <code class="ex" title="Polaris">Sheet</code> <code class="ex" title="shadcn/ui">drawer</code> <code class="ex" title="Ant Design">drawer</code></td></tr><tr><th scope="row" class=""><b>Layout</b></th><td class="num">5/8</td><td class="num">Material Web, Fluent 2, shadcn/ui</td><td class="num"><code class="ex" title="Spectrum">view</code> <code class="ex" title="MUI">Box</code> <code class="ex" title="Carbon">Grid</code> <code class="ex" title="Polaris">Box</code> <code class="ex" title="Ant Design">col</code></td></tr><tr><th scope="row" class=""><b>Pagination</b></th><td class="num">5/8</td><td class="num">Spectrum, Material Web, Fluent 2</td><td class="num"><code class="ex" title="MUI">Pagination</code> <code class="ex" title="Carbon">Pagination</code> <code class="ex" title="Polaris">Pagination</code> <code class="ex" title="shadcn/ui">pagination</code> <code class="ex" title="Ant Design">pagination</code></td></tr><tr><th scope="row" class=""><b>Skeleton</b></th><td class="num">5/8</td><td class="num">Spectrum, Material Web, Polaris</td><td class="num"><code class="ex" title="MUI">Skeleton</code> <code class="ex" title="Fluent 2">skeleton</code> <code class="ex" title="Carbon">SkeletonPlaceholder</code> <code class="ex" title="shadcn/ui">skeleton</code> <code class="ex" title="Ant Design">skeleton</code></td></tr><tr><th scope="row" class=""><b>Field</b></th><td class="num">4/8</td><td class="num">Spectrum, Carbon, Polaris, Ant Design</td><td class="num"><code class="ex" title="Material Web">field</code> <code class="ex" title="MUI">FormControl</code> <code class="ex" title="Fluent 2">field</code> <code class="ex" title="shadcn/ui">field</code></td></tr><tr><th scope="row" class=""><b>FileUpload</b></th><td class="num">4/8</td><td class="num">Material Web, MUI, Fluent 2, shadcn/ui</td><td class="num"><code class="ex" title="Spectrum">dropzone</code> <code class="ex" title="Carbon">FileUploader</code> <code class="ex" title="Polaris">DropZone</code> <code class="ex" title="Ant Design">upload</code></td></tr><tr><th scope="row" class=""><b>Spinner</b></th><td class="num">4/8</td><td class="num">Spectrum, Material Web, MUI, Ant Design</td><td class="num"><code class="ex" title="Fluent 2">spinner</code> <code class="ex" title="Carbon">Loading</code> <code class="ex" title="Polaris">Loading</code> <code class="ex" title="shadcn/ui">spinner</code></td></tr><tr><th scope="row" class=""><b>Toast</b></th><td class="num">4/8</td><td class="num">Material Web, Carbon, shadcn/ui, Ant Design</td><td class="num"><code class="ex" title="Spectrum">toast</code> <code class="ex" title="MUI">Snackbar</code> <code class="ex" title="Fluent 2">toast</code> <code class="ex" title="Polaris">Toast</code></td></tr><tr><th scope="row" class=""><b>Tree</b></th><td class="num">4/8</td><td class="num">Material Web, MUI, Polaris, shadcn/ui</td><td class="num"><code class="ex" title="Spectrum">tree</code> <code class="ex" title="Fluent 2">tree</code> <code class="ex" title="Carbon">TreeView</code> <code class="ex" title="Ant Design">tree</code></td></tr><tr><th scope="row" class=""><b>Carousel</b></th><td class="num">3/8</td><td class="num">Spectrum, Material Web, MUI, Carbon, Polaris</td><td class="num"><code class="ex" title="Fluent 2">carousel</code> <code class="ex" title="shadcn/ui">carousel</code> <code class="ex" title="Ant Design">carousel</code></td></tr><tr><th scope="row" class=""><b>ColorPicker</b></th><td class="num">3/8</td><td class="num">Spectrum, Material Web, MUI, Carbon, shadcn/ui</td><td class="num"><code class="ex" title="Fluent 2">color-picker</code> <code class="ex" title="Polaris">ColorPicker</code> <code class="ex" title="Ant Design">color-picker</code></td></tr><tr><th scope="row" class=""><b>Empty</b></th><td class="num">3/8</td><td class="num">Spectrum, Material Web, MUI, Fluent 2, Carbon</td><td class="num"><code class="ex" title="Polaris">EmptySearchResult</code> <code class="ex" title="shadcn/ui">empty</code> <code class="ex" title="Ant Design">empty</code></td></tr><tr><th scope="row" class=""><b>NumberInput</b></th><td class="num">3/8</td><td class="num">Material Web, MUI, Fluent 2, Polaris, shadcn/ui</td><td class="num"><code class="ex" title="Spectrum">numberfield</code> <code class="ex" title="Carbon">NumberInput</code> <code class="ex" title="Ant Design">input-number</code></td></tr><tr><th scope="row" class=""><b>Rating</b></th><td class="num">3/8</td><td class="num">Spectrum, Material Web, Carbon, Polaris, shadcn/ui</td><td class="num"><code class="ex" title="MUI">Rating</code> <code class="ex" title="Fluent 2">rating</code> <code class="ex" title="Ant Design">rate</code></td></tr><tr><th scope="row" class=""><b>SearchInput</b></th><td class="num">3/8</td><td class="num">Material Web, MUI, Polaris, shadcn/ui, Ant Design</td><td class="num"><code class="ex" title="Spectrum">searchfield</code> <code class="ex" title="Fluent 2">search</code> <code class="ex" title="Carbon">Search</code></td></tr><tr><th scope="row" class=""><b>Stepper</b></th><td class="num">3/8</td><td class="num">Spectrum, Material Web, Fluent 2, Polaris, shadcn/ui</td><td class="num"><code class="ex" title="MUI">Stepper</code> <code class="ex" title="Carbon">ProgressIndicator</code> <code class="ex" title="Ant Design">steps</code></td></tr><tr><th scope="row" class=""><b>Textarea</b></th><td class="num">3/8</td><td class="num">Spectrum, Material Web, MUI, Polaris, Ant Design</td><td class="num"><code class="ex" title="Fluent 2">textarea</code> <code class="ex" title="Carbon">TextArea</code> <code class="ex" title="shadcn/ui">textarea</code></td></tr><tr><th scope="row" class=""><b>Toolbar</b></th><td class="num">3/8</td><td class="num">Material Web, Carbon, Polaris, shadcn/ui, Ant Design</td><td class="num"><code class="ex" title="Spectrum">actionbar</code> <code class="ex" title="MUI">Toolbar</code> <code class="ex" title="Fluent 2">toolbar</code></td></tr></tbody></table></div></details>
+
+<h2 id="variants"><span class="h2n">4</span>Button variant 축 — 8종 실측</h2>
+<p class="sub">축 자체는 거의 같다. <b>강조도</b>(얼마나 강해 보이나) · <b>의미</b>(무슨 일을 하나) ·
+<b>크기</b> · <b>형태</b>. 갈리는 건 이름, 그리고 강조도와 의미를 <i>분리했는지 합쳤는지</i>다.
+회색 숫자는 그 축의 값 개수.</p>
+<div class="scroll"><table>
+<thead><tr><th scope="col">시스템</th><th scope="col">강조도</th><th scope="col">의미</th>
+<th scope="col">크기</th><th scope="col">형태</th><th scope="col">두 축 관계</th>
+<th scope="col">설계 특징</th></tr></thead>
+<tbody><tr><th scope="row">Spectrum</th><td class="bx on" data-tip="Spectrum · emphasis — fillStyle: fill, outline" tabindex="0"><code>fillStyle</code><b class="cnt">2</b></td><td class="bx on" data-tip="Spectrum · intent — variant: primary, secondary, accent, negative, premium, genai" tabindex="0"><code>variant</code><b class="cnt">6</b></td><td class="bx on" data-tip="Spectrum · size — size: S, M, L, XL" tabindex="0"><code>size</code><b class="cnt">4</b></td><td class="bx none"><span class="glyph">—</span></td><td class="bstruct s-s">분리</td><td class="note">강조도와 의미를 fillStyle / variant 로 분리한 유일한 시스템. premium·genai 는 도메인 확장 축.</td></tr>
+<tr><th scope="row">Material Web</th><td class="bx on" data-tip="Material Web · emphasis — prop 없음: filled, outlined, text, elevated, filled-tonal" tabindex="0"><span class="glyph">prop 없음</span><b class="cnt">5</b></td><td class="bx none"><span class="glyph">—</span></td><td class="bx none"><span class="glyph">—</span></td><td class="bx none"><span class="glyph">—</span></td><td class="bstruct s-n">의미 축 없음</td><td class="note">variant prop 이 없다. 강조도별로 *별도 커스텀 엘리먼트*(&lt;md-filled-button&gt; 등)로 나눈다. 크기 축도 없다.</td></tr>
+<tr><th scope="row">MUI</th><td class="bx on" data-tip="MUI · emphasis — variant: text, outlined, contained" tabindex="0"><code>variant</code><b class="cnt">3</b></td><td class="bx on" data-tip="MUI · intent — color: inherit, primary, secondary, success, error, info, warning" tabindex="0"><code>color</code><b class="cnt">7</b></td><td class="bx on" data-tip="MUI · size — size: small, medium, large" tabindex="0"><code>size</code><b class="cnt">3</b></td><td class="bx none"><span class="glyph">—</span></td><td class="bstruct s-s">분리</td><td class="note">emphasis(variant) × intent(color) 를 분리. Spectrum 과 같은 설계, 다른 이름.</td></tr>
+<tr><th scope="row">Fluent 2</th><td class="bx on" data-tip="Fluent 2 · emphasis — appearance: secondary, primary, outline, subtle, transparent" tabindex="0"><code>appearance</code><b class="cnt">5</b></td><td class="bx none"><span class="glyph">—</span></td><td class="bx on" data-tip="Fluent 2 · size — size: small, medium, large" tabindex="0"><code>size</code><b class="cnt">3</b></td><td class="bx on" data-tip="Fluent 2 · shape — shape: rounded, circular, square" tabindex="0"><code>shape</code><b class="cnt">3</b></td><td class="bstruct s-n">의미 축 없음</td><td class="note">emphasis 와 intent 를 appearance 한 축에 섞었다. 위험(danger) 의미 축이 Button 에 없다. disabledFocusable 은 접근성 배려(비활성이어도 포커스 가능).</td></tr>
+<tr><th scope="row">Carbon</th><td class="bx merged" data-tip="Carbon · emphasis — kind: primary, secondary, tertiary, ghost" tabindex="0"><code>kind</code><b class="cnt">4</b></td><td class="bx merged" data-tip="Carbon · intent — kind: danger, danger--primary, danger--ghost, danger--tertiary" tabindex="0"><code>kind</code><b class="cnt">4</b></td><td class="bx on" data-tip="Carbon · size — size: xs, sm, md, lg, xl, 2xl" tabindex="0"><code>size</code><b class="cnt">6</b></td><td class="bx none"><span class="glyph">—</span></td><td class="bstruct s-m">합침</td><td class="note">emphasis 와 intent 를 한 축(kind)에 합치고 `danger--tertiary` 처럼 곱을 문자열로 인코딩한다. 축이 늘면 값이 곱으로 폭발하는 구조.</td></tr>
+<tr><th scope="row">Polaris</th><td class="bx on" data-tip="Polaris · emphasis — variant: primary, secondary, tertiary, plain, monochromePlain" tabindex="0"><code>variant</code><b class="cnt">5</b></td><td class="bx on" data-tip="Polaris · intent — tone: critical, success" tabindex="0"><code>tone</code><b class="cnt">2</b></td><td class="bx on" data-tip="Polaris · size — size: micro, slim, medium, large" tabindex="0"><code>size</code><b class="cnt">4</b></td><td class="bx none"><span class="glyph">—</span></td><td class="bstruct s-s">분리</td><td class="note">emphasis(variant) × intent(tone) 분리. tone 이라는 이름을 쓰는 유일한 시스템.</td></tr>
+<tr><th scope="row">shadcn/ui</th><td class="bx merged" data-tip="shadcn/ui · emphasis — variant: default, outline, secondary, ghost, link" tabindex="0"><code>variant</code><b class="cnt">5</b></td><td class="bx merged" data-tip="shadcn/ui · intent — variant: destructive" tabindex="0"><code>variant</code><b class="cnt">1</b></td><td class="bx on" data-tip="shadcn/ui · size — size: default, xs, sm, lg, icon" tabindex="0"><code>size</code><b class="cnt">5</b></td><td class="bx none"><span class="glyph">—</span></td><td class="bstruct s-m">합침</td><td class="note">Carbon 처럼 한 축에 합쳤다. 상태는 prop 이 아니라 Tailwind `disabled:` 유틸리티로 처리 — 그래서 상태 토큰이 없다. size 에 `icon` 이 섞여 있어 크기 축이 순수하지 않다.</td></tr>
+<tr><th scope="row">Ant Design</th><td class="bx on" data-tip="Ant Design · emphasis — variant: outlined, dashed, solid, filled, text, link" tabindex="0"><code>variant</code><b class="cnt">6</b></td><td class="bx on" data-tip="Ant Design · intent — color: default, primary, danger, …PresetColors" tabindex="0"><code>color</code><b class="cnt">4</b></td><td class="bx on" data-tip="Ant Design · size — size: small, middle, large" tabindex="0"><code>size</code><b class="cnt">3</b></td><td class="bx on" data-tip="Ant Design · shape — shape: default, circle, round, square" tabindex="0"><code>shape</code><b class="cnt">4</b></td><td class="bstruct s-s">분리</td><td class="note">축이 가장 많다. 구 `type` 축과 신 `variant`+`color` 축이 공존해 같은 결과를 두 방식으로 표현할 수 있다 — 하위호환의 대가.</td></tr></tbody></table></div>
+<div class="callout">
+<p><b>합치면 값이 곱으로 폭발한다.</b> Carbon 은 <code>kind</code> 하나에 강조도와 의미를 합쳐
+<code>danger--tertiary</code> 처럼 조합을 문자열로 인코딩한다. Spectrum·MUI·Polaris·Ant Design 은
+두 축을 분리해 같은 표현력을 값의 곱 없이 얻는다. 새로 만든다면 분리가 맞다.</p>
+<p><b>Material Web 은 variant prop 자체가 없다.</b> 강조도별로 별도 커스텀 엘리먼트
+(<code>&lt;md-filled-button&gt;</code>, <code>&lt;md-text-button&gt;</code> …)로 나눈다. 크기 축도 없다.
+Figma 킷에는 variant 가 있으니 — 이 지점이 Figma↔Code 매핑이 구조적으로 어긋나는 자리다.</p>
+</div>
+
+<h2 id="figma"><span class="h2n">5</span>Figma 쪽 축 분포</h2>
+<p class="sub">공식 Figma 킷 4종의 COMPONENT_SET 에서 variant property 이름을 집계했다.
+막대는 그 축을 쓰는 SET 의 비율. <b>어느 킷에서도 1위가 <code>state</code></b>다 —
+디자인 파일이 가장 많이 표현하는 축은 상호작용 상태다.
+코드에서 상태는 prop 이 아니라 CSS 의사클래스이므로, 이 축은 원리상 1:1 매핑되지 않는다.</p>
+<div class="facets"><figure class="facet"><figcaption>Carbon<small>177 COMPONENT_SET</small></figcaption><div class="hbars"><div class="hb" data-tip="Carbon · state — 103/177 SET (58.2%) · 값: Active, Active + Copied, Active + Error, Active + Open, Active + Tooltip, Active + Warning" tabindex="0">
+<span class="hb-l">state</span>
+<span class="hb-t"><i style="width:58.20%"></i></span>
+<span class="hb-v">58.2%</span></div><div class="hb" data-tip="Carbon · size — 80/177 SET (45.2%) · 값: 12px, 14px, 160px, 16px, 20px, 24px" tabindex="0">
+<span class="hb-l">size</span>
+<span class="hb-t"><i style="width:45.20%"></i></span>
+<span class="hb-v">45.2%</span></div><div class="hb" data-tip="Carbon · type — 27/177 SET (15.3%) · 값: Advanced, Base, Batch actions, Block, Cell, Clickable" tabindex="0">
+<span class="hb-l">type</span>
+<span class="hb-t"><i style="width:15.30%"></i></span>
+<span class="hb-v">15.3%</span></div><div class="hb" data-tip="Carbon · open — 23/177 SET (13.0%) · 값: False, True" tabindex="0">
+<span class="hb-l">open</span>
+<span class="hb-t"><i style="width:13.00%"></i></span>
+<span class="hb-v">13.0%</span></div><div class="hb" data-tip="Carbon · selected — 20/177 SET (11.3%) · 값: False, True" tabindex="0">
+<span class="hb-l">selected</span>
+<span class="hb-t"><i style="width:11.30%"></i></span>
+<span class="hb-v">11.3%</span></div><div class="hb" data-tip="Carbon · alignment — 12/177 SET (6.8%) · 값: Auto-width, Center, Default, End, Grid aware, Indent" tabindex="0">
+<span class="hb-l">alignment</span>
+<span class="hb-t"><i style="width:6.80%"></i></span>
+<span class="hb-v">6.8%</span></div><div class="hb" data-tip="Carbon · style — 10/177 SET (5.6%) · 값: Contained, Danger ghost, Danger primary, Danger tertiary, Default, Fixed" tabindex="0">
+<span class="hb-l">style</span>
+<span class="hb-t"><i style="width:5.60%"></i></span>
+<span class="hb-v">5.6%</span></div></div></figure>
+<figure class="facet"><figcaption>Fluent 2<small>104 COMPONENT_SET</small></figcaption><div class="hbars"><div class="hb" data-tip="Fluent 2 · state — 46/104 SET (44.2%) · 값: Checked, Default, Disabled, Disabled (Checked only), Draggable, Empty" tabindex="0">
+<span class="hb-l">state</span>
+<span class="hb-t"><i style="width:44.20%"></i></span>
+<span class="hb-v">44.2%</span></div><div class="hb" data-tip="Fluent 2 · size — 45/104 SET (43.3%) · 값: 120, 16, 20, 24, 28, 32 (Default)" tabindex="0">
+<span class="hb-l">size</span>
+<span class="hb-t"><i style="width:43.30%"></i></span>
+<span class="hb-v">43.3%</span></div><div class="hb" data-tip="Fluent 2 · style — 31/104 SET (29.8%) · 값: Avatar (Default), Brand, Circular, Color, Darker, Default" tabindex="0">
+<span class="hb-l">style</span>
+<span class="hb-t"><i style="width:29.80%"></i></span>
+<span class="hb-v">29.8%</span></div><div class="hb" data-tip="Fluent 2 · layout — 25/104 SET (24.0%) · 값: 1 line (Default), 2 avatars, 2 line (Medium only), 3 avatars, Cell actions, Center (Default)" tabindex="0">
+<span class="hb-l">layout</span>
+<span class="hb-t"><i style="width:24.00%"></i></span>
+<span class="hb-v">24.0%</span></div><div class="hb" data-tip="Fluent 2 · type — 12/104 SET (11.5%) · 값: Active, Button, Checkbox, Checkmark, Contextual (floating), Display" tabindex="0">
+<span class="hb-l">type</span>
+<span class="hb-t"><i style="width:11.50%"></i></span>
+<span class="hb-v">11.5%</span></div><div class="hb" data-tip="Fluent 2 · selected — 10/104 SET (9.6%) · 값: False, No, True, Yes" tabindex="0">
+<span class="hb-l">selected</span>
+<span class="hb-t"><i style="width:9.60%"></i></span>
+<span class="hb-v">9.6%</span></div><div class="hb" data-tip="Fluent 2 · expanded — 4/104 SET (3.8%) · 값: False, True" tabindex="0">
+<span class="hb-l">expanded</span>
+<span class="hb-t"><i style="width:3.80%"></i></span>
+<span class="hb-v">3.8%</span></div></div></figure>
+<figure class="facet"><figcaption>Material Web<small>171 COMPONENT_SET</small></figcaption><div class="hbars"><div class="hb" data-tip="Material Web · state — 90/171 SET (52.6%) · 값: Active, Disabled, Dragged, Enabled, Error, Focused" tabindex="0">
+<span class="hb-l">state</span>
+<span class="hb-t"><i style="width:52.60%"></i></span>
+<span class="hb-v">52.6%</span></div><div class="hb" data-tip="Material Web · selected — 50/171 SET (29.2%) · 값: False, True" tabindex="0">
+<span class="hb-l">selected</span>
+<span class="hb-t"><i style="width:29.20%"></i></span>
+<span class="hb-v">29.2%</span></div><div class="hb" data-tip="Material Web · type — 44/171 SET (25.7%) · 값: Accordion button, Assistive chips, Avatar, Badge, Checkbox, Collapse" tabindex="0">
+<span class="hb-l">type</span>
+<span class="hb-t"><i style="width:25.70%"></i></span>
+<span class="hb-v">25.7%</span></div><div class="hb" data-tip="Material Web · size — 30/171 SET (17.5%) · 값: Default, Image, Large, Medium, Monogram, Small" tabindex="0">
+<span class="hb-l">size</span>
+<span class="hb-t"><i style="width:17.50%"></i></span>
+<span class="hb-v">17.5%</span></div><div class="hb" data-tip="Material Web · configuration — 18/171 SET (10.5%) · 값: Alphanumeric, Base keyboard, Center-aligned, Docked, Embedded FAB, Fixed" tabindex="0">
+<span class="hb-l">configuration</span>
+<span class="hb-t"><i style="width:10.50%"></i></span>
+<span class="hb-v">10.5%</span></div><div class="hb" data-tip="Material Web · style — 9/171 SET (5.3%) · 값: Avatar, Check, Elevated, Filled, Floating, Landscape" tabindex="0">
+<span class="hb-l">style</span>
+<span class="hb-t"><i style="width:5.30%"></i></span>
+<span class="hb-v">5.3%</span></div><div class="hb" data-tip="Material Web · alignment — 8/171 SET (4.7%) · 값: Centered, Left, Left aligned, Middle, Middle-aligned, Top" tabindex="0">
+<span class="hb-l">alignment</span>
+<span class="hb-t"><i style="width:4.70%"></i></span>
+<span class="hb-v">4.7%</span></div></div></figure>
+<figure class="facet"><figcaption>Spectrum<small>462 COMPONENT_SET</small></figcaption><div class="hbars"><div class="hb" data-tip="Spectrum · state — 256/462 SET (55.4%) · 값: Default, Disabled, Dragged, Error, Focus, Hover" tabindex="0">
+<span class="hb-l">state</span>
+<span class="hb-t"><i style="width:55.40%"></i></span>
+<span class="hb-v">55.4%</span></div><div class="hb" data-tip="Spectrum · style — 144/462 SET (31.2%) · 값: Confirmation, Default, Destructive, Determinate, Emphasized, Error" tabindex="0">
+<span class="hb-l">style</span>
+<span class="hb-t"><i style="width:31.20%"></i></span>
+<span class="hb-v">31.2%</span></div><div class="hb" data-tip="Spectrum · color — 32/462 SET (6.9%) · 값: Accent, Default, Negative, Over Background, Primary, Secondary" tabindex="0">
+<span class="hb-l">color</span>
+<span class="hb-t"><i style="width:6.90%"></i></span>
+<span class="hb-v">6.9%</span></div><div class="hb" data-tip="Spectrum · label position — 32/462 SET (6.9%) · 값: Side, Top" tabindex="0">
+<span class="hb-l">label position</span>
+<span class="hb-t"><i style="width:6.90%"></i></span>
+<span class="hb-v">6.9%</span></div><div class="hb" data-tip="Spectrum · selected ? — 28/462 SET (6.1%) · 값: False, Off, On, True" tabindex="0">
+<span class="hb-l">selected ?</span>
+<span class="hb-t"><i style="width:6.10%"></i></span>
+<span class="hb-v">6.1%</span></div><div class="hb" data-tip="Spectrum · track size — 24/462 SET (5.2%) · 값: Large, Medium, Small" tabindex="0">
+<span class="hb-l">track size</span>
+<span class="hb-t"><i style="width:5.20%"></i></span>
+<span class="hb-v">5.2%</span></div><div class="hb" data-tip="Spectrum · label ? — 24/462 SET (5.2%) · 값: False, True" tabindex="0">
+<span class="hb-l">label ?</span>
+<span class="hb-t"><i style="width:5.20%"></i></span>
+<span class="hb-v">5.2%</span></div></div></figure></div>
+
+<h2 id="reaudit"><span class="h2n">6</span>재감사 — 기존 결론이 지금도 성립하나</h2>
+<h3 style="margin-top:1.2rem">6-1. 토큰 의존율 재측정</h3>
+<p class="sub">컴포넌트 4종(Button / Checkbox / Dialog / TextInput)의 스타일 소스에서
+<code>토큰 참조 / (토큰 참조 + hardcoded)</code> 를 셌다. 빈 원이 기존 문서값, 채운 원이 재측정값.
+선이 길수록 결론이 바뀐 것이다.</p>
+<div class="panel"><div class="legend-row"><span class="lg"><i class="dot-a"></i>기존 문서값 (2026-07-26)</span><span class="lg"><i class="dot-b"></i>재측정 (2026-07-30)</span></div><div class="dbs"><div class="db big">
+<span class="db-l">shadcn/ui</span>
+<span class="db-t">
+  <span class="db-line" style="left:18.5%;width:70.6%"></span>
+  <span class="db-p a" style="left:18.5%" tabindex="0" data-tip="shadcn/ui · 기존 문서값 18.5%"></span>
+  <span class="db-p b" style="left:89.1%" tabindex="0" data-tip="shadcn/ui · 재측정 89.1%"></span>
+</span>
+<span class="db-v">+71pt <span class="flag">⚠ 기준 차이</span></span></div><div class="db big">
+<span class="db-l">Polaris</span>
+<span class="db-t">
+  <span class="db-line" style="left:53.0%;width:32.8%"></span>
+  <span class="db-p a" style="left:53.0%" tabindex="0" data-tip="Polaris · 기존 문서값 53.0%"></span>
+  <span class="db-p b" style="left:85.8%" tabindex="0" data-tip="Polaris · 재측정 85.8%"></span>
+</span>
+<span class="db-v">+33pt <span class="flag">⚠ 기준 차이</span></span></div><div class="db">
+<span class="db-l">Carbon</span>
+<span class="db-t">
+  <span class="db-line" style="left:50.0%;width:15.400000000000006%"></span>
+  <span class="db-p a" style="left:50.0%" tabindex="0" data-tip="Carbon · 기존 문서값 50.0%"></span>
+  <span class="db-p b" style="left:65.4%" tabindex="0" data-tip="Carbon · 재측정 65.4%"></span>
+</span>
+<span class="db-v">+15pt</span></div><div class="db">
+<span class="db-l">Ant Design</span>
+<span class="db-t">
+  <span class="db-line" style="left:82.0%;width:13.599999999999994%"></span>
+  <span class="db-p a" style="left:82.0%" tabindex="0" data-tip="Ant Design · 기존 문서값 82.0%"></span>
+  <span class="db-p b" style="left:95.6%" tabindex="0" data-tip="Ant Design · 재측정 95.6%"></span>
+</span>
+<span class="db-v">+14pt</span></div><div class="db">
+<span class="db-l">Material Web</span>
+<span class="db-t">
+  <span class="db-line" style="left:88.9%;width:6.099999999999994%"></span>
+  <span class="db-p a" style="left:95.0%" tabindex="0" data-tip="Material Web · 기존 문서값 95.0%"></span>
+  <span class="db-p b" style="left:88.9%" tabindex="0" data-tip="Material Web · 재측정 88.9%"></span>
+</span>
+<span class="db-v">-6pt</span></div><div class="db">
+<span class="db-l">MUI</span>
+<span class="db-t">
+  <span class="db-line" style="left:64.4%;width:5.599999999999994%"></span>
+  <span class="db-p a" style="left:70.0%" tabindex="0" data-tip="MUI · 기존 문서값 70.0%"></span>
+  <span class="db-p b" style="left:64.4%" tabindex="0" data-tip="MUI · 재측정 64.4%"></span>
+</span>
+<span class="db-v">-6pt</span></div><div class="db">
+<span class="db-l">Fluent 2</span>
+<span class="db-t">
+  <span class="db-line" style="left:77.9%;width:5.099999999999994%"></span>
+  <span class="db-p a" style="left:83.0%" tabindex="0" data-tip="Fluent 2 · 기존 문서값 83.0%"></span>
+  <span class="db-p b" style="left:77.9%" tabindex="0" data-tip="Fluent 2 · 재측정 77.9%"></span>
+</span>
+<span class="db-v">-5pt</span></div><div class="db">
+<span class="db-l">Spectrum</span>
+<span class="db-t">
+  <span class="db-line" style="left:97.2%;width:1.7000000000000028%"></span>
+  <span class="db-p a" style="left:98.9%" tabindex="0" data-tip="Spectrum · 기존 문서값 98.9%"></span>
+  <span class="db-p b" style="left:97.2%" tabindex="0" data-tip="Spectrum · 재측정 97.2%"></span>
+</span>
+<span class="db-v">-2pt</span></div><div class="db-axis"><span class="db-l"></span><span class="db-t"><span style="left:0%">0</span><span style="left:25%">25</span><span style="left:50%">50</span><span style="left:75%">75</span><span style="left:100%">100</span></span><span class="db-v"></span></div></div><details class="tv"><summary>토큰 의존율 — 표로 보기</summary><div class="scroll"><table><thead><tr><th scope="col">시스템</th><th scope="col">기존</th><th scope="col">재측정(느슨)</th><th scope="col">재측정(엄격)</th><th scope="col">범위</th><th scope="col">차이</th><th scope="col">측정 수</th></tr></thead><tbody><tr><th scope="row" class="">shadcn/ui</th><td class="num">18%</td><td class="num">89.1%</td><td class="num">80.7%</td><td class="num">76~98%</td><td class="num">+71pt</td><td class="num">4</td></tr><tr><th scope="row" class="">Polaris</th><td class="num">53%</td><td class="num">85.8%</td><td class="num">73.1%</td><td class="num">50~100%</td><td class="num">+33pt</td><td class="num">4</td></tr><tr><th scope="row" class="">Carbon</th><td class="num">50%</td><td class="num">65.4%</td><td class="num">65.4%</td><td class="num">38~85%</td><td class="num">+15pt</td><td class="num">4</td></tr><tr><th scope="row" class="">Ant Design</th><td class="num">82%</td><td class="num">95.6%</td><td class="num">95.6%</td><td class="num">91~100%</td><td class="num">+14pt</td><td class="num">4</td></tr><tr><th scope="row" class="">Material Web</th><td class="num">95%</td><td class="num">88.9%</td><td class="num">88.9%</td><td class="num">72~100%</td><td class="num">-6pt</td><td class="num">4</td></tr><tr><th scope="row" class="">MUI</th><td class="num">70%</td><td class="num">64.4%</td><td class="num">64.4%</td><td class="num">25~100%</td><td class="num">-6pt</td><td class="num">3</td></tr><tr><th scope="row" class="">Fluent 2</th><td class="num">83%</td><td class="num">77.9%</td><td class="num">77.9%</td><td class="num">64~91%</td><td class="num">-5pt</td><td class="num">4</td></tr><tr><th scope="row" class="">Spectrum</th><td class="num">99%</td><td class="num">97.2%</td><td class="num">95.8%</td><td class="num">94~100%</td><td class="num">-2pt</td><td class="num">4</td></tr></tbody></table></div></details></div>
+<div class="callout">
+<p><b>2개 시스템(shadcn/ui, Polaris)에서 20pt 이상 벌어졌다.</b> 원인은 소스 변화가 아니라 <i>집계 기준</i>이다.
+기존 감사는 shadcn 의 Tailwind 클래스를 전부 hardcoded 로 세었고(205개), 이 재측정은
+테마 스케일을 참조하는 클래스를 토큰 참조로 센다. 어느 쪽도 틀리지 않았다 —
+그래서 <b>"토큰 의존율 3 클러스터"는 시스템의 속성이 아니라 계수 규칙의 산물</b>이라고 봐야 한다.
+이 저장소가 스스로 경고한 함정 7번이 자기 결론에도 적용된다.</p>
+</div>
+
+<h3 id="mfi">6-2. Mapping Fidelity Index (부분)</h3>
+<p class="sub">로드맵 §2.1 의 MFI 5개 항목 중 계산 가능한 2개만 구해 가중치 0.50 구간으로
+재정규화했다. 막대는 두 항목의 기여를 쌓은 것 — 오른쪽 숫자가 MFI-partial.
+로드맵의 MFI 와 <b>같은 값이 아니다</b>.</p>
+<div class="panel"><div class="legend-row" role="list"><span class="lg"><i class="s1"></i>컴포넌트 매칭률 기여 (0.30)</span><span class="lg"><i class="s2"></i>네이밍 근접도 기여 (0.20)</span></div><div class="stacks"><div class="sb" data-row="Material Web"><span class="sb-l">Material Web</span><span class="sb-t"><i class="s1" style="flex:48.0" data-tip="Material Web · 컴포넌트 매칭률 기여 (0.30) 48.0%" tabindex="0"><b>48</b></i><i class="s2" style="flex:35.0" data-tip="Material Web · 네이밍 근접도 기여 (0.20) 35.0%" tabindex="0"><b>35</b></i><i class="res" style="flex:17.0" data-tip="Material Web · 미달 17.0%" tabindex="0"><b></b></i></span><span class="sb-v">83.0</span></div><div class="sb" data-row="Carbon"><span class="sb-l">Carbon</span><span class="sb-t"><i class="s1" style="flex:44.5" data-tip="Carbon · 컴포넌트 매칭률 기여 (0.30) 44.5%" tabindex="0"><b>44</b></i><i class="s2" style="flex:34.3" data-tip="Carbon · 네이밍 근접도 기여 (0.20) 34.3%" tabindex="0"><b>34</b></i><i class="res" style="flex:21.2" data-tip="Carbon · 미달 21.2%" tabindex="0"><b></b></i></span><span class="sb-v">78.8</span></div><div class="sb" data-row="Fluent 2"><span class="sb-l">Fluent 2</span><span class="sb-t"><i class="s1" style="flex:35.5" data-tip="Fluent 2 · 컴포넌트 매칭률 기여 (0.30) 35.5%" tabindex="0"><b>36</b></i><i class="s2" style="flex:32.2" data-tip="Fluent 2 · 네이밍 근접도 기여 (0.20) 32.2%" tabindex="0"><b>32</b></i><i class="res" style="flex:32.3" data-tip="Fluent 2 · 미달 32.3%" tabindex="0"><b></b></i></span><span class="sb-v">67.7</span></div><div class="sb" data-row="Spectrum"><span class="sb-l">Spectrum</span><span class="sb-t"><i class="s1" style="flex:32.2" data-tip="Spectrum · 컴포넌트 매칭률 기여 (0.30) 32.2%" tabindex="0"><b>32</b></i><i class="s2" style="flex:30.1" data-tip="Spectrum · 네이밍 근접도 기여 (0.20) 30.1%" tabindex="0"><b>30</b></i><i class="res" style="flex:37.7" data-tip="Spectrum · 미달 37.7%" tabindex="0"><b></b></i></span><span class="sb-v">62.3</span></div></div><details class="tv"><summary>MFI-partial — 표로 보기</summary><div class="scroll"><table><thead><tr><th scope="col">시스템</th><th scope="col">Figma SET</th><th scope="col">정규화 후</th><th scope="col">코드</th><th scope="col">매칭</th><th scope="col">매칭률</th><th scope="col">네이밍 근접도</th><th scope="col">MFI-partial</th></tr></thead><tbody><tr><th scope="row" class="">Material Web</th><td class="num">171</td><td class="num">140</td><td class="num">20</td><td class="num">16</td><td class="num">80.0%</td><td class="num">87.6%</td><td class="num"><b>83.0</b></td></tr><tr><th scope="row" class="">Carbon</th><td class="num">177</td><td class="num">124</td><td class="num">124</td><td class="num">92</td><td class="num">74.2%</td><td class="num">85.7%</td><td class="num"><b>78.8</b></td></tr><tr><th scope="row" class="">Fluent 2</th><td class="num">104</td><td class="num">94</td><td class="num">71</td><td class="num">42</td><td class="num">59.2%</td><td class="num">80.4%</td><td class="num"><b>67.7</b></td></tr><tr><th scope="row" class="">Spectrum</th><td class="num">462</td><td class="num">44</td><td class="num">56</td><td class="num">30</td><td class="num">53.6%</td><td class="num">75.3%</td><td class="num"><b>62.3</b></td></tr></tbody></table></div></details></div>
+<p class="sub" style="margin-top:1rem">계산하지 못한 항목 (가중치 0.50):</p>
+<ul class="plain"><li><code>variant</code> <span class="w">가중치 0.20</span> — 코드 prop 축 자동 추출 미구현 (Button 만 수동 실측 — button_api.json)</li><li><code>token</code> <span class="w">가중치 0.20</span> — Figma Variables API 403 — figma/raw/*-variables.json 전부 error</li><li><code>structural</code> <span class="w">가중치 0.10</span> — auto-layout ↔ flex/grid 수동 평가 필요</li></ul>
+
+<h2 id="recipe"><span class="h2n">7</span>그래서 최소 시스템은 무엇을 갖춰야 하나</h2>
+<p class="sub">위 측정에서 <b>8/8</b>로 나온 것만 모은 목록이다. 하나라도 빠뜨리면
+8개 시스템 중 어느 것도 하지 않은 선택을 하는 셈이다.</p>
+<ol class="recipe">
+<li><b>색상 토큰을 세 자리로 나눈다</b> — 면(surface) · 글자(foreground) · 선(border).
+예외 없이 8/8이다. 하나로 뭉치면 다크 테마에서 반드시 깨진다.</li>
+<li><b>의미 축에 최소 세 값</b> — 브랜드 · 보조 · 위험(critical). 성공·경고는 5/8로 그다음 순위.</li>
+<li><b>상태를 토큰으로 만든다</b> — hover · focus · active 는 7/8.
+shadcn/ui 만 없고, 그 대가로 상태 표현이 컴포넌트 코드에 흩어진다.</li>
+<li><b>타이포그래피 스케일을 토큰화한다</b> — 8/8. 색상과 함께 유일하게 예외가 없는 값 종류다.</li>
+<li><b>Elevation·radius 는 7/8</b> — 없는 쪽이 예외다(shadcn 은 Tailwind 유틸리티,
+Carbon 은 radius 토큰이 <i>아예 없다</i> — 각진 형태를 부재로 강제한다).</li>
+<li><b>컴포넌트는 9개부터</b> — Button · Checkbox · Dialog · Menu · Progress · Select · Slider · Tabs · TextInput.</li>
+<li><b>Button 의 variant 축은 강조도와 의미를 분리한다</b> — 합치면 값이 곱으로 폭발한다.</li>
+<li><b>상태는 Figma 와 코드가 원리상 어긋난다</b> — Figma 킷의 1위 축이 <code>state</code>인데
+코드에서는 prop 이 아니라 의사클래스다. 자동 동기화를 시도하지 말고 계약 문서로 남긴다.</li>
+</ol>
+
+<h2 id="sources"><span class="h2n">부록</span>측정에 쓴 소스 커밋</h2>
+<p class="sub">얕은 클론으로 받은 고정 커밋. 재현은 <code>bash sources/clone.sh</code>.</p>
+<div class="scroll"><table>
+<thead><tr><th scope="col">key</th><th scope="col">repo</th><th scope="col">HEAD</th>
+<th scope="col">커밋일</th><th scope="col">용량</th></tr></thead>
+<tbody><tr><td class="">ant-design</td><td class="">ant-design/ant-design</td><td class="">dae6efe</td><td class="">2026-07-30</td><td class="path">71M</td></tr>
+<tr><td class="">carbon</td><td class="">carbon-design-system/carbon</td><td class="">0a75905</td><td class="">2026-07-29</td><td class="path">22M</td></tr>
+<tr><td class="">fluentui</td><td class="">microsoft/fluentui</td><td class="">a50f6d4</td><td class="">2026-07-29</td><td class="path">86M</td></tr>
+<tr><td class="">material-ui</td><td class="">mui/material-ui</td><td class="">319668c</td><td class="">2026-07-29</td><td class="path">20M</td></tr>
+<tr><td class="">material-web</td><td class="">material-components/material-web</td><td class="">70e259d</td><td class="">2026-07-23</td><td class="path">31M</td></tr>
+<tr><td class="">polaris</td><td class="">Shopify/polaris</td><td class="">2b1ea88</td><td class="">2025-12-20</td><td class="path">14M</td></tr>
+<tr><td class="">radix-primitives</td><td class="">radix-ui/primitives</td><td class="">df8f89a</td><td class="">2026-07-28</td><td class="path">6.6M</td></tr>
+<tr><td class="">react-spectrum</td><td class="">adobe/react-spectrum</td><td class="">3823fb8</td><td class="">2026-07-30</td><td class="path">64M</td></tr>
+<tr><td class="">shadcn-ui</td><td class="">shadcn-ui/ui</td><td class="">5203f53</td><td class="">2026-07-29</td><td class="path">23M</td></tr>
+<tr><td class="">spectrum-css</td><td class="">adobe/spectrum-css</td><td class="">3762086</td><td class="">2026-04-06</td><td class="path">20M</td></tr>
+<tr><td class="">spectrum-tokens</td><td class="">adobe/spectrum-design-data</td><td class="">ca0f605</td><td class="">2026-07-29</td><td class="path">28M</td></tr></tbody></table></div>
+
+<footer>
+<p>생성: <code>python3 analysis/build_report.py</code> — 데이터는 <code>analysis/data/*.json</code> 에서 읽는다.
+측정 스크립트: <code>extract_tokens.py</code> · <code>classify_tokens.py</code> ·
+<code>extract_components.py</code> · <code>measure_dependency.py</code> · <code>mfi.py</code>.</p>
+<p>차트 색상은 dataviz 레퍼런스 팔레트를 이 문서의 surface(<code>#f6f7f8</code> / <code>#14171a</code>)에
+맞춰 재검증해 사용했다 — categorical 7슬롯·ordinal 4단계 모두 전 항목 PASS.
+light 모드 대비 WARN 항목은 직접 라벨과 표 병기로 완화했다.</p>
+</footer>
+</main>
+</div>
+
+<div id="tip" role="status" aria-live="polite"></div>
+<script>
+(function () {
+  var tip = document.getElementById('tip'), cur = null;
+  function show(el) {
+    var t = el.getAttribute('data-tip');
+    if (!t) return;
+    tip.innerHTML = t;
+    var r = el.getBoundingClientRect();
+    tip.style.left = Math.min(Math.max(r.left + r.width / 2, 120), window.innerWidth - 120) + 'px';
+    tip.style.top = r.top + 'px';
+    tip.classList.add('on');
+    cur = el;
+  }
+  function hide() { tip.classList.remove('on'); cur = null; }
+  document.addEventListener('pointerover', function (ev) {
+    var el = ev.target.closest('[data-tip]');
+    if (el && el !== cur) show(el); else if (!el && cur) hide();
+  });
+  document.addEventListener('pointerleave', hide);
+  document.addEventListener('focusin', function (ev) {
+    var el = ev.target.closest('[data-tip]');
+    if (el) show(el);
+  });
+  document.addEventListener('focusout', hide);
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') hide(); });
+  // 스크롤 중에는 위치를 따라가게 하지 않고 감춘다 — 포인터가 안 움직이면 툴팁이 남는다
+  window.addEventListener('scroll', hide, {passive: true});
+})();
+</script>

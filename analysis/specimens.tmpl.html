@@ -1,0 +1,288 @@
+<meta charset="utf-8">
+<title>실물 견본 시트 — 8개 디자인 시스템 컴포넌트 나란히 보기</title>
+<style>
+:root {
+  --ink: #16191d; --ink-2: #4a5157; --ink-3: #767f87;
+  --paper: #f6f7f8; --card: #fdfdfd; --rule: #dfe3e6; --rule-2: #eceff1;
+  --accent: #2f5d8a; --accent-soft: #e8eff6;
+  --warn: #d03b3b;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard",
+          "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --step--1: clamp(.75rem, .73rem + .1vw, .8rem);
+  --step-0: clamp(.9rem, .87rem + .15vw, .95rem);
+  --step-1: clamp(1.05rem, 1rem + .25vw, 1.15rem);
+  --step-2: clamp(1.3rem, 1.2rem + .5vw, 1.6rem);
+  --step-3: clamp(1.7rem, 1.5rem + 1vw, 2.4rem);
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --ink: #e6eaee; --ink-2: #a8b2bb; --ink-3: #7b858e;
+    --paper: #14171a; --card: #1b1f23; --rule: #2c3238; --rule-2: #23282d;
+    --accent: #7fb0dd; --accent-soft: #1e2a35; --warn: #e8846c;
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #e6eaee; --ink-2: #a8b2bb; --ink-3: #7b858e;
+  --paper: #14171a; --card: #1b1f23; --rule: #2c3238; --rule-2: #23282d;
+  --accent: #7fb0dd; --accent-soft: #1e2a35; --warn: #e8846c;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--sans); font-size: var(--step-0); line-height: 1.65;
+  -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 82rem; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+
+.eyebrow { font-family: var(--mono); font-size: .68rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--accent); margin: 0 0 .9rem; }
+h1 { font-size: var(--step-3); line-height: 1.14; letter-spacing: -.022em; font-weight: 660;
+  margin: 0 0 1rem; text-wrap: balance; max-width: 34ch; }
+.lede { font-size: var(--step-1); color: var(--ink-2); margin: 0 0 1.4rem; max-width: 64ch; }
+h2 { font-size: var(--step-2); letter-spacing: -.015em; font-weight: 640; line-height: 1.25;
+  margin: 4rem 0 .4rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+h2 .h2n { font-family: var(--mono); font-size: .7rem; color: var(--ink-3); display: block;
+  letter-spacing: .1em; margin-bottom: .5rem; font-weight: 400; }
+h3 { font-size: var(--step-1); font-weight: 620; margin: 2.2rem 0 .4rem; }
+p { max-width: 68ch; margin: 0 0 1rem; }
+.sub { color: var(--ink-2); margin-bottom: 1.2rem; max-width: 68ch; }
+code { font-family: var(--mono); font-size: .86em; }
+figure { margin: 0; }
+a { color: var(--accent); }
+
+.badge { display: inline-block; font-family: var(--mono); font-size: .62rem; letter-spacing: .08em;
+  padding: .12rem .38rem; border-radius: 2px; vertical-align: .18em; margin-left: .45rem; }
+.badge.m { color: #1a6b4f; background: #e6f2ec; border: 1px solid #1a6b4f; }
+.badge.c { color: var(--ink-3); background: var(--rule-2); border: 1px solid var(--ink-3); }
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .badge.m { color: #6cc7a1; background: #172a23; border-color: #6cc7a1; }
+}
+:root[data-theme="dark"] .badge.m { color: #6cc7a1; background: #172a23; border-color: #6cc7a1; }
+
+.callout { border-left: 3px solid var(--warn); background: var(--card); padding: .85rem 1.05rem;
+  margin: 1.2rem 0; border-radius: 0 4px 4px 0; }
+.callout p { margin: 0; font-size: var(--step--1); color: var(--ink-2); max-width: 72ch; }
+.callout p + p { margin-top: .5rem; }
+.callout b { color: var(--ink); }
+.callout.info { border-left-color: var(--accent); }
+
+/* ── 버튼 견본 ── */
+.sp-sheet { background: #ffffff; border: 1px solid var(--rule); border-radius: 5px;
+  padding: .3rem 1.1rem 1.1rem; }
+.sp-sheet.dark-note { margin-top: .6rem; }
+.sp-row { display: grid; grid-template-columns: 12rem minmax(0,1fr); gap: 1rem;
+  align-items: center; padding: .9rem 0; border-bottom: 1px solid #ececec; }
+.sp-row:last-child { border-bottom: 0; }
+.sp-name { font-size: var(--step--1); font-weight: 600; color: #16191d; }
+.sp-name code { display: block; font-weight: 400; color: #767f87; font-size: .66rem;
+  margin-top: .2rem; letter-spacing: -.01em; }
+.sp-items { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; }
+.sp-btn { font-family: var(--sans); cursor: pointer; display: inline-flex; align-items: center;
+  justify-content: center; white-space: nowrap; line-height: 1; }
+.sp-btn:focus-visible { outline: 2px solid #2f5d8a; outline-offset: 2px; }
+
+/* ── 색 스와치 ── */
+.sw-wrap { background: var(--card); border: 1px solid var(--rule); border-radius: 5px;
+  padding: .8rem 1rem 1rem; overflow-x: auto; }
+.sw-head, .sw-row { display: grid; grid-template-columns: 7.5rem minmax(0,1fr); gap: .8rem;
+  align-items: center; min-width: 46rem; }
+.sw-head { padding-bottom: .4rem; }
+.sw-hs, .sw-cells { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
+.sw-h { font-family: var(--mono); font-size: .58rem; color: var(--ink-3); text-align: center;
+  line-height: 1.3; }
+.sw-row { padding: 2px 0; }
+.sw { height: 44px; border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12);
+  display: grid; place-items: end center; padding-bottom: 3px; }
+.sw-v { font-family: var(--mono); font-size: .5rem; color: #fff; background: rgba(0,0,0,.45);
+  padding: 0 2px; border-radius: 1px; max-width: 100%; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap; }
+.sw.none { background: repeating-linear-gradient(45deg, var(--rule-2), var(--rule-2) 4px,
+  transparent 4px, transparent 8px); box-shadow: inset 0 0 0 1px var(--rule); place-items: center; }
+.sw-x { font-family: var(--mono); font-size: .52rem; color: var(--ink-3); }
+.sw:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* ── 카드 격자 ── */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem,1fr)); gap: 1rem; }
+.card { background: var(--card); border: 1px solid var(--rule); border-radius: 5px;
+  padding: .9rem 1rem 1rem; }
+.card > figcaption { font-size: var(--step--1); font-weight: 620; margin-bottom: .7rem; }
+.card > figcaption small { font-weight: 400; color: var(--ink-3); font-family: var(--mono);
+  font-size: .64rem; margin-left: .4rem; }
+
+/* 타이포 */
+.ty-l { display: grid; grid-template-columns: 8.5rem minmax(0,1fr) 5rem; gap: .6rem;
+  align-items: baseline; padding: .3rem 0; }
+.ty-k { font-family: var(--mono); font-size: .62rem; color: var(--ink-3); }
+.ty-s { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ty-m { font-family: var(--mono); font-size: .58rem; color: var(--ink-3); text-align: right; }
+
+/* radius */
+.rxs { display: flex; flex-wrap: wrap; gap: .8rem; }
+.rx { text-align: center; }
+.rx-b { width: 52px; height: 52px; }
+.rx-k { display: block; font-family: var(--mono); font-size: .58rem; color: var(--ink-3);
+  margin-top: .25rem; }
+
+/* spacing */
+.spxs { display: flex; flex-direction: column; gap: 4px; }
+.spx { display: flex; align-items: center; gap: .5rem; }
+.spx-b { height: 12px; border-radius: 2px; min-width: 1px; display: inline-block; }
+.spx-k { font-family: var(--mono); font-size: .58rem; color: var(--ink-3); }
+
+/* elevation */
+.card.lifted { border-color: transparent; }
+.evs { display: flex; flex-wrap: wrap; gap: 1rem; padding: .4rem .2rem 1rem; }
+.ev { width: 88px; height: 60px; border-radius: 4px; display: grid; place-items: center;
+  font-family: var(--mono); font-size: .52rem; color: var(--ink-3); text-align: center;
+  padding: .2rem; }
+
+/* 조립 UI */
+.ui { border: 1px solid var(--rule); border-radius: 5px; overflow: hidden; }
+.ui > figcaption { font-size: var(--step--1); font-weight: 620; padding: .55rem .9rem; }
+.ui-card { margin: 1rem; padding: 1rem; }
+.ui-card h5 { margin: 0 0 .8rem; font-weight: 620; }
+.ui-f { display: block; margin-bottom: .8rem; }
+.ui-i { display: block; width: 100%; margin-top: .3rem; padding: 0 .65rem;
+  font-family: var(--sans); }
+.ui-bs { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .8rem; }
+.ui-bd { font-size: .66rem; font-weight: 600; padding: .15rem .45rem; line-height: 1.5; }
+.ui-bd.none { background: var(--rule-2); color: var(--ink-3); font-weight: 400;
+  border: 1px dashed var(--ink-3); border-radius: 2px; }
+.ui-al { padding: .55rem .7rem; margin-bottom: .9rem; line-height: 1.5; }
+.ui-actions { display: flex; gap: .5rem; }
+
+.scroll { overflow-x: auto; border: 1px solid var(--rule); border-radius: 4px; background: var(--card); }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); }
+thead th { text-align: left; font-weight: 600; color: var(--ink-2); font-size: .68rem;
+  letter-spacing: .07em; text-transform: uppercase; padding: .55rem .75rem;
+  border-bottom: 1px solid var(--rule); white-space: nowrap; }
+tbody th { text-align: left; font-weight: 500; padding: .5rem .75rem; white-space: nowrap; }
+tbody td { padding: .5rem .75rem; }
+tbody tr + tr th, tbody tr + tr td { border-top: 1px solid var(--rule-2); }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.path { font-family: var(--mono); font-size: .7rem; color: var(--ink-3); word-break: break-all; }
+
+#tip { position: fixed; z-index: 50; pointer-events: none; opacity: 0;
+  transform: translate(-50%, -130%); background: var(--ink); color: var(--paper);
+  font-size: .72rem; line-height: 1.45; padding: .35rem .5rem; border-radius: 3px;
+  max-width: 24rem; transition: opacity .08s linear; }
+#tip.on { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+<p class="eyebrow">design-systems-benchmark · 실물 견본</p>
+<h1>같은 컴포넌트를 8개 시스템이 실제로 어떻게 만드는가</h1>
+<p class="lede">차트가 아니라 실물이다. 아래 모든 견본은 각 시스템 소스에서 해석한 <b>실제 값</b>
+— 색·높이·radius·굵기 — 을 그대로 받아 이 페이지에서 렌더링된 것이다.</p>
+
+<div class="callout info">
+<p><b>표시 규칙.</b> <span class="badge m">실측</span> 은 지오메트리를 소스에서 읽어 확인한 것,
+<span class="badge c">구성</span> 은 그 시스템의 토큰 값으로 조립한 것이다(원본 컴포넌트의 내부 패딩·아이콘·전이까지
+재현한 것은 아니다). 어느 견본이든 커서를 올리면 쓰인 실제 값이 나온다.</p>
+<p>공용 CSS 로 모양을 통일하지 않았다 — 통일하면 비교 대상인 차이가 사라진다.
+버튼 시트만 흰 배경에 고정했다(각 시스템의 라이트 테마 기준값이라 비교 조건을 같게 두려고).</p>
+</div>
+
+<h2><span class="h2n">1</span>Button<span class="badge m">실측</span></h2>
+<p class="sub">각 시스템의 실제 높이·좌우 패딩·radius·글자 크기/굵기·테두리 두께로 그렸다.
+<b>같은 "버튼"이 32px에서 48px까지, 완전 각짐에서 완전 알약까지 벌어진다.</b>
+왼쪽 회색 글씨가 그 시스템의 실측 지오메트리다.</p>
+<div class="sp-sheet">{{buttons}}</div>
+<details class="tv" style="margin-top:.8rem">
+<summary style="font-size:var(--step--1);color:var(--accent);cursor:pointer">지오메트리 근거 — 표로 보기</summary>
+<div class="scroll" style="margin-top:.5rem"><table>
+<thead><tr><th scope="col">시스템</th><th scope="col">높이</th><th scope="col">radius</th>
+<th scope="col">패딩</th><th scope="col">글자</th><th scope="col">근거 경로</th></tr></thead>
+<tbody>{{btn_table}}</tbody></table></div>
+</details>
+<div class="callout">
+<p><b>Carbon 만 유일하게 각지고(radius 0) 크다(48px).</b> 패딩도 좌우 비대칭이다
+(<code>0 63px 0 15px</code>) — 오른쪽에 아이콘 자리를 항상 비워두는 설계다.
+반대쪽 극단은 Material Web 의 알약형(<code>999px</code>)과 Spectrum 의 완전 라운드(<code>16px</code> = 높이의 절반).</p>
+<p><b>MUI 만 대문자 변환을 강제한다</b>(<code>text-transform: uppercase</code>). 나머지 7개는 라벨을 그대로 쓴다.</p>
+</div>
+
+<h2><span class="h2n">2</span>색 팔레트<span class="badge m">실측</span></h2>
+<p class="sub">semantic 슬롯 10칸을 각 시스템에서 찾아 실제 값을 칠했다. 사선 빗금은 그 시스템에
+<b>그 개념이 없다</b>는 뜻 — 해석 실패가 아니다.</p>
+<div class="sw-wrap">
+  <div class="sw-head"><span></span><span class="sw-hs">{{swatch_head}}</span></div>
+  {{swatch_rows}}
+</div>
+<div class="callout">
+<p><b>brand 색이 유일하게 갈리는 축이다.</b> Fluent 2 <code>#0078d4</code> · Carbon <code>#0f62fe</code> ·
+Ant Design <code>#1677ff</code> · MUI <code>#1976d2</code> 는 모두 파랑 계열인데,
+Material Web 은 보라(<code>#6750a4</code>), shadcn/ui 와 Polaris 는 <b>거의 검정</b>이다 —
+브랜드색을 비워두고 제품이 채우게 하는 설계다.</p>
+<p><b>success·warning 이 없는 시스템: {{no_status}}.</b> 앞선 이름 단위 측정에서
+"status:success/warning 이 5/8"로 나온 것의 실물이다. 상태색이 필요하면 직접 만들어야 한다.</p>
+</div>
+
+<h2><span class="h2n">3</span>타이포그래피 스케일<span class="badge m">실측</span></h2>
+<p class="sub">각 시스템의 실제 크기·굵기·행간으로 같은 문장을 렌더링했다.
+글자색도 그 시스템의 <code>text-primary</code> 값이다.</p>
+<div class="grid">{{types}}</div>
+
+<h2><span class="h2n">4</span>Corner radius<span class="badge m">실측</span></h2>
+<p class="sub">radius 스케일 전량을 그 시스템의 brand 색 정사각형에 적용했다.
+<b>{{radius_zero}} 은 radius 토큰이 아예 없다</b> — 각진 형태를 값의 부재로 강제한다.</p>
+<div class="grid">{{radii}}</div>
+
+<h2><span class="h2n">5</span>간격 스케일<span class="badge m">실측</span></h2>
+<p class="sub">막대 길이가 실제 간격 값이다. <b>{{no_space}} 은 간격 토큰이 없다</b> —
+값을 직접 쓰거나 유틸리티 클래스로 처리한다.</p>
+<div class="grid">{{spaces}}</div>
+
+<h2><span class="h2n">6</span>Elevation<span class="badge m">실측</span></h2>
+<p class="sub">실제 <code>box-shadow</code> 값을 그 시스템의 surface 색 위에 올렸다.
+카드 배경은 <code>surface-raised</code>, 바탕은 <code>surface</code>다.</p>
+<div class="grid">{{elevs}}</div>
+
+<h2><span class="h2n">7</span>같은 화면을 8개 시스템으로<span class="badge c">구성</span></h2>
+<p class="sub">Card · Input · Badge · Alert · Button 을 각 시스템의 토큰만으로 조립했다.
+같은 화면이 시스템에 따라 어떻게 다른 인상이 되는지 보는 용도다 —
+원본 컴포넌트의 세부(내부 패딩·아이콘·전이·포커스 링)까지 재현한 것은 아니다.</p>
+<div class="grid">{{uis}}</div>
+<div class="callout">
+<p><b>이 격자가 가장 정직한 비교다.</b> 앞선 절들은 축 하나씩 떼어 봤지만, 실제 제품 인상은
+radius·간격·글자 굵기·색 대비가 <i>동시에</i> 만들어낸다. Carbon 의 각진 48px 버튼과
+Material Web 의 알약형 40px 버튼은 같은 화면을 전혀 다른 물건으로 만든다.</p>
+</div>
+
+<footer style="margin-top:4rem;padding-top:1.4rem;border-top:1px solid var(--rule);color:var(--ink-3);font-size:var(--step--1)">
+<p>생성: <code>python3 analysis/extract_values.py &amp;&amp; python3 analysis/build_specimens.py</code> —
+값은 <code>analysis/data/values.json</code>, 소스 커밋은 <code>sources/MANIFEST.md</code>.</p>
+<p>원리·측정 리포트는 <code>design-system-standard-research.md</code> 와
+<code>design-system-standard-research-visual.html</code>.</p>
+</footer>
+</div>
+
+<div id="tip" role="status" aria-live="polite"></div>
+<script>
+(function () {
+  var tip = document.getElementById('tip'), cur = null;
+  function show(el) {
+    var t = el.getAttribute('data-tip');
+    if (!t) return;
+    tip.textContent = t;
+    var r = el.getBoundingClientRect();
+    tip.style.left = Math.min(Math.max(r.left + r.width / 2, 140), window.innerWidth - 140) + 'px';
+    tip.style.top = r.top + 'px';
+    tip.classList.add('on');
+    cur = el;
+  }
+  function hide() { tip.classList.remove('on'); cur = null; }
+  document.addEventListener('pointerover', function (ev) {
+    var el = ev.target.closest('[data-tip]');
+    if (el && el !== cur) show(el); else if (!el && cur) hide();
+  });
+  document.addEventListener('pointerleave', hide);
+  document.addEventListener('focusin', function (ev) {
+    var el = ev.target.closest('[data-tip]');
+    if (el) show(el);
+  });
+  document.addEventListener('focusout', hide);
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') hide(); });
+  window.addEventListener('scroll', hide, {passive: true});
+})();
+</script>
