@@ -97,12 +97,20 @@ def preflight():
             first = dirty.splitlines()[0].strip()
             bad.append((key, f"로컬 변경 {n}건 (예: {first}) — HEAD 는 맞지만 내용이 다르다"))
             continue
+        got = sorted(subprocess.run(["git", "-C", str(d), "sparse-checkout", "list"],
+                                    capture_output=True, text=True).stdout.split())
         exp = want_sparse.get(key)
-        if exp:
-            got = sorted(subprocess.run(["git", "-C", str(d), "sparse-checkout", "list"],
-                                        capture_output=True, text=True).stdout.split())
-            if got != exp:
-                bad.append((key, f"sparse 경로 {len(got)}개 ≠ 매니페스트 {len(exp)}개 — 파일이 빠져 있다"))
+        if exp is None:
+            # 매니페스트가 `(전체)` 인 항목은 sparse 모드 자체가 꺼져 있어야 한다.
+            # 로컬에서 sparse 를 켜두면 want_sparse 에 없으니 검사를 건너뛰어,
+            # 깨끗한 부분 체크아웃이 통과하고 부분 측정이 만들어졌다.
+            on = subprocess.run(["git", "-C", str(d), "config", "--get", "core.sparseCheckout"],
+                                capture_output=True, text=True).stdout.strip()
+            if got or on == "true":
+                bad.append((key, "매니페스트는 (전체)인데 sparse 모드가 켜져 있다 — "
+                                 "`git -C sources/%s sparse-checkout disable`" % key))
+        elif got != exp:
+            bad.append((key, f"sparse 경로 {len(got)}개 ≠ 매니페스트 {len(exp)}개 — 파일이 빠져 있다"))
 
     if bad:
         print(f"  ✗ 소스 {len(bad)}/{len(want)}개가 매니페스트와 어긋납니다:")

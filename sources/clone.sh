@@ -76,9 +76,16 @@ clone_one() {
     if [ -n "$sha" ] && [ "$(git -C "$key" rev-parse HEAD 2>/dev/null)" = "$sha" ]; then
       # HEAD 만 맞다고 넘어가면 안 된다 — sparse 규칙이 좁혀져 있으면 파일이 없는데도
       # 작업 트리는 깨끗해서 run.py 사전 검사까지 통과한다. 설정을 대조해 다르면 복구한다.
-      if [ -n "$sparse" ] && [ "$(sparse_now "$key")" != "$(printf '%s\n' $sparse | sort | tr '\n' ' ')" ]; then
-        echo "SPARSE $key (sparse 경로가 매니페스트와 달라 재적용)"
-        apply_sparse "$key" $sparse || { echo "FAIL   $key (sparse)"; return 1; }
+      if [ -n "$sparse" ]; then
+        if [ "$(sparse_now "$key")" != "$(printf '%s\n' $sparse | sort | tr '\n' ' ')" ]; then
+          echo "SPARSE $key (sparse 경로가 매니페스트와 달라 재적용)"
+          apply_sparse "$key" $sparse || { echo "FAIL   $key (sparse)"; return 1; }
+        fi
+      elif [ -n "$(sparse_now "$key")" ] \
+           || [ "$(git -C "$key" config --get core.sparseCheckout)" = "true" ]; then
+        # 전체 클론 항목인데 로컬에서 sparse 가 켜져 있으면 파일이 빠진 상태다
+        echo "SPARSE $key (전체 클론 항목인데 sparse 가 켜져 있어 해제)"
+        git -C "$key" sparse-checkout disable || { echo "FAIL   $key (sparse disable)"; return 1; }
       fi
       echo "SKIP   $key (이미 매니페스트 SHA ${sha:0:7})"
       return 0

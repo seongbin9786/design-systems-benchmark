@@ -55,8 +55,11 @@ def build():
         comp_rows.append((s, seg, f'{vocab["composition"][s]["total"]}개'))
     chart_b = (legend(COMP_SLOTS, COMP_LABEL) + stacked(comp_rows, slots, COMP_LABEL, residual="기타"))
     table_b = table_view(
-        ["시스템"] + [COMP_LABEL[k] for k in slots],
-        [[e(s)] + [f'{seg.get(k, 0):.1f}%' for k in slots] for s, seg, _ in comp_rows],
+        ["시스템", "추출 총수"] + [COMP_LABEL[k] for k in slots] + ["미분류"],
+        [[e(s), vocab["composition"][s]["total"]]
+         + [f'{seg.get(k, 0):.1f}%' for k in slots]
+         + [f'{vocab["composition"][s]["pct"].get("미분류", 0):.1f}%']
+         for s, seg, _ in comp_rows],
         "토큰 구성비")
 
     # ── C. 커버리지 매트릭스 ────────────────────────────────────────────

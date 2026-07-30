@@ -37,7 +37,7 @@ COMP_SLOTS = ["color", "typography", "spacing", "sizing", "elevation", "motion",
 COMP_LABEL = {
     "color": "색상", "typography": "타이포그래피", "spacing": "간격",
     "sizing": "크기", "elevation": "elevation", "motion": "모션", "radius": "radius",
-    "기타": "기타", "rest": "미달",
+    "기타": "기타·미분류", "rest": "미달",
 }
 
 

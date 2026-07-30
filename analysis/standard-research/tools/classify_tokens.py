@@ -35,7 +35,6 @@ import paths  # noqa: E402
 DIM_TAIL = r"(width|height|size|radius|duration|opacity|weight|spacing|gap|thickness|count|index)$"
 
 CATEGORY = [
-    ("domain",     r"^(ai|chat)-|-aura|ai-gradient"),
     ("typography", r"^component-[a-z]{1,3}-(bold|medium|regular|italic)$|typescale|typography|font|text-style|heading|body|label|display|title|caption|line-height|letter-spacing|char-|cjk|text-(align|transform|decoration|overflow|wrap|indent)"),
     ("elevation",  r"elevation|shadow|box-shadow|depth|drop-shadow"),
     ("motion",     r"motion|duration|easing|curve|transition|animation|delay"),
@@ -94,6 +93,16 @@ INTENT = [
     # `default`·`standard` 는 어디에나 붙는다 — corner-radius-large-default,
     # motion-easing-standard, transitions-duration-standard 를 neutral 로 잡았다.
     ("neutral",         r"neutral|\bgray\b|\bgrey\b"),
+]
+
+# ── 축 5: domain (값의 종류와 독립) ─────────────────────────────────────────
+# 예전에는 category 목록의 첫 항목이었다. 그래서 `ai-border-start`(테두리색) ·
+# `ai-drop-shadow`(elevation) · `chat-header-background`(색) 가 전부 "domain" 으로
+# 빨려가 색상·elevation 구성비에서 빠졌다. 도메인은 *어느 제품 영역인가* 이고
+# 값의 종류와 직교한다.
+DOMAIN = [
+    ("ai", r"^ai-|-aura|ai-gradient"),
+    ("chat", r"^chat-"),
 ]
 
 # ── 축 4: state ─────────────────────────────────────────────────────────────
@@ -157,6 +166,7 @@ def classify(raw):
         "role": match_axis(name, ROLE),
         "intent": intent,
         "state": match_axis(name, STATE) or "default",
+        "domain": match_axis(name, DOMAIN),
         "_hue_named": hue_named,
     }
 
@@ -167,7 +177,8 @@ def main():
     n = len(systems)
 
     # axis -> value -> {system: [예시 토큰...]}
-    seen = {a: defaultdict(lambda: defaultdict(list)) for a in ("category", "role", "intent", "state")}
+    seen = {a: defaultdict(lambda: defaultdict(list))
+            for a in ("category", "role", "intent", "state", "domain")}
     uncategorized = defaultdict(list)  # category 만 못 붙은 것 — 다른 축은 살린다
     hue_named = defaultdict(list)  # 색조 이름으로 상태를 표현하는 케이스
 
@@ -225,11 +236,18 @@ def main():
             c = row["counts"].get(sysname)
             if c:
                 counts[row["value"]] = c
-        total = sum(counts.values())
+        # 분모는 *추출 총수* 다. 분류된 것만으로 100% 를 만들면 시스템마다 다른 모집단을
+        # 비교하게 된다 — Carbon 은 341개 중 126개(37%)가 조용히 빠져 있었다.
+        extracted = tokens[sysname]["count"]
+        unc = len(uncategorized.get(sysname, []))
+        if unc:
+            counts["미분류"] = unc
         composition[sysname] = {
-            "total": total,
+            "total": extracted,
+            "classified": extracted - unc,
+            "uncategorized": unc,
             "counts": dict(sorted(counts.items(), key=lambda kv: -kv[1])),
-            "pct": {k: round(v / total * 100, 1) for k, v in counts.items()} if total else {},
+            "pct": {k: round(v / extracted * 100, 1) for k, v in counts.items()} if extracted else {},
         }
     result["composition"] = composition
     # 전체 볼륨 상위 category (누적 막대의 고정 슬롯 순서)
@@ -244,7 +262,7 @@ def main():
     result["hue_named_status"] = {s: {"count": len(v), "sample": sorted(v)[:8]} for s, v in hue_named.items()}
     out_path = paths.write_json("vocabulary", result)
 
-    for axis in ("category", "role", "intent", "state"):
+    for axis in ("category", "role", "intent", "state", "domain"):
         print(f"\n=== {axis} ===")
         for r in result["axes"][axis]:
             print(f"  {r['coverage']}/{n} {r['tier']:16s} {r['value']:18s} 미보유: {', '.join(r['missing']) or '-'}")

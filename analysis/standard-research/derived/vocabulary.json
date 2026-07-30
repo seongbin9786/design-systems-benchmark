@@ -42,7 +42,7 @@
      "Material Web": 50,
      "MUI": 38,
      "Fluent 2": 366,
-     "Carbon": 84,
+     "Carbon": 113,
      "Polaris": 226,
      "shadcn/ui": 78,
      "Ant Design": 106
@@ -114,7 +114,7 @@
      "Material Web": 6,
      "MUI": 25,
      "Fluent 2": 12,
-     "Carbon": 1,
+     "Carbon": 5,
      "Polaris": 23,
      "Ant Design": 14
     }
@@ -385,29 +385,6 @@
      "Spectrum": 30,
      "Carbon": 2
     }
-   },
-   {
-    "value": "domain",
-    "systems": [
-     "Carbon"
-    ],
-    "coverage": 1,
-    "tier": "system-specific",
-    "missing": [
-     "Ant Design",
-     "Fluent 2",
-     "MUI",
-     "Material Web",
-     "Polaris",
-     "Spectrum",
-     "shadcn/ui"
-    ],
-    "examples": {
-     "Carbon": "ai-overlay"
-    },
-    "counts": {
-     "Carbon": 42
-    }
    }
   ],
   "role": [
@@ -431,7 +408,7 @@
      "Material Web": "color-outline",
      "MUI": "palette-divider",
      "Fluent 2": "color-brand-stroke1",
-     "Carbon": "border-inverse",
+     "Carbon": "ai-border-end",
      "Polaris": "color-border",
      "shadcn/ui": "border",
      "Ant Design": "line-type"
@@ -1219,11 +1196,61 @@
      "Carbon": 2
     }
    }
+  ],
+  "domain": [
+   {
+    "value": "ai",
+    "systems": [
+     "Carbon"
+    ],
+    "coverage": 1,
+    "tier": "system-specific",
+    "missing": [
+     "Ant Design",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Carbon": "ai-overlay"
+    },
+    "counts": {
+     "Carbon": 21
+    }
+   },
+   {
+    "value": "chat",
+    "systems": [
+     "Carbon"
+    ],
+    "coverage": 1,
+    "tier": "system-specific",
+    "missing": [
+     "Ant Design",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Carbon": "chat-button"
+    },
+    "counts": {
+     "Carbon": 21
+    }
+   }
   ]
  },
  "composition": {
   "Spectrum": {
-   "total": 921,
+   "total": 935,
+   "classified": 921,
+   "uncategorized": 14,
    "counts": {
     "typography": 305,
     "color": 246,
@@ -1232,23 +1259,27 @@
     "sizing": 32,
     "radius": 30,
     "icon-size": 30,
+    "미분류": 14,
     "opacity": 6,
     "border": 5
    },
    "pct": {
-    "color": 26.7,
-    "typography": 33.1,
-    "elevation": 4.7,
-    "radius": 3.3,
-    "spacing": 24.3,
+    "color": 26.3,
+    "typography": 32.6,
+    "elevation": 4.6,
+    "radius": 3.2,
+    "spacing": 24.0,
     "border": 0.5,
-    "opacity": 0.7,
-    "sizing": 3.5,
-    "icon-size": 3.3
+    "opacity": 0.6,
+    "sizing": 3.4,
+    "icon-size": 3.2,
+    "미분류": 1.5
    }
   },
   "Material Web": {
    "total": 192,
+   "classified": 192,
+   "uncategorized": 0,
    "counts": {
     "typography": 93,
     "color": 50,
@@ -1268,6 +1299,8 @@
   },
   "MUI": {
    "total": 109,
+   "classified": 109,
+   "uncategorized": 0,
    "counts": {
     "color": 38,
     "elevation": 25,
@@ -1291,6 +1324,8 @@
   },
   "Fluent 2": {
    "total": 459,
+   "classified": 459,
+   "uncategorized": 0,
    "counts": {
     "color": 366,
     "typography": 27,
@@ -1311,30 +1346,34 @@
    }
   },
   "Carbon": {
-   "total": 215,
+   "total": 341,
+   "classified": 206,
+   "uncategorized": 135,
    "counts": {
-    "color": 84,
+    "미분류": 135,
+    "color": 113,
     "typography": 54,
-    "domain": 42,
     "spacing": 20,
     "motion": 6,
     "sizing": 6,
-    "icon-size": 2,
-    "elevation": 1
+    "elevation": 5,
+    "icon-size": 2
    },
    "pct": {
-    "color": 39.1,
-    "typography": 25.1,
-    "elevation": 0.5,
-    "motion": 2.8,
-    "spacing": 9.3,
-    "sizing": 2.8,
-    "icon-size": 0.9,
-    "domain": 19.5
+    "color": 33.1,
+    "typography": 15.8,
+    "elevation": 1.5,
+    "motion": 1.8,
+    "spacing": 5.9,
+    "sizing": 1.8,
+    "icon-size": 0.6,
+    "미분류": 39.6
    }
   },
   "Polaris": {
    "total": 519,
+   "classified": 519,
+   "uncategorized": 0,
    "counts": {
     "color": 226,
     "typography": 112,
@@ -1361,22 +1400,28 @@
    }
   },
   "shadcn/ui": {
-   "total": 91,
+   "total": 93,
+   "classified": 91,
+   "uncategorized": 2,
    "counts": {
     "color": 78,
     "radius": 8,
     "typography": 3,
-    "breakpoint": 2
+    "breakpoint": 2,
+    "미분류": 2
    },
    "pct": {
-    "color": 85.7,
-    "typography": 3.3,
-    "radius": 8.8,
-    "breakpoint": 2.2
+    "color": 83.9,
+    "typography": 3.2,
+    "radius": 8.6,
+    "breakpoint": 2.2,
+    "미분류": 2.2
    }
   },
   "Ant Design": {
-   "total": 227,
+   "total": 228,
+   "classified": 227,
+   "uncategorized": 1,
    "counts": {
     "color": 106,
     "typography": 24,
@@ -1388,12 +1433,13 @@
     "radius": 5,
     "opacity": 2,
     "z-index": 2,
-    "border": 1
+    "border": 1,
+    "미분류": 1
    },
    "pct": {
-    "color": 46.7,
-    "typography": 10.6,
-    "elevation": 6.2,
+    "color": 46.5,
+    "typography": 10.5,
+    "elevation": 6.1,
     "radius": 2.2,
     "motion": 4.4,
     "spacing": 10.1,
@@ -1401,19 +1447,19 @@
     "opacity": 0.9,
     "sizing": 8.8,
     "breakpoint": 8.8,
-    "z-index": 0.9
+    "z-index": 0.9,
+    "미분류": 0.4
    }
   }
  },
  "category_volume": {
-  "color": 1194,
+  "color": 1223,
   "typography": 638,
   "spacing": 312,
-  "elevation": 124,
+  "elevation": 128,
   "motion": 112,
   "sizing": 98,
   "radius": 77,
-  "domain": 42,
   "z-index": 36,
   "icon-size": 32,
   "breakpoint": 27,
@@ -1441,23 +1487,23 @@
    ]
   },
   "Carbon": {
-   "count": 126,
+   "count": 135,
    "sample": [
+    "chat-avatar-agent",
+    "chat-avatar-bot",
+    "chat-avatar-user",
+    "chat-bubble-agent",
+    "chat-bubble-user",
+    "chat-button",
+    "chat-button-active",
+    "chat-button-hover",
+    "chat-button-selected",
     "code01",
     "code02",
     "container01",
     "container02",
     "container03",
-    "container04",
-    "container05",
-    "expressive-paragraph01",
-    "fast01",
-    "fast02",
-    "field-01",
-    "field-02",
-    "field-03",
-    "field-hover-01",
-    "field-hover-02"
+    "container04"
    ]
   },
   "shadcn/ui": {
