@@ -1,0 +1,6048 @@
+{
+ "systems": [
+  "Spectrum",
+  "Material Web",
+  "MUI",
+  "Fluent 2",
+  "Carbon",
+  "Polaris",
+  "shadcn/ui",
+  "Ant Design"
+ ],
+ "system_count": 8,
+ "inventory": {
+  "Spectrum": {
+   "raw_count": 56,
+   "source": "react-spectrum/packages/@adobe/react-spectrum/src",
+   "canonical": {
+    "Accordion": [
+     "accordion"
+    ],
+    "Alert": [
+     "inlinealert"
+    ],
+    "Avatar": [
+     "avatar"
+    ],
+    "Badge": [
+     "badge",
+     "tag"
+    ],
+    "Breadcrumbs": [
+     "breadcrumbs"
+    ],
+    "Button": [
+     "button"
+    ],
+    "ButtonGroup": [
+     "actiongroup",
+     "buttongroup"
+    ],
+    "Card": [
+     "card"
+    ],
+    "Checkbox": [
+     "checkbox"
+    ],
+    "Combobox": [
+     "autocomplete",
+     "combobox"
+    ],
+    "DatePicker": [
+     "calendar",
+     "datepicker"
+    ],
+    "Dialog": [
+     "dialog"
+    ],
+    "Divider": [
+     "divider"
+    ],
+    "FileUpload": [
+     "dropzone"
+    ],
+    "Form": [
+     "form"
+    ],
+    "Icon": [
+     "icon"
+    ],
+    "Label": [
+     "label"
+    ],
+    "Layout": [
+     "view"
+    ],
+    "Link": [
+     "link"
+    ],
+    "List": [
+     "list",
+     "listbox"
+    ],
+    "Menu": [
+     "menu"
+    ],
+    "Navigation": [
+     "layout"
+    ],
+    "NumberInput": [
+     "numberfield"
+    ],
+    "Progress": [
+     "meter",
+     "progress"
+    ],
+    "Radio": [
+     "radio"
+    ],
+    "SearchInput": [
+     "searchfield"
+    ],
+    "Select": [
+     "picker"
+    ],
+    "Slider": [
+     "slider"
+    ],
+    "Switch": [
+     "switch"
+    ],
+    "Table": [
+     "table"
+    ],
+    "Tabs": [
+     "tabs"
+    ],
+    "TextInput": [
+     "textfield"
+    ],
+    "Toast": [
+     "toast"
+    ],
+    "Toolbar": [
+     "actionbar"
+    ],
+    "Tooltip": [
+     "tooltip"
+    ],
+    "Tooltip/Toggletip": [
+     "contextualhelp"
+    ],
+    "Tree": [
+     "tree"
+    ],
+    "Typography": [
+     "text"
+    ]
+   },
+   "unmapped": [
+    "dnd",
+    "illustratedmessage",
+    "labeledvalue",
+    "overlays",
+    "provider",
+    "statuslight",
+    "steplist",
+    "theme-dark",
+    "theme-default",
+    "theme-express",
+    "theme-light",
+    "well"
+   ]
+  },
+  "Material Web": {
+   "raw_count": 20,
+   "source": "material-web",
+   "canonical": {
+    "Button": [
+     "button"
+    ],
+    "Checkbox": [
+     "checkbox"
+    ],
+    "Dialog": [
+     "dialog"
+    ],
+    "Divider": [
+     "divider"
+    ],
+    "Field": [
+     "field"
+    ],
+    "Icon": [
+     "icon"
+    ],
+    "IconButton": [
+     "iconbutton"
+    ],
+    "List": [
+     "list"
+    ],
+    "Menu": [
+     "menu"
+    ],
+    "Progress": [
+     "progress"
+    ],
+    "Radio": [
+     "radio"
+    ],
+    "Select": [
+     "select"
+    ],
+    "Slider": [
+     "slider"
+    ],
+    "Switch": [
+     "switch"
+    ],
+    "Tabs": [
+     "tabs"
+    ],
+    "Tag/TokenInput": [
+     "chips"
+    ],
+    "TextInput": [
+     "textfield"
+    ],
+    "Typography": [
+     "typography"
+    ]
+   },
+   "unmapped": [
+    "fab",
+    "sass"
+   ]
+  },
+  "MUI": {
+   "raw_count": 135,
+   "source": "material-ui/packages/mui-material/src",
+   "canonical": {
+    "Accordion": [
+     "Accordion",
+     "Collapse"
+    ],
+    "Alert": [
+     "Alert"
+    ],
+    "Avatar": [
+     "Avatar",
+     "AvatarGroup"
+    ],
+    "Badge": [
+     "Badge",
+     "Chip"
+    ],
+    "Breadcrumbs": [
+     "Breadcrumbs"
+    ],
+    "Button": [
+     "Button",
+     "IconButton",
+     "ListItemButton",
+     "StepButton",
+     "TabScrollButton",
+     "ToggleButton"
+    ],
+    "ButtonGroup": [
+     "ButtonGroup",
+     "ToggleButtonGroup"
+    ],
+    "Card": [
+     "Card"
+    ],
+    "Checkbox": [
+     "Checkbox"
+    ],
+    "Combobox": [
+     "Autocomplete"
+    ],
+    "Dialog": [
+     "Dialog",
+     "Modal"
+    ],
+    "Divider": [
+     "Divider"
+    ],
+    "Drawer": [
+     "Drawer"
+    ],
+    "Field": [
+     "FormControl"
+    ],
+    "Form": [
+     "FormGroup"
+    ],
+    "Icon": [
+     "Icon",
+     "SvgIcon"
+    ],
+    "Label": [
+     "FormLabel"
+    ],
+    "Layout": [
+     "Box",
+     "Container",
+     "Grid",
+     "Stack"
+    ],
+    "Link": [
+     "Link"
+    ],
+    "List": [
+     "List",
+     "ListItem"
+    ],
+    "Menu": [
+     "Menu"
+    ],
+    "Navigation": [
+     "AppBar"
+    ],
+    "Pagination": [
+     "Pagination",
+     "PaginationItem"
+    ],
+    "Popover": [
+     "Popover"
+    ],
+    "Progress": [
+     "CircularProgress",
+     "LinearProgress"
+    ],
+    "Radio": [
+     "Radio",
+     "RadioGroup"
+    ],
+    "Rating": [
+     "Rating"
+    ],
+    "Select": [
+     "NativeSelect",
+     "Select"
+    ],
+    "Skeleton": [
+     "Skeleton"
+    ],
+    "Slider": [
+     "Slider"
+    ],
+    "Stepper": [
+     "Stepper"
+    ],
+    "Switch": [
+     "Switch"
+    ],
+    "Table": [
+     "Table"
+    ],
+    "Tabs": [
+     "Tab",
+     "Tabs"
+    ],
+    "TextInput": [
+     "Input",
+     "TextField"
+    ],
+    "Toast": [
+     "Snackbar"
+    ],
+    "Toolbar": [
+     "Toolbar"
+    ],
+    "Tooltip": [
+     "Tooltip"
+    ],
+    "Typography": [
+     "Typography"
+    ]
+   },
+   "unmapped": [
+    "AccordionActions",
+    "AccordionDetails",
+    "AccordionSummary",
+    "AlertTitle",
+    "Backdrop",
+    "BottomNavigation",
+    "BottomNavigationAction",
+    "ButtonBase",
+    "CardActionArea",
+    "CardActions",
+    "CardContent",
+    "CardHeader",
+    "CardMedia",
+    "ClickAwayListener",
+    "CssBaseline",
+    "DefaultPropsProvider",
+    "DialogActions",
+    "DialogContent",
+    "DialogContentText",
+    "DialogTitle",
+    "Fab",
+    "Fade",
+    "FilledInput",
+    "FormControlLabel",
+    "FormHelperText",
+    "Grow",
+    "ImageList",
+    "ImageListItem",
+    "ImageListItemBar",
+    "InitColorSchemeScript",
+    "InputAdornment",
+    "InputBase",
+    "InputLabel",
+    "ListItemAvatar",
+    "ListItemIcon",
+    "ListItemSecondaryAction",
+    "ListItemText",
+    "ListSubheader",
+    "MenuItem",
+    "MenuList",
+    "MobileStepper",
+    "NoSsr",
+    "OutlinedInput",
+    "OverridableComponent",
+    "Paper",
+    "PigmentContainer",
+    "PigmentGrid",
+    "PigmentStack",
+    "Popper",
+    "Portal",
+    "ScopedCssBaseline",
+    "Slide",
+    "SnackbarContent",
+    "SpeedDial",
+    "SpeedDialAction",
+    "SpeedDialIcon",
+    "Step",
+    "StepConnector",
+    "StepContent",
+    "StepIcon",
+    "StepLabel",
+    "SwipeableDrawer",
+    "TableBody",
+    "TableCell",
+    "TableContainer",
+    "TableFooter",
+    "TableHead",
+    "TablePagination",
+    "TablePaginationActions",
+    "TableRow",
+    "TableSortLabel",
+    "TextareaAutosize",
+    "Zoom",
+    "darkScrollbar",
+    "themeCssVarsAugmentation"
+   ]
+  },
+  "Fluent 2": {
+   "raw_count": 71,
+   "source": "fluentui/packages/react-components",
+   "canonical": {
+    "Accordion": [
+     "accordion"
+    ],
+    "Alert": [
+     "message-bar"
+    ],
+    "Avatar": [
+     "avatar",
+     "persona"
+    ],
+    "Badge": [
+     "badge"
+    ],
+    "Breadcrumbs": [
+     "breadcrumb"
+    ],
+    "Button": [
+     "button"
+    ],
+    "Card": [
+     "card"
+    ],
+    "Carousel": [
+     "carousel"
+    ],
+    "Checkbox": [
+     "checkbox"
+    ],
+    "ColorPicker": [
+     "color-picker"
+    ],
+    "Combobox": [
+     "combobox"
+    ],
+    "Dialog": [
+     "dialog"
+    ],
+    "Divider": [
+     "divider"
+    ],
+    "Drawer": [
+     "drawer"
+    ],
+    "Field": [
+     "field"
+    ],
+    "Label": [
+     "label"
+    ],
+    "Link": [
+     "link"
+    ],
+    "List": [
+     "list"
+    ],
+    "Menu": [
+     "menu"
+    ],
+    "Navigation": [
+     "nav"
+    ],
+    "Popover": [
+     "popover"
+    ],
+    "Progress": [
+     "progress"
+    ],
+    "Radio": [
+     "radio"
+    ],
+    "Rating": [
+     "rating"
+    ],
+    "SearchInput": [
+     "search"
+    ],
+    "Select": [
+     "select"
+    ],
+    "Skeleton": [
+     "skeleton"
+    ],
+    "Slider": [
+     "slider"
+    ],
+    "Spinner": [
+     "spinner"
+    ],
+    "Switch": [
+     "switch"
+    ],
+    "Table": [
+     "table"
+    ],
+    "Tabs": [
+     "tabs"
+    ],
+    "TextInput": [
+     "input"
+    ],
+    "Textarea": [
+     "textarea"
+    ],
+    "Toast": [
+     "toast"
+    ],
+    "Toolbar": [
+     "toolbar"
+    ],
+    "Tooltip": [
+     "tooltip"
+    ],
+    "Tree": [
+     "tree"
+    ],
+    "Typography": [
+     "text"
+    ]
+   },
+   "unmapped": [
+    "aria",
+    "calendar-compat",
+    "colorpicker-compat",
+    "components",
+    "conformance-griffel",
+    "context-selector",
+    "datepicker-compat",
+    "headless-components-preview",
+    "icons-compat",
+    "infolabel",
+    "jsx-runtime",
+    "menu-grid-preview",
+    "motion",
+    "motion-components-preview",
+    "overflow",
+    "portal",
+    "portal-compat",
+    "positioning",
+    "provider",
+    "spinbutton",
+    "storybook-addon",
+    "storybook-addon-export-to-sandbox",
+    "swatch-picker",
+    "tabster",
+    "tag-picker",
+    "tags",
+    "teaching-popover",
+    "theme-sass",
+    "timepicker-compat",
+    "utilities",
+    "utilities-compat"
+   ]
+  },
+  "Carbon": {
+   "raw_count": 124,
+   "source": "carbon/packages/react/src/components",
+   "canonical": {
+    "Accordion": [
+     "Accordion",
+     "Disclosure"
+    ],
+    "Alert": [
+     "Notification"
+    ],
+    "Badge": [
+     "Tag"
+    ],
+    "Breadcrumbs": [
+     "Breadcrumb"
+    ],
+    "Button": [
+     "Button",
+     "ChatButton",
+     "ComboButton",
+     "CopyButton",
+     "DangerButton",
+     "IconButton",
+     "MenuButton",
+     "PrimaryButton",
+     "RadioButton",
+     "SecondaryButton"
+    ],
+    "Card": [
+     "Tile"
+    ],
+    "Checkbox": [
+     "Checkbox"
+    ],
+    "Combobox": [
+     "ComboBox"
+    ],
+    "DatePicker": [
+     "DatePicker"
+    ],
+    "Dialog": [
+     "Dialog",
+     "Modal"
+    ],
+    "FileUpload": [
+     "FileUploader"
+    ],
+    "Form": [
+     "Form",
+     "FormGroup",
+     "FormItem"
+    ],
+    "Icon": [
+     "Icon",
+     "IconIndicator",
+     "Icons"
+    ],
+    "InlineCode": [
+     "CodeSnippet"
+    ],
+    "Label": [
+     "FormLabel"
+    ],
+    "Layout": [
+     "Grid",
+     "Stack"
+    ],
+    "Link": [
+     "Link"
+    ],
+    "List": [
+     "ListBox",
+     "ListItem",
+     "OrderedList",
+     "UnorderedList"
+    ],
+    "Menu": [
+     "ContextMenu",
+     "Menu",
+     "OverflowMenu"
+    ],
+    "Navigation": [
+     "Layout",
+     "UIShell"
+    ],
+    "NumberInput": [
+     "NumberInput"
+    ],
+    "Pagination": [
+     "Pagination",
+     "PaginationNav"
+    ],
+    "PasswordInput": [
+     "PasswordInput"
+    ],
+    "Popover": [
+     "Popover"
+    ],
+    "Progress": [
+     "ProgressBar"
+    ],
+    "SearchInput": [
+     "Search"
+    ],
+    "Select": [
+     "Dropdown",
+     "Select"
+    ],
+    "Skeleton": [
+     "SkeletonPlaceholder",
+     "SkeletonText"
+    ],
+    "Slider": [
+     "Slider"
+    ],
+    "Spinner": [
+     "Loading"
+    ],
+    "Stepper": [
+     "ProgressIndicator"
+    ],
+    "Switch": [
+     "Switch",
+     "Toggle"
+    ],
+    "Table": [
+     "DataTable"
+    ],
+    "Tabs": [
+     "Tab",
+     "Tabs"
+    ],
+    "TextInput": [
+     "TextInput"
+    ],
+    "Textarea": [
+     "TextArea"
+    ],
+    "TimePicker": [
+     "TimePicker"
+    ],
+    "Tooltip": [
+     "Tooltip"
+    ],
+    "Tooltip/Toggletip": [
+     "Toggletip"
+    ],
+    "Tree": [
+     "TreeView"
+    ],
+    "Typography": [
+     "Heading",
+     "Text"
+    ]
+   },
+   "unmapped": [
+    "AILabel",
+    "AISkeleton",
+    "AccordionItem",
+    "BadgeIndicator",
+    "BreadcrumbItem",
+    "ButtonSet",
+    "CheckboxGroup",
+    "ClassPrefix",
+    "ComposedModal",
+    "ContainedList",
+    "ContentSwitcher",
+    "Copy",
+    "DataTableSkeleton",
+    "DatePickerInput",
+    "ErrorBoundary",
+    "ExpandableSearch",
+    "FeatureFlags",
+    "FlexGrid",
+    "FluidComboBox",
+    "FluidDatePicker",
+    "FluidDatePickerInput",
+    "FluidDropdown",
+    "FluidForm",
+    "FluidMultiSelect",
+    "FluidNumberInput",
+    "FluidSearch",
+    "FluidSelect",
+    "FluidTextArea",
+    "FluidTextInput",
+    "FluidTimePicker",
+    "FluidTimePickerSelect",
+    "HideAtBreakpoint",
+    "IdPrefix",
+    "InlineCheckbox",
+    "InlineLoading",
+    "Layer",
+    "LayoutDirection",
+    "ModalWrapper",
+    "MultiSelect",
+    "OverflowMenuItem",
+    "OverflowMenuV2",
+    "PageHeader",
+    "Plex",
+    "Portal",
+    "RadioButtonGroup",
+    "RadioTile",
+    "SelectItem",
+    "SelectItemGroup",
+    "ShapeIndicator",
+    "SkeletonIcon",
+    "StructuredList",
+    "TabContent",
+    "TileGroup",
+    "TimePickerSelect",
+    "ToggleSmall"
+   ]
+  },
+  "Polaris": {
+   "raw_count": 111,
+   "source": "polaris/polaris-react/src/components",
+   "canonical": {
+    "Alert": [
+     "Banner",
+     "CalloutCard"
+    ],
+    "Avatar": [
+     "Avatar"
+    ],
+    "Badge": [
+     "Badge",
+     "Tag"
+    ],
+    "Breadcrumbs": [
+     "Breadcrumbs"
+    ],
+    "Button": [
+     "Button",
+     "CheckableButton",
+     "RadioButton",
+     "UnstyledButton"
+    ],
+    "ButtonGroup": [
+     "ButtonGroup"
+    ],
+    "Card": [
+     "Card"
+    ],
+    "Checkbox": [
+     "Checkbox"
+    ],
+    "ColorPicker": [
+     "ColorPicker"
+    ],
+    "Combobox": [
+     "Autocomplete",
+     "Combobox"
+    ],
+    "DatePicker": [
+     "DatePicker"
+    ],
+    "Dialog": [
+     "Modal"
+    ],
+    "Divider": [
+     "Divider"
+    ],
+    "Drawer": [
+     "Sheet"
+    ],
+    "Empty": [
+     "EmptySearchResult",
+     "EmptyState"
+    ],
+    "FileUpload": [
+     "DropZone"
+    ],
+    "Form": [
+     "Form",
+     "FormLayout"
+    ],
+    "Icon": [
+     "Icon"
+    ],
+    "Image": [
+     "Thumbnail"
+    ],
+    "Label": [
+     "Label"
+    ],
+    "Layout": [
+     "Box",
+     "Grid",
+     "Page"
+    ],
+    "Link": [
+     "Link"
+    ],
+    "List": [
+     "List",
+     "Listbox",
+     "ResourceList"
+    ],
+    "Menu": [
+     "ActionList",
+     "ActionMenu"
+    ],
+    "Navigation": [
+     "Layout",
+     "Navigation"
+    ],
+    "Pagination": [
+     "Pagination"
+    ],
+    "Popover": [
+     "Popover"
+    ],
+    "Progress": [
+     "ProgressBar"
+    ],
+    "Select": [
+     "Picker",
+     "Select"
+    ],
+    "Slider": [
+     "RangeSlider"
+    ],
+    "Spinner": [
+     "Loading",
+     "Spinner"
+    ],
+    "Table": [
+     "DataTable"
+    ],
+    "Tabs": [
+     "Tabs"
+    ],
+    "TextInput": [
+     "TextField"
+    ],
+    "Toast": [
+     "Toast"
+    ],
+    "Tooltip": [
+     "Tooltip"
+    ],
+    "Typography": [
+     "Text"
+    ]
+   },
+   "unmapped": [
+    "AccountConnection",
+    "AfterInitialMount",
+    "AppProvider",
+    "Backdrop",
+    "Bleed",
+    "BlockStack",
+    "BulkActions",
+    "Choice",
+    "ChoiceList",
+    "Collapsible",
+    "Connected",
+    "ContextualSaveBar",
+    "DescriptionList",
+    "EphemeralPresenceManager",
+    "EventListener",
+    "ExceptionList",
+    "FilterActionsProvider",
+    "Filters",
+    "FocusManager",
+    "FooterHelp",
+    "Frame",
+    "FullscreenBar",
+    "Indicator",
+    "InlineCode",
+    "InlineError",
+    "InlineGrid",
+    "InlineStack",
+    "KeyboardKey",
+    "KeypressListener",
+    "Labelled",
+    "MediaCard",
+    "MediaQueryProvider",
+    "MessageIndicator",
+    "OptionList",
+    "PageActions",
+    "Portal",
+    "PortalsManager",
+    "PositionedOverlay",
+    "ResourceItem",
+    "ScrollLock",
+    "Scrollable",
+    "SelectAllActions",
+    "SettingAction",
+    "SettingToggle",
+    "ShadowBevel",
+    "SkeletonBodyText",
+    "SkeletonDisplayText",
+    "SkeletonPage",
+    "SkeletonTabs",
+    "SkeletonThumbnail",
+    "Sticky",
+    "TextContainer",
+    "ThemeProvider",
+    "TopBar",
+    "TrapFocus",
+    "Truncate",
+    "UnstyledLink",
+    "VideoThumbnail"
+   ]
+  },
+  "shadcn/ui": {
+   "raw_count": 60,
+   "source": "shadcn-ui/apps/v4/registry/new-york-v4/ui",
+   "canonical": {
+    "Accordion": [
+     "accordion"
+    ],
+    "Alert": [
+     "alert",
+     "message"
+    ],
+    "Avatar": [
+     "avatar"
+    ],
+    "Badge": [
+     "badge"
+    ],
+    "Breadcrumbs": [
+     "breadcrumb"
+    ],
+    "Button": [
+     "button"
+    ],
+    "ButtonGroup": [
+     "button-group"
+    ],
+    "Card": [
+     "card"
+    ],
+    "Carousel": [
+     "carousel"
+    ],
+    "Chart": [
+     "chart"
+    ],
+    "Checkbox": [
+     "checkbox"
+    ],
+    "Combobox": [
+     "combobox"
+    ],
+    "Command": [
+     "command"
+    ],
+    "DatePicker": [
+     "calendar"
+    ],
+    "Dialog": [
+     "alert-dialog",
+     "dialog"
+    ],
+    "Divider": [
+     "separator"
+    ],
+    "Drawer": [
+     "drawer",
+     "sheet"
+    ],
+    "Empty": [
+     "empty"
+    ],
+    "Field": [
+     "field"
+    ],
+    "Form": [
+     "form"
+    ],
+    "InlineCode": [
+     "kbd"
+    ],
+    "Label": [
+     "label"
+    ],
+    "Menu": [
+     "context-menu",
+     "dropdown-menu"
+    ],
+    "Navigation": [
+     "menubar"
+    ],
+    "Pagination": [
+     "pagination"
+    ],
+    "Popover": [
+     "popover"
+    ],
+    "Progress": [
+     "progress"
+    ],
+    "Radio": [
+     "radio-group"
+    ],
+    "Resizable": [
+     "resizable"
+    ],
+    "Scroll": [
+     "scroll-area"
+    ],
+    "Select": [
+     "native-select",
+     "select"
+    ],
+    "Skeleton": [
+     "skeleton"
+    ],
+    "Slider": [
+     "slider"
+    ],
+    "Spinner": [
+     "spinner"
+    ],
+    "Switch": [
+     "switch",
+     "toggle"
+    ],
+    "Table": [
+     "table"
+    ],
+    "Tabs": [
+     "tabs"
+    ],
+    "TextInput": [
+     "input"
+    ],
+    "Textarea": [
+     "textarea"
+    ],
+    "Tooltip": [
+     "tooltip"
+    ]
+   },
+   "unmapped": [
+    "attachment",
+    "bubble",
+    "collapsible",
+    "direction",
+    "hover-card",
+    "input-group",
+    "input-otp",
+    "item",
+    "marker",
+    "message-scroller",
+    "navigation-menu",
+    "sidebar",
+    "sonner",
+    "toggle-group"
+   ]
+  },
+  "Ant Design": {
+   "raw_count": 75,
+   "source": "ant-design/components",
+   "canonical": {
+    "Accordion": [
+     "collapse"
+    ],
+    "Alert": [
+     "alert",
+     "message",
+     "notification"
+    ],
+    "Avatar": [
+     "avatar"
+    ],
+    "Badge": [
+     "badge",
+     "tag"
+    ],
+    "Breadcrumbs": [
+     "breadcrumb"
+    ],
+    "Button": [
+     "button",
+     "float-button"
+    ],
+    "ButtonGroup": [
+     "segmented"
+    ],
+    "Card": [
+     "card"
+    ],
+    "Carousel": [
+     "carousel"
+    ],
+    "Checkbox": [
+     "checkbox"
+    ],
+    "ColorPicker": [
+     "color-picker"
+    ],
+    "Combobox": [
+     "auto-complete"
+    ],
+    "DatePicker": [
+     "calendar",
+     "date-picker"
+    ],
+    "Dialog": [
+     "modal"
+    ],
+    "Divider": [
+     "divider"
+    ],
+    "Drawer": [
+     "drawer"
+    ],
+    "Empty": [
+     "empty"
+    ],
+    "FileUpload": [
+     "upload"
+    ],
+    "Form": [
+     "form"
+    ],
+    "Icon": [
+     "icon"
+    ],
+    "Layout": [
+     "col",
+     "flex",
+     "grid",
+     "row",
+     "space"
+    ],
+    "Link": [
+     "anchor"
+    ],
+    "List": [
+     "list"
+    ],
+    "Menu": [
+     "menu"
+    ],
+    "Navigation": [
+     "layout"
+    ],
+    "NumberInput": [
+     "input-number"
+    ],
+    "Pagination": [
+     "pagination"
+    ],
+    "Popover": [
+     "popover"
+    ],
+    "Progress": [
+     "progress"
+    ],
+    "Radio": [
+     "radio"
+    ],
+    "Rating": [
+     "rate"
+    ],
+    "Resizable": [
+     "splitter"
+    ],
+    "Select": [
+     "dropdown",
+     "select"
+    ],
+    "Skeleton": [
+     "skeleton"
+    ],
+    "Slider": [
+     "slider"
+    ],
+    "Stepper": [
+     "steps"
+    ],
+    "Switch": [
+     "switch"
+    ],
+    "Table": [
+     "table"
+    ],
+    "Tabs": [
+     "tabs"
+    ],
+    "TextInput": [
+     "input"
+    ],
+    "TimePicker": [
+     "time-picker"
+    ],
+    "Tooltip": [
+     "tooltip"
+    ],
+    "Tree": [
+     "tree",
+     "tree-select"
+    ],
+    "Typography": [
+     "typography"
+    ]
+   },
+   "unmapped": [
+    "affix",
+    "app",
+    "back-top",
+    "border-beam",
+    "cascader",
+    "config-provider",
+    "descriptions",
+    "masonry",
+    "mentions",
+    "overview",
+    "popconfirm",
+    "qr-code",
+    "qrcode",
+    "result",
+    "spin",
+    "statistic",
+    "timeline",
+    "tour",
+    "transfer",
+    "watermark"
+   ]
+  }
+ },
+ "coverage": [
+  {
+   "component": "Button",
+   "coverage": 8,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [],
+   "aliases": {
+    "Spectrum": [
+     "button"
+    ],
+    "Material Web": [
+     "button"
+    ],
+    "MUI": [
+     "Button",
+     "IconButton",
+     "ListItemButton",
+     "StepButton",
+     "TabScrollButton",
+     "ToggleButton"
+    ],
+    "Fluent 2": [
+     "button"
+    ],
+    "Carbon": [
+     "Button",
+     "ChatButton",
+     "ComboButton",
+     "CopyButton",
+     "DangerButton",
+     "IconButton",
+     "MenuButton",
+     "PrimaryButton",
+     "RadioButton",
+     "SecondaryButton"
+    ],
+    "Polaris": [
+     "Button",
+     "CheckableButton",
+     "RadioButton",
+     "UnstyledButton"
+    ],
+    "shadcn/ui": [
+     "button"
+    ],
+    "Ant Design": [
+     "button",
+     "float-button"
+    ]
+   }
+  },
+  {
+   "component": "Checkbox",
+   "coverage": 8,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [],
+   "aliases": {
+    "Spectrum": [
+     "checkbox"
+    ],
+    "Material Web": [
+     "checkbox"
+    ],
+    "MUI": [
+     "Checkbox"
+    ],
+    "Fluent 2": [
+     "checkbox"
+    ],
+    "Carbon": [
+     "Checkbox"
+    ],
+    "Polaris": [
+     "Checkbox"
+    ],
+    "shadcn/ui": [
+     "checkbox"
+    ],
+    "Ant Design": [
+     "checkbox"
+    ]
+   }
+  },
+  {
+   "component": "Dialog",
+   "coverage": 8,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [],
+   "aliases": {
+    "Spectrum": [
+     "dialog"
+    ],
+    "Material Web": [
+     "dialog"
+    ],
+    "MUI": [
+     "Dialog",
+     "Modal"
+    ],
+    "Fluent 2": [
+     "dialog"
+    ],
+    "Carbon": [
+     "Dialog",
+     "Modal"
+    ],
+    "Polaris": [
+     "Modal"
+    ],
+    "shadcn/ui": [
+     "alert-dialog",
+     "dialog"
+    ],
+    "Ant Design": [
+     "modal"
+    ]
+   }
+  },
+  {
+   "component": "Menu",
+   "coverage": 8,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [],
+   "aliases": {
+    "Spectrum": [
+     "menu"
+    ],
+    "Material Web": [
+     "menu"
+    ],
+    "MUI": [
+     "Menu"
+    ],
+    "Fluent 2": [
+     "menu"
+    ],
+    "Carbon": [
+     "ContextMenu",
+     "Menu",
+     "OverflowMenu"
+    ],
+    "Polaris": [
+     "ActionList",
+     "ActionMenu"
+    ],
+    "shadcn/ui": [
+     "context-menu",
+     "dropdown-menu"
+    ],
+    "Ant Design": [
+     "menu"
+    ]
+   }
+  },
+  {
+   "component": "Progress",
+   "coverage": 8,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [],
+   "aliases": {
+    "Spectrum": [
+     "meter",
+     "progress"
+    ],
+    "Material Web": [
+     "progress"
+    ],
+    "MUI": [
+     "CircularProgress",
+     "LinearProgress"
+    ],
+    "Fluent 2": [
+     "progress"
+    ],
+    "Carbon": [
+     "ProgressBar"
+    ],
+    "Polaris": [
+     "ProgressBar"
+    ],
+    "shadcn/ui": [
+     "progress"
+    ],
+    "Ant Design": [
+     "progress"
+    ]
+   }
+  },
+  {
+   "component": "Select",
+   "coverage": 8,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [],
+   "aliases": {
+    "Spectrum": [
+     "picker"
+    ],
+    "Material Web": [
+     "select"
+    ],
+    "MUI": [
+     "NativeSelect",
+     "Select"
+    ],
+    "Fluent 2": [
+     "select"
+    ],
+    "Carbon": [
+     "Dropdown",
+     "Select"
+    ],
+    "Polaris": [
+     "Picker",
+     "Select"
+    ],
+    "shadcn/ui": [
+     "native-select",
+     "select"
+    ],
+    "Ant Design": [
+     "dropdown",
+     "select"
+    ]
+   }
+  },
+  {
+   "component": "Slider",
+   "coverage": 8,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [],
+   "aliases": {
+    "Spectrum": [
+     "slider"
+    ],
+    "Material Web": [
+     "slider"
+    ],
+    "MUI": [
+     "Slider"
+    ],
+    "Fluent 2": [
+     "slider"
+    ],
+    "Carbon": [
+     "Slider"
+    ],
+    "Polaris": [
+     "RangeSlider"
+    ],
+    "shadcn/ui": [
+     "slider"
+    ],
+    "Ant Design": [
+     "slider"
+    ]
+   }
+  },
+  {
+   "component": "Tabs",
+   "coverage": 8,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [],
+   "aliases": {
+    "Spectrum": [
+     "tabs"
+    ],
+    "Material Web": [
+     "tabs"
+    ],
+    "MUI": [
+     "Tab",
+     "Tabs"
+    ],
+    "Fluent 2": [
+     "tabs"
+    ],
+    "Carbon": [
+     "Tab",
+     "Tabs"
+    ],
+    "Polaris": [
+     "Tabs"
+    ],
+    "shadcn/ui": [
+     "tabs"
+    ],
+    "Ant Design": [
+     "tabs"
+    ]
+   }
+  },
+  {
+   "component": "TextInput",
+   "coverage": 8,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [],
+   "aliases": {
+    "Spectrum": [
+     "textfield"
+    ],
+    "Material Web": [
+     "textfield"
+    ],
+    "MUI": [
+     "Input",
+     "TextField"
+    ],
+    "Fluent 2": [
+     "input"
+    ],
+    "Carbon": [
+     "TextInput"
+    ],
+    "Polaris": [
+     "TextField"
+    ],
+    "shadcn/ui": [
+     "input"
+    ],
+    "Ant Design": [
+     "input"
+    ]
+   }
+  },
+  {
+   "component": "Alert",
+   "coverage": 7,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "inlinealert"
+    ],
+    "MUI": [
+     "Alert"
+    ],
+    "Fluent 2": [
+     "message-bar"
+    ],
+    "Carbon": [
+     "Notification"
+    ],
+    "Polaris": [
+     "Banner",
+     "CalloutCard"
+    ],
+    "shadcn/ui": [
+     "alert",
+     "message"
+    ],
+    "Ant Design": [
+     "alert",
+     "message",
+     "notification"
+    ]
+   }
+  },
+  {
+   "component": "Badge",
+   "coverage": 7,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "badge",
+     "tag"
+    ],
+    "MUI": [
+     "Badge",
+     "Chip"
+    ],
+    "Fluent 2": [
+     "badge"
+    ],
+    "Carbon": [
+     "Tag"
+    ],
+    "Polaris": [
+     "Badge",
+     "Tag"
+    ],
+    "shadcn/ui": [
+     "badge"
+    ],
+    "Ant Design": [
+     "badge",
+     "tag"
+    ]
+   }
+  },
+  {
+   "component": "Breadcrumbs",
+   "coverage": 7,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "breadcrumbs"
+    ],
+    "MUI": [
+     "Breadcrumbs"
+    ],
+    "Fluent 2": [
+     "breadcrumb"
+    ],
+    "Carbon": [
+     "Breadcrumb"
+    ],
+    "Polaris": [
+     "Breadcrumbs"
+    ],
+    "shadcn/ui": [
+     "breadcrumb"
+    ],
+    "Ant Design": [
+     "breadcrumb"
+    ]
+   }
+  },
+  {
+   "component": "Card",
+   "coverage": 7,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "card"
+    ],
+    "MUI": [
+     "Card"
+    ],
+    "Fluent 2": [
+     "card"
+    ],
+    "Carbon": [
+     "Tile"
+    ],
+    "Polaris": [
+     "Card"
+    ],
+    "shadcn/ui": [
+     "card"
+    ],
+    "Ant Design": [
+     "card"
+    ]
+   }
+  },
+  {
+   "component": "Combobox",
+   "coverage": 7,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "autocomplete",
+     "combobox"
+    ],
+    "MUI": [
+     "Autocomplete"
+    ],
+    "Fluent 2": [
+     "combobox"
+    ],
+    "Carbon": [
+     "ComboBox"
+    ],
+    "Polaris": [
+     "Autocomplete",
+     "Combobox"
+    ],
+    "shadcn/ui": [
+     "combobox"
+    ],
+    "Ant Design": [
+     "auto-complete"
+    ]
+   }
+  },
+  {
+   "component": "Divider",
+   "coverage": 7,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Carbon"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "divider"
+    ],
+    "Material Web": [
+     "divider"
+    ],
+    "MUI": [
+     "Divider"
+    ],
+    "Fluent 2": [
+     "divider"
+    ],
+    "Polaris": [
+     "Divider"
+    ],
+    "shadcn/ui": [
+     "separator"
+    ],
+    "Ant Design": [
+     "divider"
+    ]
+   }
+  },
+  {
+   "component": "List",
+   "coverage": 7,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "Ant Design"
+   ],
+   "missing": [
+    "shadcn/ui"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "list",
+     "listbox"
+    ],
+    "Material Web": [
+     "list"
+    ],
+    "MUI": [
+     "List",
+     "ListItem"
+    ],
+    "Fluent 2": [
+     "list"
+    ],
+    "Carbon": [
+     "ListBox",
+     "ListItem",
+     "OrderedList",
+     "UnorderedList"
+    ],
+    "Polaris": [
+     "List",
+     "Listbox",
+     "ResourceList"
+    ],
+    "Ant Design": [
+     "list"
+    ]
+   }
+  },
+  {
+   "component": "Navigation",
+   "coverage": 7,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "layout"
+    ],
+    "MUI": [
+     "AppBar"
+    ],
+    "Fluent 2": [
+     "nav"
+    ],
+    "Carbon": [
+     "Layout",
+     "UIShell"
+    ],
+    "Polaris": [
+     "Layout",
+     "Navigation"
+    ],
+    "shadcn/ui": [
+     "menubar"
+    ],
+    "Ant Design": [
+     "layout"
+    ]
+   }
+  },
+  {
+   "component": "Switch",
+   "coverage": 7,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Polaris"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "switch"
+    ],
+    "Material Web": [
+     "switch"
+    ],
+    "MUI": [
+     "Switch"
+    ],
+    "Fluent 2": [
+     "switch"
+    ],
+    "Carbon": [
+     "Switch",
+     "Toggle"
+    ],
+    "shadcn/ui": [
+     "switch",
+     "toggle"
+    ],
+    "Ant Design": [
+     "switch"
+    ]
+   }
+  },
+  {
+   "component": "Table",
+   "coverage": 7,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "table"
+    ],
+    "MUI": [
+     "Table"
+    ],
+    "Fluent 2": [
+     "table"
+    ],
+    "Carbon": [
+     "DataTable"
+    ],
+    "Polaris": [
+     "DataTable"
+    ],
+    "shadcn/ui": [
+     "table"
+    ],
+    "Ant Design": [
+     "table"
+    ]
+   }
+  },
+  {
+   "component": "Tooltip",
+   "coverage": 7,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "tooltip"
+    ],
+    "MUI": [
+     "Tooltip"
+    ],
+    "Fluent 2": [
+     "tooltip"
+    ],
+    "Carbon": [
+     "Tooltip"
+    ],
+    "Polaris": [
+     "Tooltip"
+    ],
+    "shadcn/ui": [
+     "tooltip"
+    ],
+    "Ant Design": [
+     "tooltip"
+    ]
+   }
+  },
+  {
+   "component": "Typography",
+   "coverage": 7,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "Ant Design"
+   ],
+   "missing": [
+    "shadcn/ui"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "text"
+    ],
+    "Material Web": [
+     "typography"
+    ],
+    "MUI": [
+     "Typography"
+    ],
+    "Fluent 2": [
+     "text"
+    ],
+    "Carbon": [
+     "Heading",
+     "Text"
+    ],
+    "Polaris": [
+     "Text"
+    ],
+    "Ant Design": [
+     "typography"
+    ]
+   }
+  },
+  {
+   "component": "Accordion",
+   "coverage": 6,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web",
+    "Polaris"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "accordion"
+    ],
+    "MUI": [
+     "Accordion",
+     "Collapse"
+    ],
+    "Fluent 2": [
+     "accordion"
+    ],
+    "Carbon": [
+     "Accordion",
+     "Disclosure"
+    ],
+    "shadcn/ui": [
+     "accordion"
+    ],
+    "Ant Design": [
+     "collapse"
+    ]
+   }
+  },
+  {
+   "component": "Avatar",
+   "coverage": 6,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web",
+    "Carbon"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "avatar"
+    ],
+    "MUI": [
+     "Avatar",
+     "AvatarGroup"
+    ],
+    "Fluent 2": [
+     "avatar",
+     "persona"
+    ],
+    "Polaris": [
+     "Avatar"
+    ],
+    "shadcn/ui": [
+     "avatar"
+    ],
+    "Ant Design": [
+     "avatar"
+    ]
+   }
+  },
+  {
+   "component": "Form",
+   "coverage": 6,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web",
+    "Fluent 2"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "form"
+    ],
+    "MUI": [
+     "FormGroup"
+    ],
+    "Carbon": [
+     "Form",
+     "FormGroup",
+     "FormItem"
+    ],
+    "Polaris": [
+     "Form",
+     "FormLayout"
+    ],
+    "shadcn/ui": [
+     "form"
+    ],
+    "Ant Design": [
+     "form"
+    ]
+   }
+  },
+  {
+   "component": "Icon",
+   "coverage": 6,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Carbon",
+    "Polaris",
+    "Ant Design"
+   ],
+   "missing": [
+    "Fluent 2",
+    "shadcn/ui"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "icon"
+    ],
+    "Material Web": [
+     "icon"
+    ],
+    "MUI": [
+     "Icon",
+     "SvgIcon"
+    ],
+    "Carbon": [
+     "Icon",
+     "IconIndicator",
+     "Icons"
+    ],
+    "Polaris": [
+     "Icon"
+    ],
+    "Ant Design": [
+     "icon"
+    ]
+   }
+  },
+  {
+   "component": "Label",
+   "coverage": 6,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui"
+   ],
+   "missing": [
+    "Material Web",
+    "Ant Design"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "label"
+    ],
+    "MUI": [
+     "FormLabel"
+    ],
+    "Fluent 2": [
+     "label"
+    ],
+    "Carbon": [
+     "FormLabel"
+    ],
+    "Polaris": [
+     "Label"
+    ],
+    "shadcn/ui": [
+     "label"
+    ]
+   }
+  },
+  {
+   "component": "Link",
+   "coverage": 6,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web",
+    "shadcn/ui"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "link"
+    ],
+    "MUI": [
+     "Link"
+    ],
+    "Fluent 2": [
+     "link"
+    ],
+    "Carbon": [
+     "Link"
+    ],
+    "Polaris": [
+     "Link"
+    ],
+    "Ant Design": [
+     "anchor"
+    ]
+   }
+  },
+  {
+   "component": "Popover",
+   "coverage": 6,
+   "systems": [
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web"
+   ],
+   "aliases": {
+    "MUI": [
+     "Popover"
+    ],
+    "Fluent 2": [
+     "popover"
+    ],
+    "Carbon": [
+     "Popover"
+    ],
+    "Polaris": [
+     "Popover"
+    ],
+    "shadcn/ui": [
+     "popover"
+    ],
+    "Ant Design": [
+     "popover"
+    ]
+   }
+  },
+  {
+   "component": "Radio",
+   "coverage": 6,
+   "systems": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Carbon",
+    "Polaris"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "radio"
+    ],
+    "Material Web": [
+     "radio"
+    ],
+    "MUI": [
+     "Radio",
+     "RadioGroup"
+    ],
+    "Fluent 2": [
+     "radio"
+    ],
+    "shadcn/ui": [
+     "radio-group"
+    ],
+    "Ant Design": [
+     "radio"
+    ]
+   }
+  },
+  {
+   "component": "ButtonGroup",
+   "coverage": 5,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web",
+    "Fluent 2",
+    "Carbon"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "actiongroup",
+     "buttongroup"
+    ],
+    "MUI": [
+     "ButtonGroup",
+     "ToggleButtonGroup"
+    ],
+    "Polaris": [
+     "ButtonGroup"
+    ],
+    "shadcn/ui": [
+     "button-group"
+    ],
+    "Ant Design": [
+     "segmented"
+    ]
+   }
+  },
+  {
+   "component": "DatePicker",
+   "coverage": 5,
+   "systems": [
+    "Spectrum",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web",
+    "MUI",
+    "Fluent 2"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "calendar",
+     "datepicker"
+    ],
+    "Carbon": [
+     "DatePicker"
+    ],
+    "Polaris": [
+     "DatePicker"
+    ],
+    "shadcn/ui": [
+     "calendar"
+    ],
+    "Ant Design": [
+     "calendar",
+     "date-picker"
+    ]
+   }
+  },
+  {
+   "component": "Drawer",
+   "coverage": 5,
+   "systems": [
+    "MUI",
+    "Fluent 2",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "Carbon"
+   ],
+   "aliases": {
+    "MUI": [
+     "Drawer"
+    ],
+    "Fluent 2": [
+     "drawer"
+    ],
+    "Polaris": [
+     "Sheet"
+    ],
+    "shadcn/ui": [
+     "drawer",
+     "sheet"
+    ],
+    "Ant Design": [
+     "drawer"
+    ]
+   }
+  },
+  {
+   "component": "Layout",
+   "coverage": 5,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Carbon",
+    "Polaris",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web",
+    "Fluent 2",
+    "shadcn/ui"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "view"
+    ],
+    "MUI": [
+     "Box",
+     "Container",
+     "Grid",
+     "Stack"
+    ],
+    "Carbon": [
+     "Grid",
+     "Stack"
+    ],
+    "Polaris": [
+     "Box",
+     "Grid",
+     "Page"
+    ],
+    "Ant Design": [
+     "col",
+     "flex",
+     "grid",
+     "row",
+     "space"
+    ]
+   }
+  },
+  {
+   "component": "Pagination",
+   "coverage": 5,
+   "systems": [
+    "MUI",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "Fluent 2"
+   ],
+   "aliases": {
+    "MUI": [
+     "Pagination",
+     "PaginationItem"
+    ],
+    "Carbon": [
+     "Pagination",
+     "PaginationNav"
+    ],
+    "Polaris": [
+     "Pagination"
+    ],
+    "shadcn/ui": [
+     "pagination"
+    ],
+    "Ant Design": [
+     "pagination"
+    ]
+   }
+  },
+  {
+   "component": "Skeleton",
+   "coverage": 5,
+   "systems": [
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "Polaris"
+   ],
+   "aliases": {
+    "MUI": [
+     "Skeleton"
+    ],
+    "Fluent 2": [
+     "skeleton"
+    ],
+    "Carbon": [
+     "SkeletonPlaceholder",
+     "SkeletonText"
+    ],
+    "shadcn/ui": [
+     "skeleton"
+    ],
+    "Ant Design": [
+     "skeleton"
+    ]
+   }
+  },
+  {
+   "component": "Field",
+   "coverage": 4,
+   "systems": [
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "shadcn/ui"
+   ],
+   "missing": [
+    "Spectrum",
+    "Carbon",
+    "Polaris",
+    "Ant Design"
+   ],
+   "aliases": {
+    "Material Web": [
+     "field"
+    ],
+    "MUI": [
+     "FormControl"
+    ],
+    "Fluent 2": [
+     "field"
+    ],
+    "shadcn/ui": [
+     "field"
+    ]
+   }
+  },
+  {
+   "component": "FileUpload",
+   "coverage": 4,
+   "systems": [
+    "Spectrum",
+    "Carbon",
+    "Polaris",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "shadcn/ui"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "dropzone"
+    ],
+    "Carbon": [
+     "FileUploader"
+    ],
+    "Polaris": [
+     "DropZone"
+    ],
+    "Ant Design": [
+     "upload"
+    ]
+   }
+  },
+  {
+   "component": "Spinner",
+   "coverage": 4,
+   "systems": [
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Ant Design"
+   ],
+   "aliases": {
+    "Fluent 2": [
+     "spinner"
+    ],
+    "Carbon": [
+     "Loading"
+    ],
+    "Polaris": [
+     "Loading",
+     "Spinner"
+    ],
+    "shadcn/ui": [
+     "spinner"
+    ]
+   }
+  },
+  {
+   "component": "Toast",
+   "coverage": 4,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Polaris"
+   ],
+   "missing": [
+    "Material Web",
+    "Carbon",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "toast"
+    ],
+    "MUI": [
+     "Snackbar"
+    ],
+    "Fluent 2": [
+     "toast"
+    ],
+    "Polaris": [
+     "Toast"
+    ]
+   }
+  },
+  {
+   "component": "Tree",
+   "coverage": 4,
+   "systems": [
+    "Spectrum",
+    "Fluent 2",
+    "Carbon",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web",
+    "MUI",
+    "Polaris",
+    "shadcn/ui"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "tree"
+    ],
+    "Fluent 2": [
+     "tree"
+    ],
+    "Carbon": [
+     "TreeView"
+    ],
+    "Ant Design": [
+     "tree",
+     "tree-select"
+    ]
+   }
+  },
+  {
+   "component": "Carousel",
+   "coverage": 3,
+   "systems": [
+    "Fluent 2",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Carbon",
+    "Polaris"
+   ],
+   "aliases": {
+    "Fluent 2": [
+     "carousel"
+    ],
+    "shadcn/ui": [
+     "carousel"
+    ],
+    "Ant Design": [
+     "carousel"
+    ]
+   }
+  },
+  {
+   "component": "ColorPicker",
+   "coverage": 3,
+   "systems": [
+    "Fluent 2",
+    "Polaris",
+    "Ant Design"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Carbon",
+    "shadcn/ui"
+   ],
+   "aliases": {
+    "Fluent 2": [
+     "color-picker"
+    ],
+    "Polaris": [
+     "ColorPicker"
+    ],
+    "Ant Design": [
+     "color-picker"
+    ]
+   }
+  },
+  {
+   "component": "Empty",
+   "coverage": 3,
+   "systems": [
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon"
+   ],
+   "aliases": {
+    "Polaris": [
+     "EmptySearchResult",
+     "EmptyState"
+    ],
+    "shadcn/ui": [
+     "empty"
+    ],
+    "Ant Design": [
+     "empty"
+    ]
+   }
+  },
+  {
+   "component": "NumberInput",
+   "coverage": 3,
+   "systems": [
+    "Spectrum",
+    "Carbon",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Polaris",
+    "shadcn/ui"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "numberfield"
+    ],
+    "Carbon": [
+     "NumberInput"
+    ],
+    "Ant Design": [
+     "input-number"
+    ]
+   }
+  },
+  {
+   "component": "Rating",
+   "coverage": 3,
+   "systems": [
+    "MUI",
+    "Fluent 2",
+    "Ant Design"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui"
+   ],
+   "aliases": {
+    "MUI": [
+     "Rating"
+    ],
+    "Fluent 2": [
+     "rating"
+    ],
+    "Ant Design": [
+     "rate"
+    ]
+   }
+  },
+  {
+   "component": "SearchInput",
+   "coverage": 3,
+   "systems": [
+    "Spectrum",
+    "Fluent 2",
+    "Carbon"
+   ],
+   "missing": [
+    "Material Web",
+    "MUI",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "searchfield"
+    ],
+    "Fluent 2": [
+     "search"
+    ],
+    "Carbon": [
+     "Search"
+    ]
+   }
+  },
+  {
+   "component": "Stepper",
+   "coverage": 3,
+   "systems": [
+    "MUI",
+    "Carbon",
+    "Ant Design"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "Fluent 2",
+    "Polaris",
+    "shadcn/ui"
+   ],
+   "aliases": {
+    "MUI": [
+     "Stepper"
+    ],
+    "Carbon": [
+     "ProgressIndicator"
+    ],
+    "Ant Design": [
+     "steps"
+    ]
+   }
+  },
+  {
+   "component": "Textarea",
+   "coverage": 3,
+   "systems": [
+    "Fluent 2",
+    "Carbon",
+    "shadcn/ui"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Polaris",
+    "Ant Design"
+   ],
+   "aliases": {
+    "Fluent 2": [
+     "textarea"
+    ],
+    "Carbon": [
+     "TextArea"
+    ],
+    "shadcn/ui": [
+     "textarea"
+    ]
+   }
+  },
+  {
+   "component": "Toolbar",
+   "coverage": 3,
+   "systems": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2"
+   ],
+   "missing": [
+    "Material Web",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "actionbar"
+    ],
+    "MUI": [
+     "Toolbar"
+    ],
+    "Fluent 2": [
+     "toolbar"
+    ]
+   }
+  },
+  {
+   "component": "InlineCode",
+   "coverage": 2,
+   "systems": [
+    "Carbon",
+    "shadcn/ui"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Polaris",
+    "Ant Design"
+   ],
+   "aliases": {
+    "Carbon": [
+     "CodeSnippet"
+    ],
+    "shadcn/ui": [
+     "kbd"
+    ]
+   }
+  },
+  {
+   "component": "Resizable",
+   "coverage": 2,
+   "systems": [
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris"
+   ],
+   "aliases": {
+    "shadcn/ui": [
+     "resizable"
+    ],
+    "Ant Design": [
+     "splitter"
+    ]
+   }
+  },
+  {
+   "component": "TimePicker",
+   "coverage": 2,
+   "systems": [
+    "Carbon",
+    "Ant Design"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Polaris",
+    "shadcn/ui"
+   ],
+   "aliases": {
+    "Carbon": [
+     "TimePicker"
+    ],
+    "Ant Design": [
+     "time-picker"
+    ]
+   }
+  },
+  {
+   "component": "Tooltip/Toggletip",
+   "coverage": 2,
+   "systems": [
+    "Spectrum",
+    "Carbon"
+   ],
+   "missing": [
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "contextualhelp"
+    ],
+    "Carbon": [
+     "Toggletip"
+    ]
+   }
+  },
+  {
+   "component": "Chart",
+   "coverage": 1,
+   "systems": [
+    "shadcn/ui"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "Ant Design"
+   ],
+   "aliases": {
+    "shadcn/ui": [
+     "chart"
+    ]
+   }
+  },
+  {
+   "component": "Command",
+   "coverage": 1,
+   "systems": [
+    "shadcn/ui"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "Ant Design"
+   ],
+   "aliases": {
+    "shadcn/ui": [
+     "command"
+    ]
+   }
+  },
+  {
+   "component": "IconButton",
+   "coverage": 1,
+   "systems": [
+    "Material Web"
+   ],
+   "missing": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "aliases": {
+    "Material Web": [
+     "iconbutton"
+    ]
+   }
+  },
+  {
+   "component": "Image",
+   "coverage": 1,
+   "systems": [
+    "Polaris"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "aliases": {
+    "Polaris": [
+     "Thumbnail"
+    ]
+   }
+  },
+  {
+   "component": "PasswordInput",
+   "coverage": 1,
+   "systems": [
+    "Carbon"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "aliases": {
+    "Carbon": [
+     "PasswordInput"
+    ]
+   }
+  },
+  {
+   "component": "Scroll",
+   "coverage": 1,
+   "systems": [
+    "shadcn/ui"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "Ant Design"
+   ],
+   "aliases": {
+    "shadcn/ui": [
+     "scroll-area"
+    ]
+   }
+  },
+  {
+   "component": "Tag/TokenInput",
+   "coverage": 1,
+   "systems": [
+    "Material Web"
+   ],
+   "missing": [
+    "Spectrum",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "aliases": {
+    "Material Web": [
+     "chips"
+    ]
+   }
+  },
+  {
+   "component": "Calendar",
+   "coverage": 0,
+   "systems": [],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "aliases": {}
+  },
+  {
+   "component": "ToggleButton",
+   "coverage": 0,
+   "systems": [],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "aliases": {}
+  }
+ ],
+ "figma_variant_axes": {
+  "Carbon": {
+   "component_sets": 177,
+   "variants_total": 4211,
+   "variants_median": 10,
+   "variants_max": 420,
+   "variants_per_set": 23.8,
+   "variant_buckets": {
+    "1-4": 55,
+    "5-12": 51,
+    "13-32": 42,
+    "33-96": 18,
+    "97+": 11
+   },
+   "axes_per_set": 2.39,
+   "top_exploded": [
+    {
+     "name": "Button",
+     "variants": 420,
+     "axes": 4
+    },
+    {
+     "name": "Tag - Operational",
+     "variants": 150,
+     "axes": 3
+    },
+    {
+     "name": "Password input - Default",
+     "variants": 148,
+     "axes": 5
+    },
+    {
+     "name": "_Content switcher text item",
+     "variants": 144,
+     "axes": 5
+    },
+    {
+     "name": "_Content switcher icon item",
+     "variants": 144,
+     "axes": 5
+    },
+    {
+     "name": "_Tag close button",
+     "variants": 144,
+     "axes": 3
+    },
+    {
+     "name": "Dropdown - Default",
+     "variants": 136,
+     "axes": 5
+    },
+    {
+     "name": "Dropdown - Multi-select - Default",
+     "variants": 136,
+     "axes": 5
+    }
+   ],
+   "axes": {
+    "state": {
+     "used_in": 103,
+     "pct": 58.2,
+     "values": [
+      "Active",
+      "Active + Copied",
+      "Active + Error",
+      "Active + Open",
+      "Active + Tooltip",
+      "Active + Warning",
+      "Complete",
+      "Completed",
+      "Current",
+      "Danger hover",
+      "Danger hover + Focus",
+      "Day in range",
+      "Disabled",
+      "Editing",
+      "Enabled",
+      "Enabled (expanded)",
+      "End range hover",
+      "Error",
+      "Error long",
+      "Error short"
+     ]
+    },
+    "size": {
+     "used_in": 80,
+     "pct": 45.2,
+     "values": [
+      "12px",
+      "14px",
+      "160px",
+      "16px",
+      "20px",
+      "24px",
+      "2X large",
+      "2px",
+      "32px",
+      "40px",
+      "48px",
+      "4px",
+      "64px",
+      "80px",
+      "8px",
+      "96px",
+      "Big",
+      "Condensed",
+      "Default",
+      "Expressive"
+     ]
+    },
+    "type": {
+     "used_in": 27,
+     "pct": 15.3,
+     "values": [
+      "Advanced",
+      "Base",
+      "Batch actions",
+      "Block",
+      "Cell",
+      "Clickable",
+      "Compact",
+      "Contained",
+      "Default",
+      "Definition",
+      "Disabled",
+      "Disclosed",
+      "Divider",
+      "Drag and drop",
+      "Enabled",
+      "Expandable",
+      "Expandable (Interactive)",
+      "Expandable + Selectable",
+      "Focused",
+      "Header cell"
+     ]
+    },
+    "open": {
+     "used_in": 23,
+     "pct": 13.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "selected": {
+     "used_in": 20,
+     "pct": 11.3,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "alignment": {
+     "used_in": 12,
+     "pct": 6.8,
+     "values": [
+      "Auto-width",
+      "Center",
+      "Default",
+      "End",
+      "Grid aware",
+      "Indent",
+      "Inline",
+      "Left",
+      "Right",
+      "Start"
+     ]
+    },
+    "style": {
+     "used_in": 10,
+     "pct": 5.6,
+     "values": [
+      "Contained",
+      "Danger ghost",
+      "Danger primary",
+      "Danger tertiary",
+      "Default",
+      "Fixed",
+      "Ghost",
+      "Inline",
+      "Line",
+      "Primary",
+      "Secondary",
+      "Solid",
+      "Tertiary"
+     ]
+    },
+    "position": {
+     "used_in": 9,
+     "pct": 5.1,
+     "values": [
+      "Bottom",
+      "Left",
+      "Middle",
+      "Right",
+      "Top"
+     ]
+    },
+    "expanded": {
+     "used_in": 8,
+     "pct": 4.5,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "flush": {
+     "used_in": 6,
+     "pct": 3.4,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "level": {
+     "used_in": 6,
+     "pct": 3.4,
+     "values": [
+      "1",
+      "2",
+      "Background",
+      "Layer 01",
+      "Layer 02",
+      "Level 1",
+      "Level 2",
+      "Level 3",
+      "Level 4"
+     ]
+    },
+    "tooltip": {
+     "used_in": 5,
+     "pct": 2.8,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "date filled": {
+     "used_in": 5,
+     "pct": 2.8,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "text filled": {
+     "used_in": 5,
+     "pct": 2.8,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "icon": {
+     "used_in": 5,
+     "pct": 2.8,
+     "values": [
+      "Checkmark",
+      "False",
+      "Left",
+      "Radio button",
+      "Right",
+      "True"
+     ]
+    },
+    "direction": {
+     "used_in": 4,
+     "pct": 2.3,
+     "values": [
+      "Horizontal",
+      "Next",
+      "Previous",
+      "Vertical"
+     ]
+    },
+    "high contrast": {
+     "used_in": 4,
+     "pct": 2.3,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "status": {
+     "used_in": 4,
+     "pct": 2.3,
+     "values": [
+      "Active",
+      "Error",
+      "Info",
+      "Success",
+      "Warning"
+     ]
+    },
+    "expandable": {
+     "used_in": 3,
+     "pct": 1.7,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "phase": {
+     "used_in": 3,
+     "pct": 1.7,
+     "values": [
+      "0%",
+      "1",
+      "100%",
+      "2",
+      "25%",
+      "3",
+      "4",
+      "50%",
+      "75%",
+      "End",
+      "Error",
+      "Start",
+      "Success"
+     ]
+    },
+    "🚫 position": {
+     "used_in": 3,
+     "pct": 1.7,
+     "values": [
+      "Bottom",
+      "Left",
+      "Right",
+      "Top"
+     ]
+    },
+    "🚫 alignment": {
+     "used_in": 3,
+     "pct": 1.7,
+     "values": [
+      "Center",
+      "End",
+      "Start"
+     ]
+    },
+    "visible": {
+     "used_in": 3,
+     "pct": 1.7,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "color": {
+     "used_in": 3,
+     "pct": 1.7,
+     "values": [
+      "Blue",
+      "Cool gray",
+      "Cyan",
+      "Gray",
+      "Green",
+      "High contrast",
+      "Magenta",
+      "Outline",
+      "Purple",
+      "Red",
+      "Teal",
+      "Warm gray"
+     ]
+    },
+    "selection": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "Checked",
+      "Indeterminate",
+      "None",
+      "Selected",
+      "Unchecked",
+      "Unselected"
+     ]
+    },
+    "horizontal": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "action": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "Filterable search",
+      "Ghost button",
+      "Ghost icon button",
+      "Link",
+      "Overflow",
+      "Overflow menu",
+      "Primary",
+      "Primary icon button",
+      "Tag"
+     ]
+    },
+    "contrast": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "Default",
+      "High contrast",
+      "Low contrast"
+     ]
+    },
+    "disabled": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "inset divider": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    "inputs": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "2",
+      "3",
+      "False",
+      "True"
+     ]
+    },
+    "header": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "selectable": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "select type": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "Checkbox",
+      "Dynamic",
+      "Expansion",
+      "None",
+      "Radio button",
+      "Selection"
+     ]
+    },
+    "long message": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "actionable": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "filled": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "show text": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "shadow": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "active": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "v12 feature flag": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "v12 feature flags": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "toggled": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "compact": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "divider": {
+     "used_in": 2,
+     "pct": 1.1,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "current": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "action type": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Default",
+      "Filterable search"
+     ]
+    },
+    "expand filterable search": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "low contrast": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "am": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "toggletip": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "skeleton": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "sorted": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Ascending",
+      "Descending",
+      "None"
+     ]
+    },
+    "sortable": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "empty": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "open chevron": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "columns": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "1",
+      "2"
+     ]
+    },
+    "property": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Default"
+     ]
+    },
+    "inverse": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "spinner": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Large",
+      "Small"
+     ]
+    },
+    "context": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Caret",
+      "Shortcut combo"
+     ]
+    },
+    "function": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Complex",
+      "Simple"
+     ]
+    },
+    "actions": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "1",
+      "2",
+      "3"
+     ]
+    },
+    "cancel": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "inline loading": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "overflow": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "progress": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "0%",
+      "25%",
+      "50%",
+      "75%",
+      "Error",
+      "Indeterminate",
+      "Success"
+     ]
+    },
+    "🚫 direction": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Horizontal",
+      "Vertical"
+     ]
+    },
+    "handle": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Left",
+      "None",
+      "Right"
+     ]
+    },
+    "toggle only": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "🚫 type": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Definition",
+      "Icon",
+      "Standard"
+     ]
+    },
+    "node": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Branch",
+      "Leaf"
+     ]
+    }
+   }
+  },
+  "Fluent 2": {
+   "component_sets": 104,
+   "variants_total": 2376,
+   "variants_median": 7,
+   "variants_max": 168,
+   "variants_per_set": 22.8,
+   "variant_buckets": {
+    "1-4": 38,
+    "5-12": 27,
+    "13-32": 15,
+    "33-96": 20,
+    "97+": 4
+   },
+   "axes_per_set": 2.21,
+   "top_exploded": [
+    {
+     "name": "Interaction tag",
+     "variants": 168,
+     "axes": 6
+    },
+    {
+     "name": "Button",
+     "variants": 150,
+     "axes": 4
+    },
+    {
+     "name": "Split button",
+     "variants": 150,
+     "axes": 4
+    },
+    {
+     "name": "Badge",
+     "variants": 112,
+     "axes": 3
+    },
+    {
+     "name": "Presence Badge",
+     "variants": 96,
+     "axes": 3
+    },
+    {
+     "name": "Input",
+     "variants": 84,
+     "axes": 3
+    },
+    {
+     "name": "Vertical Tab",
+     "variants": 80,
+     "axes": 4
+    },
+    {
+     "name": "Horizontal Tab",
+     "variants": 80,
+     "axes": 4
+    }
+   ],
+   "axes": {
+    "state": {
+     "used_in": 46,
+     "pct": 44.2,
+     "values": [
+      "Checked",
+      "Default",
+      "Disabled",
+      "Disabled (Checked only)",
+      "Draggable",
+      "Empty",
+      "Error",
+      "Focus",
+      "Focused",
+      "Hover",
+      "Pause",
+      "Play",
+      "Pressed",
+      "Read only",
+      "Rest",
+      "Rest (Checked only)",
+      "Rest/Visited",
+      "Selected",
+      "Selected (Popover open)",
+      "Success"
+     ]
+    },
+    "size": {
+     "used_in": 45,
+     "pct": 43.3,
+     "values": [
+      "120",
+      "16",
+      "20",
+      "24",
+      "28",
+      "32 (Default)",
+      "320px",
+      "36",
+      "40",
+      "48",
+      "56",
+      "600px",
+      "64",
+      "72",
+      "96",
+      "Extra large",
+      "Extra small",
+      "Extra-large",
+      "Extra-large huge",
+      "Extra-small"
+     ]
+    },
+    "style": {
+     "used_in": 31,
+     "pct": 29.8,
+     "values": [
+      "Avatar (Default)",
+      "Brand",
+      "Circular",
+      "Color",
+      "Darker",
+      "Default",
+      "Determinate",
+      "Filled",
+      "Filled (Default)",
+      "Filled alt",
+      "Filled circular",
+      "Filled darker",
+      "Filled darker (Default)",
+      "Filled lighter",
+      "Icon",
+      "Image",
+      "Indeterminate",
+      "Inverted",
+      "None",
+      "Outline"
+     ]
+    },
+    "layout": {
+     "used_in": 25,
+     "pct": 24.0,
+     "values": [
+      "1 line (Default)",
+      "2 avatars",
+      "2 line (Medium only)",
+      "3 avatars",
+      "Cell actions",
+      "Center (Default)",
+      "Content",
+      "Custom",
+      "Default",
+      "End",
+      "Grid",
+      "Icon and label (Default)",
+      "Icon before",
+      "Icon only",
+      "Icon+Label after",
+      "Icon+Label below",
+      "Label above",
+      "Label after",
+      "Label before",
+      "Label below"
+     ]
+    },
+    "type": {
+     "used_in": 12,
+     "pct": 11.5,
+     "values": [
+      "Active",
+      "Button",
+      "Checkbox",
+      "Checkmark",
+      "Contextual (floating)",
+      "Display",
+      "Header",
+      "Icon",
+      "Image",
+      "Inactive",
+      "Initials",
+      "Inline",
+      "Interactive",
+      "Multi",
+      "Multi select",
+      "Overflow",
+      "Overlay",
+      "Radio",
+      "Regular (Default)",
+      "Semibold"
+     ]
+    },
+    "selected": {
+     "used_in": 10,
+     "pct": 9.6,
+     "values": [
+      "False",
+      "No",
+      "True",
+      "Yes"
+     ]
+    },
+    "expanded": {
+     "used_in": 4,
+     "pct": 3.8,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "status": {
+     "used_in": 3,
+     "pct": 2.9,
+     "values": [
+      "99% complete",
+      "After",
+      "Available",
+      "Away",
+      "Before",
+      "Blocked",
+      "Busy",
+      "Checked",
+      "Complete",
+      "Do not disturb",
+      "Gradient after",
+      "Gradient before",
+      "In progress",
+      "Indeterminate",
+      "Not started",
+      "OOF",
+      "Offline",
+      "Unchecked",
+      "Unknown"
+     ]
+    },
+    "secondary actions": {
+     "used_in": 3,
+     "pct": 2.9,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "appearance": {
+     "used_in": 2,
+     "pct": 1.9,
+     "values": [
+      "Fill darker",
+      "Fill lighter",
+      "Filled",
+      "Outline",
+      "Subtle",
+      "Tint",
+      "Transparent"
+     ]
+    },
+    "group": {
+     "used_in": 2,
+     "pct": 1.9,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "open": {
+     "used_in": 2,
+     "pct": 1.9,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "checked": {
+     "used_in": 2,
+     "pct": 1.9,
+     "values": [
+      "False",
+      "Off",
+      "On",
+      "True"
+     ]
+    },
+    "shape": {
+     "used_in": 2,
+     "pct": 1.9,
+     "values": [
+      "Circle",
+      "Circles",
+      "Rectangle (default)",
+      "Square",
+      "Stars"
+     ]
+    },
+    "circular": {
+     "used_in": 2,
+     "pct": 1.9,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "chevron": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "After",
+      "Before"
+     ]
+    },
+    "in office": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "color": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "Brand",
+      "Danger",
+      "Important",
+      "Informative",
+      "Subtle",
+      "Success",
+      "Warning"
+     ]
+    },
+    "states": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "Current",
+      "Disabled",
+      "Focused",
+      "Hover",
+      "Pressed",
+      "Rest"
+     ]
+    },
+    "icon": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "OFF",
+      "ON"
+     ]
+    },
+    "custom header": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "custom footer": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "custom body": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "aspect ratio": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "16:9",
+      "4:3",
+      "Flex (Default)"
+     ]
+    },
+    "mode": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "ImagePreview default",
+      "ImagePreviewAutoPlay",
+      "StepsAutoPlay",
+      "StepsDefault"
+     ]
+    },
+    "steps": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "1 (default)",
+      "2",
+      "3",
+      "4",
+      "5"
+     ]
+    },
+    "chevron placement": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "Centered to content",
+      "Flexible to edges",
+      "Grouped to steps"
+     ]
+    },
+    "pause button": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "In nav",
+      "On content click"
+     ]
+    },
+    "nav type": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "Image preview",
+      "Steps"
+     ]
+    },
+    "sorting": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "vertical": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "vertical divider": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "Left",
+      "None",
+      "Right"
+     ]
+    },
+    "navigation": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "swappable content": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "disabled": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "Off",
+      "On"
+     ]
+    },
+    "list-item type": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "One line",
+      "Two line"
+     ]
+    },
+    "active": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "material": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "Acrylic"
+     ]
+    },
+    "divider": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "section header": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False"
+     ]
+    },
+    "custom menu": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "expand": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "alignment": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "Center (Default)",
+      "Top"
+     ]
+    },
+    "direction": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "Horizontal",
+      "Horizontal stacked",
+      "Vertical"
+     ]
+    },
+    "compact": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "animated": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "frame": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ]
+    },
+    "message": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "Archived",
+      "Cancelled",
+      "Draft",
+      "Failed",
+      "Generic information",
+      "InProgress",
+      "New",
+      "Not started",
+      "Pause",
+      "Pending",
+      "Scheduled",
+      "Success",
+      "Synced",
+      "Syncing",
+      "Unknown",
+      "Warning"
+     ]
+    },
+    "category": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "Active/ In Progress",
+      "Error",
+      "Informational/Neutral",
+      "Success",
+      "Warning"
+     ]
+    },
+    "spacing": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "Medium",
+      "Small"
+     ]
+    },
+    "dismiss": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "custom layout": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "leaf node": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "slot": {
+     "used_in": 1,
+     "pct": 1.0,
+     "values": [
+      "1",
+      "2"
+     ]
+    }
+   }
+  },
+  "Material Web": {
+   "component_sets": 171,
+   "variants_total": 5354,
+   "variants_median": 8,
+   "variants_max": 300,
+   "variants_per_set": 31.3,
+   "variant_buckets": {
+    "1-4": 55,
+    "5-12": 63,
+    "13-32": 18,
+    "33-96": 16,
+    "97+": 19
+   },
+   "axes_per_set": 2.19,
+   "top_exploded": [
+    {
+     "name": "Icon button togglable",
+     "variants": 300,
+     "axes": 5
+    },
+    {
+     "name": "Icon button togglable - tonal",
+     "variants": 300,
+     "axes": 5
+    },
+    {
+     "name": "Icon button togglable - outline",
+     "variants": 300,
+     "axes": 5
+    },
+    {
+     "name": "Icon button togglable - standard",
+     "variants": 300,
+     "axes": 5
+    },
+    {
+     "name": "List item/List Item: 0 Density (baseline)",
+     "variants": 238,
+     "axes": 5
+    },
+    {
+     "name": "List item/List Item: -2 Density (baseline)",
+     "variants": 217,
+     "axes": 5
+    },
+    {
+     "name": "List item/List Item: -4 Density (baseline)",
+     "variants": 197,
+     "axes": 5
+    },
+    {
+     "name": "Split button",
+     "variants": 180,
+     "axes": 4
+    }
+   ],
+   "axes": {
+    "state": {
+     "used_in": 90,
+     "pct": 52.6,
+     "values": [
+      "Active",
+      "Disabled",
+      "Dragged",
+      "Enabled",
+      "Error",
+      "Focused",
+      "Hovere",
+      "Hovered",
+      "Pressed",
+      "Presssed",
+      "Selected"
+     ]
+    },
+    "selected": {
+     "used_in": 50,
+     "pct": 29.2,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "type": {
+     "used_in": 44,
+     "pct": 25.7,
+     "values": [
+      "Accordion button",
+      "Assistive chips",
+      "Avatar",
+      "Badge",
+      "Checkbox",
+      "Collapse",
+      "Day",
+      "Default",
+      "Docked",
+      "Draggable",
+      "Error indeterminate",
+      "Error selected",
+      "Error unselected",
+      "Expand",
+      "Expandable",
+      "Filter chips",
+      "Flat",
+      "Floating",
+      "Full-screen (range)",
+      "Icon"
+     ]
+    },
+    "size": {
+     "used_in": 30,
+     "pct": 17.5,
+     "values": [
+      "Default",
+      "Image",
+      "Large",
+      "Medium",
+      "Monogram",
+      "Small",
+      "XLarge",
+      "XSmall"
+     ]
+    },
+    "configuration": {
+     "used_in": 18,
+     "pct": 10.5,
+     "values": [
+      "Alphanumeric",
+      "Base keyboard",
+      "Center-aligned",
+      "Docked",
+      "Embedded FAB",
+      "Fixed",
+      "Floating",
+      "Icon & label",
+      "Icon only",
+      "Input text",
+      "Keypad",
+      "Label & avatar",
+      "Label & brand icon",
+      "Label & favicon",
+      "Label & icon",
+      "Label & leading icon",
+      "Label only",
+      "Large",
+      "Medium",
+      "No FAB"
+     ]
+    },
+    "style": {
+     "used_in": 9,
+     "pct": 5.3,
+     "values": [
+      "Avatar",
+      "Check",
+      "Elevated",
+      "Filled",
+      "Floating",
+      "Landscape",
+      "Monogram",
+      "Outlined",
+      "Portrait",
+      "Primary",
+      "Secondary"
+     ]
+    },
+    "alignment": {
+     "used_in": 8,
+     "pct": 4.7,
+     "values": [
+      "Centered",
+      "Left",
+      "Left aligned",
+      "Middle",
+      "Middle-aligned",
+      "Top",
+      "Top-aligned"
+     ]
+    },
+    "width": {
+     "used_in": 8,
+     "pct": 4.7,
+     "values": [
+      "Default",
+      "Narrow",
+      "Wide"
+     ]
+    },
+    "layout": {
+     "used_in": 8,
+     "pct": 4.7,
+     "values": [
+      "Center-aligned hero",
+      "Empty",
+      "Full screen",
+      "Hero",
+      "Icon only",
+      "Label & icon",
+      "Label only",
+      "Media & text",
+      "Multi-aspect ratio",
+      "Multi-browse",
+      "Multiple rows - overflow",
+      "Single row - scrollable",
+      "Slot",
+      "Uncontained"
+     ]
+    },
+    "elevation": {
+     "used_in": 7,
+     "pct": 4.1,
+     "values": [
+      "Default",
+      "Flat",
+      "On-scroll",
+      "Surface container",
+      "Surface container high",
+      "Surface container highest",
+      "Tertiary container"
+     ]
+    },
+    "color": {
+     "used_in": 6,
+     "pct": 3.5,
+     "values": [
+      "Elevated",
+      "Filled",
+      "Outline",
+      "Outlined",
+      "Primary",
+      "Primary container",
+      "Secondary",
+      "Secondary container",
+      "Standard",
+      "Tertiary",
+      "Tertiary container",
+      "Tonal",
+      "Vibrant"
+     ]
+    },
+    "orientation": {
+     "used_in": 6,
+     "pct": 3.5,
+     "values": [
+      "Horizontal",
+      "Vertical"
+     ]
+    },
+    "thickness": {
+     "used_in": 6,
+     "pct": 3.5,
+     "values": [
+      "4",
+      "4 dp",
+      "8",
+      "8 dp"
+     ]
+    },
+    "badge": {
+     "used_in": 6,
+     "pct": 3.5,
+     "values": [
+      "Large",
+      "None",
+      "Small"
+     ]
+    },
+    "icon": {
+     "used_in": 4,
+     "pct": 2.3,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "nav items": {
+     "used_in": 4,
+     "pct": 2.3,
+     "values": [
+      "3",
+      "4",
+      "5",
+      "6"
+     ]
+    },
+    "segments": {
+     "used_in": 3,
+     "pct": 1.8,
+     "values": [
+      "2",
+      "3",
+      "4",
+      "5"
+     ]
+    },
+    "show icon": {
+     "used_in": 3,
+     "pct": 1.8,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "condition": {
+     "used_in": 3,
+     "pct": 1.8,
+     "values": [
+      "1 line",
+      "2 line",
+      "3 line+"
+     ]
+    },
+    "leading": {
+     "used_in": 3,
+     "pct": 1.8,
+     "values": [
+      "Check Box",
+      "Icon",
+      "Image",
+      "Monogram",
+      "None",
+      "Radio Button",
+      "Switch",
+      "Video"
+     ]
+    },
+    "trailing": {
+     "used_in": 3,
+     "pct": 1.8,
+     "values": [
+      "Check Box",
+      "Icon",
+      "None",
+      "Radio Button",
+      "Switch"
+     ]
+    },
+    "show overline": {
+     "used_in": 3,
+     "pct": 1.8,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "show supporting text": {
+     "used_in": 3,
+     "pct": 1.8,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "value": {
+     "used_in": 3,
+     "pct": 1.8,
+     "values": [
+      "+50",
+      "-50",
+      "0",
+      "100",
+      "50"
+     ]
+    },
+    "shape": {
+     "used_in": 2,
+     "pct": 1.2,
+     "values": [
+      "1",
+      "12-sided cookie",
+      "2",
+      "3",
+      "4",
+      "4-leaf clover",
+      "4-sided cookie",
+      "5",
+      "6",
+      "6-sided cookie",
+      "7",
+      "7-sided cookie",
+      "8",
+      "8-leaf clover",
+      "9",
+      "9-sided cookie",
+      "Arch",
+      "Arrow",
+      "Boom",
+      "Bun"
+     ]
+    },
+    "density": {
+     "used_in": 2,
+     "pct": 1.2,
+     "values": [
+      "-1",
+      "-2",
+      "-3",
+      "-4",
+      "0"
+     ]
+    },
+    "context": {
+     "used_in": 2,
+     "pct": 1.2,
+     "values": [
+      "Mobile",
+      "Tablet"
+     ]
+    },
+    "am/pm": {
+     "used_in": 2,
+     "pct": 1.2,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "format": {
+     "used_in": 2,
+     "pct": 1.2,
+     "values": [
+      "12 hour",
+      "24 hour"
+     ]
+    },
+    "wave height": {
+     "used_in": 2,
+     "pct": 1.2,
+     "values": [
+      "12"
+     ]
+    },
+    "wavelength": {
+     "used_in": 2,
+     "pct": 1.2,
+     "values": [
+      "20",
+      "40"
+     ]
+    },
+    "progress": {
+     "used_in": 2,
+     "pct": 1.2,
+     "values": [
+      "0",
+      "10",
+      "100",
+      "20",
+      "30",
+      "50",
+      "80"
+     ]
+    },
+    "step": {
+     "used_in": 2,
+     "pct": 1.2,
+     "values": [
+      "0",
+      "1",
+      "2"
+     ]
+    },
+    "show label text": {
+     "used_in": 2,
+     "pct": 1.2,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "window size class": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "1. Compact (0-599dp)",
+      "2. Medium (600-839dp)",
+      "3. Expanded (840-1199p)",
+      "4. Large (1200-1599dp)",
+      "5. Extra-large (1600+dp)"
+     ]
+    },
+    "layout regions": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Navigation expanded",
+      "Navigation region",
+      "None"
+     ]
+    },
+    "icons": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "1",
+      "2",
+      "3",
+      "4"
+     ]
+    },
+    "leading state": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Disabled",
+      "Enabled",
+      "Focused",
+      "Hovered",
+      "Pressed"
+     ]
+    },
+    "trailing state": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Disabled",
+      "Enabled",
+      "Focused",
+      "Hovered",
+      "Pressed",
+      "Selected"
+     ]
+    },
+    "button type": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Icon",
+      "Label"
+     ]
+    },
+    "show trailing icon": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "show closing icon": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "false",
+      "true"
+     ]
+    },
+    "line-angle": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "1",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "2",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "3",
+      "4",
+      "5"
+     ]
+    },
+    "multi-line": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "accordion": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Collapsed",
+      "Expanded"
+     ]
+    },
+    "swipe state": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Default",
+      "Initiate reveal",
+      "Revealed",
+      "Swipe Action"
+     ]
+    },
+    "actions": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "1",
+      "2",
+      "3"
+     ]
+    },
+    "steps": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+     ]
+    },
+    "show container": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "theme": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Standard",
+      "Vibrant"
+     ]
+    },
+    "groups": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "1",
+      "2",
+      "3"
+     ]
+    },
+    "show label": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "show avatar": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "show back": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "modal": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "# of lines": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "One line",
+      "Two lines"
+     ]
+    },
+    "show close affordance": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "text configurations": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "Input text",
+      "Label text",
+      "Placeholder text"
+     ]
+    },
+    "leading icon": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "trailing icon": {
+     "used_in": 1,
+     "pct": 0.6,
+     "values": [
+      "False",
+      "True"
+     ]
+    }
+   }
+  },
+  "Spectrum": {
+   "component_sets": 462,
+   "variants_total": 8039,
+   "variants_median": 6,
+   "variants_max": 180,
+   "variants_per_set": 17.4,
+   "variant_buckets": {
+    "1-4": 177,
+    "5-12": 165,
+    "13-32": 58,
+    "33-96": 40,
+    "97+": 22
+   },
+   "axes_per_set": 1.93,
+   "top_exploded": [
+    {
+     "name": "Button - Desktop - Light",
+     "variants": 180,
+     "axes": 5
+    },
+    {
+     "name": "Button - Desktop - Dark",
+     "variants": 180,
+     "axes": 5
+    },
+    {
+     "name": "Button - Desktop - Darkest",
+     "variants": 180,
+     "axes": 5
+    },
+    {
+     "name": "Button - Desktop - Wireframe",
+     "variants": 180,
+     "axes": 5
+    },
+    {
+     "name": "Button - Mobile - Light",
+     "variants": 180,
+     "axes": 5
+    },
+    {
+     "name": "Button - Mobile - Dark",
+     "variants": 180,
+     "axes": 5
+    },
+    {
+     "name": "Button - Mobile - Darkest",
+     "variants": 180,
+     "axes": 5
+    },
+    {
+     "name": "Button - Mobile - Wireframe",
+     "variants": 180,
+     "axes": 5
+    }
+   ],
+   "axes": {
+    "state": {
+     "used_in": 256,
+     "pct": 55.4,
+     "values": [
+      "Default",
+      "Disabled",
+      "Dragged",
+      "Error",
+      "Focus",
+      "Hover",
+      "Indeterminate",
+      "Open",
+      "Pressed",
+      "Selected",
+      "Touch",
+      "Unselected"
+     ]
+    },
+    "style": {
+     "used_in": 144,
+     "pct": 31.2,
+     "values": [
+      "Confirmation",
+      "Default",
+      "Destructive",
+      "Determinate",
+      "Emphasized",
+      "Error",
+      "Generic",
+      "Icon",
+      "Image",
+      "Indeterminate",
+      "Information",
+      "Informative",
+      "Multiline",
+      "Negative",
+      "Neutral",
+      "None",
+      "Not Emphasized",
+      "Notice",
+      "Positive",
+      "Quiet"
+     ]
+    },
+    "color": {
+     "used_in": 32,
+     "pct": 6.9,
+     "values": [
+      "Accent",
+      "Default",
+      "Negative",
+      "Over Background",
+      "Primary",
+      "Secondary",
+      "Standard",
+      "Static Black",
+      "Static White"
+     ]
+    },
+    "label position": {
+     "used_in": 32,
+     "pct": 6.9,
+     "values": [
+      "Side",
+      "Top"
+     ]
+    },
+    "selected ?": {
+     "used_in": 28,
+     "pct": 6.1,
+     "values": [
+      "False",
+      "Off",
+      "On",
+      "True"
+     ]
+    },
+    "track size": {
+     "used_in": 24,
+     "pct": 5.2,
+     "values": [
+      "Large",
+      "Medium",
+      "Small"
+     ]
+    },
+    "label ?": {
+     "used_in": 24,
+     "pct": 5.2,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "icon ?": {
+     "used_in": 24,
+     "pct": 5.2,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "orientation": {
+     "used_in": 24,
+     "pct": 5.2,
+     "values": [
+      "Horizonal",
+      "Horizontal",
+      "Vertical"
+     ]
+    },
+    "type": {
+     "used_in": 16,
+     "pct": 3.5,
+     "values": [
+      "Asset",
+      "Horizontal",
+      "Learn",
+      "Navigation Header",
+      "Navigation Item",
+      "Product",
+      "Social",
+      "Standard"
+     ]
+    },
+    "card type": {
+     "used_in": 16,
+     "pct": 3.5,
+     "values": [
+      "Generic",
+      "Learn",
+      "Product",
+      "Social",
+      "Standard"
+     ]
+    },
+    "selection": {
+     "used_in": 16,
+     "pct": 3.5,
+     "values": [
+      "Indeterminate",
+      "Mixed",
+      "None",
+      "Not Selected",
+      "Nothing",
+      "Selected"
+     ]
+    },
+    "selected": {
+     "used_in": 16,
+     "pct": 3.5,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "placeholder ?": {
+     "used_in": 16,
+     "pct": 3.5,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "handle": {
+     "used_in": 16,
+     "pct": 3.5,
+     "values": [
+      "At Edge",
+      "Center",
+      "Edge",
+      "In Track"
+     ]
+    },
+    "item": {
+     "used_in": 16,
+     "pct": 3.5,
+     "values": [
+      "Checkbox",
+      "Checkmark",
+      "Icon",
+      "Switch"
+     ]
+    },
+    "emphasis ?": {
+     "used_in": 16,
+     "pct": 3.5,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "status / color": {
+     "used_in": 12,
+     "pct": 2.6,
+     "values": [
+      "Celery",
+      "Disabled",
+      "Fuchsia",
+      "Indigo",
+      "Informative",
+      "Magenta",
+      "Negative",
+      "Neutral",
+      "Notice",
+      "Positive",
+      "Purple",
+      "Seafoam",
+      "Yellow"
+     ]
+    },
+    "selection column": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "sort icon": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "variant": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "3 Actions",
+      "4 Actions",
+      "Drag",
+      "Move",
+      "Selected Checkbox",
+      "Unselected Checkbox"
+     ]
+    },
+    "status": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "Default",
+      "Disabled",
+      "Negative",
+      "Neutral",
+      "Notice",
+      "Positive"
+     ]
+    },
+    "emphasized ?": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "option": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "Breadcrumb Item",
+      "Breadcrumb Title",
+      "Truncation Folder"
+     ]
+    },
+    "toggled ?": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "Off",
+      "On"
+     ]
+    },
+    "rounding": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "Full",
+      "None",
+      "Regular"
+     ]
+    },
+    "fill": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "Amount Fill",
+      "Negative Offset Fill",
+      "No Fill",
+      "Positive Offset Fill"
+     ]
+    },
+    "focus ring": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "Off",
+      "On"
+     ]
+    },
+    "emphasized": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "tip position": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "Bottom",
+      "Left",
+      "Right",
+      "Top"
+     ]
+    },
+    "overflow ?": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "indicator position": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "Bottom Left",
+      "Bottom Middle",
+      "Bottom Right",
+      "Left Bottom",
+      "Left Middle",
+      "Left Top",
+      "Right Bottom",
+      "Right Middle",
+      "Right Top",
+      "Top Left",
+      "Top Middle",
+      "Top Right"
+     ]
+    },
+    "size": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "Large",
+      "Medium",
+      "Small"
+     ]
+    },
+    "toggled": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "Off",
+      "On"
+     ]
+    },
+    "quiet ?": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "platform": {
+     "used_in": 8,
+     "pct": 1.7,
+     "values": [
+      "Android",
+      "iOS"
+     ]
+    },
+    "outlined ?": {
+     "used_in": 7,
+     "pct": 1.5,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "hover action": {
+     "used_in": 4,
+     "pct": 0.9,
+     "values": [
+      "None",
+      "Unselected Checkbox",
+      "Unselected Checkbox & 3 Actions",
+      "Unselected Checkbox & 4 Actions",
+      "Unselected Checkbox & Move"
+     ]
+    },
+    "quick action": {
+     "used_in": 4,
+     "pct": 0.9,
+     "values": [
+      "None",
+      "Unselected Checkbox",
+      "Unselected Checkbox & 3 Actions",
+      "Unselected Checkbox & 4 Actions",
+      "Unselected Checkbox & Move"
+     ]
+    },
+    "outlined": {
+     "used_in": 1,
+     "pct": 0.2,
+     "values": [
+      "False",
+      "True"
+     ]
+    },
+    "theme": {
+     "used_in": 1,
+     "pct": 0.2,
+     "values": [
+      "Dark",
+      "Darkest",
+      "Light",
+      "Wireframe"
+     ]
+    },
+    "image": {
+     "used_in": 1,
+     "pct": 0.2,
+     "values": [
+      "Adobe",
+      "CSS",
+      "Placeholder",
+      "React",
+      "Web"
+     ]
+    }
+   }
+  }
+ }
+}

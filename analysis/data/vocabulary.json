@@ -1,0 +1,1540 @@
+{
+ "systems": [
+  "Spectrum",
+  "Material Web",
+  "MUI",
+  "Fluent 2",
+  "Carbon",
+  "Polaris",
+  "shadcn/ui",
+  "Ant Design"
+ ],
+ "system_count": 8,
+ "axes": {
+  "category": [
+   {
+    "value": "color",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "coverage": 8,
+    "tier": "standard",
+    "missing": [],
+    "examples": {
+     "Spectrum": "code-color",
+     "Material Web": "color-error",
+     "MUI": "palette-divider",
+     "Fluent 2": "color-brand-stroke1",
+     "Carbon": "overlay",
+     "Polaris": "color-bg",
+     "shadcn/ui": "card",
+     "Ant Design": "color-fill"
+    },
+    "counts": {
+     "Spectrum": 244,
+     "Material Web": 49,
+     "MUI": 38,
+     "Fluent 2": 349,
+     "Carbon": 67,
+     "Polaris": 439,
+     "shadcn/ui": 78,
+     "Ant Design": 102
+    }
+   },
+   {
+    "value": "typography",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "coverage": 8,
+    "tier": "standard",
+    "missing": [],
+    "examples": {
+     "Spectrum": "body-color",
+     "Material Web": "typescale-body-large",
+     "MUI": "typography-h1",
+     "Fluent 2": "font-family-base",
+     "Carbon": "body01",
+     "Polaris": "font-275",
+     "shadcn/ui": "font-mono",
+     "Ant Design": "font-size"
+    },
+    "counts": {
+     "Spectrum": 305,
+     "Material Web": 93,
+     "MUI": 20,
+     "Fluent 2": 27,
+     "Carbon": 54,
+     "Polaris": 112,
+     "shadcn/ui": 3,
+     "Ant Design": 26
+    }
+   },
+   {
+    "value": "elevation",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 7,
+    "tier": "prevalent",
+    "missing": [
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "drop-shadow-x",
+     "Material Web": "color-shadow",
+     "MUI": "shadows-0",
+     "Fluent 2": "shadow2",
+     "Carbon": "shadow",
+     "Polaris": "shadow-button",
+     "Ant Design": "box-shadow"
+    },
+    "counts": {
+     "Spectrum": 43,
+     "Material Web": 7,
+     "MUI": 25,
+     "Fluent 2": 20,
+     "Carbon": 1,
+     "Polaris": 36,
+     "Ant Design": 15
+    }
+   },
+   {
+    "value": "radius",
+    "systems": [
+     "Ant Design",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "coverage": 7,
+    "tier": "prevalent",
+    "missing": [
+     "Carbon"
+    ],
+    "examples": {
+     "Spectrum": "corner-radius-0",
+     "Material Web": "shape-corner-full",
+     "MUI": "shape-border-radius",
+     "Fluent 2": "border-radius-none",
+     "Polaris": "border-border-radius-0",
+     "shadcn/ui": "radius",
+     "Ant Design": "border-radius"
+    },
+    "counts": {
+     "Spectrum": 30,
+     "Material Web": 12,
+     "MUI": 1,
+     "Fluent 2": 11,
+     "Polaris": 10,
+     "shadcn/ui": 8,
+     "Ant Design": 5
+    }
+   },
+   {
+    "value": "motion",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris"
+    ],
+    "coverage": 6,
+    "tier": "prevalent",
+    "missing": [
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Material Web": "motion-path",
+     "MUI": "transitions-easing-sharp",
+     "Fluent 2": "curve-linear",
+     "Carbon": "duration-fast01",
+     "Polaris": "motion-0",
+     "Ant Design": "motion-base"
+    },
+    "counts": {
+     "Material Web": 27,
+     "MUI": 11,
+     "Fluent 2": 17,
+     "Carbon": 6,
+     "Polaris": 46,
+     "Ant Design": 10
+    }
+   },
+   {
+    "value": "spacing",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 6,
+    "tier": "prevalent",
+    "missing": [
+     "Material Web",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "spacing-25",
+     "MUI": "spacing",
+     "Fluent 2": "spacing-vertical-l",
+     "Carbon": "spacing01",
+     "Polaris": "space-0",
+     "Ant Design": "margin"
+    },
+    "counts": {
+     "Spectrum": 224,
+     "MUI": 1,
+     "Fluent 2": 22,
+     "Carbon": 20,
+     "Polaris": 40,
+     "Ant Design": 23
+    }
+   },
+   {
+    "value": "opacity",
+    "systems": [
+     "Ant Design",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Spectrum"
+    ],
+    "coverage": 5,
+    "tier": "prevalent",
+    "missing": [
+     "Carbon",
+     "Polaris",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "overlay-opacity",
+     "Material Web": "state-focus-state-layer-opacity",
+     "MUI": "palette-action-focus-opacity",
+     "Fluent 2": "color-neutral-stroke-alpha",
+     "Ant Design": "opacity-image"
+    },
+    "counts": {
+     "Spectrum": 6,
+     "Material Web": 4,
+     "MUI": 5,
+     "Fluent 2": 9,
+     "Ant Design": 2
+    }
+   },
+   {
+    "value": "z-index",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "MUI",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 5,
+    "tier": "prevalent",
+    "missing": [
+     "Fluent 2",
+     "Material Web",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "background-layer-1-color",
+     "MUI": "z-index-fab",
+     "Carbon": "layer-01",
+     "Polaris": "zIndex-0",
+     "Ant Design": "z-index-base"
+    },
+    "counts": {
+     "Spectrum": 2,
+     "MUI": 8,
+     "Carbon": 3,
+     "Polaris": 26,
+     "Ant Design": 2
+    }
+   },
+   {
+    "value": "border",
+    "systems": [
+     "Ant Design",
+     "Fluent 2",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 4,
+    "tier": "divergent",
+    "missing": [
+     "Carbon",
+     "MUI",
+     "Material Web",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "border-width-100",
+     "Fluent 2": "stroke-width-thin",
+     "Polaris": "border-0",
+     "Ant Design": "control-outline-width"
+    },
+    "counts": {
+     "Spectrum": 5,
+     "Fluent 2": 4,
+     "Polaris": 14,
+     "Ant Design": 1
+    }
+   },
+   {
+    "value": "sizing",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 4,
+    "tier": "divergent",
+    "missing": [
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "code-size-l",
+     "Carbon": "size-large",
+     "Polaris": "width-0",
+     "Ant Design": "size"
+    },
+    "counts": {
+     "Spectrum": 32,
+     "Carbon": 6,
+     "Polaris": 90,
+     "Ant Design": 20
+    }
+   },
+   {
+    "value": "breakpoint",
+    "systems": [
+     "Ant Design",
+     "Polaris",
+     "shadcn/ui"
+    ],
+    "coverage": 3,
+    "tier": "divergent",
+    "missing": [
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Spectrum"
+    ],
+    "examples": {
+     "Polaris": "breakpoints-breakpoints-lg",
+     "shadcn/ui": "breakpoint-3xl",
+     "Ant Design": "screen-lg"
+    },
+    "counts": {
+     "Polaris": 5,
+     "shadcn/ui": 2,
+     "Ant Design": 20
+    }
+   },
+   {
+    "value": "blur",
+    "systems": [
+     "Ant Design",
+     "Polaris"
+    ],
+    "coverage": 2,
+    "tier": "divergent",
+    "missing": [
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Polaris": "color-backdrop-bg",
+     "Ant Design": "color-bg-blur"
+    },
+    "counts": {
+     "Polaris": 2,
+     "Ant Design": 1
+    }
+   },
+   {
+    "value": "icon-size",
+    "systems": [
+     "Carbon",
+     "Spectrum"
+    ],
+    "coverage": 2,
+    "tier": "divergent",
+    "missing": [
+     "Ant Design",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "workflow-icon-large",
+     "Carbon": "icon-size01"
+    },
+    "counts": {
+     "Spectrum": 30,
+     "Carbon": 2
+    }
+   },
+   {
+    "value": "domain",
+    "systems": [
+     "Carbon"
+    ],
+    "coverage": 1,
+    "tier": "system-specific",
+    "missing": [
+     "Ant Design",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Carbon": "ai-overlay"
+    },
+    "counts": {
+     "Carbon": 42
+    }
+   }
+  ],
+  "role": [
+   {
+    "value": "border",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "coverage": 8,
+    "tier": "standard",
+    "missing": [],
+    "examples": {
+     "Spectrum": "disabled-border-color",
+     "Material Web": "color-outline",
+     "MUI": "palette-divider",
+     "Fluent 2": "color-brand-stroke1",
+     "Carbon": "border-inverse",
+     "Polaris": "color-border",
+     "shadcn/ui": "border",
+     "Ant Design": "color-split"
+    },
+    "counts": {
+     "Spectrum": 13,
+     "Material Web": 2,
+     "MUI": 2,
+     "Fluent 2": 111,
+     "Carbon": 22,
+     "Polaris": 78,
+     "shadcn/ui": 4,
+     "Ant Design": 28
+    }
+   },
+   {
+    "value": "foreground",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "coverage": 8,
+    "tier": "standard",
+    "missing": [],
+    "examples": {
+     "Spectrum": "disabled-content-color",
+     "Material Web": "color-on-error",
+     "MUI": "palette-text-primary",
+     "Fluent 2": "color-brand-foreground1",
+     "Carbon": "text-error",
+     "Polaris": "color-text",
+     "shadcn/ui": "foreground",
+     "Ant Design": "color-text"
+    },
+    "counts": {
+     "Spectrum": 68,
+     "Material Web": 18,
+     "MUI": 9,
+     "Fluent 2": 111,
+     "Carbon": 15,
+     "Polaris": 174,
+     "shadcn/ui": 28,
+     "Ant Design": 36
+    }
+   },
+   {
+    "value": "surface",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "coverage": 8,
+    "tier": "standard",
+    "missing": [],
+    "examples": {
+     "Spectrum": "background-base-color",
+     "Material Web": "color-surface",
+     "MUI": "palette-background-paper",
+     "Fluent 2": "color-brand-background",
+     "Carbon": "background",
+     "Polaris": "color-bg",
+     "shadcn/ui": "surface",
+     "Ant Design": "color-fill"
+    },
+    "counts": {
+     "Spectrum": 105,
+     "Material Web": 20,
+     "MUI": 3,
+     "Fluent 2": 133,
+     "Carbon": 33,
+     "Polaris": 238,
+     "shadcn/ui": 4,
+     "Ant Design": 32
+    }
+   },
+   {
+    "value": "shadow",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 7,
+    "tier": "prevalent",
+    "missing": [
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "drop-shadow-x",
+     "Material Web": "color-shadow",
+     "MUI": "shadows-0",
+     "Fluent 2": "shadow2",
+     "Carbon": "shadow",
+     "Polaris": "shadow-button",
+     "Ant Design": "box-shadow"
+    },
+    "counts": {
+     "Spectrum": 42,
+     "Material Web": 1,
+     "MUI": 25,
+     "Fluent 2": 20,
+     "Carbon": 5,
+     "Polaris": 36,
+     "Ant Design": 15
+    }
+   },
+   {
+    "value": "overlay",
+    "systems": [
+     "Carbon",
+     "Fluent 2",
+     "Material Web",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 5,
+    "tier": "prevalent",
+    "missing": [
+     "Ant Design",
+     "MUI",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "overlay-color",
+     "Material Web": "color-scrim",
+     "Fluent 2": "color-scrollbar-overlay",
+     "Carbon": "overlay",
+     "Polaris": "color-backdrop-bg"
+    },
+    "counts": {
+     "Spectrum": 2,
+     "Material Web": 1,
+     "Fluent 2": 2,
+     "Carbon": 2,
+     "Polaris": 2
+    }
+   },
+   {
+    "value": "icon",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 4,
+    "tier": "divergent",
+    "missing": [
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "icon-color-notice",
+     "Carbon": "icon-inverse",
+     "Polaris": "color-icon",
+     "Ant Design": "color-icon"
+    },
+    "counts": {
+     "Spectrum": 85,
+     "Carbon": 9,
+     "Polaris": 40,
+     "Ant Design": 3
+    }
+   },
+   {
+    "value": "link",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "Polaris"
+    ],
+    "coverage": 4,
+    "tier": "divergent",
+    "missing": [
+     "MUI",
+     "Material Web",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Fluent 2": "color-brand-foreground-link",
+     "Carbon": "syntax-link",
+     "Polaris": "color-text-link",
+     "Ant Design": "color-link"
+    },
+    "counts": {
+     "Fluent 2": 12,
+     "Carbon": 9,
+     "Polaris": 8,
+     "Ant Design": 3
+    }
+   },
+   {
+    "value": "focus-ring",
+    "systems": [
+     "MUI",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "coverage": 3,
+    "tier": "divergent",
+    "missing": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "Material Web",
+     "Polaris"
+    ],
+    "examples": {
+     "Spectrum": "focus-indicator-color",
+     "MUI": "transitions-duration-entering-screen",
+     "shadcn/ui": "ring"
+    },
+    "counts": {
+     "Spectrum": 6,
+     "MUI": 1,
+     "shadcn/ui": 4
+    }
+   }
+  ],
+  "intent": [
+   {
+    "value": "brand",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "coverage": 8,
+    "tier": "standard",
+    "missing": [],
+    "examples": {
+     "Spectrum": "accent-color-100",
+     "Material Web": "color-primary",
+     "MUI": "palette-primary-dark",
+     "Fluent 2": "color-brand-stroke1",
+     "Carbon": "icon-primary",
+     "Polaris": "color-icon-brand",
+     "shadcn/ui": "accent",
+     "Ant Design": "color-primary"
+    },
+    "counts": {
+     "Spectrum": 37,
+     "Material Web": 9,
+     "MUI": 5,
+     "Fluent 2": 66,
+     "Carbon": 14,
+     "Polaris": 76,
+     "shadcn/ui": 16,
+     "Ant Design": 10
+    }
+   },
+   {
+    "value": "secondary",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "coverage": 8,
+    "tier": "standard",
+    "missing": [],
+    "examples": {
+     "Spectrum": "neutral-subdued-content-color-down",
+     "Material Web": "color-tertiary",
+     "MUI": "palette-secondary-dark",
+     "Fluent 2": "color-subtle-background",
+     "Carbon": "icon-secondary",
+     "Polaris": "color-icon-secondary",
+     "shadcn/ui": "muted",
+     "Ant Design": "color-fill-tertiary"
+    },
+    "counts": {
+     "Spectrum": 34,
+     "Material Web": 16,
+     "MUI": 5,
+     "Fluent 2": 12,
+     "Carbon": 11,
+     "Polaris": 60,
+     "shadcn/ui": 8,
+     "Ant Design": 8
+    }
+   },
+   {
+    "value": "status:critical",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "coverage": 8,
+    "tier": "standard",
+    "missing": [],
+    "examples": {
+     "Spectrum": "red-visual-color",
+     "Material Web": "color-error",
+     "MUI": "palette-error-dark",
+     "Fluent 2": "color-palette-red-border1",
+     "Carbon": "text-error",
+     "Polaris": "color-icon-critical",
+     "shadcn/ui": "destructive",
+     "Ant Design": "color-error"
+    },
+    "counts": {
+     "Spectrum": 38,
+     "Material Web": 4,
+     "MUI": 4,
+     "Fluent 2": 27,
+     "Carbon": 1,
+     "Polaris": 38,
+     "shadcn/ui": 4,
+     "Ant Design": 14
+    }
+   },
+   {
+    "value": "disabled",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 6,
+    "tier": "prevalent",
+    "missing": [
+     "Material Web",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "disabled-border-color",
+     "MUI": "palette-text-disabled",
+     "Fluent 2": "color-neutral-stroke-disabled",
+     "Carbon": "icon-disabled",
+     "Polaris": "color-icon-disabled",
+     "Ant Design": "color-text-disabled"
+    },
+    "counts": {
+     "Spectrum": 10,
+     "MUI": 4,
+     "Fluent 2": 7,
+     "Carbon": 3,
+     "Polaris": 18,
+     "Ant Design": 4
+    }
+   },
+   {
+    "value": "status:success",
+    "systems": [
+     "Ant Design",
+     "Fluent 2",
+     "MUI",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 5,
+    "tier": "prevalent",
+    "missing": [
+     "Carbon",
+     "Material Web",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "green-visual-color",
+     "MUI": "palette-success-dark",
+     "Fluent 2": "color-palette-green-border1",
+     "Polaris": "color-icon-success",
+     "Ant Design": "color-success"
+    },
+    "counts": {
+     "Spectrum": 37,
+     "MUI": 4,
+     "Fluent 2": 31,
+     "Polaris": 34,
+     "Ant Design": 10
+    }
+   },
+   {
+    "value": "status:warning",
+    "systems": [
+     "Ant Design",
+     "Fluent 2",
+     "MUI",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 5,
+    "tier": "prevalent",
+    "missing": [
+     "Carbon",
+     "Material Web",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "notice-color-100",
+     "MUI": "palette-warning-dark",
+     "Fluent 2": "color-status-warning-border1",
+     "Polaris": "color-icon-caution",
+     "Ant Design": "color-warning"
+    },
+    "counts": {
+     "Spectrum": 34,
+     "MUI": 4,
+     "Fluent 2": 19,
+     "Polaris": 56,
+     "Ant Design": 12
+    }
+   },
+   {
+    "value": "inverse",
+    "systems": [
+     "Carbon",
+     "Fluent 2",
+     "Material Web",
+     "Polaris"
+    ],
+    "coverage": 4,
+    "tier": "divergent",
+    "missing": [
+     "Ant Design",
+     "MUI",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Material Web": "color-on-surface",
+     "Fluent 2": "color-neutral-background-inverted",
+     "Carbon": "icon-inverse",
+     "Polaris": "color-bg-inverse"
+    },
+    "counts": {
+     "Material Web": 5,
+     "Fluent 2": 20,
+     "Carbon": 13,
+     "Polaris": 42
+    }
+   },
+   {
+    "value": "neutral",
+    "systems": [
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Spectrum"
+    ],
+    "coverage": 4,
+    "tier": "divergent",
+    "missing": [
+     "Ant Design",
+     "Carbon",
+     "Polaris",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "gray-visual-color",
+     "Material Web": "motion-easing-standard",
+     "MUI": "palette-background-default",
+     "Fluent 2": "color-neutral-stroke1"
+    },
+    "counts": {
+     "Spectrum": 44,
+     "Material Web": 3,
+     "MUI": 2,
+     "Fluent 2": 78
+    }
+   },
+   {
+    "value": "status:info",
+    "systems": [
+     "Ant Design",
+     "MUI",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 4,
+    "tier": "divergent",
+    "missing": [
+     "Carbon",
+     "Fluent 2",
+     "Material Web",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "informative-color-100",
+     "MUI": "palette-info-dark",
+     "Polaris": "color-icon-info",
+     "Ant Design": "color-info"
+    },
+    "counts": {
+     "Spectrum": 23,
+     "MUI": 4,
+     "Polaris": 28,
+     "Ant Design": 10
+    }
+   }
+  ],
+  "state": [
+   {
+    "value": "default",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "coverage": 8,
+    "tier": "standard",
+    "missing": [],
+    "examples": {
+     "Spectrum": "code-color",
+     "Material Web": "color-error",
+     "MUI": "palette-divider",
+     "Fluent 2": "color-brand-stroke1",
+     "Carbon": "overlay",
+     "Polaris": "color-bg",
+     "shadcn/ui": "card",
+     "Ant Design": "color-fill"
+    },
+    "counts": {
+     "Spectrum": 845,
+     "Material Web": 189,
+     "MUI": 98,
+     "Fluent 2": 306,
+     "Carbon": 165,
+     "Polaris": 590,
+     "shadcn/ui": 91,
+     "Ant Design": 177
+    }
+   },
+   {
+    "value": "active",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 7,
+    "tier": "prevalent",
+    "missing": [
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "accent-content-color-down",
+     "Material Web": "state-pressed-state-layer-opacity",
+     "MUI": "palette-action-active",
+     "Fluent 2": "color-brand-stroke2-pressed",
+     "Carbon": "background-active",
+     "Polaris": "color-icon-active",
+     "Ant Design": "color-info-active"
+    },
+    "counts": {
+     "Spectrum": 18,
+     "Material Web": 1,
+     "MUI": 1,
+     "Fluent 2": 75,
+     "Carbon": 6,
+     "Polaris": 86,
+     "Ant Design": 17
+    }
+   },
+   {
+    "value": "focus",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 7,
+    "tier": "prevalent",
+    "missing": [
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "focus-indicator-color",
+     "Material Web": "state-focus-state-layer-opacity",
+     "MUI": "palette-action-focus",
+     "Fluent 2": "color-stroke-focus1",
+     "Carbon": "focus-inset",
+     "Polaris": "color-border-focus",
+     "Ant Design": "line-width-focus"
+    },
+    "counts": {
+     "Spectrum": 22,
+     "Material Web": 1,
+     "MUI": 2,
+     "Fluent 2": 2,
+     "Carbon": 1,
+     "Polaris": 2,
+     "Ant Design": 1
+    }
+   },
+   {
+    "value": "hover",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 7,
+    "tier": "prevalent",
+    "missing": [
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "accent-content-color-hover",
+     "Material Web": "state-hover-state-layer-opacity",
+     "MUI": "palette-action-hover",
+     "Fluent 2": "color-brand-stroke2-hover",
+     "Carbon": "background-hover",
+     "Polaris": "color-icon-hover",
+     "Ant Design": "color-icon-hover"
+    },
+    "counts": {
+     "Spectrum": 22,
+     "Material Web": 1,
+     "MUI": 2,
+     "Fluent 2": 37,
+     "Carbon": 13,
+     "Polaris": 102,
+     "Ant Design": 28
+    }
+   },
+   {
+    "value": "disabled",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 6,
+    "tier": "prevalent",
+    "missing": [
+     "Material Web",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "disabled-border-color",
+     "MUI": "palette-text-disabled",
+     "Fluent 2": "color-neutral-stroke-disabled",
+     "Carbon": "icon-disabled",
+     "Polaris": "color-icon-disabled",
+     "Ant Design": "color-text-disabled"
+    },
+    "counts": {
+     "Spectrum": 10,
+     "MUI": 4,
+     "Fluent 2": 10,
+     "Carbon": 5,
+     "Polaris": 22,
+     "Ant Design": 3
+    }
+   },
+   {
+    "value": "selected",
+    "systems": [
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 5,
+    "tier": "prevalent",
+    "missing": [
+     "Ant Design",
+     "Material Web",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "accent-content-color-selected",
+     "MUI": "palette-action-selected",
+     "Fluent 2": "color-neutral-stroke1-selected",
+     "Carbon": "background-selected",
+     "Polaris": "color-bg-fill-selected"
+    },
+    "counts": {
+     "Spectrum": 4,
+     "MUI": 2,
+     "Fluent 2": 29,
+     "Carbon": 6,
+     "Polaris": 18
+    }
+   },
+   {
+    "value": "loading",
+    "systems": [
+     "Ant Design",
+     "Carbon"
+    ],
+    "coverage": 2,
+    "tier": "divergent",
+    "missing": [
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Carbon": "skeleton-background",
+     "Ant Design": "opacity-loading"
+    },
+    "counts": {
+     "Carbon": 3,
+     "Ant Design": 1
+    }
+   },
+   {
+    "value": "visited",
+    "systems": [
+     "Carbon"
+    ],
+    "coverage": 1,
+    "tier": "system-specific",
+    "missing": [
+     "Ant Design",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Polaris",
+     "Spectrum",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Carbon": "link-visited"
+    },
+    "counts": {
+     "Carbon": 2
+    }
+   }
+  ]
+ },
+ "composition": {
+  "Spectrum": {
+   "total": 921,
+   "counts": {
+    "typography": 305,
+    "color": 244,
+    "spacing": 224,
+    "elevation": 43,
+    "sizing": 32,
+    "radius": 30,
+    "icon-size": 30,
+    "opacity": 6,
+    "border": 5,
+    "z-index": 2
+   },
+   "pct": {
+    "color": 26.5,
+    "typography": 33.1,
+    "elevation": 4.7,
+    "radius": 3.3,
+    "spacing": 24.3,
+    "opacity": 0.7,
+    "z-index": 0.2,
+    "border": 0.5,
+    "sizing": 3.5,
+    "icon-size": 3.3
+   }
+  },
+  "Material Web": {
+   "total": 192,
+   "counts": {
+    "typography": 93,
+    "color": 49,
+    "motion": 27,
+    "radius": 12,
+    "elevation": 7,
+    "opacity": 4
+   },
+   "pct": {
+    "color": 25.5,
+    "typography": 48.4,
+    "elevation": 3.6,
+    "radius": 6.2,
+    "motion": 14.1,
+    "opacity": 2.1
+   }
+  },
+  "MUI": {
+   "total": 109,
+   "counts": {
+    "color": 38,
+    "elevation": 25,
+    "typography": 20,
+    "motion": 11,
+    "z-index": 8,
+    "opacity": 5,
+    "radius": 1,
+    "spacing": 1
+   },
+   "pct": {
+    "color": 34.9,
+    "typography": 18.3,
+    "elevation": 22.9,
+    "radius": 0.9,
+    "motion": 10.1,
+    "spacing": 0.9,
+    "opacity": 4.6,
+    "z-index": 7.3
+   }
+  },
+  "Fluent 2": {
+   "total": 459,
+   "counts": {
+    "color": 349,
+    "typography": 27,
+    "spacing": 22,
+    "elevation": 20,
+    "motion": 17,
+    "radius": 11,
+    "opacity": 9,
+    "border": 4
+   },
+   "pct": {
+    "color": 76.0,
+    "typography": 5.9,
+    "elevation": 4.4,
+    "radius": 2.4,
+    "motion": 3.7,
+    "spacing": 4.8,
+    "opacity": 2.0,
+    "border": 0.9
+   }
+  },
+  "Carbon": {
+   "total": 201,
+   "counts": {
+    "color": 67,
+    "typography": 54,
+    "domain": 42,
+    "spacing": 20,
+    "motion": 6,
+    "sizing": 6,
+    "z-index": 3,
+    "icon-size": 2,
+    "elevation": 1
+   },
+   "pct": {
+    "color": 33.3,
+    "typography": 26.9,
+    "elevation": 0.5,
+    "motion": 3.0,
+    "spacing": 10.0,
+    "z-index": 1.5,
+    "sizing": 3.0,
+    "icon-size": 1.0,
+    "domain": 20.9
+   }
+  },
+  "Polaris": {
+   "total": 820,
+   "counts": {
+    "color": 439,
+    "typography": 112,
+    "sizing": 90,
+    "motion": 46,
+    "spacing": 40,
+    "elevation": 36,
+    "z-index": 26,
+    "border": 14,
+    "radius": 10,
+    "breakpoint": 5,
+    "blur": 2
+   },
+   "pct": {
+    "color": 53.5,
+    "typography": 13.7,
+    "elevation": 4.4,
+    "radius": 1.2,
+    "motion": 5.6,
+    "spacing": 4.9,
+    "z-index": 3.2,
+    "border": 1.7,
+    "sizing": 11.0,
+    "breakpoint": 0.6,
+    "blur": 0.2
+   }
+  },
+  "shadcn/ui": {
+   "total": 91,
+   "counts": {
+    "color": 78,
+    "radius": 8,
+    "typography": 3,
+    "breakpoint": 2
+   },
+   "pct": {
+    "color": 85.7,
+    "typography": 3.3,
+    "radius": 8.8,
+    "breakpoint": 2.2
+   }
+  },
+  "Ant Design": {
+   "total": 227,
+   "counts": {
+    "color": 102,
+    "typography": 26,
+    "spacing": 23,
+    "sizing": 20,
+    "breakpoint": 20,
+    "elevation": 15,
+    "motion": 10,
+    "radius": 5,
+    "opacity": 2,
+    "z-index": 2,
+    "border": 1,
+    "blur": 1
+   },
+   "pct": {
+    "color": 44.9,
+    "typography": 11.5,
+    "elevation": 6.6,
+    "radius": 2.2,
+    "motion": 4.4,
+    "spacing": 10.1,
+    "opacity": 0.9,
+    "z-index": 0.9,
+    "border": 0.4,
+    "sizing": 8.8,
+    "breakpoint": 8.8,
+    "blur": 0.4
+   }
+  }
+ },
+ "category_volume": {
+  "color": 1366,
+  "typography": 640,
+  "spacing": 330,
+  "sizing": 148,
+  "elevation": 147,
+  "motion": 117,
+  "radius": 77,
+  "domain": 42,
+  "z-index": 41,
+  "icon-size": 32,
+  "breakpoint": 27,
+  "opacity": 26,
+  "border": 24,
+  "blur": 3
+ },
+ "unclassified": {
+  "Spectrum": {
+   "count": 14,
+   "sample": [
+    "component-to-menu-extra-large",
+    "component-to-menu-large",
+    "component-to-menu-medium",
+    "component-to-menu-small",
+    "drop-target-dash-length",
+    "field-top-to-progress-circle-extra-large",
+    "field-top-to-progress-circle-large",
+    "field-top-to-progress-circle-medium",
+    "field-top-to-progress-circle-small",
+    "list-indent-large",
+    "list-indent-medium",
+    "side-focus-indicator",
+    "vertical-align-items",
+    "window-to-edge"
+   ]
+  },
+  "Carbon": {
+   "count": 140,
+   "sample": [
+    "code01",
+    "code02",
+    "container01",
+    "container02",
+    "container03",
+    "container04",
+    "container05",
+    "expressive-paragraph01",
+    "fast01",
+    "fast02",
+    "field-01",
+    "field-02",
+    "field-03",
+    "field-hover-01",
+    "field-hover-02"
+   ]
+  },
+  "shadcn/ui": {
+   "count": 2,
+   "sample": [
+    "code",
+    "code-number"
+   ]
+  },
+  "Ant Design": {
+   "count": 1,
+   "sample": [
+    "line-type"
+   ]
+  }
+ },
+ "hue_named_status": {
+  "Spectrum": {
+   "count": 3,
+   "sample": [
+    "green-visual-color",
+    "orange-visual-color",
+    "red-visual-color"
+   ]
+  },
+  "Fluent 2": {
+   "count": 45,
+   "sample": [
+    "color-palette-cranberry-background2",
+    "color-palette-cranberry-border-active",
+    "color-palette-cranberry-foreground2",
+    "color-palette-dark-green-background2",
+    "color-palette-dark-green-border-active",
+    "color-palette-dark-green-foreground2",
+    "color-palette-dark-orange-background1",
+    "color-palette-dark-orange-background2"
+   ]
+  }
+ }
+}

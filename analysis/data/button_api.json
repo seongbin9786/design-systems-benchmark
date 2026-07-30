@@ -1,0 +1,87 @@
+{
+ "_note": "Button 컴포넌트의 variant 축을 8개 시스템 소스에서 직접 읽어 정리. 자동 추출이 아니라 파일을 열어 확인한 값이며 evidence 에 근거 경로를 남긴다. 기준 커밋은 sources/MANIFEST.md.",
+ "_measured_on": "2026-07-30",
+ "_axes_canonical": {
+  "emphasis": "시각적 강조도 — 같은 버튼을 얼마나 강하게 보이게 할지 (fill/outline/ghost 계열)",
+  "intent": "의미 — 이 버튼이 무슨 일을 하는지 (기본/위험/성공)",
+  "size": "크기 스케일",
+  "shape": "테두리 형태 (직각/라운드/원형)",
+  "state": "상호작용·진행 상태 (disabled/loading)"
+ },
+ "systems": {
+  "Spectrum": {
+   "evidence": "react-spectrum/packages/@react-spectrum/s2/src/Button.tsx:49-63",
+   "emphasis": {"prop": "fillStyle", "values": ["fill", "outline"]},
+   "intent": {"prop": "variant", "values": ["primary", "secondary", "accent", "negative", "premium", "genai"]},
+   "size": {"prop": "size", "values": ["S", "M", "L", "XL"]},
+   "shape": null,
+   "state": {"props": ["isDisabled", "isPending"]},
+   "extra": {"staticColor": ["white", "black", "auto"]},
+   "note": "강조도와 의미를 fillStyle / variant 로 분리한 유일한 시스템. premium·genai 는 도메인 확장 축."
+  },
+  "Material Web": {
+   "evidence": "material-web/button/{filled,outlined,text,elevated,filled-tonal}-button.ts",
+   "emphasis": {"prop": null, "values": ["filled", "outlined", "text", "elevated", "filled-tonal"]},
+   "intent": null,
+   "size": null,
+   "shape": null,
+   "state": {"props": ["disabled", "soft-disabled"]},
+   "note": "variant prop 이 없다. 강조도별로 *별도 커스텀 엘리먼트*(<md-filled-button> 등)로 나눈다. 크기 축도 없다."
+  },
+  "MUI": {
+   "evidence": "material-ui/packages/mui-material/src/Button/Button.d.ts",
+   "emphasis": {"prop": "variant", "values": ["text", "outlined", "contained"]},
+   "intent": {"prop": "color", "values": ["inherit", "primary", "secondary", "success", "error", "info", "warning"]},
+   "size": {"prop": "size", "values": ["small", "medium", "large"]},
+   "shape": null,
+   "state": {"props": ["disabled", "loading"]},
+   "note": "emphasis(variant) × intent(color) 를 분리. Spectrum 과 같은 설계, 다른 이름."
+  },
+  "Fluent 2": {
+   "evidence": "fluentui/packages/react-components/react-button/library/src/components/Button/Button.types.ts:32-69",
+   "emphasis": {"prop": "appearance", "values": ["secondary", "primary", "outline", "subtle", "transparent"]},
+   "intent": null,
+   "size": {"prop": "size", "values": ["small", "medium", "large"]},
+   "shape": {"prop": "shape", "values": ["rounded", "circular", "square"]},
+   "state": {"props": ["disabled", "disabledFocusable"]},
+   "note": "emphasis 와 intent 를 appearance 한 축에 섞었다. 위험(danger) 의미 축이 Button 에 없다. disabledFocusable 은 접근성 배려(비활성이어도 포커스 가능)."
+  },
+  "Carbon": {
+   "evidence": "carbon/packages/react/src/components/Button/Button.tsx:15-28",
+   "emphasis": {"prop": "kind", "values": ["primary", "secondary", "tertiary", "ghost"]},
+   "intent": {"prop": "kind", "values": ["danger", "danger--primary", "danger--ghost", "danger--tertiary"]},
+   "size": {"prop": "size", "values": ["xs", "sm", "md", "lg", "xl", "2xl"]},
+   "shape": null,
+   "state": {"props": ["disabled"]},
+   "note": "emphasis 와 intent 를 한 축(kind)에 합치고 `danger--tertiary` 처럼 곱을 문자열로 인코딩한다. 축이 늘면 값이 곱으로 폭발하는 구조."
+  },
+  "Polaris": {
+   "evidence": "polaris/polaris-react/src/components/Button/Button.tsx",
+   "emphasis": {"prop": "variant", "values": ["primary", "secondary", "tertiary", "plain", "monochromePlain"]},
+   "intent": {"prop": "tone", "values": ["critical", "success"]},
+   "size": {"prop": "size", "values": ["micro", "slim", "medium", "large"]},
+   "shape": null,
+   "state": {"props": ["disabled", "loading"]},
+   "note": "emphasis(variant) × intent(tone) 분리. tone 이라는 이름을 쓰는 유일한 시스템."
+  },
+  "shadcn/ui": {
+   "evidence": "shadcn-ui/apps/v4/registry/new-york-v4/ui/button.tsx (cva variants)",
+   "emphasis": {"prop": "variant", "values": ["default", "outline", "secondary", "ghost", "link"]},
+   "intent": {"prop": "variant", "values": ["destructive"]},
+   "size": {"prop": "size", "values": ["default", "xs", "sm", "lg", "icon"]},
+   "shape": null,
+   "state": {"props": []},
+   "note": "Carbon 처럼 한 축에 합쳤다. 상태는 prop 이 아니라 Tailwind `disabled:` 유틸리티로 처리 — 그래서 상태 토큰이 없다. size 에 `icon` 이 섞여 있어 크기 축이 순수하지 않다."
+  },
+  "Ant Design": {
+   "evidence": "ant-design/components/button/buttonHelpers.tsx:110-131",
+   "emphasis": {"prop": "variant", "values": ["outlined", "dashed", "solid", "filled", "text", "link"]},
+   "intent": {"prop": "color", "values": ["default", "primary", "danger", "…PresetColors"]},
+   "size": {"prop": "size", "values": ["small", "middle", "large"]},
+   "shape": {"prop": "shape", "values": ["default", "circle", "round", "square"]},
+   "state": {"props": ["disabled", "loading", "danger", "ghost", "block"]},
+   "legacy": {"prop": "type", "values": ["default", "primary", "dashed", "link", "text"]},
+   "note": "축이 가장 많다. 구 `type` 축과 신 `variant`+`color` 축이 공존해 같은 결과를 두 방식으로 표현할 수 있다 — 하위호환의 대가."
+  }
+ }
+}
