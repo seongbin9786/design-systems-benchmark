@@ -55,22 +55,25 @@ def norm(s):
     # 임의 하이픈에서 자르면 코드 이름도 잘린다 (context-selector -> context 가 .Text 에 오매칭).
     s = s.split(" - ")[0]
     s = NOISE.sub(" ", s)
-    s = re.sub(r"[^a-z0-9]+", "", s)
-    return s
+    # `Avatar/Avatar` 처럼 같은 단어가 반복되는 Figma 경로형 이름을 접는다
+    words = []
+    for w in re.split(r"[^a-z0-9]+", s):
+        if w and w not in words:
+            words.append(w)
+    return "".join(words)
 
 
 def sim(a, b):
-    """문자열 유사도 + 포함관계 보정.
+    """정규화된 이름끼리의 문자열 유사도.
 
-    Figma 는 컴포넌트명에 수식어를 붙인다("Basic dialog", "Checkboxes").
-    순수 편집거리만 쓰면 code:`dialog` ↔ figma:`Basic dialog` 를 놓친다.
-    한쪽이 다른 쪽을 온전히 포함하면(4자 이상) 포함 비율을 점수 하한으로 둔다.
+    ⚠️ 예전에는 "한쪽이 다른 쪽을 포함하면 0.85 이상" 이라는 보정을 넣었다.
+    문자 단위 포함은 단어 경계를 무시하므로 무관한 쌍을 매칭했다 —
+    `context-selector`↔`.Text` 0.89, `select`↔`Period Selector` 0.88,
+    `icon`↔`Icon button`, `datepicker`↔`Picker` 가 전부 매칭으로 집계됐다.
+    보정을 제거했다. 그 결과 `radio`↔`Radio buttons` 처럼 사람 눈에는 대응하는 쌍도
+    놓치지만, MFI 는 "이름이 얼마나 맞는가" 지표이므로 과대평가보다 과소평가가 정직하다.
     """
-    r = SequenceMatcher(None, a, b).ratio()
-    if len(a) >= 4 and len(b) >= 4:
-        if a in b or b in a:
-            r = max(r, 0.85 + 0.15 * min(len(a), len(b)) / max(len(a), len(b)))
-    return r
+    return SequenceMatcher(None, a, b).ratio()
 
 
 def main():

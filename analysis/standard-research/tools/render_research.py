@@ -219,6 +219,7 @@ def build():
         std_count=std_count, comp_std_n=len(comp_std),
         comp_std=" · ".join(comp_std),
         code_key=" · ".join(f'<b>{e(c)}</b> {e(s)}' for s, c in CODE.items()),
+        mfi_carbon_rate=mfi["systems"].get("Carbon", {}).get("component_match_rate", "-"),
         **cf,
     )
 
@@ -520,6 +521,15 @@ def build_md():
     L.append(md_table(["시스템", "Figma SET", "정규화 후", "코드", "매칭", "매칭률",
                        "네이밍 근접도", "MFI-partial"], rows, "lrrrrrrr"))
     L.append("")
+    L.append("")
+    L.append("> [!WARNING]")
+    L.append("> **이 수치는 매칭 규칙에 극도로 민감하다.** 이름 매칭에 \"한쪽이 다른 쪽을 "
+             "포함하면 매칭\" 이라는 보정을 넣었을 때 Carbon 매칭률이 74.2%, 제거했을 때 "
+             f"{[d for s, d in sorted(mfi['systems'].items()) if s == 'Carbon'][0]['component_match_rate']}% 였다. "
+             "보정판은 `context-selector`↔`.Text`, `icon`↔`Icon button` 같은 무관한 쌍을 세고 있었다. "
+             "지금은 보정 없는 순수 문자열 유사도만 쓴다 — 사람 눈에는 대응하는 쌍(`radio`↔`Radio buttons`)도 "
+             "놓치지만, 과대평가보다 과소평가가 정직하다. 의존율과 같은 교훈이다: **집계 규칙을 밝히지 않은 "
+             "수치는 비교 불가다.**")
     L.append("계산하지 못한 항목 (가중치 0.50):")
     L.append("")
     for k, v in mfi["weights_unmeasured"].items():
@@ -965,6 +975,14 @@ Figma 킷에는 variant 가 있으니 — 이 지점이 Figma↔Code 매핑이 �
 재정규화했다. 막대는 두 항목의 기여를 쌓은 것 — 오른쪽 숫자가 MFI-partial.
 로드맵의 MFI 와 <b>같은 값이 아니다</b>.</p>
 <div class="panel">{chart_h}{table_h}</div>
+<div class="callout">
+<p><b>이 수치는 매칭 규칙에 극도로 민감하다.</b> 이름 매칭에 "한쪽이 다른 쪽을 포함하면 매칭"
+이라는 보정을 넣었을 때 Carbon 매칭률이 74.2%, 제거했을 때 {mfi_carbon_rate}% 였다.
+보정판은 <code>context-selector</code>↔<code>.Text</code>, <code>icon</code>↔<code>Icon button</code>
+같은 무관한 쌍을 세고 있었다. 지금은 보정 없는 순수 문자열 유사도만 쓴다 — 사람 눈에는 대응하는
+쌍(<code>radio</code>↔<code>Radio buttons</code>)도 놓치지만, 과대평가보다 과소평가가 정직하다.
+의존율과 같은 교훈이다: <b>집계 규칙을 밝히지 않은 수치는 비교 불가다.</b></p>
+</div>
 <p class="sub" style="margin-top:1rem">계산하지 못한 항목 (가중치 0.50):</p>
 <ul class="plain">{unmeasured}</ul>
 
@@ -980,7 +998,7 @@ Figma 킷에는 variant 가 있으니 — 이 지점이 Figma↔Code 매핑이 �
 <li><b>타이포그래피 스케일을 토큰화한다</b> — 8/8. 색상과 함께 유일하게 예외가 없는 값 종류다.</li>
 <li><b>Elevation·radius 는 {cov_shape}</b> — 미보유는 {miss_shape} 로 예외다
 (shadcn 은 Tailwind 유틸리티, Carbon 은 radius 토큰이 <i>아예 없다</i> — 각진 형태를 부재로 강제한다).</li>
-<li><b>컴포넌트는 9개부터</b> — {comp_std}.</li>
+<li><b>컴포넌트는 {comp_std_n}개부터</b> — {comp_std}.</li>
 <li><b>Button 의 variant 축은 강조도와 의미를 분리한다</b> — 합치면 값이 곱으로 폭발한다.</li>
 <li><b>상태는 Figma 와 코드가 원리상 어긋난다</b> — Figma 킷의 1위 축이 <code>state</code>인데
 코드에서는 prop 이 아니라 의사클래스다. 자동 동기화를 시도하지 말고 계약 문서로 남긴다.</li>

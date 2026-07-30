@@ -38,6 +38,51 @@ RENDER = [
      ["measured/values.json"]),
 ]
 RESEARCH = Path(__file__).resolve().parent
+SOURCES = REPO / "sources"
+MANIFEST = SOURCES / "MANIFEST.md"
+
+
+def preflight():
+    """측정 전에 *소스가 전부 있고 매니페스트 SHA 와 같은지* 확인한다.
+
+    중간 산출물만 검사하면 부분 클론을 못 잡는다. 추출기들은 없는 소스에 대해
+    빈 값을 돌려주고 성공으로 끝나므로, 일부만 받은 상태에서도 리포트가 나온다 —
+    토큰은 8개 시스템, 컴포넌트는 6개 시스템 같은 뒤섞인 결과가 만들어진다.
+    clone.sh 가 키 단위 클론을 지원하니 실제로 일어날 수 있는 상황이다.
+    """
+    import re
+    import subprocess
+
+    if not MANIFEST.exists():
+        print(f"  ✗ {MANIFEST} 가 없습니다 — `bash sources/clone.sh` 를 먼저 실행하세요")
+        return False
+
+    want = dict(re.findall(r"\|\s*`([\w-]+)`\s*\|[^|]*\|\s*`([0-9a-f]{40})`",
+                           MANIFEST.read_text(encoding="utf-8")))
+    if not want:
+        print("  ✗ MANIFEST.md 에서 전체 SHA 를 읽지 못했습니다")
+        return False
+
+    bad = []
+    for key, sha in sorted(want.items()):
+        d = SOURCES / key
+        if not (d / ".git").is_dir():
+            bad.append((key, "없음"))
+            continue
+        cur = subprocess.run(["git", "-C", str(d), "rev-parse", "HEAD"],
+                             capture_output=True, text=True).stdout.strip()
+        if cur != sha:
+            bad.append((key, f"HEAD {cur[:7]} ≠ 매니페스트 {sha[:7]}"))
+
+    if bad:
+        print(f"  ✗ 소스 {len(bad)}/{len(want)}개가 매니페스트와 어긋납니다:")
+        for key, why in bad:
+            print(f"      {key:18s} {why}")
+        print("    `bash sources/clone.sh` 로 맞추세요. 이 상태로 측정하면 시스템별로")
+        print("    다른 소스를 섞어 재는 리포트가 나옵니다.")
+        return False
+    print(f"  ✓ 소스 {len(want)}/{len(want)}개가 매니페스트 SHA 와 일치")
+    return True
 
 
 def run(stage, steps):
@@ -66,6 +111,12 @@ def main():
                ("파생 (measured → derived)", DERIVE)]
               if "--reports" not in args else [])
     stages.append(("렌더 (→ reports)", RENDER))
+
+    if "--reports" not in args:
+        print("\n\033[1m── 사전 검사 (소스 == MANIFEST) ──\033[0m")
+        if not preflight():
+            print("\n중단됨.")
+            return 1
 
     for name, steps in stages:
         if not run(name, steps):

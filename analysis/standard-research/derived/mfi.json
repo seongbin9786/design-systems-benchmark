@@ -23,21 +23,16 @@
    "figma_component_sets": 177,
    "figma_unique_after_norm": 124,
    "code_components": 124,
-   "matched": 92,
-   "component_match_rate": 74.2,
-   "naming_similarity": 85.7,
-   "naming_similarity_matched_only": 96.4,
-   "mfi_partial": 78.8,
+   "matched": 49,
+   "component_match_rate": 39.5,
+   "naming_similarity": 77.5,
+   "naming_similarity_matched_only": 99.2,
+   "mfi_partial": 54.7,
    "matched_sample": [
     {
      "code": "AILabel",
      "figma": "AI label",
      "similarity": 1.0
-    },
-    {
-     "code": "Accordion",
-     "figma": "Accordion item",
-     "similarity": 0.954
     },
     {
      "code": "AccordionItem",
@@ -60,16 +55,6 @@
      "similarity": 1.0
     },
     {
-     "code": "ButtonSet",
-     "figma": "Button",
-     "similarity": 0.95
-    },
-    {
-     "code": "ChatButton",
-     "figma": "Button",
-     "similarity": 0.94
-    },
-    {
      "code": "Checkbox",
      "figma": "Checkbox",
      "similarity": 1.0
@@ -88,6 +73,21 @@
      "code": "ComboButton",
      "figma": "Combo button",
      "similarity": 1.0
+    },
+    {
+     "code": "ContainedList",
+     "figma": "Contained list",
+     "similarity": 1.0
+    },
+    {
+     "code": "ContentSwitcher",
+     "figma": "Content switcher",
+     "similarity": 1.0
+    },
+    {
+     "code": "DataTable",
+     "figma": "Data table",
+     "similarity": 1.0
     }
    ],
    "unmatched_sample": [
@@ -97,9 +97,24 @@
      "similarity": 0.645
     },
     {
+     "code": "Accordion",
+     "closest": "Accordion item",
+     "similarity": 0.818
+    },
+    {
      "code": "BadgeIndicator",
      "closest": "Progress indicator",
      "similarity": 0.71
+    },
+    {
+     "code": "ButtonSet",
+     "closest": "Button",
+     "similarity": 0.8
+    },
+    {
+     "code": "ChatButton",
+     "closest": "Button",
+     "similarity": 0.75
     },
     {
      "code": "ClassPrefix",
@@ -112,44 +127,29 @@
      "similarity": 0.737
     },
     {
+     "code": "ComposedModal",
+     "closest": "Form modal - Default",
+     "similarity": 0.636
+    },
+    {
+     "code": "ContextMenu",
+     "closest": "Text input - Default",
+     "similarity": 0.6
+    },
+    {
      "code": "Copy",
      "closest": "_Code snippet - Inline item",
      "similarity": 0.4
     },
     {
-     "code": "Dialog",
-     "closest": "Modal",
-     "similarity": 0.545
-    },
-    {
-     "code": "Disclosure",
-     "closest": "Tile",
-     "similarity": 0.429
-    },
-    {
-     "code": "ErrorBoundary",
-     "closest": "Progress bar",
-     "similarity": 0.5
-    },
-    {
-     "code": "FeatureFlags",
-     "closest": "Structured list",
-     "similarity": 0.462
-    },
-    {
-     "code": "FlexGrid",
-     "closest": "_Slider item",
-     "similarity": 0.444
-    },
-    {
-     "code": "FluidComboBox",
+     "code": "CopyButton",
      "closest": "Combo button",
-     "similarity": 0.583
+     "similarity": 0.762
     },
     {
-     "code": "FluidForm",
-     "closest": "Slider",
-     "similarity": 0.533
+     "code": "DangerButton",
+     "closest": "_Tag close button",
+     "similarity": 0.692
     }
    ]
   },
@@ -157,11 +157,11 @@
    "figma_component_sets": 104,
    "figma_unique_after_norm": 94,
    "code_components": 71,
-   "matched": 41,
-   "component_match_rate": 57.7,
-   "naming_similarity": 78.9,
-   "naming_similarity_matched_only": 98.1,
-   "mfi_partial": 66.2,
+   "matched": 34,
+   "component_match_rate": 47.9,
+   "naming_similarity": 77.0,
+   "naming_similarity_matched_only": 99.6,
+   "mfi_partial": 59.5,
    "matched_sample": [
     {
      "code": "accordion",
@@ -171,7 +171,7 @@
     {
      "code": "avatar",
      "figma": "Avatar/Avatar",
-     "similarity": 0.925
+     "similarity": 1.0
     },
     {
      "code": "badge",
@@ -204,11 +204,6 @@
      "similarity": 1.0
     },
     {
-     "code": "context-selector",
-     "figma": ".Text",
-     "similarity": 0.89
-    },
-    {
      "code": "dialog",
      "figma": "Dialog",
      "similarity": 1.0
@@ -221,6 +216,11 @@
     {
      "code": "drawer",
      "figma": "Drawer",
+     "similarity": 1.0
+    },
+    {
+     "code": "field",
+     "figma": "Field",
      "similarity": 1.0
     }
    ],
@@ -261,6 +261,11 @@
      "similarity": 0.444
     },
     {
+     "code": "context-selector",
+     "closest": ".Content header",
+     "similarity": 0.643
+    },
+    {
      "code": "datepicker-compat",
      "closest": "SwatchPicker",
      "similarity": 0.571
@@ -279,11 +284,6 @@
      "code": "jsx-runtime",
      "closest": ".ListItem",
      "similarity": 0.444
-    },
-    {
-     "code": "menu-grid-preview",
-     "closest": ".Images Preview Step",
-     "similarity": 0.562
     }
    ]
   },
@@ -291,11 +291,11 @@
    "figma_component_sets": 171,
    "figma_unique_after_norm": 149,
    "code_components": 20,
-   "matched": 16,
-   "component_match_rate": 80.0,
-   "naming_similarity": 87.6,
-   "naming_similarity_matched_only": 96.0,
-   "mfi_partial": 83.0,
+   "matched": 10,
+   "component_match_rate": 50.0,
+   "naming_similarity": 77.4,
+   "naming_similarity_matched_only": 97.5,
+   "mfi_partial": 61.0,
    "matched_sample": [
     {
      "code": "button",
@@ -305,27 +305,17 @@
     {
      "code": "checkbox",
      "figma": "Checkboxes",
-     "similarity": 0.97
+     "similarity": 0.889
     },
     {
      "code": "dialog",
-     "figma": "List dialog",
-     "similarity": 0.94
+     "figma": "XR/XR Dialog",
+     "similarity": 0.857
     },
     {
      "code": "fab",
      "figma": "FAB",
      "similarity": 1.0
-    },
-    {
-     "code": "field",
-     "figma": "Text field",
-     "similarity": 0.933
-    },
-    {
-     "code": "icon",
-     "figma": "Icon button",
-     "similarity": 0.91
     },
     {
      "code": "iconbutton",
@@ -343,19 +333,19 @@
      "similarity": 1.0
     },
     {
-     "code": "progress",
-     "figma": "Linear-determinate progress indicator",
-     "similarity": 0.885
+     "code": "switch",
+     "figma": "Switch",
+     "similarity": 1.0
     },
     {
-     "code": "radio",
-     "figma": "Radio buttons",
-     "similarity": 0.912
+     "code": "tabs",
+     "figma": "Tabs",
+     "similarity": 1.0
     },
     {
-     "code": "select",
-     "figma": ".Building Blocks/Period Selector",
-     "similarity": 0.882
+     "code": "textfield",
+     "figma": "Text field",
+     "similarity": 1.0
     }
    ],
    "unmatched_sample": [
@@ -370,9 +360,39 @@
      "similarity": 0.588
     },
     {
+     "code": "field",
+     "closest": "Text field",
+     "similarity": 0.714
+    },
+    {
+     "code": "icon",
+     "closest": "Icon button",
+     "similarity": 0.571
+    },
+    {
+     "code": "progress",
+     "closest": "Chip groups",
+     "similarity": 0.444
+    },
+    {
+     "code": "radio",
+     "closest": "XR/XR Dialog",
+     "similarity": 0.615
+    },
+    {
      "code": "sass",
      "closest": "Shape Set",
      "similarity": 0.5
+    },
+    {
+     "code": "select",
+     "closest": "Side Sheet",
+     "similarity": 0.533
+    },
+    {
+     "code": "slider",
+     "closest": "Range slider",
+     "similarity": 0.706
     },
     {
      "code": "typography",
@@ -385,11 +405,11 @@
    "figma_component_sets": 462,
    "figma_unique_after_norm": 44,
    "code_components": 56,
-   "matched": 30,
-   "component_match_rate": 53.6,
-   "naming_similarity": 75.3,
-   "naming_similarity_matched_only": 97.3,
-   "mfi_partial": 62.3,
+   "matched": 21,
+   "component_match_rate": 37.5,
+   "naming_similarity": 71.2,
+   "naming_similarity_matched_only": 99.1,
+   "mfi_partial": 51.0,
    "matched_sample": [
     {
      "code": "actionbar",
@@ -409,17 +429,12 @@
     {
      "code": "breadcrumbs",
      "figma": "Breadcrumb - Desktop - Light",
-     "similarity": 0.986
+     "similarity": 0.952
     },
     {
      "code": "button",
      "figma": "Button - Desktop - Light",
      "similarity": 1.0
-    },
-    {
-     "code": "buttongroup",
-     "figma": "Button - Desktop - Light",
-     "similarity": 0.932
     },
     {
      "code": "card",
@@ -437,18 +452,23 @@
      "similarity": 1.0
     },
     {
-     "code": "datepicker",
-     "figma": "Picker - Desktop - Light",
-     "similarity": 0.94
-    },
-    {
-     "code": "dialog",
-     "figma": "Alert Dialog - Desktop - Light",
-     "similarity": 0.932
-    },
-    {
      "code": "divider",
      "figma": "Divider - Desktop - Light",
+     "similarity": 1.0
+    },
+    {
+     "code": "inlinealert",
+     "figma": "In-Line Alert - Desktop - Light",
+     "similarity": 1.0
+    },
+    {
+     "code": "menu",
+     "figma": "Menu - Menu Item - Desktop - Light",
+     "similarity": 1.0
+    },
+    {
+     "code": "meter",
+     "figma": "Meter - Desktop - Light",
      "similarity": 1.0
     }
    ],
@@ -469,6 +489,11 @@
      "similarity": 0.471
     },
     {
+     "code": "buttongroup",
+     "closest": "Button - Desktop - Light",
+     "similarity": 0.706
+    },
+    {
      "code": "calendar",
      "closest": "Alert Dialog - Desktop - Light",
      "similarity": 0.526
@@ -477,6 +502,16 @@
      "code": "contextualhelp",
      "closest": "Text Field - Desktop - Light",
      "similarity": 0.522
+    },
+    {
+     "code": "datepicker",
+     "closest": "Picker - Desktop - Light",
+     "similarity": 0.75
+    },
+    {
+     "code": "dialog",
+     "closest": "Alert Dialog - Desktop - Light",
+     "similarity": 0.706
     },
     {
      "code": "dnd",
@@ -497,21 +532,6 @@
      "code": "icon",
      "closest": "Quick Action - Desktop - Light",
      "similarity": 0.533
-    },
-    {
-     "code": "illustratedmessage",
-     "closest": "Color Area - Desktop - Light",
-     "similarity": 0.37
-    },
-    {
-     "code": "label",
-     "closest": "Table - Desktop - Light",
-     "similarity": 0.6
-    },
-    {
-     "code": "labeledvalue",
-     "closest": "Alert Dialog - Desktop - Light",
-     "similarity": 0.522
     }
    ]
   }
