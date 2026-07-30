@@ -134,7 +134,6 @@
 | **Combobox** | ● | · | ● | ● | ● | ● | ● | ● | 7/8 | Material Web |
 | **Divider** | ● | ● | ● | ● | · | ● | ● | ● | 7/8 | Carbon |
 | **List** | ● | ● | ● | ● | ● | ● | · | ● | 7/8 | shadcn/ui |
-| **Navigation** | ● | · | ● | ● | ● | ● | ● | ● | 7/8 | Material Web |
 | **Switch** | ● | ● | ● | ● | ● | · | ● | ● | 7/8 | Polaris |
 | **Table** | ● | · | ● | ● | ● | ● | ● | ● | 7/8 | Material Web |
 | **Tooltip** | ● | · | ● | ● | ● | ● | ● | ● | 7/8 | Material Web |
@@ -149,6 +148,7 @@
 | **ButtonGroup** | ● | · | ● | · | · | ● | ● | ● | 5/8 | Material Web, Fluent 2, Carbon |
 | **Drawer** | · | · | ● | ● | · | ● | ● | ● | 5/8 | Spectrum, Material Web, Carbon |
 | **Layout** | ● | · | ● | · | ● | ● | · | ● | 5/8 | Material Web, Fluent 2, shadcn/ui |
+| **Navigation** | · | · | ● | ● | ● | ● | ● | · | 5/8 | Spectrum, Material Web, Ant Design |
 | **Pagination** | · | · | ● | · | ● | ● | ● | ● | 5/8 | Spectrum, Material Web, Fluent 2 |
 | **Skeleton** | · | · | ● | ● | ● | · | ● | ● | 5/8 | Spectrum, Material Web, Polaris |
 | **DatePicker** | ● | · | · | · | ● | ● | · | ● | 4/8 | Material Web, MUI, Fluent 2, shadcn/ui |

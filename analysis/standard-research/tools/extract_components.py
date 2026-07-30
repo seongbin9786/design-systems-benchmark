@@ -80,7 +80,7 @@ CANON = {
     "Breadcrumbs":     r"^(breadcrumb|breadcrumbs)$",
     "Pagination":      r"^(pagination|paginator|paginat.*)$",
     "Stepper":         r"^(stepper|steps|progress-?stepper|progress-?indicator)$",
-    "Navigation":      r"^(nav|navbar|navigation|side-?nav|top-?nav|header|ui-?shell|menu-?bar|app-?bar|tab-?bar|footer|layout)$",
+    "Navigation":      r"^(nav|navbar|navigation|side-?nav|top-?nav|header|ui-?shell|menu-?bar|app-?bar|tab-?bar|footer)$",  # `layout` 은 Layout 개념 — 여기 두면 가로챈다
     "Table":           r"^(table|data-?table|data-?grid|table-?view|grid-?list)$",
     "List":            r"^(list|list-?box|list-?view|ordered-?list|unordered-?list|resource-?list|list-?item)$",
     "Tree":            r"^(tree|tree-?view|tree-?grid|tree-?select)$",
@@ -95,7 +95,7 @@ CANON = {
     "Skeleton":        r"^(skeleton|skeleton-?text|skeleton-?placeholder|shimmer)$",
     "Divider":         r"^(divider|separator|hr)$",
     "Tooltip/Toggletip": r"^(toggletip|contextual-?help)$",
-    "Layout":          r"^(grid|stack|flex|box|container|inline|view|space|row|col|column|layout-?grid|content-?layout|page)$",
+    "Layout":          r"^(grid|stack|flex|box|container|inline|view|space|row|col|column|layout|layout-?grid|content-?layout|page)$",
     "Typography":      r"^(text|typography|heading|title|paragraph)$",
     "InlineCode":      r"^(code|kbd|blockquote|snippet|code-?snippet)$",
     "Chart":           r"^(chart|charts|sparkline|data-?viz)$",

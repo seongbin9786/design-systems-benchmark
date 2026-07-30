@@ -79,6 +79,7 @@
      "label"
     ],
     "Layout": [
+     "layout",
      "view"
     ],
     "Link": [
@@ -90,9 +91,6 @@
     ],
     "Menu": [
      "menu"
-    ],
-    "Navigation": [
-     "layout"
     ],
     "NumberInput": [
      "numberfield"
@@ -706,6 +704,7 @@
     ],
     "Layout": [
      "Grid",
+     "Layout",
      "Stack"
     ],
     "Link": [
@@ -723,7 +722,6 @@
      "OverflowMenu"
     ],
     "Navigation": [
-     "Layout",
      "UIShell"
     ],
     "NumberInput": [
@@ -941,6 +939,7 @@
     "Layout": [
      "Box",
      "Grid",
+     "Layout",
      "Page"
     ],
     "Link": [
@@ -956,7 +955,6 @@
      "ActionMenu"
     ],
     "Navigation": [
-     "Layout",
      "Navigation"
     ],
     "Pagination": [
@@ -1301,6 +1299,7 @@
      "col",
      "flex",
      "grid",
+     "layout",
      "row",
      "space"
     ],
@@ -1312,9 +1311,6 @@
     ],
     "Menu": [
      "menu"
-    ],
-    "Navigation": [
-     "layout"
     ],
     "NumberInput": [
      "input-number"
@@ -2133,47 +2129,6 @@
    }
   },
   {
-   "component": "Navigation",
-   "coverage": 7,
-   "systems": [
-    "Spectrum",
-    "MUI",
-    "Fluent 2",
-    "Carbon",
-    "Polaris",
-    "shadcn/ui",
-    "Ant Design"
-   ],
-   "missing": [
-    "Material Web"
-   ],
-   "aliases": {
-    "Spectrum": [
-     "layout"
-    ],
-    "MUI": [
-     "AppBar"
-    ],
-    "Fluent 2": [
-     "nav"
-    ],
-    "Carbon": [
-     "Layout",
-     "UIShell"
-    ],
-    "Polaris": [
-     "Layout",
-     "Navigation"
-    ],
-    "shadcn/ui": [
-     "menubar"
-    ],
-    "Ant Design": [
-     "layout"
-    ]
-   }
-  },
-  {
    "component": "Switch",
    "coverage": 7,
    "systems": [
@@ -2680,6 +2635,7 @@
    ],
    "aliases": {
     "Spectrum": [
+     "layout",
      "view"
     ],
     "MUI": [
@@ -2690,19 +2646,55 @@
     ],
     "Carbon": [
      "Grid",
+     "Layout",
      "Stack"
     ],
     "Polaris": [
      "Box",
      "Grid",
+     "Layout",
      "Page"
     ],
     "Ant Design": [
      "col",
      "flex",
      "grid",
+     "layout",
      "row",
      "space"
+    ]
+   }
+  },
+  {
+   "component": "Navigation",
+   "coverage": 5,
+   "systems": [
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris",
+    "shadcn/ui"
+   ],
+   "missing": [
+    "Spectrum",
+    "Material Web",
+    "Ant Design"
+   ],
+   "aliases": {
+    "MUI": [
+     "AppBar"
+    ],
+    "Fluent 2": [
+     "nav"
+    ],
+    "Carbon": [
+     "UIShell"
+    ],
+    "Polaris": [
+     "Navigation"
+    ],
+    "shadcn/ui": [
+     "menubar"
     ]
    }
   },

@@ -806,7 +806,7 @@
      "Spectrum": 10,
      "MUI": 4,
      "Fluent 2": 7,
-     "Carbon": 4,
+     "Carbon": 6,
      "Polaris": 9,
      "Ant Design": 4
     }
@@ -925,16 +925,16 @@
      "shadcn/ui"
     ],
     "examples": {
-     "Material Web": "color-on-surface",
+     "Material Web": "color-inverse-surface",
      "Fluent 2": "color-neutral-background-inverted",
      "Carbon": "icon-inverse",
      "Polaris": "color-bg-inverse"
     },
     "counts": {
-     "Material Web": 5,
+     "Material Web": 2,
      "Fluent 2": 20,
-     "Carbon": 15,
-     "Polaris": 21
+     "Carbon": 11,
+     "Polaris": 11
     }
    },
    {

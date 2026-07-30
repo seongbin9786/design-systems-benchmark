@@ -57,6 +57,11 @@ pin() {
   return 1
 }
 
+# 현재 sparse-checkout 목록을 정렬해 한 줄로 (비교용). sparse 가 아니면 빈 문자열.
+sparse_now() {
+  git -C "$1" sparse-checkout list 2>/dev/null | sort | tr '\n' ' '
+}
+
 apply_sparse() {
   local key="$1"; shift
   [ $# -eq 0 ] && return 0
@@ -69,6 +74,12 @@ clone_one() {
 
   if [ -d "$key/.git" ]; then
     if [ -n "$sha" ] && [ "$(git -C "$key" rev-parse HEAD 2>/dev/null)" = "$sha" ]; then
+      # HEAD 만 맞다고 넘어가면 안 된다 — sparse 규칙이 좁혀져 있으면 파일이 없는데도
+      # 작업 트리는 깨끗해서 run.py 사전 검사까지 통과한다. 설정을 대조해 다르면 복구한다.
+      if [ -n "$sparse" ] && [ "$(sparse_now "$key")" != "$(printf '%s\n' $sparse | sort | tr '\n' ' ')" ]; then
+        echo "SPARSE $key (sparse 경로가 매니페스트와 달라 재적용)"
+        apply_sparse "$key" $sparse || { echo "FAIL   $key (sparse)"; return 1; }
+      fi
       echo "SKIP   $key (이미 매니페스트 SHA ${sha:0:7})"
       return 0
     fi

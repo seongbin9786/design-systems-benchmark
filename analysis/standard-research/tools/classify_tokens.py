@@ -86,7 +86,10 @@ INTENT = [
     ("status:info",     r"informative|\binfo\b|information"),
     ("brand",           r"brand|accent|primary|emphasis|\bkey\b"),
     ("secondary",       r"secondary|subdued|muted|subtle|weak|tertiary|placeholder|quiet"),
-    ("inverse",         r"inverse|\bon-\b|invert|contrast-text|-inverted"),
+    # `\bon-\b` 은 Material Web 의 일반 전경 규약(color-on-surface)을 전부 inverse 로
+    # 만들었다. extract_values.py 는 같은 토큰을 text-primary 로 쓰므로 자기모순이었다.
+    # MUI 의 contrast-text 도 "채움 위 글자" 이지 반전 테마가 아니다.
+    ("inverse",         r"invers|invert"),
     ("disabled",        r"disabled"),
     # `default`·`standard` 는 어디에나 붙는다 — corner-radius-large-default,
     # motion-easing-standard, transitions-duration-standard 를 neutral 로 잡았다.

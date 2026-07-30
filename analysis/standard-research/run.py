@@ -61,8 +61,18 @@ def preflight():
         print(f"  ✗ {MANIFEST} 가 없습니다 — `bash sources/clone.sh` 를 먼저 실행하세요")
         return False
 
-    want = dict(re.findall(r"\|\s*`([\w-]+)`\s*\|[^|]*\|\s*`([0-9a-f]{40})`",
-                           MANIFEST.read_text(encoding="utf-8")))
+    man = MANIFEST.read_text(encoding="utf-8")
+    want = dict(re.findall(r"\|\s*`([\w-]+)`\s*\|[^|]*\|\s*`([0-9a-f]{40})`", man))
+    # 매니페스트 마지막 열의 sparse 경로도 대조한다 — HEAD 가 맞아도 sparse 가 좁혀져 있으면
+    # 파일이 없는데 작업 트리는 깨끗해서 SHA 검사만으로는 통과한다.
+    want_sparse = {}
+    for row in man.splitlines():
+        m = re.match(r"\|\s*`([\w-]+)`\s*\|", row)
+        if not m:
+            continue
+        cols = [c.strip() for c in row.strip("|").split("|")]
+        if len(cols) >= 7 and cols[6] != "(전체)":
+            want_sparse[m.group(1)] = sorted(cols[6].split())
     if not want:
         print("  ✗ MANIFEST.md 에서 전체 SHA 를 읽지 못했습니다")
         return False
@@ -86,6 +96,13 @@ def preflight():
             n = len(dirty.splitlines())
             first = dirty.splitlines()[0].strip()
             bad.append((key, f"로컬 변경 {n}건 (예: {first}) — HEAD 는 맞지만 내용이 다르다"))
+            continue
+        exp = want_sparse.get(key)
+        if exp:
+            got = sorted(subprocess.run(["git", "-C", str(d), "sparse-checkout", "list"],
+                                        capture_output=True, text=True).stdout.split())
+            if got != exp:
+                bad.append((key, f"sparse 경로 {len(got)}개 ≠ 매니페스트 {len(exp)}개 — 파일이 빠져 있다"))
 
     if bad:
         print(f"  ✗ 소스 {len(bad)}/{len(want)}개가 매니페스트와 어긋납니다:")
