@@ -38,6 +38,9 @@
      "actiongroup",
      "buttongroup"
     ],
+    "Calendar": [
+     "calendar"
+    ],
     "Card": [
      "card"
     ],
@@ -49,7 +52,6 @@
      "combobox"
     ],
     "DatePicker": [
-     "calendar",
      "datepicker"
     ],
     "Dialog": [
@@ -239,11 +241,9 @@
     ],
     "Button": [
      "Button",
-     "IconButton",
      "ListItemButton",
      "StepButton",
-     "TabScrollButton",
-     "ToggleButton"
+     "TabScrollButton"
     ],
     "ButtonGroup": [
      "ButtonGroup",
@@ -277,6 +277,9 @@
     "Icon": [
      "Icon",
      "SvgIcon"
+    ],
+    "IconButton": [
+     "IconButton"
     ],
     "Label": [
      "FormLabel"
@@ -347,6 +350,9 @@
     ],
     "Toast": [
      "Snackbar"
+    ],
+    "ToggleButton": [
+     "ToggleButton"
     ],
     "Toolbar": [
      "Toolbar"
@@ -616,7 +622,6 @@
      "ComboButton",
      "CopyButton",
      "DangerButton",
-     "IconButton",
      "MenuButton",
      "PrimaryButton",
      "RadioButton",
@@ -650,6 +655,9 @@
      "Icon",
      "IconIndicator",
      "Icons"
+    ],
+    "IconButton": [
+     "IconButton"
     ],
     "InlineCode": [
      "CodeSnippet"
@@ -1026,6 +1034,9 @@
     "ButtonGroup": [
      "button-group"
     ],
+    "Calendar": [
+     "calendar"
+    ],
     "Card": [
      "card"
     ],
@@ -1043,9 +1054,6 @@
     ],
     "Command": [
      "command"
-    ],
-    "DatePicker": [
-     "calendar"
     ],
     "Dialog": [
      "alert-dialog",
@@ -1177,6 +1185,9 @@
     "ButtonGroup": [
      "segmented"
     ],
+    "Calendar": [
+     "calendar"
+    ],
     "Card": [
      "card"
     ],
@@ -1193,7 +1204,6 @@
      "auto-complete"
     ],
     "DatePicker": [
-     "calendar",
      "date-picker"
     ],
     "Dialog": [
@@ -1344,11 +1354,9 @@
     ],
     "MUI": [
      "Button",
-     "IconButton",
      "ListItemButton",
      "StepButton",
-     "TabScrollButton",
-     "ToggleButton"
+     "TabScrollButton"
     ],
     "Fluent 2": [
      "button"
@@ -1359,7 +1367,6 @@
      "ComboButton",
      "CopyButton",
      "DangerButton",
-     "IconButton",
      "MenuButton",
      "PrimaryButton",
      "RadioButton",
@@ -2550,41 +2557,6 @@
    }
   },
   {
-   "component": "DatePicker",
-   "coverage": 5,
-   "systems": [
-    "Spectrum",
-    "Carbon",
-    "Polaris",
-    "shadcn/ui",
-    "Ant Design"
-   ],
-   "missing": [
-    "Material Web",
-    "MUI",
-    "Fluent 2"
-   ],
-   "aliases": {
-    "Spectrum": [
-     "calendar",
-     "datepicker"
-    ],
-    "Carbon": [
-     "DatePicker"
-    ],
-    "Polaris": [
-     "DatePicker"
-    ],
-    "shadcn/ui": [
-     "calendar"
-    ],
-    "Ant Design": [
-     "calendar",
-     "date-picker"
-    ]
-   }
-  },
-  {
    "component": "Drawer",
    "coverage": 5,
    "systems": [
@@ -2727,6 +2699,36 @@
     ],
     "Ant Design": [
      "skeleton"
+    ]
+   }
+  },
+  {
+   "component": "DatePicker",
+   "coverage": 4,
+   "systems": [
+    "Spectrum",
+    "Carbon",
+    "Polaris",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "shadcn/ui"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "datepicker"
+    ],
+    "Carbon": [
+     "DatePicker"
+    ],
+    "Polaris": [
+     "DatePicker"
+    ],
+    "Ant Design": [
+     "date-picker"
     ]
    }
   },
@@ -2883,6 +2885,33 @@
    }
   },
   {
+   "component": "Calendar",
+   "coverage": 3,
+   "systems": [
+    "Spectrum",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "missing": [
+    "Material Web",
+    "MUI",
+    "Fluent 2",
+    "Carbon",
+    "Polaris"
+   ],
+   "aliases": {
+    "Spectrum": [
+     "calendar"
+    ],
+    "shadcn/ui": [
+     "calendar"
+    ],
+    "Ant Design": [
+     "calendar"
+    ]
+   }
+  },
+  {
    "component": "Carousel",
    "coverage": 3,
    "systems": [
@@ -2961,6 +2990,33 @@
     ],
     "Ant Design": [
      "empty"
+    ]
+   }
+  },
+  {
+   "component": "IconButton",
+   "coverage": 3,
+   "systems": [
+    "Material Web",
+    "MUI",
+    "Carbon"
+   ],
+   "missing": [
+    "Spectrum",
+    "Fluent 2",
+    "Polaris",
+    "shadcn/ui",
+    "Ant Design"
+   ],
+   "aliases": {
+    "Material Web": [
+     "iconbutton"
+    ],
+    "MUI": [
+     "IconButton"
+    ],
+    "Carbon": [
+     "IconButton"
     ]
    }
   },
@@ -3265,27 +3321,6 @@
    }
   },
   {
-   "component": "IconButton",
-   "coverage": 1,
-   "systems": [
-    "Material Web"
-   ],
-   "missing": [
-    "Spectrum",
-    "MUI",
-    "Fluent 2",
-    "Carbon",
-    "Polaris",
-    "shadcn/ui",
-    "Ant Design"
-   ],
-   "aliases": {
-    "Material Web": [
-     "iconbutton"
-    ]
-   }
-  },
-  {
    "component": "Image",
    "coverage": 1,
    "systems": [
@@ -3370,36 +3405,25 @@
    }
   },
   {
-   "component": "Calendar",
-   "coverage": 0,
-   "systems": [],
-   "missing": [
-    "Spectrum",
-    "Material Web",
-    "MUI",
-    "Fluent 2",
-    "Carbon",
-    "Polaris",
-    "shadcn/ui",
-    "Ant Design"
-   ],
-   "aliases": {}
-  },
-  {
    "component": "ToggleButton",
-   "coverage": 0,
-   "systems": [],
+   "coverage": 1,
+   "systems": [
+    "MUI"
+   ],
    "missing": [
     "Spectrum",
     "Material Web",
-    "MUI",
     "Fluent 2",
     "Carbon",
     "Polaris",
     "shadcn/ui",
     "Ant Design"
    ],
-   "aliases": {}
+   "aliases": {
+    "MUI": [
+     "ToggleButton"
+    ]
+   }
   }
  ],
  "figma_variant_axes": {

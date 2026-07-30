@@ -59,7 +59,8 @@ HUE_STATUS = {
 ROLE = [
     ("shadow",     r"shadow"),
     ("overlay",    r"overlay|scrim|backdrop"),
-    ("focus-ring", r"focus-(indicator|ring)|ring"),
+    # 무경계 `ring` 은 entering·string 을 잡는다 — 완전한 세그먼트만 인정
+    ("focus-ring", r"focus-(indicator|ring)|(^|-)ring(-|$)"),
     ("link",       r"link"),
     ("icon",       r"\bicon\b|-icon|icon-"),
     # `\bline\b` 은 line-height 를 잡는다. Ant Design 의 line-width/line-type 만 인정.
@@ -149,7 +150,7 @@ def main():
 
     # axis -> value -> {system: [예시 토큰...]}
     seen = {a: defaultdict(lambda: defaultdict(list)) for a in ("category", "role", "intent", "state")}
-    unclassified = defaultdict(list)
+    uncategorized = defaultdict(list)  # category 만 못 붙은 것 — 다른 축은 살린다
     hue_named = defaultdict(list)  # 색조 이름으로 상태를 표현하는 케이스
 
     for sys_name, info in tokens.items():
@@ -157,10 +158,13 @@ def main():
             c = classify(tname)
             if c.pop("_hue_named"):
                 hue_named[sys_name].append(tname)
+            # category 를 못 붙였다고 토큰을 통째로 버리면 안 된다.
+            # Carbon 의 `support-success` 는 색상 카테고리 패턴에 안 걸리지만
+            # intent=status:success 는 분명하다. 축은 서로 독립이다.
             if c["category"] is None:
-                unclassified[sys_name].append(tname)
-                continue
-            is_color = c["category"] == "color"
+                uncategorized[sys_name].append(tname)
+            is_color = c["category"] == "color" or (
+                c["category"] is None and (c["role"] or c["intent"]))
             for axis, val in c.items():
                 if val is None:
                     continue
@@ -216,7 +220,9 @@ def main():
         vol[row["value"]] = sum(row["counts"].values())
     result["category_volume"] = dict(sorted(vol.items(), key=lambda kv: -kv[1]))
 
-    result["unclassified"] = {s: {"count": len(v), "sample": sorted(v)[:15]} for s, v in unclassified.items()}
+    # 이 통계는 "category 축을 못 붙인 것" 이다 (다른 축은 기록됐다)
+    result["uncategorized"] = {s: {"count": len(v), "sample": sorted(v)[:15]}
+                               for s, v in uncategorized.items()}
     result["hue_named_status"] = {s: {"count": len(v), "sample": sorted(v)[:8]} for s, v in hue_named.items()}
     out_path = paths.write_json("vocabulary", result)
 
@@ -224,10 +230,10 @@ def main():
         print(f"\n=== {axis} ===")
         for r in result["axes"][axis]:
             print(f"  {r['coverage']}/{n} {r['tier']:16s} {r['value']:18s} 미보유: {', '.join(r['missing']) or '-'}")
-    tot_unc = sum(v["count"] for v in result["unclassified"].values())
+    tot_unc = sum(v["count"] for v in result["uncategorized"].values())
     tot = sum(t["count"] for t in tokens.values())
-    print(f"\n미분류 {tot_unc}/{tot} ({tot_unc / tot * 100:.1f}%)")
-    for s, v in result["unclassified"].items():
+    print(f"\ncategory 미분류 {tot_unc}/{tot} ({tot_unc / tot * 100:.1f}%) — 다른 축은 기록됨")
+    for s, v in result["uncategorized"].items():
         if v["count"]:
             print(f"  {s}: {v['count']}  예: {', '.join(v['sample'][:5])}")
     print(f"\n-> {out_path}")

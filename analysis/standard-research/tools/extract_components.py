@@ -35,24 +35,29 @@ EXCLUDE = re.compile(
 )
 
 # 정규 개념 -> 별칭 정규식. 다수 시스템이 같은 개념을 다른 이름으로 부른다.
+# ⚠️ 순서가 우선순위다 (canonicalize 가 첫 일치를 택한다).
+# 넓은 패턴이 먼저 오면 전문 개념을 삼킨다 — `.*-button` 이 IconButton·ToggleButton 을
+# 가로채 IconButton 이 1/8, ToggleButton 이 0/8 로 잡히는 사고가 있었다.
+# 전문 개념을 반드시 넓은 패턴보다 위에 둔다.
 CANON = {
-    "Button":          r"^(button|action-?button|md-?button|.*-button)$",
     "IconButton":      r"^icon-?button$",
     "ToggleButton":    r"^(toggle-?button|switch-?button)$",
     "ButtonGroup":     r"^(button-?group|segmented|toggle-?button-?group|action-?group)$",
+    "Button":          r"^(button|action-?button|md-?button|.*-button)$",
     "Link":            r"^(link|anchor)$",
     "TextInput":       r"^(input|text-?field|text-?input|textbox|filled-?text-?field)$",
     "Textarea":        r"^(textarea|text-?area)$",
     "NumberInput":     r"^(number-?field|number-?input|input-?number)$",
     "PasswordInput":   r"^(password-?input|password-?field)$",
     "SearchInput":     r"^(search|search-?field|search-?input)$",
+    "Calendar":        r"^(calendar|range-?calendar)$",
     "Select":          r"^(select|picker|dropdown|native-?select)$",
     "Combobox":        r"^(combo-?box|autocomplete|auto-?complete)$",
     "Checkbox":        r"^(checkbox|check-?box)$",
     "Radio":           r"^(radio|radio-?group|radio-?button)$",
     "Switch":          r"^(switch|toggle)$",
     "Slider":          r"^(slider|range-?slider|range-?calendar)?$|^slider$",
-    "DatePicker":      r"^(date-?picker|date-?input|date-?field|calendar)$",
+    "DatePicker":      r"^(date-?picker|date-?input|date-?field)$",
     "TimePicker":      r"^(time-?picker|time-?field|time-?input)$",
     "FileUpload":      r"^(file-?upload|file-?uploader|file-?trigger|upload|drop-?zone|dropzone)$",
     "Form":            r"^(form|form-?group|form-?item|fieldset|form-?layout)$",
@@ -93,7 +98,6 @@ CANON = {
     "Rating":          r"^(rate|rating|star-?rating)$",
     "ColorPicker":     r"^(color-?picker|color-?area|color-?field|color-?slider|color-?swatch|color-?wheel)$",
     "Command":         r"^(command|command-?palette|quick-?search)$",
-    "Calendar":        r"^(calendar|range-?calendar)$",
     "Tag/TokenInput":  r"^(tag-?group|tag-?field|token-?field|chips)$",
     "Toolbar":         r"^(toolbar|action-?bar|button-?bar)$",
     "Empty":           r"^(empty|empty-?state|empty-?search-?result)$",

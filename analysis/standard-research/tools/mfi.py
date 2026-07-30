@@ -51,7 +51,9 @@ def norm(s):
     s = s.lower()
     s = re.sub(r"[_/|]", " ", s)
     s = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", " ", s)
-    s = s.split("-")[0] if s.count("-") and len(s.split("-")[0]) > 3 else s
+    # Figma 는 " - Default" / " - Light" 처럼 *공백-하이픈-공백* 으로 수식어를 붙인다.
+    # 임의 하이픈에서 자르면 코드 이름도 잘린다 (context-selector -> context 가 .Text 에 오매칭).
+    s = s.split(" - ")[0]
     s = NOISE.sub(" ", s)
     s = re.sub(r"[^a-z0-9]+", "", s)
     return s

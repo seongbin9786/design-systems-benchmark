@@ -10,7 +10,7 @@
 > **기준일** 2026-07-30 · **소스** 고정 커밋 (부록)  
 > **시각화판** [design-system-standard-research.html](design-system-standard-research.html) — 커버리지 히트맵, 덤벨 차트 등 8종. 이 문서와 같은 데이터에서 생성된다.
 
-| 예외 없이 공통인 토큰 어휘 | 8개 시스템 전부에 있는 컴포넌트 | 추출한 semantic 토큰 총수 | 정규 어휘로 분류 안 된 잔여 |
+| 예외 없이 공통인 토큰 어휘 | 8개 시스템 전부에 있는 컴포넌트 | 추출한 semantic 토큰 총수 | category 축을 못 붙인 잔여 |
 |---:|---:|---:|---:|
 | 8 | 9 | 3177 | 4.9% |
 
@@ -21,7 +21,7 @@
 - **수집 범위** — 각 시스템의 *semantic(alias) 계층*만. primitive 램프(`gray-100` 류)는 제외했다. 표준화 대상이 아니다.
 - **판정** — 토큰 이름을 4개 축(값의 종류 / 자리 / 의미 / 상태)으로 분류하고, 각 값이 8개 중 몇 개 시스템에 등장하는지 센다.
 - **이름이 곧 근거** — 값이 아니라 *이름*을 본다. 이름에 개념이 드러나지 않으면 그 시스템은 실제로 그 개념을 구분하지 않는다고 본다.
-- **잔여 157개(4.9%)** 는 어느 축에도 걸리지 않았다. 대부분 Carbon 의 `code01`/`container01` 같은 시스템 고유 스케일이다.
+- **잔여 157개(4.9%)** 는 *값의 종류* 축만 못 붙은 것이다 (다른 축은 기록됐다). 대부분 Carbon 의 `code01`/`container01` 같은 시스템 고유 스케일이다.
 
 > [!WARNING]
 > **이름이 같아야 개념이 같은 것은 아니다.** Fluent 2 는 상태색을 `status` 가 아니라 *색조* 이름으로 부른다 — `colorPaletteCranberryForeground1` 이 위험색이다. 이 문서는 `statusColorMapping.ts`(success→green, warning→orange, danger→cranberry)를 읽어 매핑한 뒤 커버리지에 넣었다. 해당 사례: Spectrum 3개, Fluent 2 45개
@@ -79,7 +79,7 @@
 | `overlay` | ● | ● | · | ● | ● | ● | · | · | 5/8 | 우세 | Ant Design, MUI, shadcn/ui |
 | `icon` | ● | · | · | · | ● | ● | · | ● | 4/8 | 분기 | Fluent 2, MUI, Material Web, shadcn/ui |
 | `link` | · | · | · | ● | ● | ● | · | ● | 4/8 | 분기 | MUI, Material Web, Spectrum, shadcn/ui |
-| `focus-ring` | ● | · | ● | · | · | · | ● | · | 3/8 | 분기 | Ant Design, Carbon, Fluent 2, Material Web, Polaris |
+| `focus-ring` | ● | · | · | · | · | · | ● | · | 2/8 | 분기 | Ant Design, Carbon, Fluent 2, MUI, Material Web, Polaris |
 
 ### 의미와 강조도 — 그 색이 무슨 뜻인가
 
@@ -89,11 +89,11 @@
 | `secondary` | ● | ● | ● | ● | ● | ● | ● | ● | 8/8 | 표준 | — |
 | `status:critical` | ● | ● | ● | ● | ● | ● | ● | ● | 8/8 | 표준 | — |
 | `disabled` | ● | · | ● | ● | ● | ● | · | ● | 6/8 | 우세 | Material Web, shadcn/ui |
-| `status:success` | ● | · | ● | ● | · | ● | · | ● | 5/8 | 우세 | Carbon, Material Web, shadcn/ui |
-| `status:warning` | ● | · | ● | ● | · | ● | · | ● | 5/8 | 우세 | Carbon, Material Web, shadcn/ui |
+| `status:success` | ● | · | ● | ● | ● | ● | · | ● | 6/8 | 우세 | Material Web, shadcn/ui |
+| `status:warning` | ● | · | ● | ● | ● | ● | · | ● | 6/8 | 우세 | Material Web, shadcn/ui |
+| `neutral` | ● | ● | ● | ● | ● | · | · | · | 5/8 | 우세 | Ant Design, Polaris, shadcn/ui |
+| `status:info` | ● | · | ● | · | ● | ● | · | ● | 5/8 | 우세 | Fluent 2, Material Web, shadcn/ui |
 | `inverse` | · | ● | · | ● | ● | ● | · | · | 4/8 | 분기 | Ant Design, MUI, Spectrum, shadcn/ui |
-| `neutral` | ● | ● | ● | ● | · | · | · | · | 4/8 | 분기 | Ant Design, Carbon, Polaris, shadcn/ui |
-| `status:info` | ● | · | ● | · | · | ● | · | ● | 4/8 | 분기 | Carbon, Fluent 2, Material Web, shadcn/ui |
 
 ### 상호작용 상태 — 상태에 따라 값이 바뀌는가
 
@@ -148,19 +148,21 @@
 | **Popover** | · | · | ● | ● | ● | ● | ● | ● | 6/8 | Spectrum, Material Web |
 | **Radio** | ● | ● | ● | ● | · | · | ● | ● | 6/8 | Carbon, Polaris |
 | **ButtonGroup** | ● | · | ● | · | · | ● | ● | ● | 5/8 | Material Web, Fluent 2, Carbon |
-| **DatePicker** | ● | · | · | · | ● | ● | ● | ● | 5/8 | Material Web, MUI, Fluent 2 |
 | **Drawer** | · | · | ● | ● | · | ● | ● | ● | 5/8 | Spectrum, Material Web, Carbon |
 | **Layout** | ● | · | ● | · | ● | ● | · | ● | 5/8 | Material Web, Fluent 2, shadcn/ui |
 | **Pagination** | · | · | ● | · | ● | ● | ● | ● | 5/8 | Spectrum, Material Web, Fluent 2 |
 | **Skeleton** | · | · | ● | ● | ● | · | ● | ● | 5/8 | Spectrum, Material Web, Polaris |
+| **DatePicker** | ● | · | · | · | ● | ● | · | ● | 4/8 | Material Web, MUI, Fluent 2, shadcn/ui |
 | **Field** | · | ● | ● | ● | · | · | ● | · | 4/8 | Spectrum, Carbon, Polaris, Ant Design |
 | **FileUpload** | ● | · | · | · | ● | ● | · | ● | 4/8 | Material Web, MUI, Fluent 2, shadcn/ui |
 | **Spinner** | · | · | · | ● | ● | ● | ● | · | 4/8 | Spectrum, Material Web, MUI, Ant Design |
 | **Toast** | ● | · | ● | ● | · | ● | · | · | 4/8 | Material Web, Carbon, shadcn/ui, Ant Design |
 | **Tree** | ● | · | · | ● | ● | · | · | ● | 4/8 | Material Web, MUI, Polaris, shadcn/ui |
+| **Calendar** | ● | · | · | · | · | · | ● | ● | 3/8 | Material Web, MUI, Fluent 2, Carbon, Polaris |
 | **Carousel** | · | · | · | ● | · | · | ● | ● | 3/8 | Spectrum, Material Web, MUI, Carbon, Polaris |
 | **ColorPicker** | · | · | · | ● | · | ● | · | ● | 3/8 | Spectrum, Material Web, MUI, Carbon, shadcn/ui |
 | **Empty** | · | · | · | · | · | ● | ● | ● | 3/8 | Spectrum, Material Web, MUI, Fluent 2, Carbon |
+| **IconButton** | · | ● | ● | · | ● | · | · | · | 3/8 | Spectrum, Fluent 2, Polaris, shadcn/ui, Ant Design |
 | **NumberInput** | ● | · | · | · | ● | · | · | ● | 3/8 | Material Web, MUI, Fluent 2, Polaris, shadcn/ui |
 | **Rating** | · | · | ● | ● | · | · | · | ● | 3/8 | Spectrum, Material Web, Carbon, Polaris, shadcn/ui |
 | **SearchInput** | ● | · | · | ● | ● | · | · | · | 3/8 | Material Web, MUI, Polaris, shadcn/ui, Ant Design |
@@ -172,7 +174,7 @@
 
 | 정규 컴포넌트 | SPE | MTW | MUI | FLU | CAR | POL | SCN | ANT |
 |:---|:---|:---|:---|:---|:---|:---|:---|:---|
-| **Button** | `button` | `button` | `Button`, `IconButton`, `ListItemButton` | `button` | `Button`, `ChatButton`, `ComboButton` | `Button`, `CheckableButton`, `RadioButton` | `button` | `button`, `float-button` |
+| **Button** | `button` | `button` | `Button`, `ListItemButton`, `StepButton` | `button` | `Button`, `ChatButton`, `ComboButton` | `Button`, `CheckableButton`, `RadioButton` | `button` | `button`, `float-button` |
 | **Checkbox** | `checkbox` | `checkbox` | `Checkbox` | `checkbox` | `Checkbox` | `Checkbox` | `checkbox` | `checkbox` |
 | **Dialog** | `dialog` | `dialog` | `Dialog`, `Modal` | `dialog` | `Dialog`, `Modal` | `Modal` | `alert-dialog`, `dialog` | `modal` |
 | **Menu** | `menu` | `menu` | `Menu` | `menu` | `ContextMenu`, `Menu`, `OverflowMenu` | `ActionList`, `ActionMenu` | `context-menu`, `dropdown-menu` | `menu` |
@@ -248,9 +250,9 @@
 
 | 시스템 | Figma SET | 정규화 후 | 코드 | 매칭 | 매칭률 | 네이밍 근접도 | MFI-partial |
 |:---|---:|---:|---:|---:|---:|---:|---:|
-| Material Web | 171 | 140 | 20 | 16 | 80.0% | 87.6% | **83.0** |
+| Material Web | 171 | 149 | 20 | 16 | 80.0% | 87.6% | **83.0** |
 | Carbon | 177 | 124 | 124 | 92 | 74.2% | 85.7% | **78.8** |
-| Fluent 2 | 104 | 94 | 71 | 42 | 59.2% | 80.4% | **67.7** |
+| Fluent 2 | 104 | 94 | 71 | 41 | 57.7% | 78.9% | **66.2** |
 | Spectrum | 462 | 44 | 56 | 30 | 53.6% | 75.3% | **62.3** |
 
 계산하지 못한 항목 (가중치 0.50):
@@ -264,10 +266,10 @@
 위 측정에서 **8/8** 로 나온 것만 모은 목록이다. 하나라도 빠뜨리면 8개 시스템 중 어느 것도 하지 않은 선택을 하는 셈이다.
 
 1. **색상 토큰을 세 자리로 나눈다** — 면(surface) · 글자(foreground) · 선(border). 예외 없이 8/8이다. 하나로 뭉치면 다크 테마에서 반드시 깨진다.
-2. **의미 축에 최소 세 값** — 브랜드 · 보조 · 위험(critical). 성공·경고는 5/8로 그다음 순위.
-3. **상태를 토큰으로 만든다** — hover · focus · active 는 7/8. shadcn/ui 만 없고, 그 대가로 상태 표현이 컴포넌트 코드에 흩어진다.
+2. **의미 축에 최소 세 값** — 브랜드 · 보조 · 위험(critical). 성공·경고는 6/8로 그다음 순위.
+3. **상태를 토큰으로 만든다** — hover · focus · active 는 7/8. 미보유는 shadcn/ui — 그 대가로 상태 표현이 컴포넌트 코드에 흩어진다.
 4. **타이포그래피 스케일을 토큰화한다** — 8/8. 색상과 함께 유일하게 예외가 없는 값 종류다.
-5. **Elevation·radius 는 7/8** — 없는 쪽이 예외다(shadcn 은 Tailwind 유틸리티, Carbon 은 radius 토큰이 *아예 없다* — 각진 형태를 부재로 강제한다).
+5. **Elevation·radius 는 7/8** — 미보유는 shadcn/ui · Carbon 로 예외다 (shadcn 은 Tailwind 유틸리티, Carbon 은 radius 토큰이 *아예 없다*).
 6. **컴포넌트는 9개부터** — Button · Checkbox · Dialog · Menu · Progress · Select · Slider · Tabs · TextInput.
 7. **Button 의 variant 축은 강조도와 의미를 분리한다** — 합치면 값이 곱으로 폭발한다.
 8. **상태는 Figma 와 코드가 원리상 어긋난다** — Figma 킷의 1위 축이 `state` 인데 코드에서는 prop 이 아니라 의사클래스다. 자동 동기화를 시도하지 말고 계약 문서로 남긴다.
@@ -276,19 +278,19 @@
 
 얕은 클론으로 받은 고정 커밋. 재현은 `bash sources/clone.sh`.
 
-| key | repo | HEAD | HEAD 커밋일 | 용량 | 파일 수 | sparse 경로 |
+| key | repo | HEAD (전체) | 커밋일 | 용량 | 파일 수 | sparse 경로 |
 |---|---|---|---|---:|---:|---|
-| `ant-design` | ant-design/ant-design | `dae6efe` | 2026-07-30 | 71M | 4969 | components  |
-| `carbon` | carbon-design-system/carbon | `0a75905` | 2026-07-29 | 22M | 9396 | packages/colors packages/elements packages/grid packages/layout packages/motion packages/react packages/styles packages/themes packages/type  |
-| `fluentui` | microsoft/fluentui | `a50f6d4` | 2026-07-29 | 86M | 19063 | packages/react-components packages/tokens  |
-| `material-ui` | mui/material-ui | `319668c` | 2026-07-29 | 20M | 41098 | packages/mui-material packages/mui-styled-engine packages/mui-system packages/mui-utils  |
-| `material-web` | material-components/material-web | `70e259d` | 2026-07-23 | 31M | 1486 | (전체) |
-| `polaris` | Shopify/polaris | `2b1ea88` | 2025-12-20 | 14M | 4642 | polaris-react polaris-tokens  |
-| `radix-primitives` | radix-ui/primitives | `df8f89a` | 2026-07-28 | 6.6M | 683 | (전체) |
-| `react-spectrum` | adobe/react-spectrum | `3823fb8` | 2026-07-30 | 64M | 10147 | packages/@adobe packages/@react-aria packages/@react-spectrum packages/@react-stately packages/@react-types  |
-| `shadcn-ui` | shadcn-ui/ui | `5203f53` | 2026-07-29 | 23M | 5679 | apps/v4/registry apps/v4/styles packages  |
-| `spectrum-css` | adobe/spectrum-css | `3762086` | 2026-04-06 | 20M | 1252 | (전체) |
-| `spectrum-tokens` | adobe/spectrum-design-data | `ca0f605` | 2026-07-29 | 28M | 2011 | (전체) |
+| `ant-design` | ant-design/ant-design | `dae6efed9e3713e281312697b326868d95fb358c` | 2026-07-30 | 71M | 4969 | components |
+| `carbon` | carbon-design-system/carbon | `0a75905da8e49901d60354c779fea2245a7a434d` | 2026-07-29 | 22M | 9396 | packages/colors packages/elements packages/grid packages/layout packages/motion packages/react packages/styles packages/themes packages/type |
+| `fluentui` | microsoft/fluentui | `a50f6d4d680e8bdb811866473e3a89aea3c89def` | 2026-07-29 | 86M | 19063 | packages/react-components packages/tokens |
+| `material-ui` | mui/material-ui | `319668c95b56b44c53541b48c09a2515d07704f5` | 2026-07-29 | 20M | 41098 | packages/mui-material packages/mui-styled-engine packages/mui-system packages/mui-utils |
+| `material-web` | material-components/material-web | `70e259d464f627a21c7831cb4e871e0061bc0644` | 2026-07-23 | 31M | 1486 | (전체) |
+| `polaris` | Shopify/polaris | `2b1ea88625e0613853ca8577c9acd1980a90f382` | 2025-12-20 | 14M | 4642 | polaris-react polaris-tokens |
+| `radix-primitives` | radix-ui/primitives | `df8f89ac8e22e9cd4159e100a644ae94596fdd3a` | 2026-07-28 | 6.6M | 683 | (전체) |
+| `react-spectrum` | adobe/react-spectrum | `3823fb84918e5819953092cfba9a603a7200c546` | 2026-07-30 | 64M | 10147 | packages/@adobe packages/@react-aria packages/@react-spectrum packages/@react-stately packages/@react-types |
+| `shadcn-ui` | shadcn-ui/ui | `5203f537d152844a920caa66e865bc61c6ff4860` | 2026-07-29 | 25M | 5679 | apps/v4/app apps/v4/lib apps/v4/registry apps/v4/styles packages |
+| `spectrum-css` | adobe/spectrum-css | `37620864c60c4c142a506017e1a15348a26abb0e` | 2026-04-06 | 20M | 1252 | (전체) |
+| `spectrum-tokens` | adobe/spectrum-design-data | `ca0f605e617e27b3b7a5e0edefcf4ce45400a8fe` | 2026-07-29 | 28M | 2011 | (전체) |
 
 ### 시스템별 추출 경로
 

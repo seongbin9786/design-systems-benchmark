@@ -410,7 +410,7 @@ footer { margin-top: 4rem; padding-top: 1.4rem; border-top: 1px solid var(--rule
 {{n_systems}}개 중 몇 개 시스템에 등장하는지 센다.</li>
 <li><b>이름이 곧 근거</b> — 값이 아니라 <i>이름</i>을 본다. 이름에 개념이 드러나지 않으면 그 시스템은
 실제로 그 개념을 구분하지 않는다고 본다.</li>
-<li><b>잔여 {{unc_total}}개({{unc_pct}}%)</b>는 어느 축에도 걸리지 않았다. 대부분 Carbon 의
+<li><b>잔여 {{unc_total}}개({{unc_pct}}%)</b>는 <i>값의 종류</i> 축만 못 붙은 것이다 (다른 축은 기록됐다). 대부분 Carbon 의
 <code>code01</code>/<code>container01</code> 같은 시스템 고유 스케일이다.</li>
 </ul>
 <div class="callout">
@@ -588,12 +588,12 @@ Figma 킷에는 variant 가 있으니 — 이 지점이 Figma↔Code 매핑이 �
 <ol class="recipe">
 <li><b>색상 토큰을 세 자리로 나눈다</b> — 면(surface) · 글자(foreground) · 선(border).
 예외 없이 8/8이다. 하나로 뭉치면 다크 테마에서 반드시 깨진다.</li>
-<li><b>의미 축에 최소 세 값</b> — 브랜드 · 보조 · 위험(critical). 성공·경고는 5/8로 그다음 순위.</li>
-<li><b>상태를 토큰으로 만든다</b> — hover · focus · active 는 7/8.
-shadcn/ui 만 없고, 그 대가로 상태 표현이 컴포넌트 코드에 흩어진다.</li>
+<li><b>의미 축에 최소 세 값</b> — 브랜드 · 보조 · 위험(critical). 성공·경고는 {{cov_status}}로 그다음 순위.</li>
+<li><b>상태를 토큰으로 만든다</b> — hover · focus · active 는 {{cov_state}}.
+미보유는 {{miss_state}} — 그 대가로 상태 표현이 컴포넌트 코드에 흩어진다.</li>
 <li><b>타이포그래피 스케일을 토큰화한다</b> — 8/8. 색상과 함께 유일하게 예외가 없는 값 종류다.</li>
-<li><b>Elevation·radius 는 7/8</b> — 없는 쪽이 예외다(shadcn 은 Tailwind 유틸리티,
-Carbon 은 radius 토큰이 <i>아예 없다</i> — 각진 형태를 부재로 강제한다).</li>
+<li><b>Elevation·radius 는 {{cov_shape}}</b> — 미보유는 {{miss_shape}} 로 예외다
+(shadcn 은 Tailwind 유틸리티, Carbon 은 radius 토큰이 <i>아예 없다</i>).</li>
 <li><b>어순을 먼저 정하고 문서에 박아둔다</b> — 역할→의미냐 의미→역할이냐. 다수는 의미→역할이지만
 Carbon·Polaris 는 반대다. 나중에 바꾸면 전량 개명이다. <a href="#naming">4절</a> 참조.</li>
 <li><b>상태는 항상 접미사로</b> — {{suffix_txt}}.</li>

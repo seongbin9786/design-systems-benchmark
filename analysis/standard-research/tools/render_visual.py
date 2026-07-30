@@ -23,6 +23,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import paths  # noqa: E402
+from render_research import coverage_facts  # noqa: E402  — 커버리지 산문 수치 계산 공유
 from viz import (  # noqa: E402  — 프리미티브는 viz.py 가 단일 출처 (렌더러끼리 결합하지 않는다)
     AXIS_TITLE, CODE, COMP_LABEL, COMP_SLOTS, TIER_LABEL,
     dumbbell, e, hbars, legend, load, matrix, stacked, table_view,
@@ -406,7 +407,7 @@ def build():
                          for i, c in enumerate(l.strip("|").split("|")[:5])) + "</tr>"
         for l in manifest if l.startswith("| `"))
     tok_total = sum(d["count"] for d in tokens.values())
-    unc_total = sum(v["count"] for v in vocab["unclassified"].values())
+    unc_total = sum(v["count"] for v in vocab["uncategorized"].values())
     hue_html = "".join(
         f'<li><b>{e(s)}</b> {v["count"]}개 — <code>{e(v["sample"][0])}</code> 같은 이름</li>'
         for s, v in vocab.get("hue_named_status", {}).items())
@@ -457,6 +458,7 @@ def build():
         std_count=std_count, comp_std_n=len(comp_std), comp_std=" · ".join(comp_std),
         code_key=" · ".join(f'<b>{e(c)}</b> {e(s)}' for s, c in CODE.items()),
         ir_n=len(ir_camp), ri_n=len(ri_camp), max_exp=max_exp,
+        **coverage_facts(vocab, n),
         scale_ratio=scale_ratio, case_split=case_split,
         exp1=exp1, exp2=exp2, suffix_txt=suffix_txt,
         seg_key="".join(f'<span class="lg"><i class="k-{k}"></i>{e(v)}</span>'

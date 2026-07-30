@@ -157,11 +157,11 @@
    "figma_component_sets": 104,
    "figma_unique_after_norm": 94,
    "code_components": 71,
-   "matched": 42,
-   "component_match_rate": 59.2,
-   "naming_similarity": 80.4,
-   "naming_similarity_matched_only": 97.8,
-   "mfi_partial": 67.7,
+   "matched": 41,
+   "component_match_rate": 57.7,
+   "naming_similarity": 78.9,
+   "naming_similarity_matched_only": 98.1,
+   "mfi_partial": 66.2,
    "matched_sample": [
     {
      "code": "accordion",
@@ -206,7 +206,7 @@
     {
      "code": "context-selector",
      "figma": ".Text",
-     "similarity": 0.936
+     "similarity": 0.89
     },
     {
      "code": "dialog",
@@ -232,18 +232,18 @@
     },
     {
      "code": "calendar-compat",
-     "closest": ".Card media",
-     "similarity": 0.588
+     "closest": ".Secondary action",
+     "similarity": 0.483
     },
     {
      "code": "color-picker",
-     "closest": ".Card footer",
-     "similarity": 0.533
+     "closest": "SwatchPicker",
+     "similarity": 0.609
     },
     {
      "code": "colorpicker-compat",
-     "closest": "SwatchPicker",
-     "similarity": 0.609
+     "closest": "TagPicker/Secondary action",
+     "similarity": 0.488
     },
     {
      "code": "combobox",
@@ -258,21 +258,21 @@
     {
      "code": "conformance-griffel",
      "closest": "InfoLabel",
-     "similarity": 0.5
+     "similarity": 0.444
     },
     {
      "code": "datepicker-compat",
      "closest": "SwatchPicker",
-     "similarity": 0.727
+     "similarity": 0.571
     },
     {
      "code": "headless-components-preview",
-     "closest": ".Card header",
-     "similarity": 0.556
+     "closest": "List content",
+     "similarity": 0.444
     },
     {
      "code": "icons-compat",
-     "closest": "List content",
+     "closest": "Input",
      "similarity": 0.5
     },
     {
@@ -281,15 +281,15 @@
      "similarity": 0.444
     },
     {
-     "code": "motion",
-     "closest": "Menu section",
-     "similarity": 0.588
+     "code": "menu-grid-preview",
+     "closest": ".Images Preview Step",
+     "similarity": 0.562
     }
    ]
   },
   "Material Web": {
    "figma_component_sets": 171,
-   "figma_unique_after_norm": 140,
+   "figma_unique_after_norm": 149,
    "code_components": 20,
    "matched": 16,
    "component_match_rate": 80.0,
@@ -344,8 +344,8 @@
     },
     {
      "code": "progress",
-     "figma": ".Building Blocks/Progress indicator/Width 4/Segment - wave",
-     "similarity": 0.877
+     "figma": "Linear-determinate progress indicator",
+     "similarity": 0.885
     },
     {
      "code": "radio",

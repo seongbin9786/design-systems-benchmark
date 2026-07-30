@@ -187,7 +187,7 @@ def build():
                          for i, c in enumerate(l.strip("|").split("|")[:5])) + "</tr>"
         for l in man_rows)
 
-    unc = vocab["unclassified"]
+    unc = vocab["uncategorized"]
     unc_total = sum(v["count"] for v in unc.values())
     tok_total = sum(d["count"] for d in tokens.values())
     hue = vocab.get("hue_named_status", {})
@@ -195,6 +195,7 @@ def build():
         f'<li><b>{e(s)}</b> {v["count"]}개 — <code>{e(v["sample"][0])}</code> 같은 이름</li>'
         for s, v in hue.items())
 
+    cf = coverage_facts(vocab, len(systems))
     std_by_axis = {
         a: [r["value"] for r in vocab["axes"][a] if r["tier"] == "standard" and r["value"] != "default"]
         for a in ("category", "role", "intent", "state")}
@@ -218,7 +219,39 @@ def build():
         std_count=std_count, comp_std_n=len(comp_std),
         comp_std=" · ".join(comp_std),
         code_key=" · ".join(f'<b>{e(c)}</b> {e(s)}' for s, c in CODE.items()),
+        **cf,
     )
+
+
+def coverage_facts(vocab, n):
+    """레시피 산문에 들어가는 커버리지 수치 — 손으로 적으면 계수 규칙을 손볼 때마다 어긋난다."""
+    def rows(axis):
+        return {r["value"]: r for r in vocab["axes"][axis]}
+
+    intent, state, cat = rows("intent"), rows("state"), rows("category")
+
+    def lo(table, keys):
+        got = [table[k] for k in keys if k in table]
+        return min((r["coverage"] for r in got), default=0)
+
+    def missing(table, keys):
+        out = []
+        for k in keys:
+            for m in table.get(k, {}).get("missing", []):
+                if m not in out:
+                    out.append(m)
+        return out
+
+    st_keys = ["status:success", "status:warning"]
+    state_keys = ["hover", "focus", "active"]
+    shape_keys = ["elevation", "radius"]
+    return {
+        "cov_status": f"{lo(intent, st_keys)}/{n}",
+        "cov_state": f"{lo(state, state_keys)}/{n}",
+        "miss_state": " · ".join(missing(state, state_keys)) or "없음",
+        "cov_shape": f"{lo(cat, shape_keys)}/{n}",
+        "miss_shape": " · ".join(missing(cat, shape_keys)) or "없음",
+    }
 
 
 # ── Markdown 산출 ───────────────────────────────────────────────────────────
@@ -255,7 +288,7 @@ def build_md():
     L = []
 
     tok_total = sum(d["count"] for d in tokens.values())
-    unc_total = sum(v["count"] for v in vocab["unclassified"].values())
+    unc_total = sum(v["count"] for v in vocab["uncategorized"].values())
     unc_pct = round(unc_total / tok_total * 100, 1)
     std_by_axis = {a: [r["value"] for r in vocab["axes"][a]
                        if r["tier"] == "standard" and r["value"] != "default"]
@@ -264,6 +297,7 @@ def build_md():
     comp_sys = comps["systems"]
     n_cs = len(comp_sys)
     comp_std = [r["component"] for r in comps["coverage"] if r["coverage"] == n_cs]
+    cf = coverage_facts(vocab, n)
 
     L.append("# 디자인 시스템에서 표준화할 수 있는 것")
     L.append("")
@@ -278,7 +312,7 @@ def build_md():
     L.append("")
     L.append(md_table(
         ["예외 없이 공통인 토큰 어휘", f"{n}개 시스템 전부에 있는 컴포넌트",
-         "추출한 semantic 토큰 총수", "정규 어휘로 분류 안 된 잔여"],
+         "추출한 semantic 토큰 총수", "category 축을 못 붙인 잔여"],
         [[std_count, len(comp_std), tok_total, f"{unc_pct}%"]], "rrrr"))
     L.append("")
 
@@ -294,7 +328,7 @@ def build_md():
              f"각 값이 {n}개 중 몇 개 시스템에 등장하는지 센다.")
     L.append("- **이름이 곧 근거** — 값이 아니라 *이름*을 본다. 이름에 개념이 드러나지 않으면 "
              "그 시스템은 실제로 그 개념을 구분하지 않는다고 본다.")
-    L.append(f"- **잔여 {unc_total}개({unc_pct}%)** 는 어느 축에도 걸리지 않았다. 대부분 Carbon 의 "
+    L.append(f"- **잔여 {unc_total}개({unc_pct}%)** 는 *값의 종류* 축만 못 붙은 것이다 (다른 축은 기록됐다). 대부분 Carbon 의 "
              "`code01`/`container01` 같은 시스템 고유 스케일이다.")
     L.append("")
     L.append("> [!WARNING]")
@@ -500,12 +534,12 @@ def build_md():
     L.append("")
     L.append("1. **색상 토큰을 세 자리로 나눈다** — 면(surface) · 글자(foreground) · 선(border). "
              "예외 없이 8/8이다. 하나로 뭉치면 다크 테마에서 반드시 깨진다.")
-    L.append("2. **의미 축에 최소 세 값** — 브랜드 · 보조 · 위험(critical). 성공·경고는 5/8로 그다음 순위.")
-    L.append("3. **상태를 토큰으로 만든다** — hover · focus · active 는 7/8. shadcn/ui 만 없고, "
-             "그 대가로 상태 표현이 컴포넌트 코드에 흩어진다.")
+    L.append(f"2. **의미 축에 최소 세 값** — 브랜드 · 보조 · 위험(critical). 성공·경고는 {cf['cov_status']}로 그다음 순위.")
+    L.append(f"3. **상태를 토큰으로 만든다** — hover · focus · active 는 {cf['cov_state']}. "
+             f"미보유는 {cf['miss_state']} — 그 대가로 상태 표현이 컴포넌트 코드에 흩어진다.")
     L.append("4. **타이포그래피 스케일을 토큰화한다** — 8/8. 색상과 함께 유일하게 예외가 없는 값 종류다.")
-    L.append("5. **Elevation·radius 는 7/8** — 없는 쪽이 예외다(shadcn 은 Tailwind 유틸리티, "
-             "Carbon 은 radius 토큰이 *아예 없다* — 각진 형태를 부재로 강제한다).")
+    L.append(f"5. **Elevation·radius 는 {cf['cov_shape']}** — 미보유는 {cf['miss_shape']} 로 예외다 "
+             "(shadcn 은 Tailwind 유틸리티, Carbon 은 radius 토큰이 *아예 없다*).")
     L.append(f"6. **컴포넌트는 {len(comp_std)}개부터** — {' · '.join(comp_std)}.")
     L.append("7. **Button 의 variant 축은 강조도와 의미를 분리한다** — 합치면 값이 곱으로 폭발한다.")
     L.append("8. **상태는 Figma 와 코드가 원리상 어긋난다** — Figma 킷의 1위 축이 `state` 인데 "
@@ -835,7 +869,7 @@ footer {{ margin-top: 4rem; padding-top: 1.4rem; border-top: 1px solid var(--rul
   <div class="kpi"><div class="k">{std_count}</div><div class="l">예외 없이 공통인<br>토큰 어휘</div></div>
   <div class="kpi"><div class="k">{comp_std_n}</div><div class="l">8개 시스템 전부에<br>있는 컴포넌트</div></div>
   <div class="kpi"><div class="k">{tok_total}</div><div class="l">추출한 semantic<br>토큰 총수</div></div>
-  <div class="kpi"><div class="k">{unc_pct}<small>%</small></div><div class="l">정규 어휘로 분류<br>안 된 잔여</div></div>
+  <div class="kpi"><div class="k">{unc_pct}<small>%</small></div><div class="l">category 축을<br>못 붙인 잔여</div></div>
 </div>
 
 <h2 id="how"><span class="h2n">방법</span>측정 방법과 한계</h2>
@@ -845,7 +879,7 @@ footer {{ margin-top: 4rem; padding-top: 1.4rem; border-top: 1px solid var(--rul
 <li><b>수집 범위</b> — 각 시스템의 <i>semantic(alias) 계층</i>만. primitive 램프(<code>gray-100</code> 류)는 제외했다. 표준화 대상이 아니다.</li>
 <li><b>판정</b> — 토큰 이름을 4개 축(값의 종류 / 자리 / 의미 / 상태)으로 분류하고, 각 값이 {n_systems}개 중 몇 개 시스템에 등장하는지 센다.</li>
 <li><b>이름이 곧 근거</b> — 값이 아니라 <i>이름</i>을 본다. 이름에 개념이 드러나지 않으면 그 시스템은 실제로 그 개념을 구분하지 않는다고 본다.</li>
-<li><b>잔여 {unc_total}개({unc_pct}%)</b>는 어느 축에도 걸리지 않았다. 대부분 Carbon 의 <code>code01</code>/<code>container01</code> 같은 시스템 고유 스케일이다.</li>
+<li><b>잔여 {unc_total}개({unc_pct}%)</b>는 <i>값의 종류</i> 축만 못 붙은 것이다 (다른 축은 기록됐다). 대부분 Carbon 의 <code>code01</code>/<code>container01</code> 같은 시스템 고유 스케일이다.</li>
 </ul>
 <div class="callout">
 <p><b>이름이 같아야 개념이 같은 것은 아니다.</b> Fluent 2 는 상태색을 <code>status</code> 가 아니라
@@ -940,12 +974,12 @@ Figma 킷에는 variant 가 있으니 — 이 지점이 Figma↔Code 매핑이 �
 <ol class="recipe">
 <li><b>색상 토큰을 세 자리로 나눈다</b> — 면(surface) · 글자(foreground) · 선(border).
 예외 없이 8/8이다. 하나로 뭉치면 다크 테마에서 반드시 깨진다.</li>
-<li><b>의미 축에 최소 세 값</b> — 브랜드 · 보조 · 위험(critical). 성공·경고는 5/8로 그다음 순위.</li>
-<li><b>상태를 토큰으로 만든다</b> — hover · focus · active 는 7/8.
-shadcn/ui 만 없고, 그 대가로 상태 표현이 컴포넌트 코드에 흩어진다.</li>
+<li><b>의미 축에 최소 세 값</b> — 브랜드 · 보조 · 위험(critical). 성공·경고는 {cov_status}로 그다음 순위.</li>
+<li><b>상태를 토큰으로 만든다</b> — hover · focus · active 는 {cov_state}.
+미보유는 {miss_state} — 그 대가로 상태 표현이 컴포넌트 코드에 흩어진다.</li>
 <li><b>타이포그래피 스케일을 토큰화한다</b> — 8/8. 색상과 함께 유일하게 예외가 없는 값 종류다.</li>
-<li><b>Elevation·radius 는 7/8</b> — 없는 쪽이 예외다(shadcn 은 Tailwind 유틸리티,
-Carbon 은 radius 토큰이 <i>아예 없다</i> — 각진 형태를 부재로 강제한다).</li>
+<li><b>Elevation·radius 는 {cov_shape}</b> — 미보유는 {miss_shape} 로 예외다
+(shadcn 은 Tailwind 유틸리티, Carbon 은 radius 토큰이 <i>아예 없다</i> — 각진 형태를 부재로 강제한다).</li>
 <li><b>컴포넌트는 9개부터</b> — {comp_std}.</li>
 <li><b>Button 의 variant 축은 강조도와 의미를 분리한다</b> — 합치면 값이 곱으로 폭발한다.</li>
 <li><b>상태는 Figma 와 코드가 원리상 어긋난다</b> — Figma 킷의 1위 축이 <code>state</code>인데

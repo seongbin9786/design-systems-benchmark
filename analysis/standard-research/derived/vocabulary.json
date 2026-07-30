@@ -465,7 +465,7 @@
      "Carbon": "border-inverse",
      "Polaris": "color-border",
      "shadcn/ui": "border",
-     "Ant Design": "color-split"
+     "Ant Design": "line-type"
     },
     "counts": {
      "Spectrum": 13,
@@ -475,7 +475,7 @@
      "Carbon": 22,
      "Polaris": 78,
      "shadcn/ui": 4,
-     "Ant Design": 28
+     "Ant Design": 29
     }
    },
    {
@@ -508,7 +508,7 @@
      "Material Web": 18,
      "MUI": 9,
      "Fluent 2": 111,
-     "Carbon": 15,
+     "Carbon": 17,
      "Polaris": 174,
      "shadcn/ui": 28,
      "Ant Design": 36
@@ -544,7 +544,7 @@
      "Material Web": 20,
      "MUI": 3,
      "Fluent 2": 133,
-     "Carbon": 33,
+     "Carbon": 52,
      "Polaris": 238,
      "shadcn/ui": 4,
      "Ant Design": 32
@@ -677,27 +677,25 @@
    {
     "value": "focus-ring",
     "systems": [
-     "MUI",
      "Spectrum",
      "shadcn/ui"
     ],
-    "coverage": 3,
+    "coverage": 2,
     "tier": "divergent",
     "missing": [
      "Ant Design",
      "Carbon",
      "Fluent 2",
+     "MUI",
      "Material Web",
      "Polaris"
     ],
     "examples": {
-     "Spectrum": "focus-indicator-color",
-     "MUI": "transitions-duration-entering-screen",
+     "Spectrum": "side-focus-indicator",
      "shadcn/ui": "ring"
     },
     "counts": {
-     "Spectrum": 6,
-     "MUI": 1,
+     "Spectrum": 7,
      "shadcn/ui": 4
     }
    }
@@ -733,7 +731,7 @@
      "Material Web": 9,
      "MUI": 5,
      "Fluent 2": 66,
-     "Carbon": 14,
+     "Carbon": 15,
      "Polaris": 76,
      "shadcn/ui": 16,
      "Ant Design": 10
@@ -805,7 +803,7 @@
      "Material Web": 4,
      "MUI": 4,
      "Fluent 2": 27,
-     "Carbon": 1,
+     "Carbon": 4,
      "Polaris": 38,
      "shadcn/ui": 4,
      "Ant Design": 14
@@ -839,7 +837,7 @@
      "Spectrum": 10,
      "MUI": 4,
      "Fluent 2": 7,
-     "Carbon": 3,
+     "Carbon": 4,
      "Polaris": 18,
      "Ant Design": 4
     }
@@ -848,15 +846,15 @@
     "value": "status:success",
     "systems": [
      "Ant Design",
+     "Carbon",
      "Fluent 2",
      "MUI",
      "Polaris",
      "Spectrum"
     ],
-    "coverage": 5,
+    "coverage": 6,
     "tier": "prevalent",
     "missing": [
-     "Carbon",
      "Material Web",
      "shadcn/ui"
     ],
@@ -864,6 +862,7 @@
      "Spectrum": "green-visual-color",
      "MUI": "palette-success-dark",
      "Fluent 2": "color-palette-green-border1",
+     "Carbon": "support-success",
      "Polaris": "color-icon-success",
      "Ant Design": "color-success"
     },
@@ -871,6 +870,7 @@
      "Spectrum": 37,
      "MUI": 4,
      "Fluent 2": 31,
+     "Carbon": 2,
      "Polaris": 34,
      "Ant Design": 10
     }
@@ -879,15 +879,15 @@
     "value": "status:warning",
     "systems": [
      "Ant Design",
+     "Carbon",
      "Fluent 2",
      "MUI",
      "Polaris",
      "Spectrum"
     ],
-    "coverage": 5,
+    "coverage": 6,
     "tier": "prevalent",
     "missing": [
-     "Carbon",
      "Material Web",
      "shadcn/ui"
     ],
@@ -895,6 +895,7 @@
      "Spectrum": "notice-color-100",
      "MUI": "palette-warning-dark",
      "Fluent 2": "color-status-warning-border1",
+     "Carbon": "support-warning",
      "Polaris": "color-icon-caution",
      "Ant Design": "color-warning"
     },
@@ -902,8 +903,71 @@
      "Spectrum": 34,
      "MUI": 4,
      "Fluent 2": 19,
+     "Carbon": 5,
      "Polaris": 56,
      "Ant Design": 12
+    }
+   },
+   {
+    "value": "neutral",
+    "systems": [
+     "Carbon",
+     "Fluent 2",
+     "MUI",
+     "Material Web",
+     "Spectrum"
+    ],
+    "coverage": 5,
+    "tier": "prevalent",
+    "missing": [
+     "Ant Design",
+     "Polaris",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "gray-visual-color",
+     "Material Web": "motion-easing-standard",
+     "MUI": "palette-background-default",
+     "Fluent 2": "color-neutral-stroke1",
+     "Carbon": "syntax-standard"
+    },
+    "counts": {
+     "Spectrum": 44,
+     "Material Web": 3,
+     "MUI": 2,
+     "Fluent 2": 78,
+     "Carbon": 1
+    }
+   },
+   {
+    "value": "status:info",
+    "systems": [
+     "Ant Design",
+     "Carbon",
+     "MUI",
+     "Polaris",
+     "Spectrum"
+    ],
+    "coverage": 5,
+    "tier": "prevalent",
+    "missing": [
+     "Fluent 2",
+     "Material Web",
+     "shadcn/ui"
+    ],
+    "examples": {
+     "Spectrum": "informative-color-100",
+     "MUI": "palette-info-dark",
+     "Carbon": "support-info",
+     "Polaris": "color-icon-info",
+     "Ant Design": "color-info"
+    },
+    "counts": {
+     "Spectrum": 23,
+     "MUI": 4,
+     "Carbon": 2,
+     "Polaris": 28,
+     "Ant Design": 10
     }
    },
    {
@@ -931,66 +995,8 @@
     "counts": {
      "Material Web": 5,
      "Fluent 2": 20,
-     "Carbon": 13,
+     "Carbon": 15,
      "Polaris": 42
-    }
-   },
-   {
-    "value": "neutral",
-    "systems": [
-     "Fluent 2",
-     "MUI",
-     "Material Web",
-     "Spectrum"
-    ],
-    "coverage": 4,
-    "tier": "divergent",
-    "missing": [
-     "Ant Design",
-     "Carbon",
-     "Polaris",
-     "shadcn/ui"
-    ],
-    "examples": {
-     "Spectrum": "gray-visual-color",
-     "Material Web": "motion-easing-standard",
-     "MUI": "palette-background-default",
-     "Fluent 2": "color-neutral-stroke1"
-    },
-    "counts": {
-     "Spectrum": 44,
-     "Material Web": 3,
-     "MUI": 2,
-     "Fluent 2": 78
-    }
-   },
-   {
-    "value": "status:info",
-    "systems": [
-     "Ant Design",
-     "MUI",
-     "Polaris",
-     "Spectrum"
-    ],
-    "coverage": 4,
-    "tier": "divergent",
-    "missing": [
-     "Carbon",
-     "Fluent 2",
-     "Material Web",
-     "shadcn/ui"
-    ],
-    "examples": {
-     "Spectrum": "informative-color-100",
-     "MUI": "palette-info-dark",
-     "Polaris": "color-icon-info",
-     "Ant Design": "color-info"
-    },
-    "counts": {
-     "Spectrum": 23,
-     "MUI": 4,
-     "Polaris": 28,
-     "Ant Design": 10
     }
    }
   ],
@@ -1018,17 +1024,17 @@
      "Carbon": "overlay",
      "Polaris": "color-bg",
      "shadcn/ui": "card",
-     "Ant Design": "color-fill"
+     "Ant Design": "line-type"
     },
     "counts": {
-     "Spectrum": 845,
+     "Spectrum": 858,
      "Material Web": 189,
      "MUI": 98,
      "Fluent 2": 306,
-     "Carbon": 165,
+     "Carbon": 285,
      "Polaris": 590,
-     "shadcn/ui": 91,
-     "Ant Design": 177
+     "shadcn/ui": 93,
+     "Ant Design": 178
     }
    },
    {
@@ -1052,7 +1058,7 @@
      "Material Web": "state-pressed-state-layer-opacity",
      "MUI": "palette-action-active",
      "Fluent 2": "color-brand-stroke2-pressed",
-     "Carbon": "background-active",
+     "Carbon": "layer-active-01",
      "Polaris": "color-icon-active",
      "Ant Design": "color-info-active"
     },
@@ -1061,7 +1067,7 @@
      "Material Web": 1,
      "MUI": 1,
      "Fluent 2": 75,
-     "Carbon": 6,
+     "Carbon": 9,
      "Polaris": 86,
      "Ant Design": 17
     }
@@ -1083,20 +1089,20 @@
      "shadcn/ui"
     ],
     "examples": {
-     "Spectrum": "focus-indicator-color",
+     "Spectrum": "side-focus-indicator",
      "Material Web": "state-focus-state-layer-opacity",
      "MUI": "palette-action-focus",
      "Fluent 2": "color-stroke-focus1",
-     "Carbon": "focus-inset",
+     "Carbon": "focus-inverse",
      "Polaris": "color-border-focus",
      "Ant Design": "line-width-focus"
     },
     "counts": {
-     "Spectrum": 22,
+     "Spectrum": 23,
      "Material Web": 1,
      "MUI": 2,
      "Fluent 2": 2,
-     "Carbon": 1,
+     "Carbon": 3,
      "Polaris": 2,
      "Ant Design": 1
     }
@@ -1122,7 +1128,7 @@
      "Material Web": "state-hover-state-layer-opacity",
      "MUI": "palette-action-hover",
      "Fluent 2": "color-brand-stroke2-hover",
-     "Carbon": "background-hover",
+     "Carbon": "layer-hover-01",
      "Polaris": "color-icon-hover",
      "Ant Design": "color-icon-hover"
     },
@@ -1131,7 +1137,7 @@
      "Material Web": 1,
      "MUI": 2,
      "Fluent 2": 37,
-     "Carbon": 13,
+     "Carbon": 22,
      "Polaris": 102,
      "Ant Design": 28
     }
@@ -1189,14 +1195,14 @@
      "Spectrum": "accent-content-color-selected",
      "MUI": "palette-action-selected",
      "Fluent 2": "color-neutral-stroke1-selected",
-     "Carbon": "background-selected",
+     "Carbon": "layer-selected-01",
      "Polaris": "color-bg-fill-selected"
     },
     "counts": {
      "Spectrum": 4,
      "MUI": 2,
      "Fluent 2": 29,
-     "Carbon": 6,
+     "Carbon": 11,
      "Polaris": 18
     }
    },
@@ -1221,7 +1227,7 @@
      "Ant Design": "opacity-loading"
     },
     "counts": {
-     "Carbon": 3,
+     "Carbon": 4,
      "Ant Design": 1
     }
    },
@@ -1460,7 +1466,7 @@
   "border": 24,
   "blur": 3
  },
- "unclassified": {
+ "uncategorized": {
   "Spectrum": {
    "count": 14,
    "sample": [
