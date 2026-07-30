@@ -2,3 +2,4 @@
 # 재현: sources/clone.sh (고정 커밋은 sources/MANIFEST.md 참조)
 sources/*/
 __pycache__/
+.vercel

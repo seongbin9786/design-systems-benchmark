@@ -36,6 +36,8 @@ RENDER = [
      ["derived/naming.json"]),
     ("render_specimens.py", "reports/design-system-specimens.html",
      ["measured/values.json"]),
+    ("render_index.py",      "reports/index.html",
+     ["derived/naming.json", "measured/dependency.json"]),
 ]
 RESEARCH = Path(__file__).resolve().parent
 SOURCES = REPO / "sources"
