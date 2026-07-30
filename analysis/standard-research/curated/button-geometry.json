@@ -1,0 +1,81 @@
+{
+ "_note": "Button 지오메트리 — 소스를 열어 확인한 값. mixin·Tailwind 유틸리티·cva 를 거치므로 자동 추출이 불가해 수기(curated) 계층에 둔다. 색은 extract_values.py 가 토큰 체인에서 해석한다.",
+ "_measured_on": "2026-07-30",
+ "_how_to_update": "sources/ 를 갱신한 뒤 evidence 경로의 파일을 다시 읽고 이 파일을 손으로 고친다. 스크립트는 이 파일을 덮어쓰지 않는다 (paths.write_json 이 curated 쓰기를 거부한다).",
+ "_null_means": "null 인 항목은 그 시스템의 토큰에서 해석한다 — extract_values.py 의 해당 리졸버가 채운다.",
+ "systems": {
+  "Spectrum": {
+   "evidence": "spectrum-css/components/button/index.css · react-spectrum/packages/@react-spectrum/s2/src/Button.tsx",
+   "height": "32px",
+   "padding": "0 18px",
+   "radius": "16px",
+   "font_size": "14px",
+   "font_weight": 700,
+   "border_width": "2px"
+  },
+  "Material Web": {
+   "evidence": "material-web/button/internal/_filled-button.scss · _shared.scss",
+   "height": "40px",
+   "padding": "0 24px",
+   "radius": "999px",
+   "font_size": "0.875rem",
+   "font_weight": 500,
+   "border_width": "1px"
+  },
+  "MUI": {
+   "evidence": "material-ui/packages/mui-material/src/Button/Button.js",
+   "height": "36.5px",
+   "padding": "6px 16px",
+   "radius": "4px",
+   "font_size": "0.875rem",
+   "font_weight": 500,
+   "border_width": "1px",
+   "uppercase": true
+  },
+  "Fluent 2": {
+   "evidence": "fluentui/packages/react-components/react-button/library/src/components/Button/useButtonStyles.styles.ts",
+   "height": "32px",
+   "padding": "0 12px",
+   "radius": null,
+   "font_size": null,
+   "font_weight": 600,
+   "border_width": "1px"
+  },
+  "Carbon": {
+   "evidence": "carbon/packages/styles/scss/components/button/_button.scss",
+   "height": "48px",
+   "padding": "0 63px 0 15px",
+   "radius": "0",
+   "font_size": "14px",
+   "font_weight": 400,
+   "border_width": "1px"
+  },
+  "Polaris": {
+   "evidence": "polaris/polaris-react/src/components/Button/Button.module.css",
+   "height": "32px",
+   "padding": "0 12px",
+   "radius": null,
+   "font_size": null,
+   "font_weight": 650,
+   "border_width": "1px"
+  },
+  "shadcn/ui": {
+   "evidence": "shadcn-ui/apps/v4/registry/new-york-v4/ui/button.tsx (cva)",
+   "height": "36px",
+   "padding": "0 16px",
+   "radius": "calc(0.625rem - 2px)",
+   "font_size": "0.875rem",
+   "font_weight": 500,
+   "border_width": "1px"
+  },
+  "Ant Design": {
+   "evidence": "ant-design/components/button/style/index.ts · theme/themes/seed.ts",
+   "height": null,
+   "padding": "0 15px",
+   "radius": null,
+   "font_size": null,
+   "font_weight": 400,
+   "border_width": "1px"
+  }
+ }
+}

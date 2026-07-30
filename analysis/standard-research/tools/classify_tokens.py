@@ -1,0 +1,279 @@
+#!/usr/bin/env python3
+"""추출된 토큰 이름을 정규 어휘(canonical vocabulary)로 분류하고 시스템 간 교집합을 구한다.
+
+입력: measured/tokens.json
+출력: derived/vocabulary.json
+
+분류 축 4개
+  category — 값의 종류 (color / spacing / radius / typography / elevation / motion / ...)
+  role     — 색이 칠해지는 자리 (surface / foreground / border / icon / overlay / shadow / link)
+  intent   — 의미·강조도 (brand / neutral / status:critical / inverse / ...)
+  state    — 상호작용 상태 (hover / active / focus / selected / disabled / visited)
+
+판정 기준
+  한 축의 값이 N개 시스템 중 몇 개에 등장하는지 센다.
+  8/8  → 표준 (standard)      : 어느 시스템에도 빠지지 않음 → 신규 시스템의 필수 요소
+  5~7  → 우세 (prevalent)     : 다수가 채택 → 도입 권장
+  2~4  → 분기 (divergent)     : 갈림 → 선택 사항
+  1    → 고유 (system-specific): 표준화 대상 아님
+"""
+import json
+import re
+from collections import defaultdict
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import paths  # noqa: E402
+
+
+# ── 축 1: category ──────────────────────────────────────────────────────────
+# (canonical, [정규식 조각들]) — 순서가 우선순위. 먼저 맞는 것이 이긴다.
+# `color-` 로 시작하면 색이다 — 이름 뒤쪽의 일반 단어(shadow·heading·thumb·alpha)에
+# 먼저 걸려 elevation·typography·sizing 으로 잡히던 문제를 막는다.
+# 단, `color-control-track-width` 처럼 *치수 명사로 끝나면* 그건 치수다.
+DIM_TAIL = r"(width|height|size|radius|duration|opacity|weight|spacing|gap|thickness|count|index)$"
+
+CATEGORY = [
+    ("typography", r"^component-[a-z]{1,3}-(bold|medium|regular|italic)$|typescale|typography|font|text-style|heading|body|label|display|title|caption|line-height|letter-spacing|char-|cjk|text-(align|transform|decoration|overflow|wrap|indent)"),
+    ("elevation",  r"elevation|shadow|box-shadow|depth|drop-shadow"),
+    ("motion",     r"motion|duration|easing|curve|transition|animation|delay"),
+    ("radius",     r"radius|corner|rounded|shape"),
+    ("border",     r"border-width|stroke-width|border-\d|outline-width|thickness"),
+    # `layer-\d` 는 Spectrum 의 background-layer-1-color, Carbon 의 layer-01~03 —
+    # 둘 다 *배경색* 이다. 실제 스택 토큰만 인정한다.
+    ("z-index",    r"z-index|zindex|stacking|^layer$"),
+    ("breakpoint", r"breakpoint|viewport|screen-"),
+    ("opacity",    r"opacity|alpha"),
+    ("icon-size",  r"icon-size|icon-\d|workflow-icon"),
+    ("blur",       r"blur|backdrop"),
+    ("spacing",    r"spacing|space|gap|padding|margin|inset|edge-to|to-text|to-visual|to-icon|to-field|to-component|to-alert|to-validation|to-disclosure|to-control|text-to-|visual-to-"),
+    ("sizing",     r"size|height|width|min-|max-|density|track|thumb|scale"),
+    ("color",      r"color|bg|background|fg|foreground|surface|border|text|icon|fill|stroke|overlay|scrim|link|divider|split|outline|primary|secondary|accent|brand|neutral|\bring\b|card|popover|input|muted|destructive|sidebar|palette|chart|aura|gradient|swatch|highlight|selection|scrollbar|transparent|compound|layer"),
+]
+
+# Fluent 2 는 상태색을 status 가 아니라 *색조* 이름으로 부른다 (statusColorMapping.ts).
+# 커버리지에서 누락되지 않도록 매핑하되, 이름 규약이 다르다는 사실은 별도로 기록한다.
+HUE_STATUS = {
+    "green": "status:success",
+    "orange": "status:warning",
+    "cranberry": "status:critical",
+    "red": "status:critical",
+}
+
+# ── 축 2: role (색상 전용) ───────────────────────────────────────────────────
+ROLE = [
+    ("shadow",     r"shadow"),
+    ("overlay",    r"overlay|scrim|backdrop"),
+    # 무경계 `ring` 은 entering·string 을 잡는다 — 완전한 세그먼트만 인정
+    ("focus-ring", r"focus-(indicator|ring)|(^|-)ring(-|$)"),
+    ("link",       r"link"),
+    ("icon",       r"\bicon\b|-icon|icon-"),
+    # `\bline\b` 은 line-height 를 잡는다. Ant Design 의 line-width/line-type 만 인정.
+    ("border",     r"border|stroke|outline|divider|split|line-(width|type|color)"),
+    # `on-` 은 앞에 하이픈이나 문자열 시작이 와야 한다 (그냥 `on-` 은 motion-path 를 잡는다).
+    ("foreground", r"foreground|\bfg\b|\btext\b|text-|(^|-)on-[a-z]|content-color|-content\b|label-color"),
+    # `body` 는 타이포그래피 스케일(body01, body1)을 잡으므로 제외.
+    ("surface",    r"background|\bbg\b|surface|\bfill\b|container|layer|canvas|elevated|paper"),
+]
+
+# ── 축 3: intent ────────────────────────────────────────────────────────────
+INTENT = [
+    ("status:critical", r"critical|negative|danger|error|destructive|invalid"),
+    ("status:warning",  r"warning|caution|notice|alert"),
+    ("status:success",  r"success|positive|valid|confirm"),
+    ("status:info",     r"informative|\binfo\b|information"),
+    ("brand",           r"brand|accent|primary|emphasis|\bkey\b"),
+    ("secondary",       r"secondary|subdued|muted|subtle|weak|tertiary|placeholder|quiet"),
+    # `\bon-\b` 은 Material Web 의 일반 전경 규약(color-on-surface)을 전부 inverse 로
+    # 만들었다. extract_values.py 는 같은 토큰을 text-primary 로 쓰므로 자기모순이었다.
+    # MUI 의 contrast-text 도 "채움 위 글자" 이지 반전 테마가 아니다.
+    ("inverse",         r"invers|invert"),
+    ("disabled",        r"disabled"),
+    # `default`·`standard` 는 어디에나 붙는다 — corner-radius-large-default,
+    # motion-easing-standard, transitions-duration-standard 를 neutral 로 잡았다.
+    ("neutral",         r"neutral|\bgray\b|\bgrey\b"),
+]
+
+# ── 축 5: domain (값의 종류와 독립) ─────────────────────────────────────────
+# 예전에는 category 목록의 첫 항목이었다. 그래서 `ai-border-start`(테두리색) ·
+# `ai-drop-shadow`(elevation) · `chat-header-background`(색) 가 전부 "domain" 으로
+# 빨려가 색상·elevation 구성비에서 빠졌다. 도메인은 *어느 제품 영역인가* 이고
+# 값의 종류와 직교한다.
+DOMAIN = [
+    ("ai", r"^ai-|-aura|ai-gradient"),
+    ("chat", r"^chat-"),
+]
+
+# ── 축 4: state ─────────────────────────────────────────────────────────────
+STATE = [
+    ("hover",    r"hover"),
+    # 경계 없이 `active` 를 쓰면 "interactive" 를 잡는다.
+    ("active",   r"\bactive\b|pressed|\bdown\b"),
+    ("focus",    r"focus"),
+    ("selected", r"selected|checked|current"),
+    ("disabled", r"disabled"),
+    ("visited",  r"visited"),
+    ("loading",  r"loading|pending|skeleton"),
+    ("read-only", r"read-?only"),
+]
+
+
+def camel_to_kebab(s):
+    s = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", "-", s)
+    s = re.sub(r"(?<=[A-Z])(?=[A-Z][a-z])", "-", s)
+    return s.lower()
+
+
+def pick_example(entries, axis):
+    """대표 예시 1개. 색상 축은 색상 토큰을 우선하고, 그중 가장 짧은 이름을 고른다."""
+    pool = [n for n, is_color in entries if is_color] if axis in ("role", "intent", "state") else []
+    if not pool:
+        pool = [n for n, _ in entries]
+    return sorted(pool, key=lambda n: (len(n), n))[0]
+
+
+def match_axis(name, table):
+    for canon, pat in table:
+        if re.search(pat, name):
+            return canon
+    return None
+
+
+def classify(raw):
+    """role 은 category 와 독립으로 계산한다.
+
+    (구버전은 category=='color' 일 때만 role 을 봤다. 그 결과 focus-ring 처럼
+    category 가 먼저 가로채는 이름은 role 집계에서 통째로 빠졌다.)
+    """
+    name = camel_to_kebab(raw)
+    if re.match(r"^colou?r(-|$)", name) and not re.search(DIM_TAIL, name):
+        cat = "color"
+    else:
+        cat = match_axis(name, CATEGORY)
+    intent = match_axis(name, INTENT)
+    # 일반어(default/standard)는 *색상 토큰에 한해서만* neutral 로 인정한다
+    if intent is None and cat == "color" and re.search(r"default|standard", name):
+        intent = "neutral"
+    hue_named = False
+    if intent is None:
+        for hue, st in HUE_STATUS.items():
+            if re.search(rf"palette-{hue}\b|{hue}-", name):
+                intent, hue_named = st, True
+                break
+    return {
+        "category": cat,
+        "role": match_axis(name, ROLE),
+        "intent": intent,
+        "state": match_axis(name, STATE) or "default",
+        "domain": match_axis(name, DOMAIN),
+        "_hue_named": hue_named,
+    }
+
+
+def main():
+    tokens = paths.read_json("tokens")
+    systems = list(tokens)
+    n = len(systems)
+
+    # axis -> value -> {system: [예시 토큰...]}
+    seen = {a: defaultdict(lambda: defaultdict(list))
+            for a in ("category", "role", "intent", "state", "domain")}
+    uncategorized = defaultdict(list)  # category 만 못 붙은 것 — 다른 축은 살린다
+    hue_named = defaultdict(list)  # 색조 이름으로 상태를 표현하는 케이스
+
+    for sys_name, info in tokens.items():
+        for tname in info["names"]:
+            c = classify(tname)
+            if c.pop("_hue_named"):
+                hue_named[sys_name].append(tname)
+            # category 를 못 붙였다고 토큰을 통째로 버리면 안 된다.
+            # Carbon 의 `support-success` 는 색상 카테고리 패턴에 안 걸리지만
+            # intent=status:success 는 분명하다. 축은 서로 독립이다.
+            if c["category"] is None:
+                uncategorized[sys_name].append(tname)
+            is_color = c["category"] == "color" or (
+                c["category"] is None and (c["role"] or c["intent"]))
+            for axis, val in c.items():
+                if val is None:
+                    continue
+                # role/intent/state 의 대표 예시는 색상 토큰에서 뽑아야 읽을 만하다.
+                # (그렇지 않으면 role:border 예시로 line-height-100 같은 게 올라온다)
+                seen[axis][val][sys_name].append((tname, is_color))
+
+    def tier(k):
+        if k == n:
+            return "standard"
+        if k >= max(5, n * 0.6):
+            return "prevalent"
+        if k >= 2:
+            return "divergent"
+        return "system-specific"
+
+    result = {"systems": systems, "system_count": n, "axes": {}}
+    for axis, vals in seen.items():
+        rows = []
+        for val, per_sys in vals.items():
+            k = len(per_sys)
+            rows.append({
+                "value": val,
+                "systems": sorted(per_sys),
+                "coverage": k,
+                "tier": tier(k),
+                "missing": sorted(set(systems) - set(per_sys)),
+                # 시스템별 대표 예시 1개 = 이름 대조표의 재료
+                "examples": {s: pick_example(v, axis) for s, v in per_sys.items()},
+                "counts": {s: len(v) for s, v in per_sys.items()},
+            })
+        rows.sort(key=lambda r: (-r["coverage"], r["value"]))
+        result["axes"][axis] = rows
+
+    # 시스템별 category 구성비 — 100% 누적 막대의 재료
+    composition = {}
+    for sysname in systems:
+        counts = {}
+        for row in result["axes"]["category"]:
+            c = row["counts"].get(sysname)
+            if c:
+                counts[row["value"]] = c
+        # 분모는 *추출 총수* 다. 분류된 것만으로 100% 를 만들면 시스템마다 다른 모집단을
+        # 비교하게 된다 — Carbon 은 341개 중 126개(37%)가 조용히 빠져 있었다.
+        extracted = tokens[sysname]["count"]
+        unc = len(uncategorized.get(sysname, []))
+        if unc:
+            counts["미분류"] = unc
+        composition[sysname] = {
+            "total": extracted,
+            "classified": extracted - unc,
+            "uncategorized": unc,
+            "counts": dict(sorted(counts.items(), key=lambda kv: -kv[1])),
+            "pct": {k: round(v / extracted * 100, 1) for k, v in counts.items()} if extracted else {},
+        }
+    result["composition"] = composition
+    # 전체 볼륨 상위 category (누적 막대의 고정 슬롯 순서)
+    vol = {}
+    for row in result["axes"]["category"]:
+        vol[row["value"]] = sum(row["counts"].values())
+    result["category_volume"] = dict(sorted(vol.items(), key=lambda kv: -kv[1]))
+
+    # 이 통계는 "category 축을 못 붙인 것" 이다 (다른 축은 기록됐다)
+    result["uncategorized"] = {s: {"count": len(v), "sample": sorted(v)[:15]}
+                               for s, v in uncategorized.items()}
+    result["hue_named_status"] = {s: {"count": len(v), "sample": sorted(v)[:8]} for s, v in hue_named.items()}
+    out_path = paths.write_json("vocabulary", result)
+
+    for axis in ("category", "role", "intent", "state", "domain"):
+        print(f"\n=== {axis} ===")
+        for r in result["axes"][axis]:
+            print(f"  {r['coverage']}/{n} {r['tier']:16s} {r['value']:18s} 미보유: {', '.join(r['missing']) or '-'}")
+    tot_unc = sum(v["count"] for v in result["uncategorized"].values())
+    tot = sum(t["count"] for t in tokens.values())
+    print(f"\ncategory 미분류 {tot_unc}/{tot} ({tot_unc / tot * 100:.1f}%) — 다른 축은 기록됨")
+    for s, v in result["uncategorized"].items():
+        if v["count"]:
+            print(f"  {s}: {v['count']}  예: {', '.join(v['sample'][:5])}")
+    print(f"\n-> {out_path}")
+
+
+if __name__ == "__main__":
+    main()

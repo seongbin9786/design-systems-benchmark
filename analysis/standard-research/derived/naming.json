@@ -1,0 +1,309 @@
+{
+ "_note": "토큰 *이름의 문법*을 측정한다 — 표기법, 구분자, 접두사, 세그먼트 깊이, 어순.",
+ "order_legend": {
+  "RI": "역할 → 의미 (background-brand)",
+  "IR": "의미 → 역할 (brand-background)",
+  "RS": "역할 → 상태 (background-hover)",
+  "RIS": "역할 → 의미 → 상태 (background-brand-hover)",
+  "IRS": "의미 → 역할 → 상태 (brand-background-hover)",
+  "IS": "의미 → 상태 (brand-hover)",
+  "SR": "상태 → 역할 (hover-background)",
+  "SI": "상태 → 의미 (hover-brand)",
+  "RIR": "역할 → 의미 → 역할",
+  "IRI": "의미 → 역할 → 의미"
+ },
+ "systems": {
+  "Spectrum": {
+   "native_case": "kebab",
+   "native_prefix": "--spectrum-",
+   "native_sample": "`--spectrum-accent-background-color-default`",
+   "total": 935,
+   "depth_avg": 4.36,
+   "depth_max": 8,
+   "depth_hist": {
+    "2": 34,
+    "3": 272,
+    "4": 231,
+    "5": 200,
+    "6": 125,
+    "7": 62,
+    "8": 11
+   },
+   "order_top": [
+    {
+     "pattern": "IR",
+     "count": 33,
+     "pct": 33.3
+    },
+    {
+     "pattern": "IRS",
+     "count": 30,
+     "pct": 30.3
+    },
+    {
+     "pattern": "IS",
+     "count": 16,
+     "pct": 16.2
+    },
+    {
+     "pattern": "RS",
+     "count": 9,
+     "pct": 9.1
+    }
+   ],
+   "state_tokens": 77,
+   "state_suffix_pct": 70.1
+  },
+  "Material Web": {
+   "native_case": "kebab",
+   "native_prefix": "--md-sys-",
+   "native_sample": "`--md-sys-color-on-primary-container`",
+   "total": 192,
+   "depth_avg": 3.67,
+   "depth_max": 5,
+   "depth_hist": {
+    "2": 16,
+    "3": 57,
+    "4": 93,
+    "5": 26
+   },
+   "order_top": [
+    {
+     "pattern": "IR",
+     "count": 10,
+     "pct": 76.9
+    },
+    {
+     "pattern": "SR",
+     "count": 3,
+     "pct": 23.1
+    }
+   ],
+   "state_tokens": 3,
+   "state_suffix_pct": 0.0
+  },
+  "MUI": {
+   "native_case": "camel",
+   "native_prefix": "theme.",
+   "native_sample": "`theme.palette.primary.contrastText`",
+   "total": 109,
+   "depth_avg": 2.86,
+   "depth_max": 5,
+   "depth_hist": {
+    "1": 1,
+    "2": 39,
+    "3": 44,
+    "4": 24,
+    "5": 1
+   },
+   "order_top": [
+    {
+     "pattern": "IR",
+     "count": 6,
+     "pct": 60.0
+    },
+    {
+     "pattern": "RI",
+     "count": 2,
+     "pct": 20.0
+    },
+    {
+     "pattern": "SR",
+     "count": 1,
+     "pct": 10.0
+    },
+    {
+     "pattern": "RS",
+     "count": 1,
+     "pct": 10.0
+    }
+   ],
+   "state_tokens": 11,
+   "state_suffix_pct": 54.5
+  },
+  "Fluent 2": {
+   "native_case": "camel",
+   "native_prefix": "--",
+   "native_sample": "`--colorNeutralForeground2Hover`",
+   "total": 459,
+   "depth_avg": 4.03,
+   "depth_max": 6,
+   "depth_hist": {
+    "1": 6,
+    "2": 13,
+    "3": 95,
+    "4": 211,
+    "5": 116,
+    "6": 18
+   },
+   "order_top": [
+    {
+     "pattern": "IRS",
+     "count": 55,
+     "pct": 29.3
+    },
+    {
+     "pattern": "IS",
+     "count": 55,
+     "pct": 29.3
+    },
+    {
+     "pattern": "RS",
+     "count": 39,
+     "pct": 20.7
+    },
+    {
+     "pattern": "IR",
+     "count": 36,
+     "pct": 19.1
+    }
+   ],
+   "state_tokens": 149,
+   "state_suffix_pct": 100.0
+  },
+  "Carbon": {
+   "native_case": "kebab",
+   "native_prefix": "$",
+   "native_sample": "`$button-danger-hover`",
+   "total": 341,
+   "depth_avg": 2.34,
+   "depth_max": 6,
+   "depth_hist": {
+    "1": 60,
+    "2": 141,
+    "3": 109,
+    "4": 27,
+    "5": 3,
+    "6": 1
+   },
+   "order_top": [
+    {
+     "pattern": "RS",
+     "count": 24,
+     "pct": 41.4
+    },
+    {
+     "pattern": "RI",
+     "count": 17,
+     "pct": 29.3
+    },
+    {
+     "pattern": "RIS",
+     "count": 10,
+     "pct": 17.2
+    },
+    {
+     "pattern": "IS",
+     "count": 4,
+     "pct": 6.9
+    }
+   ],
+   "state_tokens": 52,
+   "state_suffix_pct": 42.3
+  },
+  "Polaris": {
+   "native_case": "kebab",
+   "native_prefix": "--p-",
+   "native_sample": "`--p-color-bg-fill-brand-hover`",
+   "total": 519,
+   "depth_avg": 3.72,
+   "depth_max": 9,
+   "depth_hist": {
+    "2": 130,
+    "3": 119,
+    "4": 107,
+    "5": 112,
+    "6": 36,
+    "7": 13,
+    "8": 1,
+    "9": 1
+   },
+   "order_top": [
+    {
+     "pattern": "RI",
+     "count": 67,
+     "pct": 35.6
+    },
+    {
+     "pattern": "RIS",
+     "count": 63,
+     "pct": 33.5
+    },
+    {
+     "pattern": "RS",
+     "count": 48,
+     "pct": 25.5
+    },
+    {
+     "pattern": "RIR",
+     "count": 6,
+     "pct": 3.2
+    }
+   ],
+   "state_tokens": 115,
+   "state_suffix_pct": 99.1
+  },
+  "shadcn/ui": {
+   "native_case": "kebab",
+   "native_prefix": "--",
+   "native_sample": "`--primary-foreground`",
+   "total": 93,
+   "depth_avg": 2.12,
+   "depth_max": 4,
+   "depth_hist": {
+    "1": 17,
+    "2": 50,
+    "3": 24,
+    "4": 2
+   },
+   "order_top": [
+    {
+     "pattern": "IR",
+     "count": 14,
+     "pct": 100.0
+    }
+   ],
+   "state_tokens": 0,
+   "state_suffix_pct": null
+  },
+  "Ant Design": {
+   "native_case": "camel",
+   "native_prefix": "token.",
+   "native_sample": "`token.colorErrorBgHover`",
+   "total": 228,
+   "depth_avg": 3.0,
+   "depth_max": 5,
+   "depth_hist": {
+    "1": 3,
+    "2": 58,
+    "3": 112,
+    "4": 47,
+    "5": 8
+   },
+   "order_top": [
+    {
+     "pattern": "IRS",
+     "count": 22,
+     "pct": 31.4
+    },
+    {
+     "pattern": "IR",
+     "count": 17,
+     "pct": 24.3
+    },
+    {
+     "pattern": "RS",
+     "count": 14,
+     "pct": 20.0
+    },
+    {
+     "pattern": "IS",
+     "count": 10,
+     "pct": 14.3
+    }
+   ],
+   "state_tokens": 50,
+   "state_suffix_pct": 100.0
+  }
+ }
+}

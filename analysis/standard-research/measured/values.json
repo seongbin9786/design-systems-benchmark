@@ -1,0 +1,1215 @@
+{
+ "slots": [
+  "surface",
+  "surface-raised",
+  "text-primary",
+  "text-secondary",
+  "border",
+  "brand-bg",
+  "brand-fg",
+  "danger-bg",
+  "success-bg",
+  "warning-bg"
+ ],
+ "systems": {
+  "Spectrum": {
+   "palette": {
+    "surface": "rgb(255, 255, 255)",
+    "surface-raised": "rgb(255, 255, 255)",
+    "text-primary": "rgb(41, 41, 41)",
+    "text-secondary": "rgb(80, 80, 80)",
+    "border": "rgb(218, 218, 218)",
+    "brand-bg": "rgb(59, 99, 251)",
+    "brand-fg": "#ffffff",
+    "danger-bg": "rgb(215, 50, 32)",
+    "success-bg": "rgb(5, 131, 78)",
+    "warning-bg": "rgb(252, 125, 0)"
+   },
+   "type": [
+    {
+     "name": "font-size-50",
+     "size": "11px",
+     "weight": 400,
+     "line_height": null
+    },
+    {
+     "name": "font-size-75",
+     "size": "12px",
+     "weight": 400,
+     "line_height": null
+    },
+    {
+     "name": "font-size-100",
+     "size": "14px",
+     "weight": 400,
+     "line_height": null
+    },
+    {
+     "name": "font-size-200",
+     "size": "16px",
+     "weight": 400,
+     "line_height": null
+    },
+    {
+     "name": "font-size-300",
+     "size": "18px",
+     "weight": 400,
+     "line_height": null
+    },
+    {
+     "name": "font-size-400",
+     "size": "20px",
+     "weight": 400,
+     "line_height": null
+    }
+   ],
+   "radius": [
+    {
+     "name": "corner-radius-75",
+     "value": "2px"
+    },
+    {
+     "name": "corner-radius-100",
+     "value": "4px"
+    },
+    {
+     "name": "corner-radius-200",
+     "value": "8px"
+    },
+    {
+     "name": "corner-radius-full",
+     "value": "999px"
+    }
+   ],
+   "space": [
+    {
+     "name": "spacing-50",
+     "value": "2px"
+    },
+    {
+     "name": "spacing-75",
+     "value": "4px"
+    },
+    {
+     "name": "spacing-100",
+     "value": "8px"
+    },
+    {
+     "name": "spacing-200",
+     "value": "12px"
+    },
+    {
+     "name": "spacing-300",
+     "value": "16px"
+    },
+    {
+     "name": "spacing-400",
+     "value": "24px"
+    },
+    {
+     "name": "spacing-500",
+     "value": "32px"
+    },
+    {
+     "name": "spacing-600",
+     "value": "40px"
+    }
+   ],
+   "shadow": [
+    {
+     "name": "drop-shadow-emphasized",
+     "value": "0 1px 4px rgba(0,0,0,.15)"
+    },
+    {
+     "name": "drop-shadow-elevated",
+     "value": "0 2px 8px rgba(0,0,0,.15)"
+    }
+   ],
+   "button": {
+    "evidence": "spectrum-css/components/button/index.css · react-spectrum/packages/@react-spectrum/s2/src/Button.tsx",
+    "height": "32px",
+    "padding": "0 18px",
+    "radius": "16px",
+    "font_size": "14px",
+    "font_weight": 700,
+    "border_width": "2px",
+    "variants": [
+     {
+      "label": "accent · fill",
+      "bg": "rgb(59, 99, 251)",
+      "fg": "#ffffff",
+      "border": "transparent"
+     },
+     {
+      "label": "primary · fill",
+      "bg": "rgb(41, 41, 41)",
+      "fg": "#ffffff",
+      "border": "transparent"
+     },
+     {
+      "label": "primary · outline",
+      "bg": "transparent",
+      "fg": "rgb(41, 41, 41)",
+      "border": "rgb(41, 41, 41)"
+     },
+     {
+      "label": "negative · fill",
+      "bg": "rgb(215, 50, 32)",
+      "fg": "#ffffff",
+      "border": "transparent"
+     }
+    ]
+   }
+  },
+  "Material Web": {
+   "palette": {
+    "surface": "#fef7ff",
+    "surface-raised": "#f3edf7",
+    "text-primary": "#1d1b20",
+    "text-secondary": "#49454f",
+    "border": "#79747e",
+    "brand-bg": "#6750a4",
+    "brand-fg": "#fff",
+    "danger-bg": "#b3261e",
+    "success-bg": null,
+    "warning-bg": null
+   },
+   "type": [
+    {
+     "name": "label-small",
+     "size": "0.6875rem",
+     "weight": 400,
+     "line_height": "1rem"
+    },
+    {
+     "name": "label-large",
+     "size": "0.875rem",
+     "weight": 400,
+     "line_height": "1.25rem"
+    },
+    {
+     "name": "body-medium",
+     "size": "0.875rem",
+     "weight": 400,
+     "line_height": "1.25rem"
+    },
+    {
+     "name": "body-large",
+     "size": "1rem",
+     "weight": 400,
+     "line_height": "1.5rem"
+    },
+    {
+     "name": "title-medium",
+     "size": "1rem",
+     "weight": 400,
+     "line_height": "1.5rem"
+    },
+    {
+     "name": "headline-small",
+     "size": "1.5rem",
+     "weight": 400,
+     "line_height": "2rem"
+    }
+   ],
+   "radius": [
+    {
+     "name": "shape-corner-extra-small",
+     "value": "4px"
+    },
+    {
+     "name": "shape-corner-small",
+     "value": "8px"
+    },
+    {
+     "name": "shape-corner-medium",
+     "value": "12px"
+    },
+    {
+     "name": "shape-corner-large",
+     "value": "16px"
+    },
+    {
+     "name": "shape-corner-full",
+     "value": "999px"
+    }
+   ],
+   "space": [
+    {
+     "name": "(토큰 없음)",
+     "value": "—"
+    }
+   ],
+   "shadow": [
+    {
+     "name": "elevation-level0",
+     "value": "none"
+    },
+    {
+     "name": "elevation-level1",
+     "value": "0 1px 2px rgba(0,0,0,.3), 0 1px 3px 1px rgba(0,0,0,.15)"
+    },
+    {
+     "name": "elevation-level2",
+     "value": "0 1px 2px rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15)"
+    },
+    {
+     "name": "elevation-level3",
+     "value": "0 4px 8px 3px rgba(0,0,0,.15), 0 1px 3px rgba(0,0,0,.3)"
+    }
+   ],
+   "button": {
+    "evidence": "material-web/button/internal/_filled-button.scss · _shared.scss",
+    "height": "40px",
+    "padding": "0 24px",
+    "radius": "999px",
+    "font_size": "0.875rem",
+    "font_weight": 500,
+    "border_width": "1px",
+    "variants": [
+     {
+      "label": "filled",
+      "bg": "#6750a4",
+      "fg": "#fff",
+      "border": "transparent"
+     },
+     {
+      "label": "filled-tonal",
+      "bg": "#e8def8",
+      "fg": "#1d192b",
+      "border": "transparent"
+     },
+     {
+      "label": "outlined",
+      "bg": "transparent",
+      "fg": "#6750a4",
+      "border": "#79747e"
+     },
+     {
+      "label": "text",
+      "bg": "transparent",
+      "fg": "#6750a4",
+      "border": "transparent"
+     }
+    ]
+   }
+  },
+  "MUI": {
+   "palette": {
+    "surface": "#ffffff",
+    "surface-raised": "#ffffff",
+    "text-primary": "rgba(0, 0, 0, 0.87)",
+    "text-secondary": "rgba(0, 0, 0, 0.6)",
+    "border": "rgba(0, 0, 0, 0.12)",
+    "brand-bg": "#1976d2",
+    "brand-fg": "#ffffff",
+    "danger-bg": "#d32f2f",
+    "success-bg": "#2e7d32",
+    "warning-bg": "#f57c00"
+   },
+   "type": [
+    {
+     "name": "caption",
+     "size": "0.75rem",
+     "weight": 400,
+     "line_height": "1.66"
+    },
+    {
+     "name": "body2",
+     "size": "0.875rem",
+     "weight": 400,
+     "line_height": "1.43"
+    },
+    {
+     "name": "body1",
+     "size": "1rem",
+     "weight": 400,
+     "line_height": "1.5"
+    },
+    {
+     "name": "h6",
+     "size": "1.25rem",
+     "weight": 500,
+     "line_height": "1.6"
+    },
+    {
+     "name": "h5",
+     "size": "1.5rem",
+     "weight": 400,
+     "line_height": "1.334"
+    },
+    {
+     "name": "h4",
+     "size": "2.125rem",
+     "weight": 400,
+     "line_height": "1.235"
+    }
+   ],
+   "radius": [
+    {
+     "name": "shape.borderRadius",
+     "value": "4px"
+    }
+   ],
+   "space": [
+    {
+     "name": "spacing(0.5)",
+     "value": "4.0px"
+    },
+    {
+     "name": "spacing(1)",
+     "value": "8px"
+    },
+    {
+     "name": "spacing(2)",
+     "value": "16px"
+    },
+    {
+     "name": "spacing(3)",
+     "value": "24px"
+    },
+    {
+     "name": "spacing(4)",
+     "value": "32px"
+    },
+    {
+     "name": "spacing(5)",
+     "value": "40px"
+    },
+    {
+     "name": "spacing(6)",
+     "value": "48px"
+    },
+    {
+     "name": "spacing(8)",
+     "value": "64px"
+    }
+   ],
+   "shadow": [
+    {
+     "name": "shadows[1]",
+     "value": "0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14)"
+    },
+    {
+     "name": "shadows[4]",
+     "value": "0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px rgba(0,0,0,.14)"
+    },
+    {
+     "name": "shadows[8]",
+     "value": "0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14)"
+    }
+   ],
+   "button": {
+    "evidence": "material-ui/packages/mui-material/src/Button/Button.js",
+    "height": "36.5px",
+    "padding": "6px 16px",
+    "radius": "4px",
+    "font_size": "0.875rem",
+    "font_weight": 500,
+    "border_width": "1px",
+    "uppercase": true,
+    "variants": [
+     {
+      "label": "contained",
+      "bg": "#1976d2",
+      "fg": "#ffffff",
+      "border": "transparent"
+     },
+     {
+      "label": "outlined",
+      "bg": "transparent",
+      "fg": "#1976d2",
+      "border": "rgba(25,118,210,.5)"
+     },
+     {
+      "label": "text",
+      "bg": "transparent",
+      "fg": "#1976d2",
+      "border": "transparent"
+     },
+     {
+      "label": "contained · error",
+      "bg": "#d32f2f",
+      "fg": "#ffffff",
+      "border": "transparent"
+     }
+    ]
+   }
+  },
+  "Fluent 2": {
+   "palette": {
+    "surface": "#ffffff",
+    "surface-raised": "#fafafa",
+    "text-primary": "#242424",
+    "text-secondary": "#424242",
+    "border": "#d1d1d1",
+    "brand-bg": "#0078d4",
+    "brand-fg": "#ffffff",
+    "danger-bg": "#c50f1f",
+    "success-bg": "#107c10",
+    "warning-bg": "#fde300"
+   },
+   "type": [
+    {
+     "name": "fontSizeBase100",
+     "size": "10px",
+     "weight": 400,
+     "line_height": "14px"
+    },
+    {
+     "name": "fontSizeBase200",
+     "size": "12px",
+     "weight": 400,
+     "line_height": "16px"
+    },
+    {
+     "name": "fontSizeBase300",
+     "size": "14px",
+     "weight": 400,
+     "line_height": "20px"
+    },
+    {
+     "name": "fontSizeBase400",
+     "size": "16px",
+     "weight": 400,
+     "line_height": "22px"
+    },
+    {
+     "name": "fontSizeBase500",
+     "size": "20px",
+     "weight": 400,
+     "line_height": "28px"
+    },
+    {
+     "name": "fontSizeBase600",
+     "size": "24px",
+     "weight": 400,
+     "line_height": "32px"
+    }
+   ],
+   "radius": [
+    {
+     "name": "borderRadiusNone",
+     "value": "0"
+    },
+    {
+     "name": "borderRadiusSmall",
+     "value": "2px"
+    },
+    {
+     "name": "borderRadiusMedium",
+     "value": "4px"
+    },
+    {
+     "name": "borderRadiusLarge",
+     "value": "6px"
+    },
+    {
+     "name": "borderRadiusXLarge",
+     "value": "8px"
+    },
+    {
+     "name": "borderRadius2XLarge",
+     "value": "12px"
+    }
+   ],
+   "space": [
+    {
+     "name": "xxs",
+     "value": "2px"
+    },
+    {
+     "name": "xs",
+     "value": "4px"
+    },
+    {
+     "name": "sNudge",
+     "value": "6px"
+    },
+    {
+     "name": "s",
+     "value": "8px"
+    },
+    {
+     "name": "mNudge",
+     "value": "10px"
+    },
+    {
+     "name": "m",
+     "value": "12px"
+    },
+    {
+     "name": "l",
+     "value": "16px"
+    },
+    {
+     "name": "xl",
+     "value": "20px"
+    }
+   ],
+   "shadow": [
+    {
+     "name": "shadow4",
+     "value": "0 2px 4px rgba(0,0,0,.14), 0 0 2px rgba(0,0,0,.12)"
+    },
+    {
+     "name": "shadow8",
+     "value": "0 4px 8px rgba(0,0,0,.14), 0 0 2px rgba(0,0,0,.12)"
+    },
+    {
+     "name": "shadow16",
+     "value": "0 8px 16px rgba(0,0,0,.14), 0 0 2px rgba(0,0,0,.12)"
+    }
+   ],
+   "button": {
+    "evidence": "fluentui/packages/react-components/react-button/library/src/components/Button/useButtonStyles.styles.ts",
+    "height": "32px",
+    "padding": "0 12px",
+    "radius": "4px",
+    "font_size": "14px",
+    "font_weight": 600,
+    "border_width": "1px",
+    "variants": [
+     {
+      "label": "primary",
+      "bg": "#0078d4",
+      "fg": "#ffffff",
+      "border": "transparent"
+     },
+     {
+      "label": "secondary",
+      "bg": "#ffffff",
+      "fg": "#242424",
+      "border": "#d1d1d1"
+     },
+     {
+      "label": "outline",
+      "bg": "transparent",
+      "fg": "#242424",
+      "border": "#d1d1d1"
+     },
+     {
+      "label": "subtle",
+      "bg": "transparent",
+      "fg": "#242424",
+      "border": "transparent"
+     }
+    ]
+   }
+  },
+  "Carbon": {
+   "palette": {
+    "surface": "#ffffff",
+    "surface-raised": "#f4f4f4",
+    "text-primary": "#161616",
+    "text-secondary": "#525252",
+    "border": "#c6c6c6",
+    "brand-bg": "#0f62fe",
+    "brand-fg": "#ffffff",
+    "danger-bg": "#da1e28",
+    "success-bg": "#24a148",
+    "warning-bg": "#f1c21b"
+   },
+   "type": [
+    {
+     "name": "caption01",
+     "size": "12px",
+     "weight": 400,
+     "line_height": "1.33333"
+    },
+    {
+     "name": "caption02",
+     "size": "14px",
+     "weight": 400,
+     "line_height": "1.28572"
+    },
+    {
+     "name": "label01",
+     "size": "12px",
+     "weight": 400,
+     "line_height": "1.33333"
+    },
+    {
+     "name": "label02",
+     "size": "14px",
+     "weight": 400,
+     "line_height": "1.28572"
+    },
+    {
+     "name": "helperText01",
+     "size": "12px",
+     "weight": 400,
+     "line_height": "1.33333"
+    },
+    {
+     "name": "helperText02",
+     "size": "14px",
+     "weight": 400,
+     "line_height": "1.28572"
+    },
+    {
+     "name": "bodyShort01",
+     "size": "14px",
+     "weight": 400,
+     "line_height": "1.28572"
+    },
+    {
+     "name": "bodyLong01",
+     "size": "14px",
+     "weight": 400,
+     "line_height": "1.42857"
+    }
+   ],
+   "radius": [
+    {
+     "name": "(없음)",
+     "value": "0px"
+    }
+   ],
+   "space": [
+    {
+     "name": "spacing-01",
+     "value": "0.125rem"
+    },
+    {
+     "name": "spacing-02",
+     "value": "0.25rem"
+    },
+    {
+     "name": "spacing-03",
+     "value": "0.5rem"
+    },
+    {
+     "name": "spacing-04",
+     "value": "0.75rem"
+    },
+    {
+     "name": "spacing-05",
+     "value": "1rem"
+    },
+    {
+     "name": "spacing-06",
+     "value": "1.5rem"
+    },
+    {
+     "name": "spacing-07",
+     "value": "2rem"
+    },
+    {
+     "name": "spacing-08",
+     "value": "2.5rem"
+    }
+   ],
+   "shadow": [
+    {
+     "name": "overlay",
+     "value": "0 0 0 rgba(0,0,0,0)"
+    }
+   ],
+   "button": {
+    "evidence": "carbon/packages/styles/scss/components/button/_button.scss",
+    "height": "48px",
+    "padding": "0 63px 0 15px",
+    "radius": "0",
+    "font_size": "14px",
+    "font_weight": 400,
+    "border_width": "1px",
+    "variants": [
+     {
+      "label": "Primary",
+      "bg": "#0f62fe",
+      "fg": "#ffffff",
+      "border": "transparent"
+     },
+     {
+      "label": "Secondary",
+      "bg": "#393939",
+      "fg": "#ffffff",
+      "border": "transparent"
+     },
+     {
+      "label": "Tertiary",
+      "bg": "transparent",
+      "fg": "#0f62fe",
+      "border": "#0f62fe"
+     },
+     {
+      "label": "Danger",
+      "bg": "#da1e28",
+      "fg": "#ffffff",
+      "border": "transparent"
+     }
+    ]
+   }
+  },
+  "Polaris": {
+   "palette": {
+    "surface": "rgba(241, 241, 241, 1)",
+    "surface-raised": "rgba(255, 255, 255, 1)",
+    "text-primary": "rgba(48, 48, 48, 1)",
+    "text-secondary": "rgba(97, 97, 97, 1)",
+    "border": "rgba(227, 227, 227, 1)",
+    "brand-bg": "rgba(48, 48, 48, 1)",
+    "brand-fg": "rgba(255, 255, 255, 1)",
+    "danger-bg": "rgba(199, 10, 36, 1)",
+    "success-bg": "rgba(4, 123, 93, 1)",
+    "warning-bg": "rgba(255, 230, 0, 1)"
+   },
+   "type": [
+    {
+     "name": "font-size-275",
+     "size": "11px",
+     "weight": 450,
+     "line_height": null
+    },
+    {
+     "name": "font-size-300",
+     "size": "12px",
+     "weight": 450,
+     "line_height": null
+    },
+    {
+     "name": "font-size-325",
+     "size": "13px",
+     "weight": 450,
+     "line_height": null
+    },
+    {
+     "name": "font-size-350",
+     "size": "14px",
+     "weight": 450,
+     "line_height": null
+    },
+    {
+     "name": "font-size-400",
+     "size": "16px",
+     "weight": 450,
+     "line_height": null
+    },
+    {
+     "name": "font-size-450",
+     "size": "18px",
+     "weight": 450,
+     "line_height": null
+    },
+    {
+     "name": "font-size-500",
+     "size": "20px",
+     "weight": 450,
+     "line_height": null
+    }
+   ],
+   "radius": [
+    {
+     "name": "border-radius-0",
+     "value": "0px"
+    },
+    {
+     "name": "border-radius-100",
+     "value": "4px"
+    },
+    {
+     "name": "border-radius-150",
+     "value": "6px"
+    },
+    {
+     "name": "border-radius-200",
+     "value": "8px"
+    },
+    {
+     "name": "border-radius-300",
+     "value": "12px"
+    },
+    {
+     "name": "border-radius-400",
+     "value": "16px"
+    }
+   ],
+   "space": [
+    {
+     "name": "space-0",
+     "value": "0px"
+    },
+    {
+     "name": "space-100",
+     "value": "4px"
+    },
+    {
+     "name": "space-150",
+     "value": "6px"
+    },
+    {
+     "name": "space-200",
+     "value": "8px"
+    },
+    {
+     "name": "space-300",
+     "value": "12px"
+    },
+    {
+     "name": "space-400",
+     "value": "16px"
+    },
+    {
+     "name": "space-500",
+     "value": "20px"
+    },
+    {
+     "name": "space-600",
+     "value": "24px"
+    }
+   ],
+   "shadow": [
+    {
+     "name": "shadow-0",
+     "value": "none"
+    },
+    {
+     "name": "shadow-100",
+     "value": "0px 1px 0px 0px rgba(26, 26, 26, 0.07)"
+    },
+    {
+     "name": "shadow-200",
+     "value": "0px 3px 1px -1px rgba(26, 26, 26, 0.07)"
+    },
+    {
+     "name": "shadow-300",
+     "value": "0px 4px 6px -2px rgba(26, 26, 26, 0.20)"
+    }
+   ],
+   "button": {
+    "evidence": "polaris/polaris-react/src/components/Button/Button.module.css",
+    "height": "32px",
+    "padding": "0 12px",
+    "radius": "8px",
+    "font_size": "13px",
+    "font_weight": 650,
+    "border_width": "1px",
+    "variants": [
+     {
+      "label": "primary",
+      "bg": "rgba(48, 48, 48, 1)",
+      "fg": "rgba(255, 255, 255, 1)",
+      "border": "transparent"
+     },
+     {
+      "label": "secondary",
+      "bg": "rgba(255, 255, 255, 1)",
+      "fg": "rgba(48, 48, 48, 1)",
+      "border": "rgba(227, 227, 227, 1)"
+     },
+     {
+      "label": "tertiary",
+      "bg": "transparent",
+      "fg": "rgba(48, 48, 48, 1)",
+      "border": "transparent"
+     },
+     {
+      "label": "primary · critical",
+      "bg": "rgba(199, 10, 36, 1)",
+      "fg": "rgba(255, 250, 251, 1)",
+      "border": "transparent"
+     }
+    ]
+   }
+  },
+  "shadcn/ui": {
+   "palette": {
+    "surface": "oklch(1 0 0)",
+    "surface-raised": "oklch(1 0 0)",
+    "text-primary": "oklch(0% 0 0)",
+    "text-secondary": "oklch(0.556 0 0)",
+    "border": "oklch(0.922 0 0)",
+    "brand-bg": "oklch(0% 0 0)",
+    "brand-fg": "oklch(0.985 0 0)",
+    "danger-bg": "oklch(0.577 0.245 27.325)",
+    "success-bg": null,
+    "warning-bg": null
+   },
+   "type": [
+    {
+     "name": "text-xs",
+     "size": "0.75rem",
+     "weight": 400,
+     "line_height": "1rem"
+    },
+    {
+     "name": "text-sm",
+     "size": "0.875rem",
+     "weight": 400,
+     "line_height": "1.25rem"
+    },
+    {
+     "name": "text-base",
+     "size": "1rem",
+     "weight": 400,
+     "line_height": "1.5rem"
+    },
+    {
+     "name": "text-lg",
+     "size": "1.125rem",
+     "weight": 400,
+     "line_height": "1.75rem"
+    },
+    {
+     "name": "text-xl",
+     "size": "1.25rem",
+     "weight": 400,
+     "line_height": "1.75rem"
+    },
+    {
+     "name": "text-2xl",
+     "size": "1.5rem",
+     "weight": 400,
+     "line_height": "2rem"
+    }
+   ],
+   "radius": [
+    {
+     "name": "--radius-sm",
+     "value": "calc(0.625rem - 4px)"
+    },
+    {
+     "name": "--radius-md",
+     "value": "calc(0.625rem - 2px)"
+    },
+    {
+     "name": "--radius-lg",
+     "value": "calc(0.625rem + 0px)"
+    },
+    {
+     "name": "--radius-xl",
+     "value": "calc(0.625rem + 4px)"
+    }
+   ],
+   "space": [
+    {
+     "name": "p-1",
+     "value": "0.25rem"
+    },
+    {
+     "name": "p-2",
+     "value": "0.5rem"
+    },
+    {
+     "name": "p-3",
+     "value": "0.75rem"
+    },
+    {
+     "name": "p-4",
+     "value": "1.0rem"
+    },
+    {
+     "name": "p-6",
+     "value": "1.5rem"
+    },
+    {
+     "name": "p-8",
+     "value": "2.0rem"
+    },
+    {
+     "name": "p-10",
+     "value": "2.5rem"
+    },
+    {
+     "name": "p-12",
+     "value": "3.0rem"
+    }
+   ],
+   "shadow": [
+    {
+     "name": "shadow-xs",
+     "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)"
+    },
+    {
+     "name": "shadow-sm",
+     "value": "0 1px 3px 0 rgb(0 0 0 / 0.1)"
+    },
+    {
+     "name": "shadow-md",
+     "value": "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+    }
+   ],
+   "button": {
+    "evidence": "shadcn-ui/apps/v4/registry/new-york-v4/ui/button.tsx (cva)",
+    "height": "36px",
+    "padding": "0 16px",
+    "radius": "calc(0.625rem - 2px)",
+    "font_size": "0.875rem",
+    "font_weight": 500,
+    "border_width": "1px",
+    "variants": [
+     {
+      "label": "default",
+      "bg": "oklch(0% 0 0)",
+      "fg": "oklch(0.985 0 0)",
+      "border": "transparent"
+     },
+     {
+      "label": "secondary",
+      "bg": "oklch(0.97 0 0)",
+      "fg": "oklch(0.205 0 0)",
+      "border": "transparent"
+     },
+     {
+      "label": "outline",
+      "bg": "oklch(1 0 0)",
+      "fg": "oklch(0% 0 0)",
+      "border": "oklch(0.922 0 0)"
+     },
+     {
+      "label": "destructive",
+      "bg": "oklch(0.577 0.245 27.325)",
+      "fg": "oklch(0.97 0.01 17)",
+      "border": "transparent"
+     }
+    ]
+   }
+  },
+  "Ant Design": {
+   "palette": {
+    "surface": "#ffffff",
+    "surface-raised": "#ffffff",
+    "text-primary": "rgba(0, 0, 0, 0.88)",
+    "text-secondary": "rgba(0, 0, 0, 0.65)",
+    "border": "#d9d9d9",
+    "brand-bg": "#1677ff",
+    "brand-fg": "#ffffff",
+    "danger-bg": "#ff4d4f",
+    "success-bg": "#52c41a",
+    "warning-bg": "#faad14"
+   },
+   "type": [
+    {
+     "name": "fontSizeSM",
+     "size": "12px",
+     "weight": 400,
+     "line_height": null
+    },
+    {
+     "name": "fontSize",
+     "size": "14px",
+     "weight": 400,
+     "line_height": null
+    },
+    {
+     "name": "fontSizeLG",
+     "size": "16px",
+     "weight": 400,
+     "line_height": null
+    },
+    {
+     "name": "fontSizeXL",
+     "size": "20px",
+     "weight": 400,
+     "line_height": null
+    },
+    {
+     "name": "fontSizeHeading3",
+     "size": "24px",
+     "weight": 600,
+     "line_height": null
+    },
+    {
+     "name": "fontSizeHeading2",
+     "size": "30px",
+     "weight": 600,
+     "line_height": null
+    }
+   ],
+   "radius": [
+    {
+     "name": "borderRadiusXS",
+     "value": "2px"
+    },
+    {
+     "name": "borderRadiusSM",
+     "value": "4px"
+    },
+    {
+     "name": "borderRadius",
+     "value": "6px"
+    },
+    {
+     "name": "borderRadiusLG",
+     "value": "8px"
+    }
+   ],
+   "space": [
+    {
+     "name": "paddingXXS",
+     "value": "4px"
+    },
+    {
+     "name": "paddingXS",
+     "value": "8px"
+    },
+    {
+     "name": "paddingSM",
+     "value": "12px"
+    },
+    {
+     "name": "padding",
+     "value": "16px"
+    },
+    {
+     "name": "paddingMD",
+     "value": "20px"
+    },
+    {
+     "name": "paddingLG",
+     "value": "24px"
+    },
+    {
+     "name": "paddingXL",
+     "value": "32px"
+    }
+   ],
+   "shadow": [
+    {
+     "name": "boxShadowTertiary",
+     "value": "0 1px 2px 0 rgba(0,0,0,.03), 0 1px 6px -1px rgba(0,0,0,.02)"
+    },
+    {
+     "name": "boxShadowSecondary",
+     "value": "0 6px 16px 0 rgba(0,0,0,.08), 0 3px 6px -4px rgba(0,0,0,.12)"
+    }
+   ],
+   "button": {
+    "evidence": "ant-design/components/button/style/index.ts · theme/themes/seed.ts",
+    "height": "32px",
+    "padding": "0 15px",
+    "radius": "6px",
+    "font_size": "14px",
+    "font_weight": 400,
+    "border_width": "1px",
+    "variants": [
+     {
+      "label": "primary · solid",
+      "bg": "#1677ff",
+      "fg": "#ffffff",
+      "border": "transparent"
+     },
+     {
+      "label": "default · outlined",
+      "bg": "#ffffff",
+      "fg": "rgba(0, 0, 0, 0.88)",
+      "border": "#d9d9d9"
+     },
+     {
+      "label": "primary · filled",
+      "bg": "#e6f4ff",
+      "fg": "#1677ff",
+      "border": "transparent"
+     },
+     {
+      "label": "danger · solid",
+      "bg": "#ff4d4f",
+      "fg": "#ffffff",
+      "border": "transparent"
+     }
+    ]
+   }
+  }
+ }
+}

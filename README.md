@@ -42,6 +42,25 @@ Figma ↔ Code 매핑 충실도를 중심으로 주요 컴포넌트 라이브러
 디자인 시스템을 추출·확장하는 8단계 절차. 이 벤치마크의 결론과 matchday-saas 구축 사례
 (단계별 실물 산출물 대응표 포함)를 근거로 한다.
 
+## 표준화 가능한 요소 (실측 리포트)
+
+"디자인 시스템이 반드시 갖춰야 할 것"을 8개 시스템 소스에서 직접 세어 판정한 결과.
+파이프라인과 계층 구조는 → [**analysis/standard-research/README.md**](analysis/standard-research/README.md)
+
+리포트 (전부 생성물 — 직접 편집하지 말 것):
+
+- [**본문**](analysis/standard-research/reports/design-system-standard-research.md) — 읽기용 MD
+- [**시각화**](analysis/standard-research/reports/design-system-standard-research.html) — 커버리지 히트맵·덤벨 차트 등 8종
+- [**확장판**](analysis/standard-research/reports/design-system-standard-research-visual.html) —
+  위의 상위집합 + 네이밍 문법(이름 해부·어순 진영) · 어휘 밀도 · variant 폭발 · 분해 단위
+- [**실물 견본**](analysis/standard-research/reports/design-system-specimens.html) —
+  Button 32개·팔레트 80칸·타이포·radius·간격·elevation·조립 UI 를 각 시스템의 *실제 값*으로 렌더링
+
+```bash
+bash sources/clone.sh                        # 선행: 분석 대상 소스 얕은 클론
+python3 analysis/standard-research/run.py    # 전체 재생성
+```
+
 ## 구조
 
 ```
@@ -60,12 +79,23 @@ Figma ↔ Code 매핑 충실도를 중심으로 주요 컴포넌트 라이브러
 │   ├── token-analysis-framework.md # 토큰 분석 프레임워크
 │   ├── component-mapping.md # Figma↔Code 매핑 비교
 │   └── dependency-audit-summary.md # 의존성 전수 조사 종합
-├── analysis/             # 리뷰와 다음 단계
+├── analysis/             # 리뷰·다음 단계 문서 + 실측 연구
 │   ├── review-and-next-steps.md # 문서 리뷰 (유용성/학습/고도화/심화)
 │   ├── learning-guide.md # 학습 가이드
-│   └── advancement-roadmap.md # 고도화 로드맵
-└── figma/                # Figma API 추출 데이터
-    ├── extract.py        # 추출 스크립트
-    ├── figma-mapping-results.md # 실측 매핑 분석
-    └── raw/              # 원본 JSON 데이터
+│   ├── advancement-roadmap.md # 고도화 로드맵
+│   └── standard-research/ # 표준화 가능 요소 실측 (계층 분리)
+│       ├── README.md     # 파이프라인·의존 그래프·계층 규칙
+│       ├── run.py        # 전체 실행 (의존 순서 강제)
+│       ├── tools/        # 측정·렌더 스크립트 + paths.py + viz.py + templates/
+│       ├── curated/      # 수기 입력 (스크립트가 덮어쓰지 않음)
+│       ├── measured/     # 1차 측정 (sources·figma 직접)
+│       ├── derived/      # 2차 파생 (measured 입력)
+│       └── reports/      # 최종 생성물 (편집 금지)
+├── figma/                # Figma API 추출 데이터
+│   ├── extract.py        # 추출 스크립트
+│   ├── figma-mapping-results.md # 실측 매핑 분석
+│   └── raw/              # 원본 JSON 데이터
+└── sources/              # 분석 대상 라이브러리 얕은 클론 (.gitignore)
+    ├── clone.sh          # 재현 스크립트
+    └── MANIFEST.md       # 고정 커밋 SHA·기준일
 ```
