@@ -1,0 +1,4 @@
+# 정적 사이트는 reports/ 만 서빙한다 (vercel.json outputDirectory).
+# 분석 대상 클론은 파일이 3만 개가 넘어 Vercel 업로드 제한(15,000)을 깨므로
+# 배포에 올리지 않는다. 재현에는 sources/clone.sh 로 다시 받는다.
+sources
