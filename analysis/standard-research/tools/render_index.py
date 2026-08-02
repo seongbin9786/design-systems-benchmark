@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
-"""배포용 목차 페이지를 만든다 — reports/index.html.
+"""배포용 단일 페이지를 만든다 — reports/index.html.
+
+예전에는 리포트마다 카드 링크를 걸어 각각 다른 페이지로 열게 했다. 그러면 읽는 사람이
+섹션마다 이동해야 한다. 이제는 한 페이지에 전부 조립한다 — 히어로·KPI·핵심 발견은
+그대로 두고, 세 리포트를 스크롤되는 섹션으로 이어 붙인다.
+
+리포트를 한 문서로 합치지 않고 iframe 으로 담는 이유가 있다. 각 리포트는 `:root`,
+`body`, `*`, `.wrap`, `h1·h2` 같은 전역 선택자를 쓰는 독립 완결 HTML 이라 한 문서에
+쏟아부으면 스타일이 서로 덮어쓴다 (`.wrap` 만 세 종류). iframe 은 문서를 격리해
+정교하게 튜닝된 리포트 스타일을 건드리지 않으면서 한 페이지 경험을 준다. 같은 오리진이라
+스크립트가 각 iframe 의 실제 높이로 맞춰 연속 스크롤처럼 보인다.
 
 목차를 손으로 관리하면 리포트가 바뀔 때 어긋난다. 핵심 수치도 데이터에서 읽는다.
 정적 호스팅(Vercel 등)의 루트가 reports/ 를 가리키면 그대로 사이트가 된다.
@@ -43,31 +53,31 @@ def build():
     flagged = []
     for s, d in dep["summary"].items():
         try:
-            a = float(str(d.get("documented_avg")).replace("~", "").replace("%", "").replace("+", ""))
+            a = float(str(d.get("documented_average")).replace("~", "").replace("%", "").replace("+", ""))
         except (TypeError, ValueError):
             continue
         if abs(d["avg_loose"] - a) >= 20:
             flagged.append(s)
 
-    cards = [
-        ("design-system-standard-research.html", "📐", "본문 (시각화)",
-         "커버리지 히트맵 · 덤벨 차트 · 100% 누적 막대 등 8종. 무엇이 표준화 가능한지 판정한다.",
-         ["토큰 어휘 4축 커버리지", "컴포넌트 교집합", "Button variant 축", "재감사: 의존율 · MFI"]),
-        ("design-system-standard-research-visual.html", "📊", "확장판",
-         "본문의 상위집합. 이름의 *문법* 까지 파고든다.",
-         ["토큰 이름 해부 · 어순 진영", "어휘 밀도 히트맵", "variant 조합 폭발", "분해 단위 · 매칭 근거"]),
-        ("design-system-specimens.html", "🎨", "실물 견본",
-         "차트가 아니라 실물. 각 시스템의 실제 토큰 값으로 컴포넌트를 렌더링했다.",
-         ["Button 32개 나란히", "색 팔레트 80칸", "타이포 · radius · 간격 · elevation", "같은 화면을 8개 시스템으로"]),
-        ("design-system-standard-research.md", "📄", "본문 (마크다운)",
-         "읽기용 원문. 히트맵은 ●/· 표기.", ["GitHub · 에디터에서 그대로", "표 14개"]),
+    # (앵커 id, 파일, 아이콘, 제목, 설명) — 카드 링크 대신 한 페이지 섹션으로 조립한다.
+    sections = [
+        ("research", "design-system-standard-research.html", "📐", "본문 (시각화)",
+         "커버리지 히트맵 · 덤벨 차트 · 100% 누적 막대 등 8종. 무엇이 표준화 가능한지 판정한다."),
+        ("visual", "design-system-standard-research-visual.html", "📊", "확장판",
+         "본문의 상위집합. 이름의 *문법* 까지 파고든다."),
+        ("specimens", "design-system-specimens.html", "🎨", "실물 견본",
+         "차트가 아니라 실물. 각 시스템의 실제 토큰 값으로 컴포넌트를 렌더링했다."),
     ]
-    card_html = "".join(
-        f'<a class="card" href="{e(href)}"><span class="ico">{ico}</span>'
-        f'<h2>{e(title)}</h2><p>{e(desc)}</p>'
-        f'<ul>{"".join(f"<li>{e(b)}</li>" for b in bullets)}</ul>'
-        f'<span class="go">열기 →</span></a>'
-        for href, ico, title, desc, bullets in cards)
+    nav_html = "".join(
+        f'<a href="#{sid}">{ico} {e(title)}</a>' for sid, _h, ico, title, _d in sections)
+    sec_html = "".join(
+        f'<section class="rpt" id="{sid}">'
+        f'<header class="rpt-h"><span class="ico">{ico}</span>'
+        f'<div class="t"><h2>{e(title)}</h2><p>{e(desc)}</p></div>'
+        f'<a class="pop" href="{e(href)}" target="_blank" rel="noopener">새 창 ↗</a></header>'
+        f'<iframe class="rpt-frame" src="{e(href)}" loading="lazy" '
+        f'title="{e(title)}"></iframe></section>'
+        for sid, href, ico, title, desc in sections)
 
     stats = [
         (std_count, "예외 없이 공통인<br>토큰 어휘"),
@@ -93,7 +103,8 @@ def build():
     ]
     find_html = "".join(f'<div class="f"><h3>{e(t)}</h3><p>{e(d)}</p></div>' for t, d in findings)
 
-    return TEMPLATE.replace("{{cards}}", card_html) \
+    return TEMPLATE.replace("{{nav}}", nav_html) \
+                   .replace("{{sections}}", sec_html) \
                    .replace("{{stats}}", stat_html) \
                    .replace("{{findings}}", find_html) \
                    .replace("{{n}}", str(n)) \
@@ -105,7 +116,7 @@ def build():
 TEMPLATE = """<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>디자인 시스템 표준화 연구 — 8개 시스템 소스 실측</title>
-<meta name="description" content="Spectrum · Material · MUI · Fluent 2 · Carbon · Polaris · shadcn/ui · Ant Design 의 실제 소스에서 토큰과 컴포넌트를 세어 무엇이 표준화 가능한지 판정한 리포트.">
+<meta name="description" content="Spectrum · Material · MUI · Fluent 2 · Carbon · Polaris · shadcn/ui · Ant Design 의 실제 소스에서 토큰과 컴포넌트를 세어 무엇이 표준화 가능한지 판정한 리포트. 한 페이지에서 전부 읽는다.">
 <style>
 :root {
   --ink: #16191d; --ink-2: #4a5157; --ink-3: #767f87;
@@ -128,9 +139,11 @@ TEMPLATE = """<meta charset="utf-8">
   --accent: #7fb0dd; --accent-soft: #1e2a35;
 }
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans);
   font-size: clamp(.9rem,.87rem + .15vw,.95rem); line-height: 1.65; -webkit-font-smoothing: antialiased; }
-.wrap { max-width: 62rem; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+.wrap { max-width: 62rem; margin: 0 auto; padding: 0 1.5rem; }
+.hero { padding-top: 4rem; }
 .eyebrow { font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
   color: var(--accent); margin: 0 0 .9rem; }
 h1 { font-size: clamp(1.9rem,1.6rem + 1.4vw,2.9rem); line-height: 1.1; letter-spacing: -.025em;
@@ -144,21 +157,33 @@ h1 { font-size: clamp(1.9rem,1.6rem + 1.4vw,2.9rem); line-height: 1.1; letter-sp
 .kpi .k { font-size: 2rem; line-height: 1; font-weight: 600; letter-spacing: -.035em; }
 .kpi .k small { font-size: .95rem; font-weight: 500; color: var(--ink-3); letter-spacing: 0; }
 .kpi .l { font-size: .78rem; color: var(--ink-2); margin-top: .45rem; }
+
+.topbar { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(8px); backdrop-filter: saturate(1.4) blur(8px); }
+.topbar .in { max-width: 90rem; margin: 0 auto; padding: .55rem 1.5rem;
+  display: flex; flex-wrap: wrap; gap: .25rem; align-items: center; }
+.topbar a { font-size: .8rem; color: var(--ink-2); text-decoration: none;
+  padding: .3rem .65rem; border-radius: 4px; }
+.topbar a:hover { color: var(--accent); background: var(--accent-soft); }
+.topbar .md { margin-left: auto; color: var(--ink-3); font-family: var(--mono); font-size: .72rem; }
+
+.reports { max-width: 90rem; margin: 0 auto; padding: 2.5rem 1.5rem 0; }
+.rpt { margin: 0 0 3.5rem; scroll-margin-top: 4.2rem; }
+.rpt-h { display: flex; align-items: flex-start; gap: .7rem; margin: 0 0 .8rem; }
+.rpt-h .ico { font-size: 1.4rem; line-height: 1.25; }
+.rpt-h .t { min-width: 0; }
+.rpt-h h2 { font-size: 1.15rem; font-weight: 640; letter-spacing: -.01em; margin: 0; }
+.rpt-h p { font-size: .82rem; color: var(--ink-2); margin: .2rem 0 0; max-width: 64ch; }
+.rpt-h .pop { margin-left: auto; flex: none; white-space: nowrap; font-size: .76rem; color: var(--accent);
+  text-decoration: none; border: 1px solid var(--rule); background: var(--card);
+  padding: .28rem .6rem; border-radius: 4px; }
+.rpt-h .pop:hover { border-color: var(--accent); }
+.rpt-frame { display: block; width: 100%; height: 70vh; min-height: 26rem; border: 0;
+  background: var(--paper); border-radius: 6px; }
+
 h2.sec { font-size: 1.35rem; font-weight: 640; letter-spacing: -.015em; margin: 0 0 1rem;
   padding-top: 1.6rem; border-top: 1px solid var(--rule); }
-.cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(17rem,1fr)); gap: 1rem; margin: 0 0 3rem; }
-.card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--rule);
-  border-radius: 6px; padding: 1.2rem 1.25rem 1.1rem; text-decoration: none; color: inherit;
-  transition: border-color .12s, transform .12s; }
-.card:hover { border-color: var(--accent); transform: translateY(-2px); }
-.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.card .ico { font-size: 1.5rem; line-height: 1; }
-.card h2 { font-size: 1.05rem; font-weight: 640; margin: .55rem 0 .35rem; }
-.card p { font-size: .82rem; color: var(--ink-2); margin: 0 0 .7rem; }
-.card ul { list-style: none; margin: 0 0 .9rem; padding: 0; }
-.card li { font-size: .76rem; color: var(--ink-3); padding-left: .8rem; position: relative; line-height: 1.6; }
-.card li::before { content: "·"; position: absolute; left: .15rem; color: var(--accent); }
-.card .go { margin-top: auto; font-size: .78rem; color: var(--accent); font-weight: 600; }
 .finds { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule);
   border-radius: 5px; overflow: hidden; margin: 0 0 3rem; }
 .f { background: var(--card); padding: 1.05rem 1.15rem; }
@@ -171,26 +196,35 @@ h2.sec { font-size: 1.35rem; font-weight: 640; letter-spacing: -.015em; margin: 
   padding: .1rem .3rem; border-radius: 3px; }
 .how pre { font-family: var(--mono); font-size: .74rem; background: var(--rule-2); color: var(--ink-2);
   padding: .7rem .8rem; border-radius: 4px; overflow-x: auto; margin: 0 0 .6rem; }
+.tail { padding-bottom: 6rem; }
 footer { margin-top: 3rem; padding-top: 1.3rem; border-top: 1px solid var(--rule);
   font-size: .76rem; color: var(--ink-3); }
 footer a { color: var(--accent); }
-@media (prefers-reduced-motion: reduce) { .card { transition: none; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
 
-<div class="wrap">
+<div class="wrap hero">
 <p class="eyebrow">design-systems-benchmark · 실측</p>
 <h1>디자인 시스템에서 표준화할 수 있는 것</h1>
 <p class="lede">{{n}}개 컴포넌트 라이브러리의 <b>실제 소스</b>에서 semantic 토큰 {{tok_total}}개와
 컴포넌트 인벤토리를 추출해, 어느 개념이 예외 없이 공통이고 어느 개념이 갈리는지 셌다.
-공통인 것만이 표준화 가능하다.</p>
+공통인 것만이 표준화 가능하다. 아래 리포트는 전부 이 페이지에서 이어진다.</p>
 <p class="meta"><b>대상</b> {{systems}} &nbsp;·&nbsp; <b>기준일</b> 2026-07-30 &nbsp;·&nbsp;
 <b>소스</b> 고정 커밋 (각 리포트 부록)</p>
 
 <div class="kpis">{{stats}}</div>
+</div>
 
-<h2 class="sec">리포트</h2>
-<div class="cards">{{cards}}</div>
+<nav class="topbar"><div class="in">
+{{nav}}
+<a class="md" href="design-system-standard-research.md">마크다운 원문 ↗</a>
+</div></nav>
 
+<main class="reports">
+{{sections}}
+</main>
+
+<div class="wrap tail">
 <h2 class="sec">핵심 발견</h2>
 <div class="finds">{{findings}}</div>
 
@@ -214,6 +248,34 @@ python3 ... run.py --check                 # 재현성 검사 (출력 == 커밋�
 생성: <code>python3 analysis/standard-research/run.py</code></p>
 </footer>
 </div>
+
+<script>
+// 같은 오리진 iframe 을 실제 내용 높이로 맞춰 한 페이지처럼 연속 스크롤되게 한다.
+// 파일이 추가·교체돼도 iframe.rpt-frame 만 찾으면 되므로 목차를 손볼 필요가 없다.
+(function () {
+  function fit(f) {
+    try {
+      var d = f.contentDocument || (f.contentWindow && f.contentWindow.document);
+      if (!d || !d.documentElement) return;
+      var h = Math.max(d.body ? d.body.scrollHeight : 0, d.documentElement.scrollHeight);
+      if (h > 0) f.style.height = h + "px";
+    } catch (err) { /* cross-origin 이면 그대로 둔다 */ }
+  }
+  function watch(f) {
+    try {
+      var d = f.contentDocument;
+      if (!d || typeof ResizeObserver === "undefined") return;
+      new ResizeObserver(function () { fit(f); }).observe(d.body || d.documentElement);
+    } catch (err) { /* ignore */ }
+  }
+  var frames = Array.prototype.slice.call(document.querySelectorAll("iframe.rpt-frame"));
+  frames.forEach(function (f) {
+    f.addEventListener("load", function () { fit(f); watch(f); });
+    if (f.contentDocument && f.contentDocument.readyState === "complete") { fit(f); watch(f); }
+  });
+  window.addEventListener("resize", function () { frames.forEach(fit); });
+})();
+</script>
 """
 
 

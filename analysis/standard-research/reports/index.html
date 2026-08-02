@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>디자인 시스템 표준화 연구 — 8개 시스템 소스 실측</title>
-<meta name="description" content="Spectrum · Material · MUI · Fluent 2 · Carbon · Polaris · shadcn/ui · Ant Design 의 실제 소스에서 토큰과 컴포넌트를 세어 무엇이 표준화 가능한지 판정한 리포트.">
+<meta name="description" content="Spectrum · Material · MUI · Fluent 2 · Carbon · Polaris · shadcn/ui · Ant Design 의 실제 소스에서 토큰과 컴포넌트를 세어 무엇이 표준화 가능한지 판정한 리포트. 한 페이지에서 전부 읽는다.">
 <style>
 :root {
   --ink: #16191d; --ink-2: #4a5157; --ink-3: #767f87;
@@ -27,9 +27,11 @@
   --accent: #7fb0dd; --accent-soft: #1e2a35;
 }
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans);
   font-size: clamp(.9rem,.87rem + .15vw,.95rem); line-height: 1.65; -webkit-font-smoothing: antialiased; }
-.wrap { max-width: 62rem; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+.wrap { max-width: 62rem; margin: 0 auto; padding: 0 1.5rem; }
+.hero { padding-top: 4rem; }
 .eyebrow { font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
   color: var(--accent); margin: 0 0 .9rem; }
 h1 { font-size: clamp(1.9rem,1.6rem + 1.4vw,2.9rem); line-height: 1.1; letter-spacing: -.025em;
@@ -43,21 +45,33 @@ h1 { font-size: clamp(1.9rem,1.6rem + 1.4vw,2.9rem); line-height: 1.1; letter-sp
 .kpi .k { font-size: 2rem; line-height: 1; font-weight: 600; letter-spacing: -.035em; }
 .kpi .k small { font-size: .95rem; font-weight: 500; color: var(--ink-3); letter-spacing: 0; }
 .kpi .l { font-size: .78rem; color: var(--ink-2); margin-top: .45rem; }
+
+.topbar { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(8px); backdrop-filter: saturate(1.4) blur(8px); }
+.topbar .in { max-width: 90rem; margin: 0 auto; padding: .55rem 1.5rem;
+  display: flex; flex-wrap: wrap; gap: .25rem; align-items: center; }
+.topbar a { font-size: .8rem; color: var(--ink-2); text-decoration: none;
+  padding: .3rem .65rem; border-radius: 4px; }
+.topbar a:hover { color: var(--accent); background: var(--accent-soft); }
+.topbar .md { margin-left: auto; color: var(--ink-3); font-family: var(--mono); font-size: .72rem; }
+
+.reports { max-width: 90rem; margin: 0 auto; padding: 2.5rem 1.5rem 0; }
+.rpt { margin: 0 0 3.5rem; scroll-margin-top: 4.2rem; }
+.rpt-h { display: flex; align-items: flex-start; gap: .7rem; margin: 0 0 .8rem; }
+.rpt-h .ico { font-size: 1.4rem; line-height: 1.25; }
+.rpt-h .t { min-width: 0; }
+.rpt-h h2 { font-size: 1.15rem; font-weight: 640; letter-spacing: -.01em; margin: 0; }
+.rpt-h p { font-size: .82rem; color: var(--ink-2); margin: .2rem 0 0; max-width: 64ch; }
+.rpt-h .pop { margin-left: auto; flex: none; white-space: nowrap; font-size: .76rem; color: var(--accent);
+  text-decoration: none; border: 1px solid var(--rule); background: var(--card);
+  padding: .28rem .6rem; border-radius: 4px; }
+.rpt-h .pop:hover { border-color: var(--accent); }
+.rpt-frame { display: block; width: 100%; height: 70vh; min-height: 26rem; border: 0;
+  background: var(--paper); border-radius: 6px; }
+
 h2.sec { font-size: 1.35rem; font-weight: 640; letter-spacing: -.015em; margin: 0 0 1rem;
   padding-top: 1.6rem; border-top: 1px solid var(--rule); }
-.cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(17rem,1fr)); gap: 1rem; margin: 0 0 3rem; }
-.card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--rule);
-  border-radius: 6px; padding: 1.2rem 1.25rem 1.1rem; text-decoration: none; color: inherit;
-  transition: border-color .12s, transform .12s; }
-.card:hover { border-color: var(--accent); transform: translateY(-2px); }
-.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.card .ico { font-size: 1.5rem; line-height: 1; }
-.card h2 { font-size: 1.05rem; font-weight: 640; margin: .55rem 0 .35rem; }
-.card p { font-size: .82rem; color: var(--ink-2); margin: 0 0 .7rem; }
-.card ul { list-style: none; margin: 0 0 .9rem; padding: 0; }
-.card li { font-size: .76rem; color: var(--ink-3); padding-left: .8rem; position: relative; line-height: 1.6; }
-.card li::before { content: "·"; position: absolute; left: .15rem; color: var(--accent); }
-.card .go { margin-top: auto; font-size: .78rem; color: var(--accent); font-weight: 600; }
 .finds { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule);
   border-radius: 5px; overflow: hidden; margin: 0 0 3rem; }
 .f { background: var(--card); padding: 1.05rem 1.15rem; }
@@ -70,28 +84,37 @@ h2.sec { font-size: 1.35rem; font-weight: 640; letter-spacing: -.015em; margin: 
   padding: .1rem .3rem; border-radius: 3px; }
 .how pre { font-family: var(--mono); font-size: .74rem; background: var(--rule-2); color: var(--ink-2);
   padding: .7rem .8rem; border-radius: 4px; overflow-x: auto; margin: 0 0 .6rem; }
+.tail { padding-bottom: 6rem; }
 footer { margin-top: 3rem; padding-top: 1.3rem; border-top: 1px solid var(--rule);
   font-size: .76rem; color: var(--ink-3); }
 footer a { color: var(--accent); }
-@media (prefers-reduced-motion: reduce) { .card { transition: none; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
 
-<div class="wrap">
+<div class="wrap hero">
 <p class="eyebrow">design-systems-benchmark · 실측</p>
 <h1>디자인 시스템에서 표준화할 수 있는 것</h1>
 <p class="lede">8개 컴포넌트 라이브러리의 <b>실제 소스</b>에서 semantic 토큰 2,876개와
 컴포넌트 인벤토리를 추출해, 어느 개념이 예외 없이 공통이고 어느 개념이 갈리는지 셌다.
-공통인 것만이 표준화 가능하다.</p>
+공통인 것만이 표준화 가능하다. 아래 리포트는 전부 이 페이지에서 이어진다.</p>
 <p class="meta"><b>대상</b> Spectrum · Material Web · MUI · Fluent 2 · Carbon · Polaris · shadcn/ui · Ant Design &nbsp;·&nbsp; <b>기준일</b> 2026-07-30 &nbsp;·&nbsp;
 <b>소스</b> 고정 커밋 (각 리포트 부록)</p>
 
 <div class="kpis"><div class="kpi"><div class="k">8</div><div class="l">예외 없이 공통인<br>토큰 어휘</div></div><div class="kpi"><div class="k">10</div><div class="l">8개 시스템 전부에<br>있는 컴포넌트</div></div><div class="kpi"><div class="k">2<small> vs 6</small></div><div class="l">어순이 갈린<br>두 진영</div></div><div class="kpi"><div class="k">420</div><div class="l">Figma 한 컴포넌트의<br>최대 variant 수</div></div></div>
+</div>
 
-<h2 class="sec">리포트</h2>
-<div class="cards"><a class="card" href="design-system-standard-research.html"><span class="ico">📐</span><h2>본문 (시각화)</h2><p>커버리지 히트맵 · 덤벨 차트 · 100% 누적 막대 등 8종. 무엇이 표준화 가능한지 판정한다.</p><ul><li>토큰 어휘 4축 커버리지</li><li>컴포넌트 교집합</li><li>Button variant 축</li><li>재감사: 의존율 · MFI</li></ul><span class="go">열기 →</span></a><a class="card" href="design-system-standard-research-visual.html"><span class="ico">📊</span><h2>확장판</h2><p>본문의 상위집합. 이름의 *문법* 까지 파고든다.</p><ul><li>토큰 이름 해부 · 어순 진영</li><li>어휘 밀도 히트맵</li><li>variant 조합 폭발</li><li>분해 단위 · 매칭 근거</li></ul><span class="go">열기 →</span></a><a class="card" href="design-system-specimens.html"><span class="ico">🎨</span><h2>실물 견본</h2><p>차트가 아니라 실물. 각 시스템의 실제 토큰 값으로 컴포넌트를 렌더링했다.</p><ul><li>Button 32개 나란히</li><li>색 팔레트 80칸</li><li>타이포 · radius · 간격 · elevation</li><li>같은 화면을 8개 시스템으로</li></ul><span class="go">열기 →</span></a><a class="card" href="design-system-standard-research.md"><span class="ico">📄</span><h2>본문 (마크다운)</h2><p>읽기용 원문. 히트맵은 ●/· 표기.</p><ul><li>GitHub · 에디터에서 그대로</li><li>표 14개</li></ul><span class="go">열기 →</span></a></div>
+<nav class="topbar"><div class="in">
+<a href="#research">📐 본문 (시각화)</a><a href="#visual">📊 확장판</a><a href="#specimens">🎨 실물 견본</a>
+<a class="md" href="design-system-standard-research.md">마크다운 원문 ↗</a>
+</div></nav>
 
+<main class="reports">
+<section class="rpt" id="research"><header class="rpt-h"><span class="ico">📐</span><div class="t"><h2>본문 (시각화)</h2><p>커버리지 히트맵 · 덤벨 차트 · 100% 누적 막대 등 8종. 무엇이 표준화 가능한지 판정한다.</p></div><a class="pop" href="design-system-standard-research.html" target="_blank" rel="noopener">새 창 ↗</a></header><iframe class="rpt-frame" src="design-system-standard-research.html" loading="lazy" title="본문 (시각화)"></iframe></section><section class="rpt" id="visual"><header class="rpt-h"><span class="ico">📊</span><div class="t"><h2>확장판</h2><p>본문의 상위집합. 이름의 *문법* 까지 파고든다.</p></div><a class="pop" href="design-system-standard-research-visual.html" target="_blank" rel="noopener">새 창 ↗</a></header><iframe class="rpt-frame" src="design-system-standard-research-visual.html" loading="lazy" title="확장판"></iframe></section><section class="rpt" id="specimens"><header class="rpt-h"><span class="ico">🎨</span><div class="t"><h2>실물 견본</h2><p>차트가 아니라 실물. 각 시스템의 실제 토큰 값으로 컴포넌트를 렌더링했다.</p></div><a class="pop" href="design-system-specimens.html" target="_blank" rel="noopener">새 창 ↗</a></header><iframe class="rpt-frame" src="design-system-specimens.html" loading="lazy" title="실물 견본"></iframe></section>
+</main>
+
+<div class="wrap tail">
 <h2 class="sec">핵심 발견</h2>
-<div class="finds"><div class="f"><h3>색상은 세 자리로 나뉜다</h3><p>면(surface) · 글자(foreground) · 선(border) — 8개 시스템 예외 없이 전부. 하나로 뭉치면 다크 테마에서 반드시 깨진다.</p></div><div class="f"><h3>어순이 두 진영으로 갈린다</h3><p>의미→역할 6개 vs 역할→의미 2개(Carbon · Polaris). 개념이 같아도 이름 문법이 달라 사전 하나로 변환할 수 없다.</p></div><div class="f"><h3>축을 합치면 값이 곱으로 폭발한다</h3><p>강조도와 의미를 한 축에 합친 결과가 Figma 에서 최대 420 variant 로 전개된다.</p></div><div class="f"><h3>집계 규칙을 밝히지 않은 수치는 비교 불가다</h3><p>기존 감사의 토큰 의존율을 다시 재니 2개 시스템(Polaris · shadcn/ui)에서 20pt 이상 벌어졌다. 소스가 아니라 계수 규칙 때문이다.</p></div></div>
+<div class="finds"><div class="f"><h3>색상은 세 자리로 나뉜다</h3><p>면(surface) · 글자(foreground) · 선(border) — 8개 시스템 예외 없이 전부. 하나로 뭉치면 다크 테마에서 반드시 깨진다.</p></div><div class="f"><h3>어순이 두 진영으로 갈린다</h3><p>의미→역할 6개 vs 역할→의미 2개(Carbon · Polaris). 개념이 같아도 이름 문법이 달라 사전 하나로 변환할 수 없다.</p></div><div class="f"><h3>축을 합치면 값이 곱으로 폭발한다</h3><p>강조도와 의미를 한 축에 합친 결과가 Figma 에서 최대 420 variant 로 전개된다.</p></div><div class="f"><h3>집계 규칙을 밝히지 않은 수치는 비교 불가다</h3><p>기존 감사의 토큰 의존율을 다시 재니 0개 시스템()에서 20pt 이상 벌어졌다. 소스가 아니라 계수 규칙 때문이다.</p></div></div>
 
 <h2 class="sec">어떻게 측정했나</h2>
 <div class="how">
@@ -113,3 +136,31 @@ python3 ... run.py --check                 # 재현성 검사 (출력 == 커밋�
 생성: <code>python3 analysis/standard-research/run.py</code></p>
 </footer>
 </div>
+
+<script>
+// 같은 오리진 iframe 을 실제 내용 높이로 맞춰 한 페이지처럼 연속 스크롤되게 한다.
+// 파일이 추가·교체돼도 iframe.rpt-frame 만 찾으면 되므로 목차를 손볼 필요가 없다.
+(function () {
+  function fit(f) {
+    try {
+      var d = f.contentDocument || (f.contentWindow && f.contentWindow.document);
+      if (!d || !d.documentElement) return;
+      var h = Math.max(d.body ? d.body.scrollHeight : 0, d.documentElement.scrollHeight);
+      if (h > 0) f.style.height = h + "px";
+    } catch (err) { /* cross-origin 이면 그대로 둔다 */ }
+  }
+  function watch(f) {
+    try {
+      var d = f.contentDocument;
+      if (!d || typeof ResizeObserver === "undefined") return;
+      new ResizeObserver(function () { fit(f); }).observe(d.body || d.documentElement);
+    } catch (err) { /* ignore */ }
+  }
+  var frames = Array.prototype.slice.call(document.querySelectorAll("iframe.rpt-frame"));
+  frames.forEach(function (f) {
+    f.addEventListener("load", function () { fit(f); watch(f); });
+    if (f.contentDocument && f.contentDocument.readyState === "complete") { fit(f); watch(f); }
+  });
+  window.addEventListener("resize", function () { frames.forEach(fit); });
+})();
+</script>
