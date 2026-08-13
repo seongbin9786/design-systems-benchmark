@@ -1,5 +1,7 @@
 # 분석 대상 라이브러리 소스 — 얕은 클론, 커밋하지 않음
 # 재현: sources/clone.sh (고정 커밋은 sources/MANIFEST.md 참조)
 sources/*/
+# 차기 후보 분석용 소스 — 재현: sources-candidates/clone.sh
+sources-candidates/*/
 __pycache__/
 .vercel
