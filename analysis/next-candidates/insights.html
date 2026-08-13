@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>모바일 웹뷰 신규 DS 인사이트</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #667085;
+    --line: #e4e7ec;
+    --card: #fafafa;
+    --accent: #175cd3;
+    --ok: #027a48;
+    --warn: #b54708;
+    --bad: #b42318;
+    --chip: #f2f4f7;
+    --hl: #fffaeb;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Pretendard", "Apple SD Gothic Neo", system-ui, sans-serif;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  main { max-width: 1080px; margin: 0 auto; padding: 40px 24px 96px; }
+  h1 { font-size: 26px; margin: 0 0 8px; }
+  h2 { font-size: 20px; margin: 56px 0 12px; padding-top: 16px; border-top: 2px solid var(--fg); }
+  h3 { font-size: 16px; margin: 28px 0 8px; }
+  p.lead { color: var(--muted); margin: 0 0 4px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code { background: var(--chip); border-radius: 4px; padding: 1px 5px; font-size: 13px; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; margin: 14px 0; }
+  th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--chip); font-weight: 600; white-space: nowrap; }
+  .wrap-x { overflow-x: auto; }
+  .ok   { color: var(--ok); font-weight: 600; }
+  .warn { color: var(--warn); font-weight: 600; }
+  .bad  { color: var(--bad); font-weight: 600; }
+  .dim  { color: var(--muted); }
+
+  .verdict {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    background: var(--card);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+  .verdict b { color: var(--accent); }
+  .warnbox {
+    border: 1px solid #f9dbaf;
+    border-left: 4px solid var(--warn);
+    background: var(--hl);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  ul { margin: 8px 0; padding-left: 22px; }
+  li { margin: 3px 0; }
+  .note { font-size: 13px; color: var(--muted); }
+  .spectrum {
+    display: flex; flex-wrap: wrap; gap: 0; align-items: stretch;
+    border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin: 16px 0;
+  }
+  .spectrum > div { flex: 1 1 200px; padding: 12px 14px; border-right: 1px solid var(--line); font-size: 13px; }
+  .spectrum > div:last-child { border-right: none; }
+  .spectrum b { display: block; font-size: 13.5px; margin-bottom: 4px; }
+  .spectrum .pos { color: var(--muted); font-size: 12px; display: block; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>모바일 웹뷰 신규 DS 인사이트</h1>
+<p class="lead">1군, 2군 후보 8개 시스템의 소스를 병렬 실측한 결과에서 신규 디자인 시스템 설계 지침을 추출했다.</p>
+<p class="note">
+  근거: 시스템별 상세 문서 8건(<a href="systems/baseweb.md">baseweb</a> ·
+  <a href="systems/primer.md">primer</a> · <a href="systems/mantine.md">mantine</a> ·
+  <a href="systems/semi.md">semi</a> · <a href="systems/antd-mobile.md">antd-mobile</a> ·
+  <a href="systems/seed.md">seed</a> · <a href="systems/abc-def.md">abc-def</a> ·
+  <a href="systems/vkui.md">vkui</a>) ·
+  고정 커밋: <code>sources-candidates/MANIFEST.md</code> · 분석일 2026-08-13
+</p>
+
+<h2 id="conclusion">결론 요약</h2>
+<div class="verdict">
+  <p><b>1. 진짜 모바일 시스템은 3개뿐이다.</b> antd-mobile, Seed, VKUI만 mobile-first다. Semi Design과 ABC Def는 문서상 표방과 달리 실측으로는 데스크톱 전용이다. 분류는 문서가 아니라 소스 신호(safe-area, hover, 터치 타깃)로 해야 한다.</p>
+  <p><b>2. "primitive는 직교 축, use-case는 별도 컴포넌트"가 8개 중 7개 시스템의 합의다.</b> Seed만 한발 더 나가 범용 Button을 없애고 ActionButton부터 시작한다. 신규 DS는 중간 지점이 안전하다: primitive를 유지하되, use-case 계층을 1급으로 둔다.</p>
+  <p><b>3. 모바일 3사가 독립적으로 수렴한 기반 5종이 있다.</b> safe-area 전역 변수, pressed 1급 상태(hover 가드), 정적 CSS + CSS 변수 + html 속성 테마, 오버레이 혈통 구조, 44px급 터치 타깃. 이 5종은 논쟁 없이 채택한다.</p>
+</div>
+
+<h2 id="classification">1. PC 전용 vs 모바일 위주: 실측 분류</h2>
+<p>판정 기준은 소스에서 셀 수 있는 신호 5종이다. 문서 주장은 배제했다.</p>
+<div class="wrap-x">
+<table>
+  <thead>
+    <tr><th>시스템</th><th>판정</th><th>safe-area</th><th>hover 의존</th><th>기본 터치 타깃</th><th>터치 제스처 코드</th><th>모바일 어휘 수</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>antd-mobile</b></td><td class="ok">mobile-first</td><td>전용 컴포넌트 + 기본 내장</td><td>:hover 0건, :active만</td><td>44px급</td><td>@use-gesture 10개 컴포넌트</td><td>15+</td></tr>
+    <tr><td><b>Seed (당근)</b></td><td class="ok">mobile-first</td><td>전역 변수 정규화</td><td>engaged 셀렉터로 hover 봉인</td><td>large 52px</td><td>PullToRefresh 직접 구현</td><td>11+</td></tr>
+    <tr><td><b>VKUI</b></td><td class="ok">mobile-first</td><td>전역 변수 + Tabbar 소비</td><td>토큰에 hover/active 분리 내장</td><td>44px급</td><td>스와이프 백 직접 구현</td><td>14+</td></tr>
+    <tr><td>Base Web</td><td class="warn">responsive</td><td>0건</td><td>@media(hover:hover) 가드</td><td>minHitArea로 48px 확장</td><td>SlidingButton 등 일부</td><td>9</td></tr>
+    <tr><td>Primer</td><td class="warn">responsive</td><td>Overlay 1곳</td><td>38개 파일</td><td>coarse 토큰 44px 존재</td><td>없음</td><td>0</td></tr>
+    <tr><td>Mantine</td><td class="warn">responsive</td><td>AppShell 1곳</td><td>hover mixin 18개 파일</td><td>36px (compact 22px)</td><td>없음</td><td>0</td></tr>
+    <tr><td>Semi Design</td><td class="bad">desktop</td><td>0건</td><td>:hover 279회</td><td>24/32/40px</td><td>없음</td><td>0</td></tr>
+    <tr><td>ABC Def</td><td class="bad">desktop</td><td>0건</td><td>CSS 49개 중 24개</td><td>32px (xs 24px)</td><td>Carousel만</td><td>1(Drawer)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="warnbox">
+  <b>발견: "모바일 대응" 표방과 실측이 갈린다.</b>
+  ABC Def는 kbd, menubar, context-menu, hover-card 같은 데스크톱 어휘를 갖고 있고 -pressed 상태 토큰이 없다.
+  Semi는 hover가 279곳이고 컨트롤 높이가 24~40px다.
+  두 시스템의 토큰 구조는 배울 가치가 있지만, 컴포넌트 치수와 상태 설계는 그대로 가져오면 안 된다.
+</div>
+
+<h3>신규 DS에 적용할 판별 체크리스트</h3>
+<p>외부 시스템을 참고하거나 컴포넌트를 이식할 때 이 5개를 먼저 확인한다.</p>
+<ul>
+  <li>safe-area 처리가 전역 계층에 있는가 (<code>env(safe-area-inset-*)</code> 참조 위치)</li>
+  <li>hover가 가드 없이 쓰였는가 (생 <code>:hover</code> 개수)</li>
+  <li>기본 컨트롤 높이가 44px 이상인가</li>
+  <li>터치 제스처(드래그, 스와이프, 당겨서 새로고침)를 시스템이 소유하는가</li>
+  <li>바텀시트, 탭바, 내비바가 1급 컴포넌트인가</li>
+</ul>
+
+<h2 id="tokens">2. 토큰 아키텍처: 3계층이 합의, 차이는 상태의 위치</h2>
+<p>8개 전부 사실상 3계층(원시 팔레트 → 시맨틱 → 컴포넌트)이다. 논점은 계층 수가 아니라 <b>눌림 상태를 어디에 두느냐</b>다.</p>
+<div class="wrap-x">
+<table>
+  <thead><tr><th>시스템</th><th>계층</th><th>상태(-pressed 등)의 위치</th><th>전달 방식</th></tr></thead>
+  <tbody>
+    <tr><td><b>Seed</b></td><td>palette → semantic → component (Figma→YAML→생성)</td><td class="ok">semantic 토큰에 -pressed 쌍 내장 (bg.brand-solid-pressed)</td><td>CSS 변수 + html data 속성</td></tr>
+    <tr><td><b>VKUI</b></td><td>원시 JSON → 시맨틱 TS → 테마 상속(69종)</td><td class="ok">토큰 값 자체에 hover/active와 밀도(regular/compact) 내장</td><td>CSS 변수, 루트 클래스 교체</td></tr>
+    <tr><td><b>antd-mobile</b></td><td>global(--adm-*) → 컴포넌트 공개 변수 → 인스턴스 변수</td><td>:active 셀렉터 처리, 인스턴스 변수는 타입으로 계약</td><td>정적 CSS + CSS 변수</td></tr>
+    <tr><td>Primer</td><td>base → functional → component (테마 14종)</td><td>셀렉터 처리. coarse/fine 타깃 토큰 이원화가 특징</td><td>CSS 변수 + data 속성</td></tr>
+    <tr><td>Mantine</td><td>JS 테마 → 전역 CSS 변수 → 컴포넌트 스코프 변수</td><td>셀렉터 처리. variantColorResolver가 색 계산 중앙화</td><td>CSS 변수 + data 속성</td></tr>
+    <tr><td>Semi</td><td>RGB 채널 팔레트 → 시맨틱 서수 층위 → 컴포넌트 SCSS</td><td class="warn">hover 중심. 치수가 컴파일 타임에 고정되는 한계</td><td>CSS 변수(색만)</td></tr>
+    <tr><td>ABC Def</td><td>Tailwind 원시 → semantic → component(자동 생성)</td><td class="bad">-hover/-expanded만 있고 -pressed 없음</td><td>authored CSS + 클래스 계약</td></tr>
+    <tr><td>Base Web</td><td>색상만 4계층, 함수 합성으로 재계산</td><td class="warn">CSS 변수 미사용, 테마 객체 교체(CSS-in-JS)</td><td>Styletron 런타임</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="verdict">
+  <b>권고.</b> 3계층(palette → semantic → component)을 채택한다.
+  semantic 계층에 Seed처럼 <b>-pressed 쌍을 내장</b>한다. hover 쌍은 만들지 않는다.
+  전달은 정적 CSS + CSS 변수 + html data 속성으로 한다. 런타임 CSS-in-JS는 배제한다(8개 중 Base Web만 사용하며, 성능과 이식성 모두 불리).
+  component 토큰은 ABC Def처럼 <b>자동 생성 파일 1개</b>로 모아 오버라이드 표면을 문서화한다.
+  가져올 세부 기법: Semi의 RGB 채널 팔레트(<code>rgba(var(--x), a)</code> 합성으로 dim 계열 토큰 수 절감), Semi의 층위 서수 토큰(bg-0~4로 페이지/카드/모달/토스트 명도 관리), antd-mobile의 타입 계약된 인스턴스 변수 탈출구.
+</div>
+
+<h2 id="variants">3. Variant 문법: 축은 직교로, 값은 의미로</h2>
+<p>Button의 실측 축을 비교하면 성공과 실패 패턴이 갈린다.</p>
+<div class="wrap-x">
+<table>
+  <thead><tr><th>시스템</th><th>Button 축</th><th>평가</th></tr></thead>
+  <tbody>
+    <tr><td>Semi</td><td>type(의미 5) × theme(강도 4) × size(3)</td><td class="ok">의미와 강도를 직교 분리. 2축으로 20조합</td></tr>
+    <tr><td>VKUI</td><td>mode(위계 5) × appearance(색 의미 6) × size(3)</td><td class="ok">같은 직교 철학. appearance에 overlay 같은 특수값 포함</td></tr>
+    <tr><td>antd-mobile</td><td>color(5) × fill(3) × size(4) × shape(3)</td><td class="ok">직교 4축 + Promise 자동 로딩(loading='auto')</td></tr>
+    <tr><td>Seed</td><td>variant 7값(brandSolid, criticalSolid, ghost 등) × size(4) × layout(2)</td><td class="ok">tone × 강도를 7개 합성값으로 제한. JSDoc에 사용 규칙 명시</td></tr>
+    <tr><td>Primer</td><td>variant(5) × size(3), IconButton은 별도 컴포넌트</td><td class="ok">축을 동결하고 용도는 컴포넌트로</td></tr>
+    <tr><td>Mantine</td><td>variant(시각 톤 8) × color(자유) × size(10)</td><td class="warn">유연하나 danger조차 color 조합에 위임, 의미 축 부재</td></tr>
+    <tr><td>ABC Def</td><td>variant(6) × size(10!) × rounded(5)</td><td class="warn">size 10종은 아이콘 변형까지 한 축에 뭉친 결과</td></tr>
+    <tr><td>Base Web</td><td>kind(6: 강조×danger 뭉침) × shape(7) × size(신구 공존 7)</td><td class="bad">반면교사: 의미와 강조를 한 축에 뭉치면 값이 폭발하고, 네이밍 실패가 영구 이월된다</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="verdict">
+  <b>권고.</b> primitive 버튼은 <b>tone(brand | neutral | critical) × variant(solid | weak | outline | ghost) × size(3~4)</b>의 직교 3축으로 시작한다.
+  Base Web의 kind 뭉침과 size 신구 공존이 보여주듯, 축 설계 실패는 되돌릴 수 없는 이월 비용이 된다.
+  Seed처럼 조합 전부를 열지 말고 유효 조합만 화이트리스트로 노출하는 것도 좋다(7값 제한 + JSDoc 사용 규칙).
+  색 계산은 Mantine의 variantColorResolver처럼 (tone, variant) → 색 4종을 반환하는 <b>중앙 함수 1개</b>로 처리한다. variant 추가가 컴포넌트 N개 수정이 아니라 함수 분기 1개가 된다.
+</div>
+
+<h2 id="usecase">4. Use-case 계층: 8개 시스템이 그리는 스펙트럼</h2>
+<p>"용도를 어디까지 시스템이 소유하는가"에서 8개 시스템은 하나의 스펙트럼에 놓인다.</p>
+
+<div class="spectrum">
+  <div>
+    <b>순수 primitive</b>
+    <span class="pos">Mantine</span>
+    variant는 전부 시각 톤. 용도 개념 자체가 없다. danger도 color="red" 조합.
+  </div>
+  <div>
+    <b>프리셋 배선</b>
+    <span class="pos">ABC Def · antd-mobile</span>
+    AlertDialogAction = Button(variant=default) 고정 래퍼. DialogActionButton도 동일. primitive는 오염되지 않는다.
+  </div>
+  <div>
+    <b>용도 컴포넌트 승격</b>
+    <span class="pos">Primer · Semi · Base Web · VKUI</span>
+    ConfirmationDialog, Modal.confirm, ButtonTimed, PanelHeaderSubmit. 용도가 이름이 된 별도 컴포넌트.
+  </div>
+  <div>
+    <b>use-case가 기본형</b>
+    <span class="pos">Seed</span>
+    범용 Button이 없다. ActionButton, ReactionButton, FieldButton부터 시작. 도메인 컴포넌트(MannerTemp)까지 시스템이 소유.
+  </div>
+</div>
+
+<p>실측에서 확인된 핵심 사실:</p>
+<ul>
+  <li>Seed조차 use-case를 <b>variant 축으로 풀지 않았다</b>. ActionButton과 ReactionButton은 별도 컴포넌트고, 한 컴포넌트의 variant 축은 3개 이하로 유지한다.</li>
+  <li>VKUI는 직교 primitive(Button)와 용도 컴포넌트(PanelHeaderSubmit, CellButton, WriteBar)가 충돌 없이 공존함을 보여준다. 예외적 용도 variant는 오버레이 아이템(ActionSheetItem destructive | cancel)에만 허용한다.</li>
+  <li>antd-mobile의 ErrorBlock(status: default | disconnected | empty | busy)과 Result(5종)는 <b>상태 화면 자체를 use-case 컴포넌트로</b> 만든 사례다.</li>
+</ul>
+
+<div class="verdict">
+  <b>권고: 3층 구조.</b><br>
+  <b>L1 primitive</b>: 직교 축만 갖는 범용 컴포넌트(Button, Input, Popup, List). Mantine, VKUI 방식.<br>
+  <b>L2 use-case 컴포넌트</b>: 용도가 이름에 박힌 컴포넌트. L1을 합성하고 프리셋을 배선한다. 예: ConfirmButton(=Button tone=brand solid 고정), DestructiveSheetItem, EmptyState, PageError. Seed의 "컴포넌트 분리, 축 3개 이하, JSDoc 사용 규칙" 원칙을 따른다.<br>
+  <b>L3 도메인 패턴</b>: 제품 고유 컴포넌트(Seed의 MannerTemp 상당). DS 패키지에 두되 별도 네임스페이스로 격리한다.<br>
+  범용 Button을 없애는 Seed 방식은 도메인 어휘가 이미 확립된 조직에 맞다. 신규 제품은 L1을 유지하고 L2를 빠르게 늘리는 쪽이 재작업 위험이 작다.<br>
+  <span class="note">Seed 87개 컴포넌트를 이 프레임으로 전수 분류한 자료: <a href="seed-component-tiers.md">seed-component-tiers.md</a> (L1 40 : L2 44 : L3 3)</span><br>
+  <span class="note">후속 실측: variant 와 compound 의 사용 경계, 11개 시스템 → <a href="variant-vs-compound.html">variant-vs-compound.html</a></span>
+</div>
+
+<h2 id="foundations">5. 모바일 웹뷰 필수 기반: 3사가 수렴한 것</h2>
+<p>antd-mobile, Seed, VKUI가 서로 참조 없이 같은 결론에 도달한 항목이다. 논쟁 없이 채택한다.</p>
+<div class="wrap-x">
+<table>
+  <thead><tr><th>기반</th><th>구현 지침</th><th>출처</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>safe-area 정규화</b></td>
+      <td><code>env(safe-area-inset-*)</code>를 전역 CSS 변수 1곳에서 래핑한다. 하단 고정 컴포넌트(TabBar, Sheet, Snackbar, FAB)가 그 변수를 소비하고 기본 내장한다. 네이티브 쉘이 inset을 이미 처리하는 화면용 끄기 변수를 둔다.</td>
+      <td>Seed(--seed-safe-area-*), VKUI(constants.css), antd-mobile(safeArea:true 기본 + --adm-safe-area-multiple)</td>
+    </tr>
+    <tr>
+      <td><b>pressed 1급, hover 봉인</b></td>
+      <td>눌림 피드백은 :active와 -pressed 토큰으로 설계한다. hover는 <code>@media (hover: hover)</code> 가드 아래에만 두고, 생 :hover는 lint로 금지한다. tap-highlight도 전역에서 제거한다.</td>
+      <td>Seed(engaged 셀렉터), antd-mobile(:hover 0건), Base Web(hover 가드), Mantine(hover mixin)</td>
+    </tr>
+    <tr>
+      <td><b>정적 CSS + CSS 변수 + html 속성 테마</b></td>
+      <td>런타임 CSS-in-JS 없이 빌드 타임 CSS를 배포한다. 다크 모드와 브랜드 전환은 html data 속성이 CSS 변수를 재정의한다. FOUC 방지 부트 스크립트를 제공한다.</td>
+      <td>antd-mobile, Seed(qvism), VKUI, Primer, Mantine 공통. 반례는 Base Web(Styletron)뿐</td>
+    </tr>
+    <tr>
+      <td><b>오버레이 혈통</b></td>
+      <td>Mask → Popup(위치) → 목적별 오버레이(BottomSheet, ActionSheet, Dialog) 순서로 상속 구조를 만든다. 스크롤 잠금과 포탈과 포커스 관리를 밑층 1곳에 둔다. 최상위에 <code>Dialog.confirm()</code> 같은 Promise 명령형 API를 얹는다.</td>
+      <td>antd-mobile(Mask→Popup→Dialog), Mantine(ModalBase 인프라), Seed(목적별 4종 + ResponsiveDialog 어댑터)</td>
+    </tr>
+    <tr>
+      <td><b>터치 타깃 44px+</b></td>
+      <td>기본 컨트롤 높이를 44px 이상으로 끊는다. 시각 크기를 줄여야 하면 Base Web의 minHitArea처럼 가상 요소로 히트 영역만 확장한다. 데스크톱계 스케일(32~36px)을 상속하지 않는다.</td>
+      <td>Primer(coarse 토큰 44px), Base Web(minHitArea 48px), Seed(large 52px)</td>
+    </tr>
+    <tr>
+      <td><b>웹뷰 브리지 대응</b></td>
+      <td>테마 부트 스크립트가 웹뷰 브리지(window.webkit.messageHandlers 등)로 플랫폼을 감지하고 html data 속성을 세팅한다. 색 모드 동기화 인터페이스(colorSchemeManager)를 주입식으로 열어 네이티브 설정과 동기화한다.</td>
+      <td>Seed(generateThemingScript), Mantine(colorSchemeManager 인터페이스)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3>결정이 필요한 항목 1개: 앱 셸 소유권</h3>
+<p>VKUI는 Epic → Root → View → Panel 계층과 스와이프 백, 스크롤 보존까지 DS가 소유한다. Seed도 stackflow 전용 패키지(AppScreen, AppBar)를 둔다.
+웹뷰에서 네이티브 유사 내비게이션을 표준화하는 효과가 가장 크지만, 라우터와 결합된다.
+권고: <b>1단계에서는 AppBar(NavBar)와 TabBar까지만 DS가 소유</b>하고, 화면 전환 스택은 앱 계층에 둔다. 전환 애니메이션 요구가 커지면 VKUI 모델을 재검토한다.</p>
+
+<h2 id="inventory">6. 1차 컴포넌트 인벤토리 제안</h2>
+<p>모바일 3사의 어휘 교집합에서 출발한다. 표의 근거 열은 해당 어휘를 가진 시스템이다.</p>
+<div class="wrap-x">
+<table>
+  <thead><tr><th>계층</th><th>컴포넌트</th><th>근거</th></tr></thead>
+  <tbody>
+    <tr><td rowspan="3">기반</td><td>SafeArea(전역 변수 + 컴포넌트), ConfigProvider(테마/로케일)</td><td>antd-mobile, Seed, VKUI</td></tr>
+    <tr><td>레이아웃: Box, Flex, Stack, Grid, Divider, Space</td><td>Seed, Mantine</td></tr>
+    <tr><td>Typography(Text, 스케일 토큰), Icon</td><td>전 시스템</td></tr>
+    <tr><td rowspan="4">L1 primitive</td><td>Button(tone × variant × size), IconButton</td><td>3장 권고안</td></tr>
+    <tr><td>Input, Checkbox, Radio, Switch, Slider, TextArea</td><td>전 시스템</td></tr>
+    <tr><td>Mask, Popup(position), Toast/Snackbar</td><td>antd-mobile 혈통 구조</td></tr>
+    <tr><td>List(Cell/Item, 눌림 상태 내장), Tag/Badge, Avatar, Image(지연 로드)</td><td>VKUI Tappable, antd-mobile List</td></tr>
+    <tr><td rowspan="4">L2 use-case</td><td>BottomSheet(핸들, 스냅 포인트), ActionSheet(destructive | cancel), Dialog(.confirm/.alert)</td><td>Seed 목적별 분리, antd-mobile Promise API, VKUI ModalPage 스냅</td></tr>
+    <tr><td>AppBar(NavBar: Back/Close/Submit 슬롯), TabBar(safe-area 내장)</td><td>VKUI PanelHeader 계열, antd-mobile</td></tr>
+    <tr><td>PullToRefresh, InfiniteScroll, SwipeAction</td><td>antd-mobile, Seed headless</td></tr>
+    <tr><td>EmptyState/ErrorBlock(status 4종), Result, Skeleton</td><td>antd-mobile ErrorBlock 패턴</td></tr>
+    <tr><td>L3 도메인</td><td>제품 확정 후. 별도 네임스페이스로 격리</td><td>Seed MannerTemp 사례</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="note">2차 후보(수요 확인 후): Picker 계열, Calendar, NumberKeyboard, PasscodeInput, FloatingPanel, IndexBar, Stepper, SearchBar.</p>
+
+<h2 id="map">7. 시스템별 차용 지도</h2>
+<div class="wrap-x">
+<table>
+  <thead><tr><th>시스템</th><th>가져올 것</th><th>가져오면 안 되는 것</th></tr></thead>
+  <tbody>
+    <tr><td><b>Seed</b></td><td>engaged 셀렉터, -pressed 토큰 쌍, 웹뷰 브리지 부트 스크립트, 목적별 오버레이 분리, use-case 컴포넌트 원칙(축 3개 이하 + JSDoc 규칙)</td><td>범용 Button 제거(신규 제품에는 과격), 도메인 컴포넌트 동거(L3로 격리해서 수용)</td></tr>
+    <tr><td><b>antd-mobile</b></td><td>오버레이 혈통(Mask→Popup→Dialog), Promise 명령형 API, SafeArea 기본 내장, 타입 계약 인스턴스 변수, ErrorBlock status 패턴</td><td>Less 파이프라인(신규라면 최신 도구로)</td></tr>
+    <tr><td><b>VKUI</b></td><td>직교 primitive + 용도 컴포넌트 공존 규칙, safe-area 소비 방식, 뷰포트별 렌더러 분기(sheet/menu)를 DS가 소유</td><td>앱 셸 전면 소유(1단계에서는 보류), 69테마 상속 체계(과잉)</td></tr>
+    <tr><td><b>Primer</b></td><td>base→functional→component 토큰 문법, coarse 44px 타깃 토큰, use-case 컴포넌트 계층(ConfirmationDialog)</td><td>데스크톱 우선 후 모바일 개조 순서(역방향 반면교사)</td></tr>
+    <tr><td><b>Mantine</b></td><td>variantColorResolver 중앙화, 컴포넌트 스코프 CSS 변수 계약, ModalBase 인프라 분리, colorSchemeManager 주입</td><td>36px 사이즈 스케일, variant 8종의 의미 축 부재</td></tr>
+    <tr><td><b>Semi</b></td><td>tone × 강도 직교 2축, RGB 채널 팔레트, 층위 서수 토큰(bg-0~4)</td><td>치수의 컴파일 타임 고정, hover 279곳</td></tr>
+    <tr><td><b>ABC Def</b></td><td>component 토큰 자동 생성 파일(오버라이드 표면 문서화), 스타일 패키지와 프레임워크 패키지 분리</td><td>-pressed 부재, 32px 밀도, size 10종 뭉침</td></tr>
+    <tr><td><b>Base Web</b></td><td>minHitArea 히트 확장, hover 전면 가드, use-case=합성 원칙(ButtonTimed)</td><td>런타임 CSS-in-JS, kind 축 뭉침, 네이밍 신구 공존</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p class="note">이 문서는 수기 작성물이다. 시스템별 상세 근거(파일 경로와 라인)는 <code>systems/*.md</code> 8건에 있다.</p>
+
+</main>
+</body>
+</html>

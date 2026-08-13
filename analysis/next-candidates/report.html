@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>차기 벤치마킹 후보 리스트업</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #667085;
+    --line: #e4e7ec;
+    --card: #fafafa;
+    --accent: #175cd3;
+    --ok: #027a48;
+    --warn: #b54708;
+    --bad: #b42318;
+    --chip: #f2f4f7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Pretendard", "Apple SD Gothic Neo", system-ui, sans-serif;
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  main { max-width: 1080px; margin: 0 auto; padding: 40px 24px 96px; }
+  h1 { font-size: 26px; margin: 0 0 8px; }
+  h2 { font-size: 20px; margin: 56px 0 8px; padding-top: 16px; border-top: 2px solid var(--fg); }
+  h2 small { font-weight: 400; color: var(--muted); font-size: 13px; margin-left: 8px; }
+  h3 { font-size: 16px; margin: 0; }
+  p.lead { color: var(--muted); margin: 0 0 4px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; margin: 16px 0; }
+  th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--chip); font-weight: 600; white-space: nowrap; }
+  td.num { text-align: right; white-space: nowrap; }
+  .wrap-x { overflow-x: auto; }
+
+  .status-ok   { color: var(--ok); font-weight: 600; }
+  .status-warn { color: var(--warn); font-weight: 600; }
+  .status-bad  { color: var(--bad); font-weight: 600; }
+
+  .card {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    padding: 20px 20px 16px;
+    margin: 20px 0;
+  }
+  .card-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; margin-bottom: 6px; }
+  .card-head .org { color: var(--muted); font-size: 13px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px; }
+  .chip {
+    background: var(--chip);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 1px 10px;
+    font-size: 12px;
+    color: #344054;
+    white-space: nowrap;
+  }
+  .chip.warn { background: #fff4e5; border-color: #f9dbaf; color: var(--warn); }
+  .card p { margin: 6px 0; }
+  .point { font-size: 14px; }
+  .point b { color: var(--accent); }
+  .note { font-size: 13px; color: var(--muted); }
+
+  .shots { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; align-items: flex-start; }
+  .shots figure { margin: 0; }
+  .shots figcaption { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .shots img {
+    display: block;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    max-width: 100%;
+    height: auto;
+  }
+  .shots .desktop { flex: 1 1 560px; max-width: 720px; }
+  .shots .mobile  { flex: 0 0 220px; max-width: 220px; }
+
+  .toc { font-size: 14px; columns: 2; margin: 12px 0 0; }
+  .toc li { margin: 2px 0; }
+  @media (max-width: 640px) { .toc { columns: 1; } }
+</style>
+</head>
+<body>
+<main>
+
+<h1>차기 벤치마킹 후보 리스트업</h1>
+<p class="lead">공개된 디자인 시스템 중에서 아직 벤치마킹하지 않은 23종을 추렸다.</p>
+<p class="lead">각 시스템의 문서 사이트를 캡처해서 첫인상을 확인할 수 있게 했다.</p>
+<p class="note">
+  캡처 일자: 2026-08-13 ·
+  방법: playwright chromium, 데스크톱 1440×900, 모바일 390×844 ·
+  재현: <code>bash capture.sh</code> (<code>targets.txt</code> 참고)
+</p>
+<p class="note">
+  후속 작업: 1군, 2군 8종 소스 실측 완료 →
+  <a href="insights.html"><b>모바일 웹뷰 신규 DS 인사이트</b></a> ·
+  시스템별 상세는 <code>systems/*.md</code>
+</p>
+
+<h2 id="summary">요약</h2>
+<p>후보는 5개 그룹, 23종이다. 저장소 지표는 2026-08-13에 GitHub API로 확인했다.</p>
+<div class="wrap-x">
+<table>
+  <thead>
+    <tr><th>그룹</th><th>시스템</th><th>조직</th><th>라이선스</th><th>프레임워크</th><th>★</th><th>최근 푸시</th><th>상태</th></tr>
+  </thead>
+  <tbody>
+    <tr><td rowspan="10">A. 대형 프로덕트</td>
+        <td><a href="#baseweb">Base Web</a></td><td>Uber</td><td>MIT</td><td>React</td><td class="num">9.0k</td><td>2026-07</td><td class="status-ok">양호</td></tr>
+    <tr><td><a href="#primer">Primer</a></td><td>GitHub</td><td>MIT</td><td>React, ViewComponent</td><td class="num">3.9k</td><td>2026-08</td><td class="status-ok">양호</td></tr>
+    <tr><td><a href="#atlassian">Atlassian DS</a></td><td>Atlassian</td><td>Apache-2.0(패키지별)</td><td>React</td><td class="num">-</td><td>-</td><td class="status-warn">부분 공개</td></tr>
+    <tr><td><a href="#slds">Lightning DS 2</a></td><td>Salesforce</td><td>BSD-3(SLDS 1)</td><td>CSS Blueprint</td><td class="num">3.7k</td><td>아카이브</td><td class="status-warn">전환기</td></tr>
+    <tr><td><a href="#canvas">Canvas</a></td><td>Workday</td><td>Apache-2.0</td><td>React</td><td class="num">357</td><td>2026-08</td><td class="status-ok">양호</td></tr>
+    <tr><td><a href="#clarity">Clarity</a></td><td>VMware</td><td>MIT 계열</td><td>Angular, Web Components</td><td class="num">428</td><td>2026-08</td><td class="status-warn">Angular 전용</td></tr>
+    <tr><td><a href="#geist">Geist</a></td><td>Vercel</td><td>문서만 공개</td><td>React(비공개)</td><td class="num">-</td><td>-</td><td class="status-warn">코드 비공개</td></tr>
+    <tr><td><a href="#semi">Semi Design</a></td><td>ByteDance</td><td>MIT(npm 표기)</td><td>React</td><td class="num">10.3k</td><td>2026-08</td><td class="status-ok">양호</td></tr>
+    <tr><td><a href="#mantine">Mantine</a></td><td>커뮤니티</td><td>MIT</td><td>React</td><td class="num">31.6k</td><td>2026-08</td><td class="status-ok">양호</td></tr>
+    <tr><td><a href="#primereact">PrimeReact</a></td><td>PrimeTek</td><td>MIT</td><td>React</td><td class="num">8.3k</td><td>아카이브</td><td class="status-warn">재편기</td></tr>
+    <tr><td rowspan="7">B. 모바일 특화</td>
+        <td><a href="#antd-mobile">Ant Design Mobile</a></td><td>Ant Group</td><td>MIT</td><td>React</td><td class="num">12.0k</td><td>2026-08</td><td class="status-ok">양호</td></tr>
+    <tr><td><a href="#vkui">VKUI</a></td><td>VK</td><td>MIT</td><td>React</td><td class="num">1.2k</td><td>2026-08</td><td class="status-ok">양호</td></tr>
+    <tr><td><a href="#nutui">NutUI React</a></td><td>JD.com</td><td>MIT(README)</td><td>React, Taro</td><td class="num">1.2k</td><td>2026-08</td><td class="status-ok">양호</td></tr>
+    <tr><td><a href="#varlet">Varlet</a></td><td>커뮤니티</td><td>MIT</td><td>Vue 3</td><td class="num">5.3k</td><td>2026-08</td><td class="status-warn">Vue 전용</td></tr>
+    <tr><td><a href="#ionic">Ionic</a></td><td>OutSystems</td><td>MIT</td><td>Web Components + 래퍼</td><td class="num">52.6k</td><td>2026-08</td><td class="status-ok">양호</td></tr>
+    <tr><td><a href="#framework7">Framework7</a></td><td>커뮤니티</td><td>MIT</td><td>Core JS + 래퍼</td><td class="num">18.7k</td><td>2026-07</td><td class="status-ok">양호</td></tr>
+    <tr><td><a href="#onsen">Onsen UI</a></td><td>Monaca</td><td>Apache-2.0(README)</td><td>Web Components</td><td class="num">8.9k</td><td>2026-06</td><td class="status-warn">활동 둔화</td></tr>
+    <tr><td rowspan="2">C. Tailwind 계열</td>
+        <td><a href="#daisyui">DaisyUI</a></td><td>커뮤니티</td><td>MIT</td><td>CSS 클래스만</td><td class="num">42.1k</td><td>2026-08</td><td class="status-ok">양호</td></tr>
+    <tr><td><a href="#flowbite">Flowbite</a></td><td>Themesberg</td><td>MIT(코어)</td><td>Tailwind + JS</td><td class="num">9.3k</td><td>2026-06</td><td class="status-warn">Blocks 유료</td></tr>
+    <tr><td rowspan="2">D. 공공</td>
+        <td><a href="#govuk">GOV.UK DS</a></td><td>영국 정부</td><td>MIT(코드)</td><td>Nunjucks + SCSS</td><td class="num">1.4k</td><td>2026-08</td><td class="status-ok">양호</td></tr>
+    <tr><td><a href="#nsw">NSW DS</a></td><td>호주 NSW 주정부</td><td>MIT</td><td>HTML/SCSS/JS</td><td class="num">89</td><td>2026-08</td><td class="status-ok">양호</td></tr>
+    <tr><td rowspan="2">E. 국내·부분 공개</td>
+        <td><a href="#seed">Seed Design</a></td><td>당근</td><td>Apache-2.0</td><td>React</td><td class="num">1.0k</td><td>2026-08</td><td class="status-ok">양호</td></tr>
+    <tr><td><a href="#abcdef">ABC Def</a></td><td>LINE(LY)</td><td>Apache-2.0</td><td>React, Vue, HTML/CSS</td><td class="num">106</td><td>2026-08</td><td class="status-ok">양호</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>제외한 시스템과 사유</h3>
+<div class="wrap-x">
+<table>
+  <thead><tr><th>시스템</th><th>사유</th></tr></thead>
+  <tbody>
+    <tr><td>Polaris, Carbon, Spectrum, Fluent</td><td>이미 벤치마킹을 완료했다. <code>systems/</code>와 실측 리포트에 포함되어 있다.</td></tr>
+    <tr><td>Goldman Sachs DS</td><td class="status-bad">문서 사이트가 사라졌다. design.gs.com이 goldmansachs.com 기업 홈으로 리다이렉트된다. 2026-08-13 확인.</td></tr>
+    <tr><td>Audi DS</td><td class="status-bad">CI 포털(audi.com/ci)이 전부 404를 반환한다. 2026-08-13 확인.</td></tr>
+    <tr><td>29CM</td><td>비공개다. 기술 블로그 아티클만 있다.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="group-a">A. 대형 프로덕트 계열 <small>데스크톱과 반응형 웹 중심</small></h2>
+
+<div class="card" id="baseweb">
+  <div class="card-head"><h3>Base Web</h3><span class="org">Uber</span></div>
+  <div class="chips"><span class="chip">MIT</span><span class="chip">React</span><span class="chip">★ 9.0k</span><span class="chip">푸시 2026-07</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> overrides 기반 커스터마이징 철학. 토큰 계층이 얇은 시스템과 기존 8종의 대비군으로 가치가 있다.</p>
+  <p class="note"><a href="https://baseweb.design/components/">문서</a> · <a href="https://github.com/uber/baseweb">GitHub</a> · 컴포넌트 갤러리의 회색 카드는 사이트 자체의 와이어프레임 썸네일이다.</p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/baseweb.png" alt="Base Web 컴포넌트 갤러리" loading="lazy"><figcaption>컴포넌트 갤러리</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="primer">
+  <div class="card-head"><h3>Primer</h3><span class="org">GitHub</span></div>
+  <div class="chips"><span class="chip">MIT</span><span class="chip">React + ViewComponent</span><span class="chip">★ 3.9k</span><span class="chip">푸시 2026-08</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> 토큰 패키지(primer/primitives)를 컴포넌트와 분리해서 배포한다. 기존 파이프라인의 토큰 실측을 그대로 적용할 수 있다. Figma 공식 킷이 있다.</p>
+  <p class="note"><a href="https://primer.style/components">문서</a> · <a href="https://github.com/primer/react">GitHub</a></p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/primer.png" alt="Primer 컴포넌트 문서" loading="lazy"><figcaption>컴포넌트 문서</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="atlassian">
+  <div class="card-head"><h3>Atlassian Design System</h3><span class="org">Atlassian</span></div>
+  <div class="chips"><span class="chip">Apache-2.0(패키지별)</span><span class="chip">React</span><span class="chip warn">부분 공개</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> @atlaskit/tokens 패키지가 공개되어 토큰 실측이 가능하다. 대규모 B2B 제품군(Jira, Confluence)의 컴포넌트 어휘를 볼 수 있다.</p>
+  <p class="note"><a href="https://atlassian.design/components">문서</a> · 소스는 npm 패키지와 공개 미러(atlassian-frontend-mirror)로 접근한다. 모노레포 원본은 비공개다.</p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/atlassian.png" alt="Atlassian Design System 컴포넌트" loading="lazy"><figcaption>컴포넌트 문서</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="slds">
+  <div class="card-head"><h3>Lightning Design System 2</h3><span class="org">Salesforce</span></div>
+  <div class="chips"><span class="chip">BSD-3(SLDS 1)</span><span class="chip">CSS Blueprint</span><span class="chip warn">SLDS 1 저장소 아카이브</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> Page Layout Blueprint 문서화 방식. 컴포넌트가 아니라 페이지 구조를 HTML/CSS 청사진으로 배포하는 접근이 독특하다.</p>
+  <p class="note"><a href="https://www.lightningdesignsystem.com/">문서</a> · <a href="https://github.com/salesforce-ux/design-system">GitHub(아카이브)</a> · 저장소가 2026년에 아카이브됐다. SLDS 2는 문서 중심으로 전환 중이다. 소스 실측 대상으로는 전환이 끝난 뒤가 안전하다.</p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/slds.png" alt="SLDS 2 홈" loading="lazy"><figcaption>SLDS 2 홈</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="canvas">
+  <div class="card-head"><h3>Canvas</h3><span class="org">Workday</span></div>
+  <div class="chips"><span class="chip">Apache-2.0</span><span class="chip">React</span><span class="chip">★ 357</span><span class="chip">푸시 2026-08</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> 엔터프라이즈 HR 제품의 폼, 카드 목록, 승인 흐름 패턴. Components와 Patterns를 명시적으로 구분해서 문서화한다.</p>
+  <p class="note"><a href="https://canvas.workday.com/components/">문서</a> · <a href="https://github.com/Workday/canvas-kit">GitHub</a> · 문서 사이트가 헤드리스 브라우저 UA를 차단한다. 캡처 시 UA 위장이 필요했다.</p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/canvas-workday.png" alt="Workday Canvas 컴포넌트" loading="lazy"><figcaption>컴포넌트 문서</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="clarity">
+  <div class="card-head"><h3>Clarity</h3><span class="org">VMware(Broadcom)</span></div>
+  <div class="chips"><span class="chip">MIT 계열</span><span class="chip">Angular</span><span class="chip">★ 428</span><span class="chip warn">React 아님</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> Wizard, Master-Detail 등 복잡한 입력 과정을 단계로 나누는 패턴 문서.</p>
+  <p class="note"><a href="https://clarity.design/">문서</a> · <a href="https://github.com/vmware-clarity/ng-clarity">GitHub</a> · Angular 전용이라 기존 비교군과 겹치는 축이 적다.</p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/clarity.png" alt="Clarity 홈" loading="lazy"><figcaption>홈</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="geist">
+  <div class="card-head"><h3>Geist</h3><span class="org">Vercel</span></div>
+  <div class="chips"><span class="chip warn">컴포넌트 코드 비공개</span><span class="chip">문서 공개</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> 절제된 모바일 웹 패턴과 문서 UI 자체의 완성도. 다만 공식 컴포넌트 npm 패키지가 없다. 폰트와 아이콘만 오픈소스다.</p>
+  <p class="note"><a href="https://vercel.com/geist/introduction">문서</a> · 소스 실측 파이프라인에는 넣을 수 없다. 화면 참고용으로만 쓴다.</p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/geist.png" alt="Geist 문서" loading="lazy"><figcaption>문서 홈</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="semi">
+  <div class="card-head"><h3>Semi Design</h3><span class="org">ByteDance(Douyin FE)</span></div>
+  <div class="chips"><span class="chip">MIT(npm 표기)</span><span class="chip">React</span><span class="chip">★ 10.3k</span><span class="chip">푸시 2026-08</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> 디자인을 코드로 변환하는 D2C 도구를 시스템에 내장했다. Figma↔Code 매핑 충실도 관점에서 기존 8종과 다른 접근이다.</p>
+  <p class="note"><a href="https://semi.design/en-US/">문서(영문)</a> · <a href="https://github.com/DouyinFE/semi-design">GitHub</a></p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/semi.png" alt="Semi Design 홈" loading="lazy"><figcaption>홈(중문 기본)</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="mantine">
+  <div class="card-head"><h3>Mantine</h3><span class="org">커뮤니티</span></div>
+  <div class="chips"><span class="chip">MIT</span><span class="chip">React</span><span class="chip">★ 31.6k</span><span class="chip">푸시 2026-08</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> 100개가 넘는 컴포넌트와 CSS 변수 기반 토큰. 커뮤니티 주도 시스템의 어휘 팽창을 측정하기 좋은 표본이다.</p>
+  <p class="note"><a href="https://mantine.dev/">문서</a> · <a href="https://github.com/mantinedev/mantine">GitHub</a></p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/mantine.png" alt="Mantine 홈" loading="lazy"><figcaption>홈</figcaption></figure>
+    <figure class="desktop"><img src="captures/mantine-button.png" alt="Mantine Button 문서" loading="lazy"><figcaption>Button 문서</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="primereact">
+  <div class="card-head"><h3>PrimeReact</h3><span class="org">PrimeTek</span></div>
+  <div class="chips"><span class="chip">MIT</span><span class="chip">React</span><span class="chip">★ 8.3k</span><span class="chip warn">저장소 아카이브(2026-06)</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> Styled, Tailwind, Headless 세 가지 스타일링 모드를 동시에 제공한다. 스타일링 접근법 축의 극단 표본이다.</p>
+  <p class="note"><a href="https://primereact.org/">문서</a> · <a href="https://github.com/primefaces/primereact">GitHub(아카이브)</a> · 사이트는 v11로 운영 중이다. 저장소 재편이 진행 중으로 보인다. 실측 전에 새 저장소 위치를 확인해야 한다.</p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/primereact.png" alt="PrimeReact 홈" loading="lazy"><figcaption>홈</figcaption></figure>
+  </div>
+</div>
+
+<h2 id="group-b">B. 모바일 특화 <small>모바일 웹과 하이브리드 앱 전용</small></h2>
+
+<div class="card" id="antd-mobile">
+  <div class="card-head"><h3>Ant Design Mobile</h3><span class="org">Ant Group</span></div>
+  <div class="chips"><span class="chip">MIT</span><span class="chip">React</span><span class="chip">★ 12.0k</span><span class="chip">푸시 2026-08</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> 이미 벤치마킹한 antd와 같은 조직의 모바일 전용 시스템이다. 데스크톱판과 모바일판의 어휘, 토큰 차이를 직접 비교할 수 있는 유일한 쌍이다.</p>
+  <p class="note"><a href="https://mobile.ant.design/">문서</a> · <a href="https://github.com/ant-design/ant-design-mobile">GitHub</a></p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/antd-mobile.png" alt="Ant Design Mobile 홈" loading="lazy"><figcaption>데스크톱 문서</figcaption></figure>
+    <figure class="mobile"><img src="captures/antd-mobile-m.png" alt="Ant Design Mobile 모바일 데모" loading="lazy"><figcaption>모바일 390px</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="vkui">
+  <div class="card-head"><h3>VKUI</h3><span class="org">VK</span></div>
+  <div class="chips"><span class="chip">MIT</span><span class="chip">React</span><span class="chip">★ 1.2k</span><span class="chip">푸시 2026-08</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> 피드, 메신저형 소셜 앱의 화면 계층(Epic, Root, View, Panel)을 컴포넌트로 강제한다. 앱 셸 구조를 시스템이 소유하는 드문 사례다. 토큰 저장소도 별도 공개한다.</p>
+  <p class="note"><a href="https://vkui.io/">문서(러시아어)</a> · <a href="https://github.com/VKCOM/VKUI">GitHub</a> · v8.3.2</p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/vkui.png" alt="VKUI 문서" loading="lazy"><figcaption>문서 홈</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="nutui">
+  <div class="card-head"><h3>NutUI React</h3><span class="org">JD.com</span></div>
+  <div class="chips"><span class="chip">MIT(README)</span><span class="chip">React + Taro</span><span class="chip">★ 1.2k</span><span class="chip">푸시 2026-08</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> 커머스 업무 컴포넌트(SKU 선택, 주소 입력, 카운트다운)를 시스템 어휘에 포함한다. 범용 컴포넌트와 업무 컴포넌트의 경계 사례다.</p>
+  <p class="note"><a href="https://nutui.jd.com/react/2x/#/en-US/component/button">문서</a> · <a href="https://github.com/jdf2e/nutui-react">GitHub</a></p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/nutui.png" alt="NutUI React Button 문서" loading="lazy"><figcaption>Button 문서, 우측이 라이브 데모</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="varlet">
+  <div class="card-head"><h3>Varlet</h3><span class="org">커뮤니티</span></div>
+  <div class="chips"><span class="chip">MIT</span><span class="chip">Vue 3</span><span class="chip">★ 5.3k</span><span class="chip warn">React 아님</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> Material Design을 모바일 전용으로 재해석했다. 이미 벤치마킹한 Material(MUI, Material Web)과 삼각 비교가 가능하다.</p>
+  <p class="note"><a href="https://varletjs.org/#/en-US/home">문서</a> · <a href="https://github.com/varletjs/varlet">GitHub</a></p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/varlet.png" alt="Varlet 문서" loading="lazy"><figcaption>데스크톱 문서</figcaption></figure>
+    <figure class="mobile"><img src="captures/varlet-m.png" alt="Varlet 모바일 데모" loading="lazy"><figcaption>모바일 390px</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="ionic">
+  <div class="card-head"><h3>Ionic</h3><span class="org">OutSystems</span></div>
+  <div class="chips"><span class="chip">MIT</span><span class="chip">Web Components + React/Vue/Angular</span><span class="chip">★ 52.6k</span><span class="chip">푸시 2026-08</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> iOS와 Android 테마를 하나의 컴포넌트가 런타임에 전환한다. 플랫폼별 변형을 variant가 아니라 mode로 푸는 접근이다.</p>
+  <p class="note"><a href="https://ionicframework.com/docs/components">문서</a> · <a href="https://github.com/ionic-team/ionic-framework">GitHub</a></p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/ionic.png" alt="Ionic 컴포넌트 문서" loading="lazy"><figcaption>컴포넌트 문서</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="framework7">
+  <div class="card-head"><h3>Framework7</h3><span class="org">커뮤니티</span></div>
+  <div class="chips"><span class="chip">MIT</span><span class="chip">Core JS + React/Vue/Svelte</span><span class="chip">★ 18.7k</span><span class="chip">푸시 2026-07</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> 메신저, 스와이프 리스트 등 화면 단위 복합 UI를 킷으로 제공한다. Kitchen Sink 데모로 전체 어휘를 한 번에 훑을 수 있다.</p>
+  <p class="note"><a href="https://framework7.io/">문서</a> · <a href="https://github.com/framework7io/framework7">GitHub</a></p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/framework7.png" alt="Framework7 홈" loading="lazy"><figcaption>홈</figcaption></figure>
+    <figure class="mobile"><img src="captures/framework7-m.png" alt="Framework7 Kitchen Sink" loading="lazy"><figcaption>Kitchen Sink 390px</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="onsen">
+  <div class="card-head"><h3>Onsen UI</h3><span class="org">Monaca</span></div>
+  <div class="chips"><span class="chip">Apache-2.0(README)</span><span class="chip">Web Components</span><span class="chip">★ 8.9k</span><span class="chip warn">활동 둔화</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> iOS/Android 스타일 자동 전환의 원조격 사례. 다만 릴리스 주기가 느려졌다(2.12.8).</p>
+  <p class="note"><a href="https://onsen.io/">문서</a> · <a href="https://github.com/OnsenUI/OnsenUI">GitHub</a> · 우선순위를 낮게 두는 것이 안전하다.</p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/onsen.png" alt="Onsen UI 홈" loading="lazy"><figcaption>홈</figcaption></figure>
+  </div>
+</div>
+
+<h2 id="group-c">C. Tailwind 계열 <small>유틸리티 클래스 기반</small></h2>
+
+<div class="card" id="daisyui">
+  <div class="card-head"><h3>DaisyUI</h3><span class="org">커뮤니티</span></div>
+  <div class="chips"><span class="chip">MIT</span><span class="chip">CSS 클래스만, JS 없음</span><span class="chip">★ 42.1k</span><span class="chip">푸시 2026-08</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> 유틸리티 클래스를 시맨틱 컴포넌트 클래스로 접는 방식. 컴포넌트 정의가 코드가 아니라 클래스 네이밍에만 존재하는 극단 사례다.</p>
+  <p class="note"><a href="https://daisyui.com/components/">문서</a> · <a href="https://github.com/saadeghi/daisyui">GitHub</a></p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/daisyui.png" alt="DaisyUI 컴포넌트" loading="lazy"><figcaption>컴포넌트 갤러리</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="flowbite">
+  <div class="card-head"><h3>Flowbite</h3><span class="org">Themesberg</span></div>
+  <div class="chips"><span class="chip">MIT(코어)</span><span class="chip">Tailwind + JS</span><span class="chip">★ 9.3k</span><span class="chip warn">Blocks 상당수 유료</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> 컴포넌트 위에 Application UI Blocks 계층을 상품화했다. 페이지 블록 단위 재사용의 시장 검증 사례다.</p>
+  <p class="note"><a href="https://flowbite.com/blocks/">Blocks</a> · <a href="https://github.com/themesberg/flowbite">GitHub</a></p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/flowbite.png" alt="Flowbite Blocks" loading="lazy"><figcaption>Blocks 갤러리</figcaption></figure>
+  </div>
+</div>
+
+<h2 id="group-d">D. 공공 <small>접근성과 폼 패턴의 표준</small></h2>
+
+<div class="card" id="govuk">
+  <div class="card-head"><h3>GOV.UK Design System</h3><span class="org">영국 정부</span></div>
+  <div class="chips"><span class="chip">MIT(코드) / OGL(문서)</span><span class="chip">Nunjucks + SCSS</span><span class="chip">★ 1.4k</span><span class="chip">푸시 2026-08</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> One question per page 폼 패턴과 접근성 문서화. 컴포넌트보다 Task Pattern이 시스템의 중심인 사례다.</p>
+  <p class="note"><a href="https://design-system.service.gov.uk/components/">문서</a> · <a href="https://github.com/alphagov/govuk-frontend">GitHub</a> · 프레임워크 독립적이라 토큰 비교는 제한적이다.</p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/govuk.png" alt="GOV.UK 컴포넌트" loading="lazy"><figcaption>컴포넌트 문서</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="nsw">
+  <div class="card-head"><h3>NSW Design System</h3><span class="org">호주 NSW 주정부</span></div>
+  <div class="chips"><span class="chip">MIT</span><span class="chip">HTML/SCSS/JS</span><span class="chip">★ 89</span><span class="chip">푸시 2026-08</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> 검색 결과, 다단계 서식 등 페이지 템플릿까지 포함한 공공 시스템. GOV.UK 계열과의 유사도 비교가 흥미로운 지점이다.</p>
+  <p class="note"><a href="https://designsystem.nsw.gov.au/">문서</a> · <a href="https://github.com/digitalnsw/nsw-design-system">GitHub</a></p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/nsw.png" alt="NSW Design System 홈" loading="lazy"><figcaption>홈</figcaption></figure>
+  </div>
+</div>
+
+<h2 id="group-e">E. 국내·부분 공개 <small>실무 참고 가치가 높은 쌍</small></h2>
+
+<div class="card" id="seed">
+  <div class="card-head"><h3>Seed Design</h3><span class="org">당근</span></div>
+  <div class="chips"><span class="chip">Apache-2.0</span><span class="chip">React</span><span class="chip">★ 1.0k</span><span class="chip">푸시 2026-08</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> 국내 모바일 퍼스트 시스템 중 문서와 코드가 가장 넓게 공개된 사례다. Bottom Sheet, Action Button 등 모바일 어휘가 중심이다. 문서가 한국어다.</p>
+  <p class="note"><a href="https://seed-design.io/">문서</a> · <a href="https://github.com/daangn/seed-design">GitHub</a> · 구 문서 도메인(designsystem.daangn.com)은 404다. seed-design.io가 현행이다.</p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/seed.png" alt="Seed Design 홈" loading="lazy"><figcaption>홈</figcaption></figure>
+    <figure class="desktop"><img src="captures/seed-components.png" alt="Seed Design 컴포넌트" loading="lazy"><figcaption>컴포넌트 갤러리</figcaption></figure>
+  </div>
+</div>
+
+<div class="card" id="abcdef">
+  <div class="card-head"><h3>ABC Def</h3><span class="org">LINE(LY Corporation)</span></div>
+  <div class="chips"><span class="chip">Apache-2.0</span><span class="chip">React + Vue + HTML/CSS</span><span class="chip">★ 106</span><span class="chip">푸시 2026-08</span></div>
+  <p class="point"><b>벤치마킹 포인트:</b> 3계층 토큰 구조와 Headless UI 조합을 명시적으로 내세운다. 컴포넌트 53종, v2.0.0. AI 친화 워크플로를 표방하는 신생 시스템이다.</p>
+  <p class="note"><a href="https://line.github.io/abc-def/">문서</a> · <a href="https://github.com/line/abc-def">GitHub</a> · LINE 본체 앱의 코어 라이브러리와는 별개다.</p>
+  <div class="shots">
+    <figure class="desktop"><img src="captures/line-abc-def.png" alt="ABC Def 문서" loading="lazy"><figcaption>문서 홈</figcaption></figure>
+  </div>
+</div>
+
+<h2 id="next">다음 단계 제안</h2>
+<p>기존 파이프라인은 소스 클론, 토큰 실측, Figma 대조 순서로 동작한다. 이 기준으로 후보를 나눴다.</p>
+<div class="wrap-x">
+<table>
+  <thead><tr><th>우선순위</th><th>후보</th><th>근거</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="status-ok">1군: 즉시 투입 가능</td>
+      <td>Primer, Mantine, Base Web, Semi Design</td>
+      <td>React 소스와 토큰이 공개 저장소에 있다. 기존 8종과 같은 방법으로 측정할 수 있다.</td>
+    </tr>
+    <tr>
+      <td class="status-ok">2군: 모바일 축 신설 시</td>
+      <td>Ant Design Mobile, Seed Design, ABC Def, VKUI</td>
+      <td>모바일 전용 어휘를 측정하는 새 축이 필요하다. antd와 antd-mobile은 같은 조직의 데스크톱·모바일 쌍이라 비교 가치가 가장 크다. Seed와 ABC Def는 국내 실무 참고 가치가 있다.</td>
+    </tr>
+    <tr>
+      <td class="status-warn">관찰: 전환기</td>
+      <td>SLDS 2, PrimeReact</td>
+      <td>두 시스템 모두 저장소가 아카이브 상태다. 재편이 끝난 뒤에 실측해야 낭비가 없다.</td>
+    </tr>
+    <tr>
+      <td class="status-warn">보류</td>
+      <td>Geist(코드 비공개), Clarity(Angular), Varlet(Vue), Onsen(활동 둔화), Tailwind 계열, 공공 계열</td>
+      <td>파이프라인 전제(토큰 파일 + 컴포넌트 소스)와 어긋나거나, 측정해도 기존 결론에 새 축을 더하지 못한다. 화면 참고용으로만 쓴다.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p class="note">이 문서는 수기 작성물이다. <code>analysis/standard-research/reports/</code>의 생성물과 달리 직접 편집해도 된다.</p>
+
+</main>
+</body>
+</html>
