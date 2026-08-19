@@ -1,0 +1,862 @@
+<title>AI 디자인시스템 사례집</title>
+<style>
+  :root {
+    --bg: #f5f6f3;
+    --surface: #ffffff;
+    --surface-alt: #ebeee9;
+    --text: #1a1e1b;
+    --text-muted: #59635c;
+    --line: #dbe0da;
+    --accent: #2e5c4e;
+    --accent-strong: #1d3f35;
+    --accent-soft: #e4eee9;
+    --caution: #9a6427;
+    --caution-soft: #f5e9d8;
+    --shadow: 0 1px 2px rgba(20, 24, 21, 0.04), 0 8px 24px rgba(20, 24, 21, 0.05);
+  }
+
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #121513;
+      --surface: #191d1a;
+      --surface-alt: #212520;
+      --text: #e8ebe6;
+      --text-muted: #98a39c;
+      --line: #333a34;
+      --accent: #74c6ab;
+      --accent-strong: #9adcc2;
+      --accent-soft: #1e332b;
+      --caution: #e0a868;
+      --caution-soft: #382c1a;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #121513;
+    --surface: #191d1a;
+    --surface-alt: #212520;
+    --text: #e8ebe6;
+    --text-muted: #98a39c;
+    --line: #333a34;
+    --accent: #74c6ab;
+    --accent-strong: #9adcc2;
+    --accent-soft: #1e332b;
+    --caution: #e0a868;
+    --caution-soft: #382c1a;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Noto Sans KR", "Malgun Gothic", sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    padding: 0 20px 96px;
+  }
+
+  a { color: var(--accent-strong); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:hover { color: var(--accent); }
+
+  .wrap { max-width: 800px; margin: 0 auto; }
+
+  /* ---------- header ---------- */
+  header {
+    padding: 72px 0 40px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 48px;
+  }
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 18px;
+  }
+  h1 {
+    font-family: "Song Myung", serif;
+    font-weight: 400;
+    font-size: clamp(34px, 6vw, 50px);
+    line-height: 1.25;
+    margin: 0 0 20px;
+    text-wrap: balance;
+  }
+  .lede {
+    font-size: 17px;
+    color: var(--text-muted);
+    max-width: 62ch;
+    margin: 0 0 28px;
+  }
+  .lede strong { color: var(--text); font-weight: 600; }
+
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .stat-row .stat-item { display: flex; flex-direction: column; gap: 4px; }
+  .stat-row .num {
+    font-size: 26px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+  }
+  .stat-row .label { font-size: 12.5px; color: var(--text-muted); letter-spacing: 0.02em; }
+
+  /* ---------- section ---------- */
+  section.category { margin-bottom: 64px; }
+  .cat-head { margin-bottom: 24px; }
+  .cat-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--accent);
+    margin: 0 0 6px;
+  }
+  h2 {
+    font-family: "Song Myung", serif;
+    font-weight: 400;
+    font-size: 27px;
+    margin: 0 0 10px;
+    text-wrap: balance;
+  }
+  .cat-desc { color: var(--text-muted); font-size: 15px; max-width: 64ch; margin: 0; }
+  .cat-desc code, .desc code, blockquote code {
+    font-family: "JetBrains Mono", monospace;
+    background: var(--surface-alt);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.92em;
+  }
+
+  .case-list { display: flex; flex-direction: column; gap: 14px; }
+
+  .case {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+  }
+  .case-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .chip {
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+  .case-date {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+  .badge-verified {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--accent-strong);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .badge-verified::before { content: "✓"; }
+  .badge-cross {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .badge-caution {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--caution);
+    background: var(--caution-soft);
+    padding: 2px 8px;
+    border-radius: 100px;
+  }
+
+  .case h3 { font-size: 17px; font-weight: 700; line-height: 1.45; margin: 0 0 8px; }
+  .case h3 a { color: var(--text); }
+  .case h3 a:hover { color: var(--accent-strong); }
+
+  .stat-pill {
+    display: inline-block;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin: 0 0 10px;
+  }
+
+  .desc { font-size: 14.5px; color: var(--text-muted); margin: 0; }
+
+  details { margin-top: 12px; }
+  summary {
+    cursor: pointer;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12.5px;
+    color: var(--accent);
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: "▸"; font-size: 10px; transition: transform 0.15s ease; }
+  details[open] summary::before { transform: rotate(90deg); }
+
+  blockquote {
+    margin: 10px 0 0;
+    padding: 12px 16px;
+    background: var(--surface-alt);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.75;
+  }
+  blockquote .src {
+    display: block;
+    margin-top: 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+    color: var(--text-muted);
+  }
+
+  /* ---------- footer / method note ---------- */
+  .method {
+    background: var(--surface-alt);
+    border-radius: 10px;
+    padding: 26px 26px 28px;
+    font-size: 14.5px;
+    color: var(--text-muted);
+  }
+  .method h2 { font-size: 20px; margin-bottom: 12px; }
+  .method p { margin: 0 0 12px; }
+  .method p:last-child { margin-bottom: 0; }
+  .method strong { color: var(--text); }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 32px 0 40px;
+    padding: 14px 18px;
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+
+  footer.page-end {
+    max-width: 800px;
+    margin: 56px auto 0;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  @media (max-width: 560px) {
+    header { padding: 48px 0 32px; }
+    .case { padding: 16px 16px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">국내 사례 리포트 · 2026.08.19</p>
+    <h1>AI 시대의 디자인 시스템</h1>
+    <p class="lede">
+      모요·당근 외에 <strong>AI 사용을 염두에 둔 디자인 시스템 설계</strong>와
+      <strong>AI 시대에 디자인 시스템으로 낸 성과</strong>를 국내 스타트업·기업 전반에서
+      찾아 정리했다. 기업 블로그만으로는 부족해 컨퍼런스 발표와 회사 자체 매거진까지
+      넓혔고, 핵심 근거는 원문을 직접 열어 인용문을 대조했다.
+    </p>
+    <div class="stat-row">
+      <div class="stat-item"><span class="num">26</span><span class="label">사례 정리</span></div>
+      <div class="stat-item"><span class="num">16</span><span class="label">원문 대조 완료</span></div>
+      <div class="stat-item"><span class="num">9</span><span class="label">조사 클러스터</span></div>
+      <div class="stat-item"><span class="num">21</span><span class="label">확인 못한 회사</span></div>
+    </div>
+  </header>
+
+  <div class="legend">
+    <span><span class="badge-verified"></span> 이 세션에서 원문을 직접 열어 인용문을 대조했다</span>
+    <span><span class="badge-cross">교차확인</span> 독립된 후기 2건 이상이 같은 내용을 진술한다</span>
+    <span><span class="badge-caution">자체 발표</span> 회사 발표 인용이며 제3자 검증은 없다</span>
+  </div>
+
+  <section class="category">
+    <div class="cat-head">
+      <p class="cat-num">01 / 05</p>
+      <h2>성과가 뚜렷한 사례</h2>
+      <p class="cat-desc">구체적 수치를 공개한 사례. 오늘의집(버킷플레이스)이 압도적으로 두껍다 —
+        자체 매거진 <code>bucketplace.com/culture/Design</code>에 2026년 2월부터 8월까지
+        "AI frontier" 시리즈로 8편 넘게 연재했다.</p>
+    </div>
+
+    <div class="case-list">
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">오늘의집</span>
+          <span class="case-date">2026.05.29</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://www.bucketplace.com/post/2026-05-29-반복되는-어드민-디자인-prd로-어디까지-자동화할-수-있을까/" target="_blank" rel="noopener">반복되는 어드민 디자인, PRD로 어디까지 자동화할 수 있을까?</a></h3>
+        <p class="stat-pill">작업 기간 20일 → 5일</p>
+        <p class="desc">Figma Make로 먼저 시도했다가 실패했다. Claude Code + MCP + Skill로
+          PRD→디자인 파이프라인을 다시 구축해, 물류 어드민 신규 페이지 9개의 작업 기간을 줄였다.</p>
+        <details>
+          <summary>원문 인용 보기</summary>
+          <blockquote>
+            "디자인 자동화 시스템으로 9개 신규 페이지의 디자인 작업 기간은 예상했던 20일에서
+            5일로 단축됐습니다. … 이제는 PO가 PRD URL만 입력하면 프로토타입이 생성되고,
+            간단한 수정도 프롬프트로 직접 반영할 수 있게 되었죠."
+            <span class="src">— 오늘의집 프로덕트 디자이너 Lana, 2026.05.29</span>
+          </blockquote>
+        </details>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">오늘의집</span>
+          <span class="case-date">2026.05.06</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://www.bucketplace.com/post/2026-05-06-디자이너가-ai를-쓰는-법-더-빠르게-고민하고-더-깊게-검증하기/" target="_blank" rel="noopener">디자이너가 AI를 쓰는 법: 더 빠르게 고민하고, 더 깊게 검증하기</a></h3>
+        <p class="stat-pill">시안 3~4일 → 반나절 · UT 세팅 2시간 → 15분</p>
+        <p class="desc">자체 "Figma DS MCP"를 만들었지만 화면 하나에 15~20분 걸리는 한계를 인지했다.
+          "AI가 완성"이 아니라 "병목만 해결"로 전략을 바꾼 뒤에야 효과가 났다.</p>
+        <details>
+          <summary>원문 인용 보기</summary>
+          <blockquote>
+            "시안 작업 : 3~4일 → 반나절 / UT 데이터 세팅 : 참여자 5명 기준 2시간 → 15분 /
+            정책 커뮤니케이션 : 반복 질문 → 인터랙티브 스펙으로 0건."
+            <span class="src">— 오늘의집 프로덕트 디자이너 Gongdee, 2026.05.06</span>
+          </blockquote>
+        </details>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">오늘의집</span>
+          <span class="case-date">2026.02.24</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://www.bucketplace.com/post/2026-02-24-리소스-8배-절감-ai로-해결한-로컬라이즈-대공사/" target="_blank" rel="noopener">리소스 8배 절감, AI로 해결한 로컬라이즈 대공사</a></h3>
+        <p class="stat-pill">디자이너 리소스 8배 절감</p>
+        <p class="desc">하드코딩 텍스트 4,000개를 String ID로 옮기는 레거시 작업을 계기로
+          n8n 워크플로우 + LLM 조합의 "마스터 플러그인"을 만들어 로컬라이즈 키 생성을 완전 자동화했다.</p>
+        <details>
+          <summary>원문 인용 보기</summary>
+          <blockquote>
+            "국내 선례가 없어 10개의 워크플로우를 직접 설계하고 엮어내는 과정이 쉽지만은
+            않았습니다. … 전사 협업 시스템에 성공적으로 안착하며, 디자이너의 관련 리소스를
+            무려 8배나 절감할 수 있었거든요."
+            <span class="src">— 오늘의집 프로덕트 디자인팀 Yohan · Lucy, 2026.02.24</span>
+          </blockquote>
+        </details>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">오늘의집</span>
+          <span class="case-date">2026.04.24</span>
+        </div>
+        <h3><a href="https://www.bucketplace.com/post/2026-04-24-디자이너의-감각이-ai를-만나-시스템이-될-때/" target="_blank" rel="noopener">디자이너의 '감각'이 AI를 만나 '시스템'이 될 때</a></h3>
+        <p class="desc">아이콘 200개를 AI로 일관되게 생성하는 파이프라인. 같은 "AI frontier" 시리즈의 한 편.</p>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">오늘의집</span>
+          <span class="case-date">2026.08.13</span>
+        </div>
+        <h3><a href="https://www.bucketplace.com/post/2026-08-13-반복되는-디자인-작업-우리는-ai와-시스템을-만들기로-했다/" target="_blank" rel="noopener">반복되는 디자인 작업, 우리는 AI와 시스템을 만들기로 했다</a></h3>
+        <p class="desc">웹 빌더 9개를 자동화한 최신 편. "AI frontier" 시리즈 중 조사 시점 기준 가장 최근 글.</p>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">오늘의집</span>
+          <span class="case-date">FEConf 2025</span>
+          <span class="badge-cross">교차확인</span>
+        </div>
+        <h3>UI 코드 생성 자동화를 프로덕션까지 <span style="font-weight:400; color:var(--text-muted); font-size: 14px;">(발표자 손효정)</span></h3>
+        <p class="stat-pill">9명 팀 · 실제 프로덕션 도입</p>
+        <p class="desc">Figma MCP + Cursor 조합으로 UI 개발을 실제 서비스까지 도입했다.
+          "디자인팀과 1px로 싸울 일이 없다"는 발표자 문구를 참석 후기 2건이 독립적으로
+          최고 세션으로 꼽으며 인용했다.</p>
+        <details>
+          <summary>후기 출처 보기</summary>
+          <blockquote>
+            devocean.sk.com과 flikary.dev, 서로 무관한 참석자 두 명이 각자 후기에서
+            이 세션을 "국내에서는 거의 최초" 수준의 프로덕션 적용 사례로 꼽았다.
+            <span class="src">
+              <a href="https://devocean.sk.com/blog/techBoardDetail.do?ID=167748" target="_blank" rel="noopener">devocean.sk.com</a> ·
+              <a href="https://flikary.dev/blog/feconf-2025" target="_blank" rel="noopener">flikary.dev</a>
+            </span>
+          </blockquote>
+        </details>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">원티드랩</span>
+          <span class="case-date">2026</span>
+          <span class="badge-verified">원문 대조</span>
+          <span class="badge-caution">자체 발표</span>
+        </div>
+        <h3><a href="https://platum.kr/archives/284141" target="_blank" rel="noopener">AI 기반 에이전틱 디자인 시스템 '몽타주' — 기획~개발 90% 단축</a></h3>
+        <p class="stat-pill">기획~개발 3~4주 → 2~3일 (최대 90%)</p>
+        <p class="desc">자체 구축한 전용 MCP로 AI와 디자인 시스템을 직접 연결했다는 것이 핵심.
+          플래텀(스타트업 전문 매체)의 보도이지만, 수치는 원티드랩의 자체 발표를 그대로 인용한
+          것이라 제3자 검증은 없다.</p>
+        <details>
+          <summary>원문 인용 보기</summary>
+          <blockquote>
+            "내부 테스트에서는 기획부터 개발까지 평균 3~4주 소요되던 업무를 2~3일 수준으로
+            단축해 최대 90%의 시간 절감 효과를 확인했다."
+            <span class="src">— 플래텀, 원티드랩 관계자 인용</span>
+          </blockquote>
+        </details>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">팀스파르타 (Stack)</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://gamguma.dev/post/2025/06/design-system-mcp" target="_blank" rel="noopener">Cursor가 디자인 시스템 컴포넌트를 모르는 게 답답해서 — MCP 도입기</a></h3>
+        <p class="stat-pill">컴포넌트 정보 검색 2~3분 → 10~20초</p>
+        <p class="desc">개인 개발 블로그지만 회사명(팀스파르타 Stack)이 명시돼 있다.
+          전체 문서를 텍스트로 넘기는 LLMs.txt 방식(397,180토큰) 대신, 필요한 만큼만
+          꺼내 오는 MCP 툴 6종을 직접 설계했다.</p>
+        <details>
+          <summary>원문 인용 보기</summary>
+          <blockquote>
+            "기존: 스토리북 → 컴포넌트 페이지 → props 테이블 확인 (평균 2-3분) /
+            MCP 도입 후: AI에게 질문 → 즉시 답변 (평균 10-20초)."
+          </blockquote>
+        </details>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">카카오뱅크</span>
+        </div>
+        <h3><a href="https://www.figma.com/ko-kr/customers/kakaobank-faster-design-delivery-with-figma" target="_blank" rel="noopener">Figma 고객 사례: 디자인 효율성 30% 개선</a></h3>
+        <p class="desc">디자인 프로세스 효율 30% 개선, 온보딩 속도 향상. AI를 직접 언급하지는
+          않아 참고용으로만 남겼다.</p>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">인프랩 (Inflearn)</span>
+          <span class="case-date">2026.06.06</span>
+        </div>
+        <h3><a href="https://tech.inflab.com/20260606-ds-migration-ai" target="_blank" rel="noopener">AI로 디자인시스템 마이그레이션하기 1편</a></h3>
+        <p class="desc">Mantine 기반 DS를 AI로 마이그레이션. 수치는 약하지만
+          "AI는 토대가 있어야 동료가 된다"는 결론이 참고할 만하다.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="category">
+    <div class="cat-head">
+      <p class="cat-num">02 / 05</p>
+      <h2>AI 대응 구조로 재설계한 사례</h2>
+      <p class="cat-desc">가장 정교한 설계는 우아한형제들이다. 3단계로 나눠 3년치 데이터를 쌓았다.</p>
+    </div>
+
+    <div class="case-list">
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">우아한형제들</span>
+          <span class="case-date">WOOWACON 2025</span>
+          <span class="badge-cross">교차확인</span>
+        </div>
+        <h3><a href="https://www.youtube.com/watch?v=HTHcsVgI_CM" target="_blank" rel="noopener">당연해진 디자인시스템, 그다음 이야기: AST와 MCP로 여는 미래</a></h3>
+        <p class="stat-pill">연 1,000건 티켓 · 3년치 데이터를 MCP로 통합</p>
+        <p class="desc">1단계 — Figma API + Babel AST 분석으로 토큰 미준수 컴포넌트를
+          대시보드화("Atelier Analytics"). 2단계 — 하드코딩 스타일을 토큰으로 바꾸는
+          Codemod 자동화. 3단계 — Figma·Storybook 문서와 3년치 공방 데이터를 MCP로 통합해
+          퍼지 매칭(Levenshtein)으로 오타까지 자동 교정했다.</p>
+        <details>
+          <summary>후기 원문 보기</summary>
+          <blockquote>
+            "공통 문서, Figma 가이드, Storybook 문서 등 흩어진 정보를 모두 통합하였습니다. …
+            이렇게 3년간 축적된 공방 데이터를 통해 AI가 참고 가능한 '내부 데이터베이스'가
+            완성되게 됩니다!"
+            <span class="src">
+              <a href="https://dev-tomato.tistory.com/35" target="_blank" rel="noopener">dev-tomato.tistory.com</a> ·
+              <a href="https://velog.io/@qorgkr26/woowacon-2025" target="_blank" rel="noopener">velog.io/@qorgkr26</a> 두 참석자의 후기가 서로 다른 각도에서 같은 세션을 뒷받침한다
+            </span>
+          </blockquote>
+        </details>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">우아한형제들</span>
+          <span class="case-date">2026.05.22</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://techblog.woowahan.com/26319" target="_blank" rel="noopener">우아한공방의 새로운 동료: 시스템 맥락을 가진 챗봇서비스 (feat. RAG)</a></h3>
+        <p class="desc">AWS Bedrock Knowledge Bases + OpenSearch Serverless로 RAG 챗봇을
+          <code>Storybook</code> 내부에 직접 임베드했다. 컴포넌트명 오타(버턴→버튼)까지
+          보정하는 메타데이터 필터링 구조가 핵심.</p>
+        <details>
+          <summary>원문 인용 보기</summary>
+          <blockquote>
+            "디자인시스템플랫폼팀은 단순히 컴포넌트를 제공하는 것을 넘어, AI를 활용해
+            디자인시스템의 정보를 더 쉽게 전달하고, 코드를 생성하거나 수정하며, 나아가
+            사용자의 아이디어 만으로도 서비스 UI를 구현할 수 있는 환경을 만들어가고 있습니다."
+            <span class="src">— 우아한형제들 권현아 · 성민제, 2026.05.22</span>
+          </blockquote>
+        </details>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">우아한형제들</span>
+          <span class="case-date">2026.07.07</span>
+        </div>
+        <h3><a href="https://techblog.woowahan.com/26459" target="_blank" rel="noopener">AI가 내 프롬프트를 흘려듣는 이유</a></h3>
+        <p class="desc">디자인 시스템 안에서 MCP 서버를 직접 개발하며 실패를 반복하다,
+          context engineering(lost-in-the-middle, 컨텍스트 큐레이션)을 다시 배운 과정.</p>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">토스</span>
+          <span class="case-date">GitHub 오픈소스</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://github.com/toss/apps-in-toss-ax" target="_blank" rel="noopener">apps-in-toss-ax</a></h3>
+        <p class="desc">AI 어시스턴트가 미니앱을 개발하도록 설계된 MCP/CLI 툴킷.
+          <code>search_tds_web_docs</code> 등 TDS(Toss Design System) 전용 문서 검색
+          MCP 도구를 코드 배포 워크플로우 전체에 내장했다 — 지금까지 찾은 사례 중
+          가장 제품화된 형태다.</p>
+        <details>
+          <summary>도구 목록 보기</summary>
+          <blockquote>
+            <code>search_docs</code> · <code>get_doc</code> ·
+            <code>search_tds_rn_docs</code> · <code>get_tds_rn_doc</code> ·
+            <code>search_tds_web_docs</code> · <code>get_tds_web_doc</code>
+            <span class="src">— GitHub toss/apps-in-toss-ax README, ★24</span>
+          </blockquote>
+        </details>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">카카오페이</span>
+          <span class="case-date">Figma Maker Collective Seoul 2026</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://www.youtube.com/watch?v=ebw2DaQ60aY" target="_blank" rel="noopener">FIT Design System 2.0: AI가 읽을 수 있는 디자인 시스템</a></h3>
+        <p class="stat-pill">적용률 88% (목표 80%) · 4개 플랫폼 스펙 통일</p>
+        <p class="desc">적용률은 목표를 초과했지만 "임의 수정·이름만 같고 실제로는 다른
+          컴포넌트 사용"이 많다는 문제의식에서 재설계를 시작했다. 웹·Android·iOS·
+          React Native 4개 플랫폼의 컴포넌트 스펙을 통일해, 같은 프롬프트로 여러
+          플랫폼을 동시에 개발할 수 있게 만들었다.</p>
+        <details>
+          <summary>발표 대본 인용 보기</summary>
+          <blockquote>
+            "저희 디자인 시스템 적용률 목표는 80%였고 실제 달성은 약 88%였습니다.
+            … 적용률은 높았지만 올바르게 쓰이고 있는지는 별개의 문제였습니다."
+            <span class="src">— 카카오페이 디자인 시스템 리드 "애니", 2026.07.14</span>
+          </blockquote>
+        </details>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">네이버파이낸셜</span>
+          <span class="case-date">NAVER ENGINEERING DAY 2025</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://d2.naver.com/helloworld/3442203" target="_blank" rel="noopener">디자인시스템이 AI를 만났을 때</a></h3>
+        <p class="desc">설계 판단이 흥미롭다. <strong>MCP 대신 인스트럭션 방식을 먼저 택했다.</strong>
+          Figma Code Connect 연결에 한 달 넘게 걸렸고, 아이콘은 Figma API로 Code Connect를
+          자동 생성했다.</p>
+        <details>
+          <summary>발표 대본 인용 보기</summary>
+          <blockquote>
+            "이거는 사실 저희가 정보를 제공을 해야 돼요. … 저희는 이번 발표에서는
+            인스트럭션을 했어요. 왜 그러냐면 많은 시행착오를 거쳐서 … MCP를 하기에는
+            너무 변경 포인트가 많아서 우선 인스트럭션으로 잡아보고, 향후 안정화되면
+            MCP로 제공할 수도 있겠죠."
+            <span class="src">— 네이버파이낸셜 손찬욱, 2025.10</span>
+          </blockquote>
+        </details>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">블룸에이아이 (BlumnAI)</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://blog.blumn.ai/ai-design-system-rulebook" target="_blank" rel="noopener">AI가 이해하는 디자인 시스템 구축하기</a></h3>
+        <p class="desc">'Sort UI' 디자인 시스템에 금지 패턴·결정 트리를 규칙서로 정리했다.
+          Figma 변수보다 <code>Storybook</code>(코드)을 기준점으로 삼은 이유가 명확하다 —
+          "문서는 낡아도 코드는 거짓말을 하지 않는다."</p>
+        <details>
+          <summary>원문 인용 보기</summary>
+          <blockquote>
+            "변수만 주면 AI가 알아서 해줄 줄 알았다 … 설령 디자인 시스템의 토큰과
+            컴포넌트를 모두 넘겨줬다고 해도, AI는 이를 하나의 체계가 아니라 조합
+            가능한 재료 목록처럼 다뤘습니다."
+          </blockquote>
+        </details>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="category">
+    <div class="cat-head">
+      <p class="cat-num">03 / 05</p>
+      <h2>디자이너의 일하는 방식이 바뀐 사례</h2>
+      <p class="cat-desc">AI로 직접 제품을 만들거나, 규칙을 시스템화해 개발자가 디자이너 없이 UI를 만들게 된 사례.</p>
+    </div>
+
+    <div class="case-list">
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">토스</span>
+          <span class="case-date">2025.05.13</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://toss.tech/article/removing_designers_in_ai_era" target="_blank" rel="noopener">AI 시대에 디자이너로 살아남기</a></h3>
+        <p class="desc">정산 UI의 반복 화면을 규칙으로 시스템화했더니, 개발자가 디자이너
+          없이 UI를 직접 만들기 시작했다. 지금은 MCP로 AI가 토스 자체 디자인 툴을
+          직접 조작하는 실험 중이며, <strong>이미 AI가 디자인한 화면이 실제 제품에
+          쓰이고 있다</strong>고 명시한다.</p>
+        <details>
+          <summary>원문 인용 보기</summary>
+          <blockquote>
+            "규칙을 만든지 반년쯤 지난 어느 날, … 프론트엔드 개발자가 저 없이도
+            UI를 만들고 있는 거예요. … 이쯤 되니 진짜로 '디자이너를 없앤다'는
+            실험이 현실이 되어가고 있다는 느낌이 들었어요."
+            <span class="src">— 토스 이다윗, Product Designer, 2025.05.13</span>
+          </blockquote>
+        </details>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">토스</span>
+        </div>
+        <h3><a href="https://toss.tech/article/deadend" target="_blank" rel="noopener">디자이너가 시안 대신 앱을 만든 이유</a></h3>
+        <p class="desc">Xcode·SwiftUI 경험이 전혀 없는 디자이너가 AI로 동작하는 iOS
+          프로토타입(Metal 셰이더 애니메이션 포함)을 직접 구현했다. 코드 저장소를
+          그대로 개발자에게 전달했더니 첫 빌드가 디자인과 거의 일치했다.</p>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">배달의민족</span>
+          <span class="case-date">WOOWACON 2025</span>
+        </div>
+        <h3><a href="https://www.youtube.com/watch?v=R9xqcIuhXSI" target="_blank" rel="noopener">같은 시간, 더 나은 디자인을 할 수 있는 방법</a></h3>
+        <p class="desc">클릭 한 번으로 실데이터를 Figma 시안에 반영하는 "데이터 브릿지",
+          디자인 QA를 끝내는 크롬 익스텐션 "티켓 브릿지". DesignOps 발표.</p>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">오픈패스 (듀오톤 인터뷰)</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://blog.openpath.kr/design-system-importance-ai-designers" target="_blank" rel="noopener">AI 시대, 디자이너에게 '디자인 시스템'이 더 중요해지는 이유</a></h3>
+        <p class="stat-pill">이틀 만에 동작하는 앱 완성</p>
+        <p class="desc">원티드 디자인 시스템(Montage) 소스를 Claude에 올려 카페 기록 앱을
+          이틀 만에 완성했다. 컴포넌트 정확도를 높이려면 전용 <code>wds-mcp</code>를
+          연결하라는 실질적인 팁도 남겼다.</p>
+        <details>
+          <summary>원문 인용 보기</summary>
+          <blockquote>
+            "결과는 놀라웠어요. 구글 맵까지 연결된, 실제로 작동하는 카페 로그 앱이
+            단 이틀 만에 만들어졌거든요. … 원티드의 경우 전용 wds-mcp를 연결해서
+            AI의 컴포넌트 사용 정확도를 훨씬 높일 수 있다는 실질적인 팁도 얻었죠."
+            <span class="src">— 듀오톤 디자이너 고민아 인터뷰, 2026.04.16</span>
+          </blockquote>
+        </details>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">여기어때</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://techblog.gccompany.co.kr/디자이너의-상상을-현실로-여기어때-아이콘-생성기-077fa8b6d795" target="_blank" rel="noopener">디자이너의 상상을 현실로: 여기어때 아이콘 생성기 제작기</a></h3>
+        <p class="desc">YDS(여기어때 디자인 시스템) 스타일을 지키는 AI 아이콘 생성·벡터화
+          파이프라인. 멀티 뷰 분할 프롬프트로 2D·3D를 한 번에 뽑는다.</p>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">개인 (Angular 조직)</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://medium.com/@nexttonone/ai%EB%A1%9C-design-system%EC%9D%84-%EB%A7%8C%EB%93%A4%EB%A9%B0-%EB%B0%B0%EC%9A%B4-%EA%B2%83%EB%93%A4-3%ED%8E%B8-dfa9a24e2304" target="_blank" rel="noopener">AI로 Design System을 만들며 배운 것들 — 1~3편</a></h3>
+        <p class="desc">디자이너가 직접 Claude Code로 컴포넌트 PR을 썼다. 규칙을
+          문서로만 두면 지켜지지 않는다는 걸 깨닫고, 위반 시 다음 단계로 못 넘어가는
+          <code>생성 → 로컬 검증 → PR → CI 재검증 → merge</code> 파이프라인으로 바꿨다.</p>
+        <details>
+          <summary>원문 인용 보기</summary>
+          <blockquote>
+            "나는 규칙을 더 많이 설명할수록 AI가 더 잘할 거라고 믿었다. 틀렸다. …
+            AI에게 '우리 시스템대로 만들어줘'라고 말하는 건 선언이다. AI가 우리
+            시스템대로 만들 수밖에 없게 만드는 건 운영이다."
+            <span class="src">— Eunae Noh, 2026.04.30</span>
+          </blockquote>
+        </details>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">개인 (brunch)</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://brunch.co.kr/@dad8d14cac41474/23" target="_blank" rel="noopener">AI로 일관된 결과가 나오는 디자인 시스템 만들기</a></h3>
+        <p class="desc">shadcn 기반 컴포넌트를 Primitive/Enforced 2계층으로 나누고,
+          MCP로 별도 저장소의 디자인 시스템을 읽게 했다. 훅으로 강제 검증까지 자동화했다.</p>
+        <details>
+          <summary>원문 인용 보기</summary>
+          <blockquote>
+            "AI에게 지침은 반드시 지켜야 하는 규칙이 아니라 참고하는 자료다. …
+            대신 둘을 이어줄 통로가 필요했고, 거기에 MCP를 썼다. AI가 제품 화면을
+            그릴 때 다른 저장소에 있는 디자인 시스템을 꺼내 볼 수 있게 열어주는
+            통로라고 보면 된다."
+          </blockquote>
+        </details>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="category">
+    <div class="cat-head">
+      <p class="cat-num">04 / 05</p>
+      <h2>근원: 모요 · 당근</h2>
+      <p class="cat-desc">이 조사의 출발점이 된, 이미 알려진 두 건.</p>
+    </div>
+
+    <div class="case-list">
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">모요</span>
+          <span class="badge-verified">원문 대조</span>
+        </div>
+        <h3><a href="https://tech.moyoplan.com/posts/ax-designstudio" target="_blank" rel="noopener">화면을 그리는 디자이너에서, 규칙을 설계하는 디자이너로</a></h3>
+        <p class="desc">AX팀이 자체 AI 디자인 툴을 직접 만들어, 토큰·컴포넌트 라이브러리를
+          AI가 따르게 했다. AI가 자기 화면을 스크린샷으로 찍어 스스로 검수하는
+          루프까지 만들었다.</p>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">당근</span>
+        </div>
+        <h3><a href="https://medium.com/daangn/프롬프트-한-줄로-화면이-나오는-시대-당근스러운-화면을-만드는-법-0bc268f819c7" target="_blank" rel="noopener">프롬프트 한 줄로 화면이 나오는 시대, '당근스러운 화면'을 만드는 법</a></h3>
+        <p class="desc">SEED 디자인 시스템 규칙을 스킬 모듈로 쪼개 AI 에이전트(Kraft)에
+          로드시킨다. 어드민 → CLI → 에이전트 순으로 발전한 Plan/Orchestra 구조를 다룬다.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="category">
+    <div class="cat-head">
+      <p class="cat-num">05 / 05</p>
+      <h2>매체 기고 · 칼럼</h2>
+      <p class="cat-desc">1차 사례는 아니지만, 방법론을 정리한 2차 콘텐츠.</p>
+    </div>
+
+    <div class="case-list">
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">코리아메타버스저널</span>
+        </div>
+        <h3><a href="https://www.kmjournal.net/news/articleView.html?idxno=11096" target="_blank" rel="noopener">AI디자인 실전 #01~#08 시리즈</a></h3>
+        <p class="desc">올림플래닛 디자인 총괄 김민우의 연재 칼럼. "프로젝트 루트에
+          <code>CLAUDE.md</code>가 있는가", "컴포넌트의 모든 상태(Hover/Loading/Disabled)가
+          명시돼 있는가" 같은 실무 체크리스트를 제공한다.</p>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">요즘IT</span>
+        </div>
+        <h3><a href="https://yozm.wishket.com/magazine/detail/3885" target="_blank" rel="noopener">AI 에이전트와 함께 쓰는 기획/디자인 도구 6가지</a></h3>
+        <p class="desc">DESIGN.md(구글랩스), shadcn/ui MCP, taste-skill 등 도구를
+          정리했다. 국내 기업 사례는 아니고 도구 소개 위주다.</p>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">Figma Korea 웨비나</span>
+        </div>
+        <h3>AI + 디자인 시스템으로 더 스마트하게 개발하는 법</h3>
+        <p class="desc">단군소프트(Figma 한국 파트너사) 발표. Figma Make로 상태값까지
+          프로토타입화하는 실연을 포함한다. 텍스트 아티클이 아니라 영상 자료다.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <div class="method">
+    <h2>조사 방법 메모</h2>
+    <p>
+      <strong>1차 조사(기업 기술 블로그 검색)는 부족했다.</strong> 모요·당근처럼 회사
+      기술 블로그에 실린 것만 찾다 보니 소넷 수준의 검색 깊이로는 15건 안팎에서
+      멈췄다. <strong>컨퍼런스 발표(WOOWACON · FEConf · NAVER ENGINEERING DAY ·
+      Figma Maker Collective)와 회사 자체 매거진</strong>까지 넓히자 훨씬 밀도
+      높은 자료가 나왔다 — 특히 오늘의집(버킷플레이스)의 <code>bucketplace.com/culture</code>는
+      기술 블로그가 아니라 컬처 매거진이라 처음 검색에서 완전히 놓쳤던 소스다.
+    </p>
+    <p>
+      velopers.kr의 다른 태그 페이지(<code>#자동화</code> · <code>#Figma</code> ·
+      <code>#컴포넌트</code> · <code>#토큰</code>)까지 확인했지만 새로운 사례는
+      거의 없었다.
+    </p>
+    <p>
+      시도했지만 AI × 디자인시스템을 직접 연결하는 자료를 찾지 못한 회사:
+      쿠팡, 무신사, 컬리, 왓챠, 뱅크샐러드, 라인(LY Corp), 크몽, 리멤버, 데이블,
+      스포카, 캐시노트, 그리팅/두들린, 뤼튼, 업스테이지, 카카오(본사), 카카오뱅크.
+    </p>
+  </div>
+
+  <footer class="page-end">
+    analysis/next-candidates/korean-startup-ds-blogs.md · claude code 조사, 2026.08.19
+  </footer>
+
+</div>
