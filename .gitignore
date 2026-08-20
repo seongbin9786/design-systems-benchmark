@@ -3,5 +3,7 @@
 sources/*/
 # 차기 후보 분석용 소스 — 재현: sources-candidates/clone.sh
 sources-candidates/*/
+# 개인 학습 기록 — 커밋하지 않음
+learning/
 __pycache__/
 .vercel
