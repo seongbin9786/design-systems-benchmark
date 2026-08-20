@@ -1,0 +1,1788 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>시드 색 이름 사전</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap">
+</head>
+<body>
+<style>
+/* ─────────────────────────────────────────────
+   페이지 크롬: 거의 무채색.
+   이 문서에서 채도 있는 색은 전부 '토큰 견본'이다.
+   ───────────────────────────────────────────── */
+:root {
+  --paper:      #fbfbfc;
+  --paper-2:    #f2f3f6;
+  --ink:        #17191d;
+  --ink-2:      #5c6470;
+  --ink-3:      #8b929c;
+  --rule:       #e3e6eb;
+  --rule-2:     #cdd2da;
+  --accent:     #345470;
+  --accent-bg:  #eaeff4;
+  --code-bg:    #f0f1f4;
+  --flag:       #8a4a1f;
+  --flag-bg:    #f8efe7;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:     #131519;
+    --paper-2:   #1b1e24;
+    --ink:       #e7e9ec;
+    --ink-2:     #a2aab5;
+    --ink-3:     #79818c;
+    --rule:      #2b3038;
+    --rule-2:    #3b424c;
+    --accent:    #9dbcd6;
+    --accent-bg: #1b2732;
+    --code-bg:   #1e2228;
+    --flag:      #d9a276;
+    --flag-bg:   #2a2119;
+  }
+}
+:root[data-theme="dark"] {
+  --paper:     #131519;
+  --paper-2:   #1b1e24;
+  --ink:       #e7e9ec;
+  --ink-2:     #a2aab5;
+  --ink-3:     #79818c;
+  --rule:      #2b3038;
+  --rule-2:    #3b424c;
+  --accent:    #9dbcd6;
+  --accent-bg: #1b2732;
+  --code-bg:   #1e2228;
+  --flag:      #d9a276;
+  --flag-bg:   #2a2119;
+}
+
+/* ─────────────────────────────────────────────
+   Seed 실측 토큰. 미리보기 패널 안에서만 쓴다.
+   출처: packages/rootage/color.yaml (lastUpdated 26-06-15)
+   ───────────────────────────────────────────── */
+.seed {
+  --t-layer-basement:   #f3f4f5;
+  --t-layer-default:    #ffffff;
+  --t-bg-disabled:      #f3f4f5;
+
+  --t-bg-brand-solid:       #ff6600;
+  --t-bg-brand-weak:        #fff2ec;
+  --t-bg-critical-solid:    #fa342c;
+  --t-bg-critical-weak:     #fdf0f0;
+  --t-bg-positive-solid:    #079171;
+  --t-bg-positive-weak:     #edfaf6;
+  --t-bg-warning-solid:     #fbdc65;
+  --t-bg-warning-weak:      #fff7de;
+  --t-bg-info-solid:        #217cf9;
+  --t-bg-info-weak:         #eff6ff;
+
+  --t-bg-neutral-solid:        #1a1c20;
+  --t-bg-neutral-solid-muted:  #555d6d;
+  --t-bg-neutral-weak:         #f3f4f5;
+  --t-bg-neutral-inverted:     #2a3038;
+
+  --t-fg-brand:            #ff6600;
+  --t-fg-brand-contrast:   #e14d00;
+  --t-fg-critical:         #fa342c;
+  --t-fg-critical-contrast:#921708;
+  --t-fg-positive:         #079171;
+  --t-fg-positive-contrast:#075445;
+  --t-fg-warning:          #9b7821;
+  --t-fg-warning-contrast: #4f3e1f;
+  --t-fg-info:             #217cf9;
+  --t-fg-info-contrast:    #0b4596;
+
+  --t-fg-neutral:          #1a1c20;
+  --t-fg-neutral-muted:    #555d6d;
+  --t-fg-neutral-subtle:   #868b94;
+  --t-fg-placeholder:      #b0b3ba;
+  --t-fg-disabled:         #d1d3d8;
+  --t-fg-neutral-inverted: #ffffff;
+
+  --t-st-brand-weak:       #ffd5c0;
+  --t-st-critical-weak:    #fed4d2;
+  --t-st-positive-weak:    #b9e9d2;
+  --t-st-warning-weak:     #fbdc65;
+  --t-st-info-weak:        #cbdffa;
+  --t-st-neutral-contrast: #1a1c20;
+  --t-st-neutral-solid:    #555d6d;
+  --t-st-neutral-weak:     #dcdee3;
+  --t-st-neutral-muted:    #00000010;
+  --t-st-neutral-subtle:   #0000000c;
+
+  --t-static-white:        #ffffff;
+  --t-on-warning:          #000000d0;
+}
+.seed[data-seed="dark"] {
+  --t-layer-basement:   #000000;
+  --t-layer-default:    #16171b;
+  --t-bg-disabled:      #2b2e35;
+
+  --t-bg-brand-solid:       #ff6600;
+  --t-bg-brand-weak:        #31241f;
+  --t-bg-critical-solid:    #f73526;
+  --t-bg-critical-weak:     #322323;
+  --t-bg-positive-solid:    #117956;
+  --t-bg-positive-weak:     #202926;
+  --t-bg-warning-solid:     #dab156;
+  --t-bg-warning-weak:      #302819;
+  --t-bg-info-solid:        #1e82eb;
+  --t-bg-info-weak:         #202742;
+
+  --t-bg-neutral-solid:        #2b2e35;
+  --t-bg-neutral-solid-muted:  #393d46;
+  --t-bg-neutral-weak:         #2b2e35;
+  --t-bg-neutral-inverted:     #f3f4f5;
+
+  --t-fg-brand:            #ff6600;
+  --t-fg-brand-contrast:   #ff6600;
+  --t-fg-critical:         #ff6e60;
+  --t-fg-critical-contrast:#f8c5c3;
+  --t-fg-positive:         #22b27f;
+  --t-fg-positive-contrast:#93e5c0;
+  --t-fg-warning:          #ca901c;
+  --t-fg-warning-contrast: #e5d49b;
+  --t-fg-info:             #41a2f9;
+  --t-fg-info-contrast:    #b9d7fb;
+
+  --t-fg-neutral:          #f3f4f5;
+  --t-fg-neutral-muted:    #dcdee3;
+  --t-fg-neutral-subtle:   #b0b3ba;
+  --t-fg-placeholder:      #868b94;
+  --t-fg-disabled:         #5b606a;
+  --t-fg-neutral-inverted: #16171b;
+
+  --t-st-brand-weak:       #6b311c;
+  --t-st-critical-weak:    #742826;
+  --t-st-positive-weak:    #20493b;
+  --t-st-warning-weak:     #543e15;
+  --t-st-info-weak:        #1a4275;
+  --t-st-neutral-contrast: #f3f4f5;
+  --t-st-neutral-solid:    #dcdee3;
+  --t-st-neutral-weak:     #393d46;
+  --t-st-neutral-muted:    #ffffff17;
+  --t-st-neutral-subtle:   #ffffff0d;
+
+  --t-static-white:        #ffffff;
+  --t-on-warning:          #000000d0;
+}
+
+/* ─────────── 기본 ─────────── */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo",
+               system-ui, -apple-system, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.78;
+  -webkit-text-size-adjust: 100%;
+  word-break: keep-all;
+}
+main { max-width: 1120px; margin: 0 auto; padding: 0 22px 140px; }
+.col { max-width: 720px; margin-left: auto; margin-right: auto; }
+p { margin: 0 0 1.05em; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+code, .mono, th.mono, td.mono {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+code {
+  font-size: .855em;
+  background: var(--code-bg);
+  padding: .12em .38em;
+  border-radius: 4px;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* ─────────── 표제 ─────────── */
+.masthead {
+  border-bottom: 2px solid var(--ink);
+  padding: 76px 0 26px;
+  margin-bottom: 14px;
+}
+.masthead .kicker {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 18px;
+}
+h1 {
+  font-family: "Noto Serif KR", serif;
+  font-weight: 700;
+  font-size: clamp(34px, 6vw, 52px);
+  line-height: 1.24;
+  letter-spacing: -.01em;
+  margin: 0 0 18px;
+  text-wrap: balance;
+}
+.masthead .standfirst {
+  font-size: 17px;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 44em;
+}
+.colophon {
+  display: flex; flex-wrap: wrap; gap: 8px 22px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11.5px; color: var(--ink-3);
+  padding: 12px 0 60px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 60px;
+}
+
+/* ─────────── 섹션 ─────────── */
+section { margin: 0 0 84px; }
+h2 {
+  font-family: "Noto Serif KR", serif;
+  font-weight: 700;
+  font-size: clamp(23px, 3.4vw, 29px);
+  line-height: 1.4;
+  margin: 0 0 6px;
+  text-wrap: balance;
+}
+h2 .num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: .55em;
+  font-weight: 400;
+  color: var(--ink-3);
+  margin-right: .8em;
+  vertical-align: .18em;
+}
+.dek { color: var(--ink-2); font-size: 15.5px; margin: 0 0 34px; }
+h3 {
+  font-family: "Noto Serif KR", serif;
+  font-weight: 500;
+  font-size: 19px;
+  margin: 40px 0 12px;
+}
+
+/* ─────────── 문법 분해도 ─────────── */
+.syntax {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 26px 20px 20px;
+  overflow-x: auto;
+}
+.syntax-line {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 15px;
+  white-space: nowrap;
+  display: flex;
+  gap: 0;
+}
+.syntax-line span { padding: 0; }
+.sy-prop { color: #2f7d6b; font-weight: 700; }
+.sy-role { color: #9c5b13; font-weight: 700; }
+.sy-var  { color: #7a4bb5; font-weight: 700; }
+.sy-state{ color: #3a6ea8; font-weight: 700; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .sy-prop { color: #6fd0b6; }
+  :root:not([data-theme="light"]) .sy-role { color: #e0a35c; }
+  :root:not([data-theme="light"]) .sy-var  { color: #c3a2f0; }
+  :root:not([data-theme="light"]) .sy-state{ color: #86b6e8; }
+}
+:root[data-theme="dark"] .sy-prop { color: #6fd0b6; }
+:root[data-theme="dark"] .sy-role { color: #e0a35c; }
+:root[data-theme="dark"] .sy-var  { color: #c3a2f0; }
+:root[data-theme="dark"] .sy-state{ color: #86b6e8; }
+
+.syntax-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px 20px;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--rule-2);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+.syntax-legend dt {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  margin-bottom: 2px;
+}
+.syntax-legend dd { margin: 0; color: var(--ink-2); }
+
+/* ─────────── 사전 항목 ─────────── */
+.entry {
+  border-top: 1px solid var(--rule);
+  padding: 30px 0 26px;
+  display: grid;
+  grid-template-columns: 168px 1fr;
+  gap: 8px 30px;
+  align-items: start;
+}
+.entry:last-of-type { border-bottom: 1px solid var(--rule); }
+.entry-head { position: sticky; top: 18px; }
+.headword {
+  font-family: "Noto Serif KR", serif;
+  font-weight: 700;
+  font-size: 25px;
+  line-height: 1.2;
+  margin: 0 0 8px;
+  letter-spacing: -.01em;
+}
+.pos {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--ink-3);
+  display: block;
+  margin-bottom: 14px;
+}
+.chip-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  width: 34px; height: 34px;
+  border-radius: 7px;
+  border: 1px solid var(--t-st-neutral-muted, rgba(0,0,0,.12));
+  flex: none;
+}
+.gloss { margin: 0 0 14px; font-size: 17px; }
+.gloss b { font-weight: 700; }
+.entry-note { color: var(--ink-2); font-size: 15px; margin: 0 0 14px; }
+
+.spec {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 18px;
+  font-size: 13.5px;
+  border-left: 2px solid var(--rule-2);
+  padding: 4px 0 4px 16px;
+  margin: 0 0 6px;
+}
+.spec dt {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: .05em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  padding-top: 3px;
+}
+.spec dd { margin: 0; }
+.spec dd .mono { font-size: 12.5px; }
+
+/* ─────────── 미리보기 패널 ─────────── */
+.preview {
+  background: var(--t-layer-basement);
+  border: 1px solid var(--rule-2);
+  border-radius: 14px;
+  padding: 0;
+  overflow: hidden;
+  margin: 0 0 12px;
+}
+.preview-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px 10px 16px;
+  background: var(--paper-2);
+  border-bottom: 1px solid var(--rule);
+  flex-wrap: wrap;
+}
+.preview-bar .label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.toggle {
+  display: inline-flex;
+  border: 1px solid var(--rule-2);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--paper);
+}
+.toggle button {
+  font: inherit;
+  font-size: 12.5px;
+  font-family: "JetBrains Mono", monospace;
+  padding: 5px 15px;
+  border: 0;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.toggle button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
+}
+.preview-body { padding: 22px 18px; }
+.screen {
+  background: var(--t-layer-default);
+  border-radius: 10px;
+  padding: 18px;
+}
+
+/* 배지 데모 */
+.badge-grid {
+  display: grid;
+  grid-template-columns: 92px repeat(3, 1fr);
+  gap: 10px 12px;
+  align-items: center;
+}
+.badge-grid .rowlab, .badge-grid .collab {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: var(--t-fg-neutral-subtle);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 11px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+/* 눈금(ladder) */
+.ladder { display: grid; gap: 0; }
+.rung {
+  display: grid;
+  grid-template-columns: 62px minmax(0,1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px dashed var(--t-st-neutral-muted);
+}
+.rung:last-child { border-bottom: 0; }
+.rung .sw {
+  height: 30px; border-radius: 6px;
+  border: 1px solid var(--t-st-neutral-muted);
+}
+.rung .nm {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  color: var(--t-fg-neutral);
+  overflow-wrap: anywhere;
+}
+.rung .val {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11.5px;
+  color: var(--t-fg-neutral-subtle);
+  text-align: right;
+  white-space: nowrap;
+}
+.rung.fg .sw {
+  display: flex; align-items: center; justify-content: center;
+  background: var(--t-layer-default);
+  font-family: "Noto Serif KR", serif; font-weight: 700; font-size: 17px;
+}
+.rung.st .sw { background: var(--t-layer-default); border-width: 2px; }
+
+/* solid vs inverted 실험 */
+.flip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+}
+.flip-cell {
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 108px;
+  justify-content: center;
+}
+.flip-cell .k {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11.5px;
+  opacity: .82;
+}
+.flip-cell .v { font-size: 15px; font-weight: 700; }
+
+/* ─────────── 표 ─────────── */
+.tablewrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  margin: 0 0 12px;
+}
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td {
+  text-align: left;
+  padding: 9px 13px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+  white-space: nowrap;
+}
+thead th {
+  background: var(--paper-2);
+  font-size: 11.5px;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: .04em;
+  color: var(--ink-2);
+  font-weight: 700;
+  position: sticky; top: 0;
+}
+tbody tr:last-child td { border-bottom: 0; }
+tbody th {
+  font-weight: 700;
+  font-size: 13px;
+  background: var(--paper-2);
+  border-right: 1px solid var(--rule);
+}
+td.wrap, th.wrap { white-space: normal; min-width: 200px; }
+.dim { color: var(--ink-3); }
+.tnote {
+  font-size: 13px; color: var(--ink-3); margin: 0 0 34px;
+}
+
+/* ─────────── 강조 블록 ─────────── */
+.rule-box {
+  border: 1px solid var(--rule-2);
+  border-radius: 10px;
+  padding: 20px 22px;
+  background: var(--paper-2);
+  margin: 0 0 20px;
+}
+.rule-box h4 {
+  font-family: "Noto Serif KR", serif;
+  font-size: 17px; font-weight: 700;
+  margin: 0 0 8px;
+}
+.rule-box p:last-child { margin-bottom: 0; }
+
+.flag {
+  border-left: 3px solid var(--flag);
+  background: var(--flag-bg);
+  padding: 14px 18px;
+  border-radius: 0 8px 8px 0;
+  margin: 0 0 20px;
+  font-size: 15px;
+}
+.flag strong { color: var(--flag); }
+
+.principle {
+  border-top: 1px solid var(--rule);
+  padding: 22px 0 4px;
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 20px;
+}
+.principle .n {
+  font-family: "Noto Serif KR", serif;
+  font-size: 27px;
+  font-weight: 700;
+  color: var(--rule-2);
+  line-height: 1;
+  padding-top: 4px;
+}
+.principle h3 { margin: 0 0 8px; font-size: 18px; }
+.principle p:last-child { margin-bottom: 0; }
+
+/* ─────────── 근거 접기 ─────────── */
+details {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  margin: 0 0 12px;
+  background: var(--paper-2);
+}
+summary {
+  cursor: pointer;
+  padding: 13px 18px;
+  font-size: 14.5px;
+  font-weight: 700;
+  list-style: none;
+  display: flex; align-items: center; gap: 10px;
+}
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: "▸";
+  color: var(--ink-3);
+  font-size: 12px;
+  transition: transform .15s ease;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details .inner { padding: 0 18px 18px; }
+pre {
+  background: var(--code-bg);
+  border-radius: 8px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12.5px;
+  line-height: 1.7;
+  margin: 0 0 14px;
+}
+pre .c { color: var(--ink-3); }
+
+footer {
+  border-top: 2px solid var(--ink);
+  padding-top: 20px;
+  font-size: 13px;
+  color: var(--ink-3);
+  font-family: "JetBrains Mono", monospace;
+  line-height: 1.9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+@media (max-width: 720px) {
+  .entry { grid-template-columns: 1fr; gap: 14px; }
+  .entry-head { position: static; }
+  .badge-grid { grid-template-columns: 76px repeat(3, 1fr); gap: 8px; }
+  .rung { grid-template-columns: 48px minmax(0,1fr); }
+  .rung .val { grid-column: 2; text-align: left; }
+}
+</style>
+
+<main>
+
+<header class="masthead col">
+  <p class="kicker">Design Systems Benchmark / 당근 Seed</p>
+  <h1>시드 색 이름 사전</h1>
+  <p class="standfirst">
+    <code>solid</code> · <code>weak</code> · <code>muted</code> · <code>subtle</code> ·
+    <code>contrast</code> · <code>inverted</code>.
+    당근 Seed의 색 토큰에 붙는 이 여섯 단어가 각각 무슨 뜻인지, 왜 그렇게 나뉘는지 정리했다.
+    이어서 같은 개념을 다른 디자인 시스템 9종이 어떤 단어로 부르는지 대조한다.
+  </p>
+</header>
+
+<p class="colophon col">
+  <span>실측 원본 · packages/rootage/color.yaml</span>
+  <span>토큰 갱신일 · 26-06-15</span>
+  <span>비교 대상 · 9종</span>
+</p>
+
+<!-- ══════════════ 0. 토큰 이름 읽는 법 ══════════════ -->
+<section class="col">
+  <h2><span class="num">00</span>먼저, 토큰 이름 읽는 법</h2>
+  <p class="dek">여섯 단어는 토큰 이름의 세 번째 자리에 온다. 그 자리가 무슨 자리인지부터 본다.</p>
+
+  <div class="syntax">
+    <div class="syntax-line">
+      <span class="dim">$color.</span><span class="sy-prop">bg</span><span class="dim">.</span><span class="sy-role">brand</span><span class="dim">-</span><span class="sy-var">solid</span><span class="dim">-</span><span class="sy-state">pressed</span>
+    </div>
+    <div class="syntax-line" style="margin-top:6px">
+      <span class="dim">$color.</span><span class="sy-prop">fg</span><span class="dim">.</span><span class="sy-role">neutral</span><span class="dim">-</span><span class="sy-var">subtle</span>
+    </div>
+    <div class="syntax-line" style="margin-top:6px">
+      <span class="dim">$color.</span><span class="sy-prop">stroke</span><span class="dim">.</span><span class="sy-role">critical</span><span class="dim">-</span><span class="sy-var">weak</span>
+    </div>
+
+    <dl class="syntax-legend">
+      <div>
+        <dt class="sy-prop">Property</dt>
+        <dd>어디에 칠하나. <code>bg</code> 면, <code>fg</code> 글자와 아이콘, <code>stroke</code> 선.</dd>
+      </div>
+      <div>
+        <dt class="sy-role">Role</dt>
+        <dd>무슨 뜻인가. <code>brand</code> <code>neutral</code> <code>positive</code> <code>warning</code> <code>critical</code> <code>informative</code>.</dd>
+      </div>
+      <div>
+        <dt class="sy-var">Variant</dt>
+        <dd><b>이 문서가 다루는 자리다.</b> 같은 역할을 얼마나 세게 표현할지 정한다.</dd>
+      </div>
+      <div>
+        <dt class="sy-state">State</dt>
+        <dd>지금 어떤 상태인가. Seed는 주로 <code>pressed</code>를 쓴다.</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="rule-box" style="margin-top:26px">
+    <h4>한 줄 요약</h4>
+    <p>
+      Variant는 <b>그 property 안에서의 강조도 눈금</b>이다.
+      그래서 같은 단어라도 <code>bg</code>에 붙을 때와 <code>fg</code>에 붙을 때 뜻이 달라진다.
+      <code>bg</code>의 <code>weak</code>는 "아주 옅게 칠한 면"이고,
+      <code>fg</code>의 <code>subtle</code>는 "아주 흐린 글자"다.
+      이 점을 놓치면 여섯 단어가 끝까지 뒤섞인다.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════ 1. 사전 ══════════════ -->
+<section class="col">
+  <h2><span class="num">01</span>여섯 단어의 뜻</h2>
+  <p class="dek">
+    표제어마다 실제 hex 값을 붙였다. 견본은 라이트 모드 기준이다.
+    다크 모드에서 어떻게 달라지는지는 03장에서 확인한다.
+  </p>
+
+  <!-- solid -->
+  <div class="entry seed">
+    <div class="entry-head">
+      <p class="headword">solid</p>
+      <span class="pos">bg · stroke</span>
+      <div class="chip-row">
+        <span class="chip" style="background:var(--t-bg-brand-solid)"></span>
+        <span class="chip" style="background:var(--t-bg-critical-solid)"></span>
+        <span class="chip" style="background:var(--t-bg-positive-solid)"></span>
+      </div>
+    </div>
+    <div>
+      <p class="gloss">역할색을 <b>원색 그대로 꽉 채워 칠한다.</b> 강조도의 최댓값이다.</p>
+      <p class="entry-note">
+        화면에서 가장 중요한 액션 하나에 쓴다. 확인 버튼, 진행 버튼이 여기에 해당한다.
+        한 화면에 solid를 여러 개 두면 무엇이 중요한지 사라진다.
+      </p>
+      <dl class="spec">
+        <dt>실측</dt>
+        <dd><span class="mono">$color.bg.brand-solid</span> → <span class="mono">carrot-600 · #ff6600</span></dd>
+        <dt>위치</dt>
+        <dd>팔레트 600~700번대. 채도가 가장 높은 구간이다.</dd>
+        <dt>짝</dt>
+        <dd>그 위 글자는 <span class="mono">$color.palette.static-white</span>. 토큰이 아니라 고정 흰색이다.</dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- weak -->
+  <div class="entry seed">
+    <div class="entry-head">
+      <p class="headword">weak</p>
+      <span class="pos">bg · stroke</span>
+      <div class="chip-row">
+        <span class="chip" style="background:var(--t-bg-brand-weak)"></span>
+        <span class="chip" style="background:var(--t-bg-critical-weak)"></span>
+        <span class="chip" style="background:var(--t-bg-positive-weak)"></span>
+      </div>
+    </div>
+    <div>
+      <p class="gloss">같은 역할을 <b>아주 옅게 칠한다.</b> 뜻은 살리고 주목도만 낮춘다.</p>
+      <p class="entry-note">
+        배지, 콜아웃, 인라인 배너의 배경이다.
+        "이건 오류다"라는 의미는 전달해야 하지만 화면 전체를 빨갛게 만들 수는 없을 때 쓴다.
+      </p>
+      <dl class="spec">
+        <dt>실측</dt>
+        <dd><span class="mono">$color.bg.critical-weak</span> → <span class="mono">red-100 · #fdf0f0</span></dd>
+        <dt>위치</dt>
+        <dd>bg는 팔레트 100~200번대, stroke는 300번대.</dd>
+        <dt>짝</dt>
+        <dd>그 위 글자는 반드시 <b>contrast</b>다. 아래 항목을 본다.</dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- contrast -->
+  <div class="entry seed">
+    <div class="entry-head">
+      <p class="headword">contrast</p>
+      <span class="pos">fg · stroke</span>
+      <div class="chip-row">
+        <span class="chip" style="background:var(--t-bg-critical-weak);color:var(--t-fg-critical-contrast);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-weight:700;font-size:17px">가</span>
+        <span class="chip" style="background:var(--t-bg-positive-weak);color:var(--t-fg-positive-contrast);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-weight:700;font-size:17px">가</span>
+      </div>
+    </div>
+    <div>
+      <p class="gloss">
+        눈금의 <b>맨 위 칸</b>이다. 여섯 단어 중 유일하게 강조도를 <b>올리는</b> 쪽이다.
+      </p>
+      <p class="entry-note">
+        붙는 자리가 6개뿐이고, 자리마다 하는 일이 다르다.
+        <code>fg</code>에서는 대비 확보용이다.
+        <code>weak</code> 배경은 100번대라 매우 밝아서
+        맨몸 <code>fg.critical</code>(red-700)을 얹으면 APCA 대비가 아슬아슬하다.
+        그래서 red-900을 따로 만들어 두었다.
+      </p>
+      <p class="entry-note">
+        <code>stroke</code>에서는 대비가 아니라 <b>상태 표시</b>다.
+        Chip의 <code>selected</code>, SelectBox의 <code>selected</code>,
+        TextInput의 <code>focused</code> 세 곳에만 쓴다.
+        평소 흐린 선을 gray-1000으로 확 올려 "지금 이게 선택됐다"를 알린다.
+      </p>
+      <dl class="spec">
+        <dt>전체</dt>
+        <dd>
+          <span class="mono">fg.{brand, critical, informative, positive, warning}-contrast</span><br>
+          <span class="mono">stroke.neutral-contrast</span>
+        </dd>
+        <dt>실측</dt>
+        <dd>
+          <span class="mono">$color.fg.critical</span> → <span class="mono">red-700 · #fa342c</span><br>
+          <span class="mono">$color.fg.critical-contrast</span> → <span class="mono">red-900 · #921708</span>
+        </dd>
+        <dt>분포</dt>
+        <dd>
+          <code>fg</code>는 유채색 5종에만 있다. <code>fg.neutral-contrast</code>는 없다.
+          <code>fg.neutral</code>이 이미 gray-1000이라 더 올릴 칸이 없기 때문이다.
+          <code>stroke</code>는 반대로 neutral에만 있다.
+        </dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- muted -->
+  <div class="entry seed">
+    <div class="entry-head">
+      <p class="headword">muted</p>
+      <span class="pos">fg · stroke · bg</span>
+      <div class="chip-row">
+        <span class="chip" style="background:var(--t-layer-default);color:var(--t-fg-neutral-muted);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-weight:700;font-size:17px">가</span>
+        <span class="chip" style="background:var(--t-bg-neutral-solid-muted)"></span>
+      </div>
+    </div>
+    <div>
+      <p class="gloss">
+        <b>이름 앞부분의 약화형</b>이다. "기본에서 낮춘 것"이 아니다.
+      </p>
+      <p class="entry-note">
+        <code>-muted</code>는 접미사로 읽어야 한다.
+        기준은 그 앞에 적힌 이름이지, 어떤 절대적인 기본값이 아니다.
+        <code>bg.neutral-solid-muted</code>가 그 증거다. 기준이 <code>bg.neutral-solid</code>다.
+        보조 텍스트, 구분선처럼 안 읽어도 되는 정보에 쓴다.
+      </p>
+      <dl class="spec">
+        <dt>기준</dt>
+        <dd>
+          <span class="mono">fg.neutral-muted</span> ← <span class="mono">fg.neutral</span> <span class="dim">있음</span><br>
+          <span class="mono">bg.overlay-muted</span> ← <span class="mono">bg.overlay</span> <span class="dim">있음</span><br>
+          <span class="mono">bg.neutral-solid-muted</span> ← <span class="mono">bg.neutral-solid</span> <span class="dim">있음</span><br>
+          <span class="mono">stroke.neutral-muted</span> ← <span class="mono">stroke.neutral</span> <b>없음</b>
+        </dd>
+        <dt>실측</dt>
+        <dd>
+          <span class="mono">$color.fg.neutral</span> → <span class="mono">gray-1000 · #1a1c20</span><br>
+          <span class="mono">$color.fg.neutral-muted</span> → <span class="mono">gray-800 · #555d6d</span>
+          <span class="dim">(팔레트 2칸 아래)</span>
+        </dd>
+        <dt>주의</dt>
+        <dd>다른 디자인 시스템의 <code>muted</code>와 뜻이 다르다. 06장에서 다룬다.</dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- subtle -->
+  <div class="entry seed">
+    <div class="entry-head">
+      <p class="headword">subtle</p>
+      <span class="pos">fg · stroke</span>
+      <div class="chip-row">
+        <span class="chip" style="background:var(--t-layer-default);color:var(--t-fg-neutral-subtle);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-weight:700;font-size:17px">가</span>
+        <span class="chip" style="background:var(--t-layer-default);border:2px solid var(--t-st-neutral-subtle)"></span>
+      </div>
+    </div>
+    <div>
+      <p class="gloss"><code>muted</code>보다 <b>한 칸 더 약하다.</b></p>
+      <p class="entry-note">
+        타임스탬프, 부가 설명, 카드 사이 얇은 구분선처럼 있는 줄도 몰라도 되는 요소에 쓴다.
+        <code>fg.neutral-subtle</code>과 <code>stroke.neutral-subtle</code> 둘뿐이다.
+        서열은 <code>muted</code> &gt; <code>subtle</code>인데, 이름만으로는 알 수 없으니 외워야 한다.
+      </p>
+      <dl class="spec">
+        <dt>실측</dt>
+        <dd>
+          <span class="mono">$color.fg.neutral-subtle</span> → <span class="mono">gray-700 · #868b94</span><br>
+          <span class="mono">$color.stroke.neutral-subtle</span> → <span class="mono">black-alpha-200 · #0000000c</span>
+        </dd>
+        <dt>아래로</dt>
+        <dd><code>fg.placeholder</code>(gray-600), <code>fg.disabled</code>(gray-500)가 더 있다.</dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- inverted -->
+  <div class="entry seed">
+    <div class="entry-head">
+      <p class="headword">inverted</p>
+      <span class="pos">fg · bg</span>
+      <div class="chip-row">
+        <span class="chip" style="background:var(--t-bg-neutral-inverted);color:var(--t-fg-neutral-inverted);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-weight:700;font-size:17px">가</span>
+      </div>
+    </div>
+    <div>
+      <p class="gloss">현재 테마의 <b>반대 극</b>으로 간다.</p>
+      <p class="entry-note">
+        스낵바, 툴팁처럼 주변과 명도가 반대인 표면에 쓴다.
+        라이트 모드에서는 어두운 판에 흰 글자, 다크 모드에서는 밝은 판에 검은 글자가 된다.
+        <code>bg.neutral-inverted</code>와 <code>fg.neutral-inverted</code>는 항상 짝으로 쓴다.
+      </p>
+      <dl class="spec">
+        <dt>실측</dt>
+        <dd>
+          <span class="mono">$color.bg.neutral-inverted</span><br>
+          <span class="mono">라이트 gray-900 · #2a3038</span><br>
+          <span class="mono">다크 &nbsp;&nbsp;gray-1000 · #f3f4f5</span>
+        </dd>
+        <dt>혼동 주의</dt>
+        <dd><code>solid</code>와 다르다. 03장에서 눈으로 확인한다.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 2. 눈금 ══════════════ -->
+<section class="col">
+  <h2><span class="num">02</span>property별 강조도 눈금</h2>
+  <p class="dek">
+    같은 단어가 property마다 다른 자리에 놓인다.
+    아래 세 눈금은 실측값을 진한 순서대로 세운 것이다. 위가 강하고 아래가 약하다.
+  </p>
+
+  <div class="preview seed" data-preview-group>
+    <div class="preview-bar">
+      <span class="label">Seed 강조도 눈금 · 실측</span>
+      <span class="toggle" role="group" aria-label="미리보기 테마">
+        <button type="button" data-seed-set="light" aria-pressed="true">라이트</button>
+        <button type="button" data-seed-set="dark" aria-pressed="false">다크</button>
+      </span>
+    </div>
+    <div class="preview-body">
+      <div class="screen">
+        <p class="mono" style="font-size:11px;letter-spacing:.1em;color:var(--t-fg-neutral-subtle);margin:0 0 10px">BG — 칠하는 면</p>
+        <div class="ladder">
+          <div class="rung">
+            <span class="sw" style="background:var(--t-bg-neutral-solid)"></span>
+            <span class="nm">neutral-solid</span>
+            <span class="val">gray-1000</span>
+          </div>
+          <div class="rung">
+            <span class="sw" style="background:var(--t-bg-neutral-solid-muted)"></span>
+            <span class="nm">neutral-solid-muted</span>
+            <span class="val">gray-800</span>
+          </div>
+          <div class="rung">
+            <span class="sw" style="background:var(--t-bg-neutral-weak)"></span>
+            <span class="nm">neutral-weak</span>
+            <span class="val">gray-200 / 300</span>
+          </div>
+          <div class="rung">
+            <span class="sw" style="background:var(--t-layer-default)"></span>
+            <span class="nm">layer-default <span style="color:var(--t-fg-neutral-subtle)">(기본 표면)</span></span>
+            <span class="val">gray-00 / 100</span>
+          </div>
+        </div>
+
+        <p class="mono" style="font-size:11px;letter-spacing:.1em;color:var(--t-fg-neutral-subtle);margin:26px 0 10px">FG — 글자와 아이콘</p>
+        <div class="ladder">
+          <div class="rung fg">
+            <span class="sw" style="color:var(--t-fg-critical-contrast)">가</span>
+            <span class="nm">critical-contrast</span>
+            <span class="val">red-900</span>
+          </div>
+          <div class="rung fg">
+            <span class="sw" style="color:var(--t-fg-critical)">가</span>
+            <span class="nm">critical <span style="color:var(--t-fg-neutral-subtle)">(기본)</span></span>
+            <span class="val">red-700</span>
+          </div>
+          <div class="rung fg">
+            <span class="sw" style="color:var(--t-fg-neutral)">가</span>
+            <span class="nm">neutral <span style="color:var(--t-fg-neutral-subtle)">(기본)</span></span>
+            <span class="val">gray-1000</span>
+          </div>
+          <div class="rung fg">
+            <span class="sw" style="color:var(--t-fg-neutral-muted)">가</span>
+            <span class="nm">neutral-muted</span>
+            <span class="val">gray-800</span>
+          </div>
+          <div class="rung fg">
+            <span class="sw" style="color:var(--t-fg-neutral-subtle)">가</span>
+            <span class="nm">neutral-subtle</span>
+            <span class="val">gray-700</span>
+          </div>
+          <div class="rung fg">
+            <span class="sw" style="color:var(--t-fg-placeholder)">가</span>
+            <span class="nm">placeholder</span>
+            <span class="val">gray-600</span>
+          </div>
+          <div class="rung fg">
+            <span class="sw" style="color:var(--t-fg-disabled)">가</span>
+            <span class="nm">disabled</span>
+            <span class="val">gray-500</span>
+          </div>
+        </div>
+
+        <p class="mono" style="font-size:11px;letter-spacing:.1em;color:var(--t-fg-neutral-subtle);margin:26px 0 10px">STROKE — 선</p>
+        <div class="ladder">
+          <div class="rung st">
+            <span class="sw" style="border-color:var(--t-st-neutral-contrast)"></span>
+            <span class="nm">neutral-contrast</span>
+            <span class="val">gray-1000</span>
+          </div>
+          <div class="rung st">
+            <span class="sw" style="border-color:var(--t-st-neutral-solid)"></span>
+            <span class="nm">neutral-solid</span>
+            <span class="val">gray-800</span>
+          </div>
+          <div class="rung st">
+            <span class="sw" style="border-color:var(--t-st-neutral-weak)"></span>
+            <span class="nm">neutral-weak <span style="color:var(--t-fg-neutral-subtle)">(불투명)</span></span>
+            <span class="val">gray-400</span>
+          </div>
+          <div class="rung st">
+            <span class="sw" style="border-color:var(--t-st-neutral-muted)"></span>
+            <span class="nm">neutral-muted <span style="color:var(--t-fg-neutral-subtle)">(알파)</span></span>
+            <span class="val">black-α-300</span>
+          </div>
+          <div class="rung st">
+            <span class="sw" style="border-color:var(--t-st-neutral-subtle)"></span>
+            <span class="nm">neutral-subtle <span style="color:var(--t-fg-neutral-subtle)">(알파)</span></span>
+            <span class="val">black-α-200</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tablewrap" style="margin-top:26px">
+    <table>
+      <thead>
+        <tr><th>property</th><th class="wrap">쓰는 variant</th><th class="wrap">쓰지 않는 variant</th><th class="wrap">맨몸 토큰(기준점)</th></tr>
+      </thead>
+      <tbody>
+        <tr><th><code>bg</code></th><td class="wrap">solid, solid-muted, weak, inverted, alpha</td><td class="wrap"><span class="dim">subtle, contrast 없음</span></td><td class="wrap"><span class="mono">bg.overlay</span> 하나뿐</td></tr>
+        <tr><th><code>fg</code></th><td class="wrap">contrast, muted, subtle, inverted</td><td class="wrap"><span class="dim">weak, solid 없음</span></td><td class="wrap">역할 6종 전부 있다</td></tr>
+        <tr><th><code>stroke</code></th><td class="wrap">contrast, solid, weak, muted, subtle</td><td class="wrap"><span class="dim">inverted 없음</span></td><td class="wrap"><b>하나도 없다</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">
+    이 비대칭이 학습을 어렵게 만든다. <code>bg</code>에는 <code>subtle</code>이 없고 <code>fg</code>에는 <code>weak</code>이 없다.
+    셋 다 있는 건 <code>stroke</code>뿐이다.
+  </p>
+
+  <h3>"기본색"이라는 건 <code>fg</code>에만 있다</h3>
+  <p>
+    variant 없이 <code>$color.{property}.{role}</code> 형태로 존재하는 토큰은 전부 7개다.
+  </p>
+  <pre>$color.fg.brand      $color.fg.critical   $color.fg.informative
+$color.fg.neutral    $color.fg.positive   $color.fg.warning
+$color.bg.overlay
+
+<span class="c"># $color.stroke.neutral 은 없다. $color.bg.neutral 도 없다.</span></pre>
+  <p>
+    그래서 <code>stroke.neutral-muted</code>를 "기본에서 한 단계 낮춘 것"이라고 설명할 수 없다.
+    낮출 기준이 토큰으로 존재하지 않는다.
+    <code>stroke</code>의 다섯 칸은 서로에 대해서만 순서가 있는 눈금이다.
+  </p>
+
+  <div class="flag">
+    <strong>함정.</strong>
+    <code>stroke</code>에서는 <code>muted</code>가 <code>weak</code>보다 <b>약하다.</b>
+    <code>fg</code>에서 익힌 순서를 <code>stroke</code>에 그대로 가져오면 <code>weak</code>가 어디 끼는지 알 수 없다.
+    값의 형식도 섞여 있다. <code>weak</code>와 <code>solid</code>는 불투명 gray, <code>muted</code>와 <code>subtle</code>은 알파다.
+    숫자만 봐서는 비교되지 않는다.
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>stroke 토큰</th><th>정의된 값</th><th class="wrap">흰 배경에서 보이는 색</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">neutral-contrast</td><td class="mono">gray-1000 · #1a1c20</td><td class="mono">#1a1c20</td></tr>
+        <tr><td class="mono">neutral-solid</td><td class="mono">gray-800 · #555d6d</td><td class="mono">#555d6d</td></tr>
+        <tr><td class="mono">neutral-weak</td><td class="mono">gray-400 · #dcdee3</td><td class="mono">#dcdee3</td></tr>
+        <tr><td class="mono">neutral-muted</td><td class="mono">black-alpha-300 · 6% 검정</td><td class="mono">≈ #efefef</td></tr>
+        <tr><td class="mono">neutral-subtle</td><td class="mono">black-alpha-200 · 5% 검정</td><td class="mono">≈ #f3f3f3</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">
+    위 눈금의 순서는 맞다. 다만 그 순서를 알려면 알파를 흰 배경에 합성해 봐야 한다.
+    이름이 해 주지 않는 일이다.
+  </p>
+</section>
+
+<!-- ══════════════ 3. 짝짓기 ══════════════ -->
+<section class="col">
+  <h2><span class="num">03</span>짝짓기 규칙 — 여기가 설계의 핵심이다</h2>
+  <p class="dek">
+    배경 강조도와 글자 색은 따로 고르는 게 아니다. 쌍으로 정해져 있다.
+    아래는 <span class="mono">packages/rootage/components/badge.yaml</span>에 적힌 조합을 그대로 그린 것이다.
+  </p>
+
+  <div class="preview seed" data-preview-group>
+    <div class="preview-bar">
+      <span class="label">Badge · tone 5종 × variant 3종</span>
+      <span class="toggle" role="group" aria-label="미리보기 테마">
+        <button type="button" data-seed-set="light" aria-pressed="true">라이트</button>
+        <button type="button" data-seed-set="dark" aria-pressed="false">다크</button>
+      </span>
+    </div>
+    <div class="preview-body">
+      <div class="screen">
+        <div class="badge-grid">
+          <span class="collab"></span>
+          <span class="collab">solid</span>
+          <span class="collab">weak</span>
+          <span class="collab">outline</span>
+
+          <span class="rowlab">brand</span>
+          <span><span class="badge" style="background:var(--t-bg-brand-solid);color:var(--t-static-white)">당근</span></span>
+          <span><span class="badge" style="background:var(--t-bg-brand-weak);color:var(--t-fg-brand-contrast)">당근</span></span>
+          <span><span class="badge" style="border-color:var(--t-st-brand-weak);color:var(--t-fg-brand)">당근</span></span>
+
+          <span class="rowlab">informative</span>
+          <span><span class="badge" style="background:var(--t-bg-info-solid);color:var(--t-static-white)">안내</span></span>
+          <span><span class="badge" style="background:var(--t-bg-info-weak);color:var(--t-fg-info-contrast)">안내</span></span>
+          <span><span class="badge" style="border-color:var(--t-st-info-weak);color:var(--t-fg-info)">안내</span></span>
+
+          <span class="rowlab">positive</span>
+          <span><span class="badge" style="background:var(--t-bg-positive-solid);color:var(--t-static-white)">완료</span></span>
+          <span><span class="badge" style="background:var(--t-bg-positive-weak);color:var(--t-fg-positive-contrast)">완료</span></span>
+          <span><span class="badge" style="border-color:var(--t-st-positive-weak);color:var(--t-fg-positive)">완료</span></span>
+
+          <span class="rowlab">warning</span>
+          <span><span class="badge" style="background:var(--t-bg-warning-solid);color:var(--t-on-warning)">주의</span></span>
+          <span><span class="badge" style="background:var(--t-bg-warning-weak);color:var(--t-fg-warning-contrast)">주의</span></span>
+          <span><span class="badge" style="border-color:var(--t-st-warning-weak);color:var(--t-fg-warning)">주의</span></span>
+
+          <span class="rowlab">critical</span>
+          <span><span class="badge" style="background:var(--t-bg-critical-solid);color:var(--t-static-white)">오류</span></span>
+          <span><span class="badge" style="background:var(--t-bg-critical-weak);color:var(--t-fg-critical-contrast)">오류</span></span>
+          <span><span class="badge" style="border-color:var(--t-st-critical-weak);color:var(--t-fg-critical)">오류</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th>variant</th><th>배경</th><th>글자</th><th>테두리</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>solid</th>
+          <td class="mono">bg.{role}-solid</td>
+          <td class="mono">palette.static-white</td>
+          <td class="dim">—</td>
+        </tr>
+        <tr>
+          <th>weak</th>
+          <td class="mono">bg.{role}-weak</td>
+          <td class="mono">fg.{role}-contrast</td>
+          <td class="dim">—</td>
+        </tr>
+        <tr>
+          <th>outline</th>
+          <td class="dim">투명</td>
+          <td class="mono">fg.{role}</td>
+          <td class="mono">stroke.{role}-weak</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">
+    이 표가 <code>weak</code>와 <code>contrast</code>가 왜 한 쌍인지 설명한다.
+    <code>outline</code>은 배경이 없으므로 기본 <code>fg</code>로 충분하다. 대비를 올릴 필요가 없다.
+  </p>
+
+  <div class="flag">
+    <strong>예외 하나.</strong>
+    warning의 <code>solid</code>만 글자가 흰색이 아니다.
+    <code>bg.warning-solid</code>는 라이트 모드에서 <span class="mono">yellow-300 · #fbdc65</span>로 밝기 때문이다.
+    이때는 <span class="mono">static-black-alpha-900</span>을 쓴다.
+    위 미리보기의 노란 배지에서 확인할 수 있다.
+  </div>
+
+  <h3>왜 solid 위 글자에는 토큰이 없나</h3>
+  <p>
+    <code>bg.brand-solid</code>는 라이트와 다크 모두 진한 원색이다.
+    그 위 글자는 어느 테마에서든 흰색이다. 테마에 따라 바뀔 이유가 없다.
+    그래서 테마 분기가 없는 <code>palette.static-white</code>를 직접 쓴다.
+    Seed가 <code>static-</code> 팔레트를 따로 둔 이유가 여기 있다.
+  </p>
+
+  <h3>solid와 inverted는 무엇이 다른가</h3>
+  <p>
+    라이트 모드에서는 둘 다 어두운 판이라 구별되지 않는다.
+    다크 모드로 바꾸면 갈라진다. 아래에서 테마를 눌러 확인한다.
+  </p>
+
+  <div class="preview seed" data-preview-group>
+    <div class="preview-bar">
+      <span class="label">같은 판, 다른 동작</span>
+      <span class="toggle" role="group" aria-label="미리보기 테마">
+        <button type="button" data-seed-set="light" aria-pressed="true">라이트</button>
+        <button type="button" data-seed-set="dark" aria-pressed="false">다크</button>
+      </span>
+    </div>
+    <div class="preview-body">
+      <div class="flip">
+        <div class="flip-cell" style="background:var(--t-bg-neutral-solid);color:var(--t-static-white)">
+          <span class="k">bg.neutral-solid</span>
+          <span class="v">테마를 따라간다</span>
+          <span class="k">그 테마에서 가장 강한 중립 칠</span>
+        </div>
+        <div class="flip-cell" style="background:var(--t-bg-neutral-inverted);color:var(--t-fg-neutral-inverted)">
+          <span class="k">bg.neutral-inverted</span>
+          <span class="v">테마를 뒤집는다</span>
+          <span class="k">다크에서 밝아진다</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>토큰</th><th>라이트</th><th>다크</th><th class="wrap">결과</th></tr></thead>
+      <tbody>
+        <tr>
+          <th class="mono">bg.neutral-solid</th>
+          <td class="mono">gray-1000 · #1a1c20</td>
+          <td class="mono">gray-300 · #2b2e35</td>
+          <td class="wrap">두 테마 모두 어둡다</td>
+        </tr>
+        <tr>
+          <th class="mono">bg.neutral-inverted</th>
+          <td class="mono">gray-900 · #2a3038</td>
+          <td class="mono">gray-1000 · #f3f4f5</td>
+          <td class="wrap">다크에서 <b>밝아진다</b></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">다크 모드에서 <code>gray-1000</code>은 <span class="mono">#f3f4f5</span>다. 팔레트 자체가 뒤집히기 때문이다. 바로 다음 장에서 다룬다.</p>
+</section>
+
+<!-- ══════════════ 4. 적응형 팔레트 ══════════════ -->
+<section class="col">
+  <h2><span class="num">04</span>왜 시맨틱 토큰에 테마 분기가 거의 없나</h2>
+  <p class="dek">Seed 팔레트는 그 자체가 테마별로 값을 뒤집는다. 분기는 팔레트 층에서 이미 끝난다.</p>
+
+  <pre><span class="c"># packages/rootage/color.yaml</span>
+$color.palette.gray-1000:
+  theme-light: "#1a1c20"   <span class="c"># 거의 검정</span>
+  theme-dark:  "#f3f4f5"   <span class="c"># 거의 흰색</span>
+
+$color.palette.carrot-100:
+  theme-light: "#fff2ec"   <span class="c"># 아주 옅은 주황</span>
+  theme-dark:  "#31241f"   <span class="c"># 아주 어두운 주황</span>
+
+<span class="c"># 그래서 시맨틱 토큰은 양쪽 테마에서 같은 스텝만 가리키면 된다</span>
+$color.bg.brand-weak:
+  theme-light: $color.palette.carrot-100
+  theme-dark:  $color.palette.carrot-100</pre>
+
+  <p>
+    <code>fg.neutral</code>도 마찬가지다. 두 테마 모두 <code>gray-1000</code>을 가리킨다.
+    라이트에서는 검정 글자가 되고 다크에서는 흰 글자가 된다. 토큰은 한 줄도 바뀌지 않는다.
+  </p>
+
+  <h3>예외는 지각 밝기 보정이 필요한 소수다</h3>
+  <p>
+    <code>solid</code>는 스텝이 갈린다. 라이트는 <code>carrot-600</code>, 다크는 <code>carrot-700</code>을 쓴다.
+    그런데 실측 결과가 재미있다.
+  </p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>테마</th><th>참조 스텝</th><th>최종 hex</th></tr></thead>
+      <tbody>
+        <tr><th>라이트</th><td class="mono">carrot-600</td><td class="mono">#ff6600</td></tr>
+        <tr><th>다크</th><td class="mono">carrot-700</td><td class="mono">#ff6600</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">
+    참조하는 스텝은 다르지만 <b>최종 색은 같다.</b>
+    팔레트가 다크에서 한 칸씩 밀려 있기 때문이다.
+    브랜드 주황은 어느 테마에서든 같은 주황이어야 하므로, 스텝을 옮겨서 값을 맞춘 것이다.
+  </p>
+
+  <div class="rule-box">
+    <h4>설계 판단</h4>
+    <p>
+      테마가 2개면 이 방식이 유리하다. 시맨틱 토큰이 단순해진다.
+      테마가 많으면 반대다. GitHub Primer는 시맨틱 층에서 8개 테마를 각각 분기한다
+      (<span class="mono">org.primer.overrides</span>에 <code>dark</code>, <code>dark-dimmed</code>,
+      <code>light-high-contrast</code> 등이 들어 있다).
+      Seed는 팔레트 층에서, Primer는 시맨틱 층에서 푼다.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════ 5. 대역 사전 ══════════════ -->
+<section>
+  <div class="col">
+    <h2><span class="num">05</span>대역 사전 — 다른 시스템은 뭐라고 부르나</h2>
+    <p class="dek">
+      같은 개념이 시스템마다 다른 단어를 쓴다. 개념을 왼쪽 열에 두고 9종을 대조했다.
+      가로로 스크롤한다.
+    </p>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="wrap">개념</th>
+          <th>Seed</th>
+          <th>Radix</th>
+          <th>Material 3</th>
+          <th>shadcn/ui</th>
+          <th>Primer</th>
+          <th>Atlassian</th>
+          <th>Spectrum 2</th>
+          <th>Carbon</th>
+          <th>Ant Design</th>
+          <th>Polaris</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th class="wrap">원색으로 꽉 채운 면</th>
+          <td class="mono">bg.*-solid</td>
+          <td class="mono">step 9</td>
+          <td class="mono">primary</td>
+          <td class="mono">--primary</td>
+          <td class="mono">bgColor.*.emphasis</td>
+          <td class="mono">*.bold</td>
+          <td class="mono">background-color</td>
+          <td class="mono">(슬롯별)</td>
+          <td class="mono">colorPrimary</td>
+          <td class="mono">bg-fill-*</td>
+        </tr>
+        <tr>
+          <th class="wrap">옅게 칠한 면</th>
+          <td class="mono">bg.*-weak</td>
+          <td class="mono">step 3</td>
+          <td class="mono">*-container</td>
+          <td class="mono">--muted</td>
+          <td class="mono">bgColor.*.muted</td>
+          <td class="mono">*.subtler</td>
+          <td class="mono">*-subtle</td>
+          <td class="mono">layer-01</td>
+          <td class="mono">colorPrimaryBg</td>
+          <td class="mono">bg-surface-*</td>
+        </tr>
+        <tr>
+          <th class="wrap">원색 면 위 글자</th>
+          <td class="mono">palette.static-white</td>
+          <td class="dim">(관례)</td>
+          <td class="mono">on-primary</td>
+          <td class="mono">--primary-foreground</td>
+          <td class="mono">fgColor.onEmphasis</td>
+          <td class="mono">text.inverse</td>
+          <td class="mono">content-color</td>
+          <td class="mono">text-on-color</td>
+          <td class="dim">—</td>
+          <td class="mono">text-*-on-bg-fill</td>
+        </tr>
+        <tr>
+          <th class="wrap">옅은 면 위 글자</th>
+          <td class="mono">fg.*-contrast</td>
+          <td class="mono">step 11–12</td>
+          <td class="mono">on-*-container</td>
+          <td class="mono">--muted-foreground</td>
+          <td class="mono">fgColor.{role}</td>
+          <td class="mono">text.accent.*.bolder</td>
+          <td class="dim">—</td>
+          <td class="dim">—</td>
+          <td class="mono">colorPrimaryText</td>
+          <td class="mono">text-*</td>
+        </tr>
+        <tr>
+          <th class="wrap">한 단계 흐린 글자</th>
+          <td class="mono">fg.neutral-muted</td>
+          <td class="mono">step 11</td>
+          <td class="mono">on-surface-variant</td>
+          <td class="mono">--muted-foreground</td>
+          <td class="mono">fgColor.muted</td>
+          <td class="mono">text.subtle</td>
+          <td class="mono">*-subdued</td>
+          <td class="mono">text-secondary</td>
+          <td class="mono">colorTextSecondary</td>
+          <td class="mono">text-secondary</td>
+        </tr>
+        <tr>
+          <th class="wrap">두 단계 흐린 글자</th>
+          <td class="mono">fg.neutral-subtle</td>
+          <td class="dim">—</td>
+          <td class="dim">—</td>
+          <td class="dim">—</td>
+          <td class="dim">—</td>
+          <td class="mono">text.subtlest</td>
+          <td class="dim">—</td>
+          <td class="mono">text-placeholder</td>
+          <td class="mono">colorTextTertiary</td>
+          <td class="mono">text-disabled</td>
+        </tr>
+        <tr>
+          <th class="wrap">얇은 구분선</th>
+          <td class="mono">stroke.neutral-subtle</td>
+          <td class="mono">step 6</td>
+          <td class="mono">outline-variant</td>
+          <td class="mono">--border</td>
+          <td class="mono">borderColor.muted</td>
+          <td class="mono">border.accent.*</td>
+          <td class="mono">border-color</td>
+          <td class="mono">border-subtle-01</td>
+          <td class="mono">colorBorderSecondary</td>
+          <td class="mono">border-secondary</td>
+        </tr>
+        <tr>
+          <th class="wrap">반대 명도 표면</th>
+          <td class="mono">bg.neutral-inverted</td>
+          <td class="dim">—</td>
+          <td class="mono">inverse-surface</td>
+          <td class="dim">—</td>
+          <td class="mono">bgColor.inverse</td>
+          <td class="mono">background.inverse.subtle</td>
+          <td class="dim">—</td>
+          <td class="mono">background-inverse</td>
+          <td class="mono">colorBgSpotlight</td>
+          <td class="mono">bg-fill-inverse</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col">
+    <p class="tnote">
+      Seed·Primer·Polaris·Carbon·Spectrum·Ant Design은 이 저장소에 클론된 소스에서 직접 확인했다.
+      Radix·Material 3·Atlassian은 공식 문서 기준이다.
+    </p>
+
+    <h3>세 갈래로 나뉜다</h3>
+    <p>
+      <b>첫째, 숫자 눈금.</b> Radix가 대표다. 12스텝에 용도를 고정한다.
+      1–2 배경, 3–5 요소 배경, 6–8 선, 9–10 solid, 11–12 텍스트.
+      "solid"라는 단어 자체가 Radix 9단계의 이름이다.
+      Seed의 어휘는 이 눈금에 이름을 붙인 것에 가깝다.
+      Carbon은 여기에 레이어 깊이를 더해 <code>layer-01/02/03</code>, <code>field-01/02/03</code>으로 쓴다.
+    </p>
+    <p>
+      <b>둘째, 짝을 이름에 박는 방식.</b> Material 3의 <code>on-</code> 접두사,
+      shadcn의 <code>-foreground</code> 접미사, Polaris의 <code>-on-bg-fill</code>이 여기 속한다.
+      <code>primary</code> 위에는 <code>on-primary</code>를 쓴다는 걸 이름만 보고 안다.
+      실수할 여지가 없다. 대신 강조도 단계가 2개뿐이라 중간 단계를 만들 수 없다.
+    </p>
+    <p>
+      <b>셋째, 알고리즘 생성.</b> Ant Design은 시드 색 하나에서 10단계를 만들고 인덱스를 역할에 고정한다.
+      1=Bg, 3=Border, 6=기본, 9=Text. 시드만 바꾸면 40개 토큰이 자동으로 나온다.
+      테마 커스터마이징이 압도적으로 쉽다. 대신 생성 결과의 대비를 사람이 보장할 수 없다.
+      Seed는 반대로 전부 손으로 정하고 APCA로 검증한다.
+    </p>
+
+    <h3>Seed와 가장 닮은 둘</h3>
+    <p>
+      <b>Adobe Spectrum 2</b>는 토큰 이름을 문자열이 아니라 구조체로 저장한다.
+      <span class="mono">colorRole</span> + <span class="mono">object</span> +
+      <span class="mono">property</span> + <span class="mono">variant</span> + <span class="mono">state</span>.
+      Seed의 Property/Role/Variant/State 4축과 정확히 대응한다.
+      차이는 Spectrum이 상태를 정식 축으로 승격했다는 점이다
+      (<code>hover</code>, <code>down</code>, <code>keyboard-focus</code>).
+      Seed는 <code>pressed</code> 중심이다. 모바일 웹뷰가 주 무대라 hover가 없기 때문이다.
+    </p>
+    <p>
+      <b>Atlassian</b>은 문법이 거의 같은데 어휘를 하나의 연속 척도로 통일했다.
+      <code>subtlest</code> → <code>subtler</code> → <code>subtle</code> →
+      <code>bold</code> → <code>bolder</code> → <code>boldest</code>.
+      방향과 순서가 이름에 다 들어 있다. Seed의 <code>weak</code>/<code>muted</code>/<code>subtle</code>은
+      서로의 대소 관계가 이름에 드러나지 않는다.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════ 6. 거짓 짝 ══════════════ -->
+<section class="col">
+  <h2><span class="num">06</span>거짓 짝 — 같은 단어, 다른 뜻</h2>
+  <p class="dek">
+    실무에서 제일 위험한 부분이다. 이 어휘는 업계 표준이 아니다.
+    시스템을 옮겨 다니면 <code>muted</code>에서 반드시 한 번 틀린다.
+  </p>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th>단어</th><th class="wrap">Seed</th><th class="wrap">Primer</th><th class="wrap">shadcn/ui</th><th class="wrap">Atlassian</th><th class="wrap">Spectrum 2</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th class="mono">muted</th>
+          <td class="wrap">한 단계 낮춘 <b>전경·선</b></td>
+          <td class="wrap"><b>옅은 배경</b><br><span class="dim">= Seed의 weak</span></td>
+          <td class="wrap"><b>옅은 배경 역할 이름</b><br><span class="dim">= Seed의 bg.neutral-weak</span></td>
+          <td class="wrap"><span class="dim">없음</span></td>
+          <td class="wrap"><span class="dim">없음</span></td>
+        </tr>
+        <tr>
+          <th class="mono">subtle</th>
+          <td class="wrap">두 단계 낮춘 <b>전경·선</b></td>
+          <td class="wrap"><span class="dim">없음</span></td>
+          <td class="wrap"><span class="dim">없음</span></td>
+          <td class="wrap"><b>중간 강조 배경</b><br><span class="dim">subtlest보다 진함</span></td>
+          <td class="wrap"><b>옅은 배경</b><br><span class="dim">= Seed의 weak</span></td>
+        </tr>
+        <tr>
+          <th class="mono">solid</th>
+          <td class="wrap">원색 <b>배경</b></td>
+          <td class="wrap"><code>emphasis</code>로 부름</td>
+          <td class="wrap"><code>primary</code>로 부름</td>
+          <td class="wrap"><code>bold</code>로 부름</td>
+          <td class="wrap"><span class="dim">기본값(무명)</span></td>
+        </tr>
+        <tr>
+          <th class="mono">contrast</th>
+          <td class="wrap"><b>더 진한</b> 전경</td>
+          <td class="wrap"><span class="dim">없음</span></td>
+          <td class="wrap"><span class="dim">없음</span></td>
+          <td class="wrap"><span class="dim">없음</span></td>
+          <td class="wrap"><span class="dim">없음</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="flag">
+    <strong>가장 자주 나는 사고.</strong>
+    shadcn을 쓰다가 Seed로 오면 <code>muted</code>를 배경으로 쓰려 한다.
+    Seed에는 <code>bg.neutral-muted</code>가 없다.
+    찾는 건 <code>bg.neutral-weak</code>다.
+    반대로 Seed를 쓰다가 Primer로 가면 <code>bgColor.accent.muted</code>를
+    "흐린 파랑 글자"로 오해한다. 실제로는 "옅은 파랑 배경"이다.
+  </div>
+</section>
+
+<!-- ══════════════ 7. 원리 ══════════════ -->
+<section class="col">
+  <h2><span class="num">07</span>여기서 뽑을 수 있는 원리 네 가지</h2>
+  <p class="dek">어휘는 시스템마다 다르지만 풀려는 문제는 같다.</p>
+
+  <div class="principle">
+    <span class="n">1</span>
+    <div>
+      <h3>강조도 축은 모든 시스템에 있다</h3>
+      <p>
+        표현 방식만 세 가지로 갈린다.
+        숫자(Radix, Carbon, Ant Design), 단어(Seed, Atlassian, Primer), 컨테이너 개념(Material 3).
+        새 디자인 시스템을 만든다면 이 중 하나를 고르는 문제이지, 만들지 말지의 문제가 아니다.
+      </p>
+    </div>
+  </div>
+
+  <div class="principle">
+    <span class="n">2</span>
+    <div>
+      <h3>배경 강조도와 전경 대비는 반드시 쌍으로 정의한다</h3>
+      <p>
+        강제하는 방법이 세 가지다.
+        이름에 짝을 박거나(Material 3, shadcn, Polaris),
+        variant로 두고 컴포넌트 토큰으로 강제하거나(Seed, Primer),
+        숫자 규약으로 문서화한다(Radix).
+      </p>
+      <p>
+        Seed는 두 번째다. 그래서 <code>fg.brand-contrast</code>라는 이름만 봐서는 어디 쓰는지 알 수 없다.
+        <span class="mono">badge.yaml</span> 같은 컴포넌트 토큰 파일이 짝을 고정한다.
+        Seed가 컴포넌트 토큰을 별도 YAML로 관리하는 이유가 여기 있다.
+      </p>
+    </div>
+  </div>
+
+  <div class="principle">
+    <span class="n">3</span>
+    <div>
+      <h3>팔레트를 적응형으로 만들면 시맨틱 층이 단순해진다</h3>
+      <p>
+        테마가 라이트·다크 2개라면 팔레트에서 뒤집는 게 낫다.
+        시맨틱 토큰 대부분이 분기 없이 같은 스텝만 가리키면 된다.
+        고대비 테마나 색각 이상 대응 테마까지 붙일 계획이면 Primer처럼 시맨틱 층에서 분기하는 편이 관리하기 쉽다.
+      </p>
+    </div>
+  </div>
+
+  <div class="principle">
+    <span class="n">4</span>
+    <div>
+      <h3>강조도 눈금에는 기준점 토큰이 있어야 한다</h3>
+      <p>
+        Seed의 <code>weak</code>/<code>muted</code>/<code>subtle</code>은
+        어느 쪽이 더 약한지 이름으로 알 수 없다. 게다가 property마다 쓰는 어휘가 다르다.
+        Atlassian처럼 <code>subtlest</code> → <code>boldest</code> 한 축으로 통일했다면 외울 게 없었을 것이다.
+      </p>
+      <p>
+        더 근본적인 문제는 <b>기준점이 없다</b>는 것이다.
+        <code>fg</code>에는 <code>fg.neutral</code>이라는 맨몸 토큰이 있어서
+        <code>muted</code>와 <code>subtle</code>이 무엇에서 내려온 값인지 말할 수 있다.
+        <code>stroke</code>에는 그게 없다. 그래서 다섯 칸의 순서를 값으로 직접 재 봐야 알 수 있다.
+        눈금을 만들 거라면 0점을 먼저 정의해야 한다.
+        Radix가 12스텝을 숫자로 둔 이유가 여기 있다. 숫자에는 기준점이 필요 없다.
+      </p>
+      <p>
+        다만 이건 이 문서의 판단이다.
+        Seed 문서에 이 선택의 근거는 적혀 있지 않다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 부록 ══════════════ -->
+<section class="col">
+  <h2><span class="num">08</span>근거</h2>
+  <p class="dek">본문 수치의 출처다. 필요할 때만 펼친다.</p>
+
+  <details>
+    <summary>토큰 원본 — 역할 색 정의</summary>
+    <div class="inner">
+      <p style="font-size:14px;color:var(--ink-2)">
+        <span class="mono">sources-candidates/seed-design/packages/rootage/color.yaml</span>
+      </p>
+      <pre>$color.fg.neutral:
+  description: 일반적인 콘텐츠에 사용되는 기본 색상입니다.
+  values:
+    theme-light: $color.palette.gray-1000
+    theme-dark:  $color.palette.gray-1000
+
+$color.fg.neutral-muted:
+  description: 일반적인 콘텐츠에 사용되는 기본 색상입니다. (muted)
+  values:
+    theme-light: $color.palette.gray-800
+    theme-dark:  $color.palette.gray-800
+
+$color.fg.neutral-subtle:
+  description: 일반적인 콘텐츠에 사용되는 기본 색상입니다. (subtle)
+  values:
+    theme-light: $color.palette.gray-700
+    theme-dark:  $color.palette.gray-700
+
+$color.fg.critical-contrast:
+  description: 오류, 경고 또는 중요한 문제를 나타내는 데 사용됩니다. (contrast)
+  values:
+    theme-light: $color.palette.red-900
+    theme-dark:  $color.palette.red-900
+
+$color.stroke.neutral-muted:
+  values:
+    theme-light: $color.palette.static-black-alpha-300
+    theme-dark:  $color.palette.static-white-alpha-100
+
+$color.stroke.neutral-subtle:
+  values:
+    theme-light: $color.palette.static-black-alpha-200
+    theme-dark:  $color.palette.static-white-alpha-50</pre>
+      <p style="font-size:14px;color:var(--ink-2);margin:0">
+        <code>description</code>이 역할 설명만 담고 variant 설명은 <code>(muted)</code>처럼
+        괄호 표기로 끝난다. 즉 variant의 의미는 문서가 아니라 값에서 읽어야 한다.
+      </p>
+    </div>
+  </details>
+
+  <details>
+    <summary>컴포넌트 토큰 원본 — 짝짓기 규칙</summary>
+    <div class="inner">
+      <p style="font-size:14px;color:var(--ink-2)">
+        <span class="mono">packages/rootage/components/badge.yaml</span>
+      </p>
+      <pre>tone=critical, variant=weak:
+  enabled:
+    root:  { color: $color.bg.critical-weak }
+    label: { color: $color.fg.critical-contrast }
+
+tone=critical, variant=solid:
+  enabled:
+    root:  { color: $color.bg.critical-solid }
+    label: { color: $color.palette.static-white }
+
+tone=critical, variant=outline:
+  enabled:
+    root:  { strokeColor: $color.stroke.critical-weak }
+    label: { color: $color.fg.critical }
+
+<span class="c"># warning만 예외</span>
+tone=warning, variant=solid:
+  enabled:
+    root:  { color: $color.bg.warning-solid }
+    label: { color: $color.palette.static-black-alpha-900 }</pre>
+    </div>
+  </details>
+
+  <details>
+    <summary>property별 variant 사용 현황 (실측)</summary>
+    <div class="inner">
+      <div class="tablewrap" style="margin:0">
+        <table>
+          <thead><tr><th>토큰</th><th>라이트</th><th>다크</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">bg.brand-solid</td><td class="mono">#ff6600</td><td class="mono">#ff6600</td></tr>
+            <tr><td class="mono">bg.brand-weak</td><td class="mono">#fff2ec</td><td class="mono">#31241f</td></tr>
+            <tr><td class="mono">bg.neutral-solid</td><td class="mono">#1a1c20</td><td class="mono">#2b2e35</td></tr>
+            <tr><td class="mono">bg.neutral-solid-muted</td><td class="mono">#555d6d</td><td class="mono">#393d46</td></tr>
+            <tr><td class="mono">bg.neutral-weak</td><td class="mono">#f3f4f5</td><td class="mono">#2b2e35</td></tr>
+            <tr><td class="mono">bg.neutral-inverted</td><td class="mono">#2a3038</td><td class="mono">#f3f4f5</td></tr>
+            <tr><td class="mono">fg.neutral</td><td class="mono">#1a1c20</td><td class="mono">#f3f4f5</td></tr>
+            <tr><td class="mono">fg.neutral-muted</td><td class="mono">#555d6d</td><td class="mono">#dcdee3</td></tr>
+            <tr><td class="mono">fg.neutral-subtle</td><td class="mono">#868b94</td><td class="mono">#b0b3ba</td></tr>
+            <tr><td class="mono">fg.neutral-inverted</td><td class="mono">#ffffff</td><td class="mono">#16171b</td></tr>
+            <tr><td class="mono">fg.critical</td><td class="mono">#fa342c</td><td class="mono">#ff6e60</td></tr>
+            <tr><td class="mono">fg.critical-contrast</td><td class="mono">#921708</td><td class="mono">#f8c5c3</td></tr>
+            <tr><td class="mono">stroke.neutral-contrast</td><td class="mono">#1a1c20</td><td class="mono">#f3f4f5</td></tr>
+            <tr><td class="mono">stroke.neutral-solid</td><td class="mono">#555d6d</td><td class="mono">#dcdee3</td></tr>
+            <tr><td class="mono">stroke.neutral-weak</td><td class="mono">#dcdee3</td><td class="mono">#393d46</td></tr>
+            <tr><td class="mono">stroke.neutral-muted</td><td class="mono">#00000010</td><td class="mono">#ffffff17</td></tr>
+            <tr><td class="mono">stroke.neutral-subtle</td><td class="mono">#0000000c</td><td class="mono">#ffffff0d</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>비교 대상 소스 위치</summary>
+    <div class="inner">
+      <div class="tablewrap" style="margin:0">
+        <table>
+          <thead><tr><th>시스템</th><th class="wrap">확인한 파일</th></tr></thead>
+          <tbody>
+            <tr><td>Seed</td><td class="wrap mono">sources-candidates/seed-design/packages/rootage/color.yaml</td></tr>
+            <tr><td>Primer</td><td class="wrap mono">sources-candidates/primer-primitives/src/tokens/functional/color/*.json5</td></tr>
+            <tr><td>Polaris</td><td class="wrap mono">sources/polaris/polaris-tokens/src/themes/base/color.ts</td></tr>
+            <tr><td>Carbon</td><td class="wrap mono">sources/carbon/packages/themes/src/tokens/v11TokenGroup.ts</td></tr>
+            <tr><td>Spectrum 2</td><td class="wrap mono">sources/spectrum-tokens/packages/design-data/tokens/color-aliases.tokens.json</td></tr>
+            <tr><td>Ant Design</td><td class="wrap mono">sources/ant-design/components/theme/interface/maps/colors.ts</td></tr>
+            <tr><td>shadcn/ui</td><td class="wrap mono">sources/shadcn-ui/apps/v4/app/globals.css</td></tr>
+            <tr><td>Radix Colors</td><td class="wrap">공식 문서 — Understanding the scale</td></tr>
+            <tr><td>Material 3</td><td class="wrap">공식 문서 — Color roles</td></tr>
+            <tr><td>Atlassian</td><td class="wrap">공식 문서 — Color foundations, Accents</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+</section>
+
+<footer class="col">
+  <p style="margin:0">
+    Design Systems Benchmark · 색 토큰 어휘 대조<br>
+    Seed 토큰 갱신일 26-06-15 기준 실측 · 작성 2026-08-19
+  </p>
+</footer>
+
+</main>
+
+<script>
+(function () {
+  var groups = document.querySelectorAll('[data-preview-group]');
+  groups.forEach(function (group) {
+    var panel = group.classList.contains('seed') ? group : group.querySelector('.seed');
+    group.querySelectorAll('[data-seed-set]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var mode = btn.getAttribute('data-seed-set');
+        panel.setAttribute('data-seed', mode);
+        group.querySelectorAll('[data-seed-set]').forEach(function (b) {
+          b.setAttribute('aria-pressed', String(b === btn));
+        });
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

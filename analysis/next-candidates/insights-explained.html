@@ -1,0 +1,1236 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DS 인사이트 풀어 읽기</title>
+</head>
+<body>
+<style>
+  :root {
+    --bg: #fbfcfd;
+    --surface: #f2f4f6;
+    --surface-2: #e9edf1;
+    --fg: #22272e;
+    --muted: #61707e;
+    --line: #dde3e8;
+    --accent: #1d5fbf;
+    --accent-weak: #e7effa;
+    --ok: #177245;
+    --ok-bg: #e8f3ec;
+    --warn: #98591b;
+    --warn-bg: #f8f0e4;
+    --bad: #b3372b;
+    --bad-bg: #f9eae8;
+    --code-bg: #eef1f4;
+    --shadow: 0 1px 3px rgba(30, 41, 59, .08);
+
+    /* 데모 전용 색 (본문 UI 색과 분리) */
+    --demo-brand: #ff6f0f;
+    --demo-brand-pressed: #d95a00;
+    --demo-brand-weak: #ffefe2;
+    --demo-brand-weak-pressed: #ffdfc4;
+    --demo-neutral: #46505a;
+    --demo-neutral-pressed: #2f363d;
+    --demo-neutral-weak: #eceff2;
+    --demo-neutral-weak-pressed: #dbe1e6;
+    --demo-critical: #d6363e;
+    --demo-critical-pressed: #b02229;
+    --demo-critical-weak: #fdeaea;
+    --demo-critical-weak-pressed: #f9d2d3;
+    --demo-on-solid: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15181c;
+      --surface: #1d2126;
+      --surface-2: #252a30;
+      --fg: #e6e9ec;
+      --muted: #96a1ac;
+      --line: #323942;
+      --accent: #6ea8e8;
+      --accent-weak: #1c2a3d;
+      --ok: #5fbe8a;
+      --ok-bg: #182b20;
+      --warn: #d9a35e;
+      --warn-bg: #2e2417;
+      --bad: #e07a6e;
+      --bad-bg: #33201d;
+      --code-bg: #23282e;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .4);
+      --demo-brand-weak: #3a2412;
+      --demo-brand-weak-pressed: #4d2f15;
+      --demo-neutral: #b9c2cb;
+      --demo-neutral-pressed: #d7dde2;
+      --demo-neutral-weak: #2a3037;
+      --demo-neutral-weak-pressed: #353d45;
+      --demo-critical-weak: #3a1c1e;
+      --demo-critical-weak-pressed: #4d2427;
+      --demo-on-solid: #ffffff;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15181c;
+    --surface: #1d2126;
+    --surface-2: #252a30;
+    --fg: #e6e9ec;
+    --muted: #96a1ac;
+    --line: #323942;
+    --accent: #6ea8e8;
+    --accent-weak: #1c2a3d;
+    --ok: #5fbe8a;
+    --ok-bg: #182b20;
+    --warn: #d9a35e;
+    --warn-bg: #2e2417;
+    --bad: #e07a6e;
+    --bad-bg: #33201d;
+    --code-bg: #23282e;
+    --shadow: 0 1px 3px rgba(0, 0, 0, .4);
+    --demo-brand-weak: #3a2412;
+    --demo-brand-weak-pressed: #4d2f15;
+    --demo-neutral: #b9c2cb;
+    --demo-neutral-pressed: #d7dde2;
+    --demo-neutral-weak: #2a3037;
+    --demo-neutral-weak-pressed: #353d45;
+    --demo-critical-weak: #3a1c1e;
+    --demo-critical-weak-pressed: #4d2427;
+    --demo-on-solid: #ffffff;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.8;
+    -webkit-text-size-adjust: 100%;
+  }
+  main { max-width: 780px; margin: 0 auto; padding: 56px 24px 120px; }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  h1 { font-size: 30px; line-height: 1.35; margin: 0 0 12px; text-wrap: balance; }
+  h2 {
+    font-size: 22px; line-height: 1.4; margin: 0 0 16px;
+    text-wrap: balance;
+  }
+  h3 { font-size: 17px; margin: 36px 0 10px; }
+  section { margin-top: 88px; }
+  section:first-of-type { margin-top: 48px; }
+  .section-no {
+    display: block;
+    font-size: 12px; font-weight: 700; letter-spacing: .12em;
+    color: var(--accent); margin-bottom: 6px;
+  }
+  p { margin: 12px 0; }
+  .lead { font-size: 17.5px; color: var(--muted); margin: 0 0 8px; }
+  ul, ol { margin: 10px 0; padding-left: 24px; }
+  li { margin: 5px 0; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  b, strong { font-weight: 700; }
+
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .85em;
+    background: var(--code-bg);
+    border-radius: 5px;
+    padding: 2px 6px;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 18px;
+    overflow-x: auto;
+    line-height: 1.65;
+    margin: 14px 0;
+  }
+  pre code { background: none; padding: 0; font-size: 13px; }
+  .code-note { font-size: 13px; color: var(--muted); margin-top: -6px; }
+
+  /* 용어 카드 */
+  .term {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 18px 0;
+  }
+  .term .term-name { font-weight: 700; color: var(--accent); }
+  .term p { margin: 6px 0; font-size: 15px; }
+  .term pre { background: var(--code-bg); margin: 10px 0 2px; }
+
+  /* 요약, 주의 박스 */
+  .keybox {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--ok);
+    background: var(--ok-bg);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 18px 0;
+  }
+  .keybox b:first-child { color: var(--ok); }
+  .warnbox {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--warn);
+    background: var(--warn-bg);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 18px 0;
+    font-size: 15px;
+  }
+  .warnbox b:first-child { color: var(--warn); }
+
+  /* 그림 공통 */
+  figure {
+    margin: 24px 0;
+    padding: 20px 16px 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface);
+  }
+  figure svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+  figcaption {
+    font-size: 13.5px; color: var(--muted);
+    text-align: center; margin-top: 12px; line-height: 1.6;
+  }
+  .fig-wide { overflow-x: auto; }
+
+  /* 표 */
+  .wrap-x { overflow-x: auto; margin: 14px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--surface-2); font-weight: 600; white-space: nowrap; }
+  td b { white-space: nowrap; }
+  .ok-t { color: var(--ok); font-weight: 700; }
+  .warn-t { color: var(--warn); font-weight: 700; }
+  .bad-t { color: var(--bad); font-weight: 700; }
+
+  details {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    padding: 0 16px;
+    margin: 16px 0;
+  }
+  details summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14.5px;
+    padding: 12px 0;
+    color: var(--muted);
+  }
+  details[open] summary { border-bottom: 1px solid var(--line); }
+  details > *:not(summary) { margin-top: 12px; }
+  details > *:last-child { margin-bottom: 14px; }
+
+  /* 판정 스펙트럼 */
+  .verdict-groups { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 18px 0; }
+  .vg { border-radius: 10px; padding: 12px 14px; border: 1px solid var(--line); }
+  .vg h4 { margin: 0 0 6px; font-size: 13.5px; }
+  .vg.g-ok { background: var(--ok-bg); } .vg.g-ok h4 { color: var(--ok); }
+  .vg.g-warn { background: var(--warn-bg); } .vg.g-warn h4 { color: var(--warn); }
+  .vg.g-bad { background: var(--bad-bg); } .vg.g-bad h4 { color: var(--bad); }
+  .vg ul { margin: 0; padding: 0; list-style: none; font-size: 13.5px; }
+  .vg li { margin: 2px 0; }
+  .vg .why { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  @media (max-width: 640px) { .verdict-groups { grid-template-columns: 1fr; } }
+
+  /* 터치 타깃 실물 크기 데모 */
+  .target-demo { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; margin: 8px 0 4px; }
+  .target-item { text-align: center; }
+  .target-item .bar {
+    position: relative;
+    background: var(--demo-neutral-weak);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    width: 132px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: var(--fg);
+  }
+  .target-item .bar.good { background: var(--demo-brand-weak); border-color: var(--demo-brand); }
+  .target-item .finger {
+    position: absolute; right: -16px; top: 50%;
+    width: 38px; height: 38px; margin-top: -19px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--fg) 14%, transparent);
+    border: 1.5px dashed var(--muted);
+  }
+  .target-item .lab { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+  /* 미니 폰 목업 */
+  .phones { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; margin: 8px 0 4px; }
+  .phone {
+    width: 150px; height: 240px;
+    border: 2px solid var(--fg);
+    border-radius: 20px;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .phone .screen-dim { position: absolute; inset: 0; background: color-mix(in srgb, var(--fg) 35%, transparent); }
+  .phone .sheet {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    background: var(--bg); border-top: 1px solid var(--line);
+    border-radius: 14px 14px 0 0; padding: 8px 10px 12px;
+  }
+  .phone .handle { width: 32px; height: 4px; border-radius: 2px; background: var(--line); margin: 0 auto 8px; }
+  .phone .row { height: 12px; border-radius: 4px; background: var(--surface-2); margin: 6px 0; }
+  .phone .row.danger { background: color-mix(in srgb, var(--demo-critical) 45%, var(--bg)); }
+  .phone .tabbar {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    border-top: 1px solid var(--line); background: var(--bg);
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 8px 0 14px;
+  }
+  .phone .tab { width: 18px; height: 18px; border-radius: 5px; background: var(--surface-2); }
+  .phone .tab.on { background: var(--demo-brand); }
+  .phone-cap { font-size: 12.5px; color: var(--muted); text-align: center; margin-top: 6px; }
+
+  /* 버튼 데모 (tone × variant 매트릭스) */
+  .btn-matrix {
+    display: grid;
+    grid-template-columns: 72px repeat(4, 1fr);
+    gap: 10px 8px;
+    align-items: center;
+    margin: 8px 0 4px;
+    min-width: 520px;
+  }
+  .btn-matrix .axis { font-size: 12px; font-weight: 700; color: var(--muted); text-align: center; letter-spacing: .04em; }
+  .btn-matrix .axis.row-l { text-align: right; padding-right: 4px; }
+  .demo-btn {
+    display: block; width: 100%;
+    min-height: 44px;
+    border-radius: 10px;
+    border: none;
+    font-family: inherit; font-size: 14px; font-weight: 600;
+    cursor: pointer;
+    transition: transform .05s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .demo-btn:active { transform: scale(.98); }
+  .b-brand.v-solid { background: var(--demo-brand); color: var(--demo-on-solid); }
+  .b-brand.v-solid:active { background: var(--demo-brand-pressed); }
+  .b-brand.v-weak { background: var(--demo-brand-weak); color: var(--demo-brand); }
+  .b-brand.v-weak:active { background: var(--demo-brand-weak-pressed); }
+  .b-brand.v-outline { background: transparent; color: var(--demo-brand); border: 1.5px solid var(--demo-brand); }
+  .b-brand.v-outline:active { background: var(--demo-brand-weak); }
+  .b-brand.v-ghost { background: transparent; color: var(--demo-brand); }
+  .b-brand.v-ghost:active { background: var(--demo-brand-weak); }
+  .b-neutral.v-solid { background: var(--demo-neutral); color: var(--bg); }
+  .b-neutral.v-solid:active { background: var(--demo-neutral-pressed); }
+  .b-neutral.v-weak { background: var(--demo-neutral-weak); color: var(--fg); }
+  .b-neutral.v-weak:active { background: var(--demo-neutral-weak-pressed); }
+  .b-neutral.v-outline { background: transparent; color: var(--fg); border: 1.5px solid var(--demo-neutral); }
+  .b-neutral.v-outline:active { background: var(--demo-neutral-weak); }
+  .b-neutral.v-ghost { background: transparent; color: var(--fg); }
+  .b-neutral.v-ghost:active { background: var(--demo-neutral-weak); }
+  .b-critical.v-solid { background: var(--demo-critical); color: var(--demo-on-solid); }
+  .b-critical.v-solid:active { background: var(--demo-critical-pressed); }
+  .b-critical.v-weak { background: var(--demo-critical-weak); color: var(--demo-critical); }
+  .b-critical.v-weak:active { background: var(--demo-critical-weak-pressed); }
+  .b-critical.v-outline { background: transparent; color: var(--demo-critical); border: 1.5px solid var(--demo-critical); }
+  .b-critical.v-outline:active { background: var(--demo-critical-weak); }
+  .b-critical.v-ghost { background: transparent; color: var(--demo-critical); }
+  .b-critical.v-ghost:active { background: var(--demo-critical-weak); }
+
+  /* use-case 스펙트럼 카드 */
+  .spectrum { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 18px 0; }
+  .spectrum > div {
+    border: 1px solid var(--line); border-radius: 10px;
+    background: var(--bg); padding: 12px 13px; font-size: 13px; line-height: 1.6;
+  }
+  .spectrum b { display: block; font-size: 13.5px; margin-bottom: 2px; }
+  .spectrum .pos { color: var(--accent); font-size: 12px; font-weight: 700; display: block; margin-bottom: 6px; }
+  .spectrum > div.picked { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  @media (max-width: 700px) { .spectrum { grid-template-columns: 1fr 1fr; } }
+
+  /* 계층(L1/L2/L3) 카드 */
+  .layers { display: grid; gap: 10px; margin: 18px 0; }
+  .layer {
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px 16px; background: var(--bg);
+  }
+  .layer .l-name { font-weight: 700; color: var(--accent); font-size: 14px; }
+  .layer p { margin: 4px 0 0; font-size: 14px; }
+
+  /* 다크 모드 스와치 데모 */
+  .theme-demo { display: flex; flex-wrap: wrap; gap: 14px; margin: 8px 0 4px; }
+  .theme-card {
+    flex: 1 1 220px;
+    border-radius: 12px; padding: 14px 16px;
+    border: 1px solid var(--line);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; line-height: 1.9;
+  }
+  .theme-card .sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 6px; border: 1px solid rgba(128,128,128,.4); }
+  .theme-card.light { background: #ffffff; color: #22272e; }
+  .theme-card.dark { background: #17171b; color: #e6e9ec; }
+
+  .footnote { font-size: 13.5px; color: var(--muted); }
+  hr.soft { border: none; border-top: 1px solid var(--line); margin: 48px 0; }
+</style>
+<main>
+
+<p class="eyebrow">쉽게 풀어 쓴 해설판</p>
+<h1>모바일 디자인 시스템, 8개를 뜯어보고 배운 것</h1>
+<p class="lead">원본 보고서 <code>insights.html</code>은 디자인 시스템 8개의 코드를 직접 열어 비교한 기록입니다. 이 문서는 그 내용을 디자인 시스템을 처음 접하는 프론트엔드 개발자와 디자이너 눈높이로 다시 씁니다.</p>
+<p class="footnote">읽는 데 약 20분이 걸립니다. 각 장은 독립적이라 순서 없이 읽어도 됩니다. 깊은 근거가 필요하면 각 장 끝의 접힌 표를 펼치세요.</p>
+
+<!-- ─────────────────────────────── 0장 ─────────────────────────────── -->
+<section id="what-is-ds">
+<span class="section-no">0장</span>
+<h2>먼저, 디자인 시스템이 뭔가요?</h2>
+
+<p><b>디자인 시스템은 UI 부품(컴포넌트)을 한 곳에서 만들어 두고, 모든 화면이 가져다 쓰게 하는 부품 창고입니다.</b> 이 문서에서 "부품"과 "컴포넌트"는 같은 말입니다. 부품과 함께 색, 글자 크기, 간격 같은 규칙도 창고에 들어 있습니다.</p>
+
+<p>디자인 시스템이 없으면 화면마다 버튼을 새로 만듭니다. 그러면 화면마다 버튼 색과 높이가 조금씩 달라집니다. 디자인 시스템이 있으면 이렇게 바뀝니다.</p>
+
+<pre><code>// 디자인 시스템이 없을 때: 화면마다 스타일을 직접 씀
+&lt;button style="background:#FF6F0F; height:44px; borderRadius:10px"&gt;구매하기&lt;/button&gt;
+
+// 디자인 시스템이 있을 때: 완성된 부품을 가져다 씀
+import { Button } from "@our-company/design-system";
+&lt;Button tone="brand" size="large"&gt;구매하기&lt;/Button&gt;</code></pre>
+
+<figure>
+  <svg viewBox="0 0 680 230" role="img" aria-label="디자인 시스템 패키지 하나에서 홈, 검색, 결제 세 화면이 같은 버튼과 입력창 컴포넌트를 가져다 쓰는 구조">
+    <defs>
+      <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+      </marker>
+    </defs>
+    <g fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="14" y="40" width="200" height="160" rx="12"/>
+      <rect x="34" y="86" width="160" height="30" rx="8" style="stroke:var(--demo-brand)"/>
+      <rect x="34" y="126" width="160" height="30" rx="8"/>
+      <rect x="34" y="166" width="72" height="22" rx="6"/>
+      <rect x="118" y="166" width="76" height="22" rx="6"/>
+    </g>
+    <text x="114" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">디자인 시스템 패키지</text>
+    <text x="114" y="106" text-anchor="middle" font-size="12" style="fill:var(--demo-brand)">Button</text>
+    <text x="114" y="146" text-anchor="middle" font-size="12" fill="currentColor">Input</text>
+    <text x="70" y="182" text-anchor="middle" font-size="11" fill="currentColor">색 규칙</text>
+    <text x="156" y="182" text-anchor="middle" font-size="11" fill="currentColor">간격 규칙</text>
+    <g fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M214 90 C 260 70, 280 60, 316 55" marker-end="url(#arr)"/>
+      <path d="M214 120 C 260 120, 280 120, 316 120" marker-end="url(#arr)"/>
+      <path d="M214 150 C 260 170, 280 180, 316 185" marker-end="url(#arr)"/>
+    </g>
+    <text x="264" y="108" text-anchor="middle" font-size="11" fill="currentColor">가져다 씀</text>
+    <g fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="320" y="18" width="100" height="72" rx="8"/>
+      <rect x="320" y="98" width="100" height="72" rx="8"/>
+      <rect x="320" y="178" width="100" height="46" rx="8"/>
+    </g>
+    <g style="fill:var(--demo-brand)">
+      <rect x="334" y="62" width="72" height="16" rx="5"/>
+      <rect x="334" y="142" width="72" height="16" rx="5"/>
+      <rect x="334" y="198" width="72" height="16" rx="5"/>
+    </g>
+    <text x="370" y="36" font-size="12" fill="currentColor">홈 화면</text>
+    <text x="370" y="116" font-size="12" fill="currentColor">검색 화면</text>
+    <text x="500" y="50" font-size="12.5" fill="currentColor">어느 화면에서 써도</text>
+    <text x="500" y="70" font-size="12.5" fill="currentColor">버튼의 색, 높이,</text>
+    <text x="500" y="90" font-size="12.5" fill="currentColor">눌림 효과가 똑같다.</text>
+    <text x="500" y="122" font-size="12.5" fill="currentColor">고치고 싶으면 창고의</text>
+    <text x="500" y="142" font-size="12.5" fill="currentColor">부품 하나만 고친다.</text>
+    <text x="370" y="196" font-size="12" fill="currentColor">결제 화면</text>
+  </svg>
+  <figcaption>디자인 시스템의 핵심 구조. 부품은 창고 한 곳에만 있고, 화면은 가져다 쓰기만 합니다.</figcaption>
+</figure>
+
+<h3>이번 조사는 무엇을 했나</h3>
+<p>새 디자인 시스템을 만들기 전에, 이미 검증된 시스템 8개를 골라 <b>공개된 코드를 직접 열어서</b> 비교했습니다. 홍보 문서를 읽은 것이 아닙니다. 코드에서 셀 수 있는 것(특정 코드가 몇 번 나오는지, 버튼 높이가 몇 px인지)을 세었습니다. 원본 보고서는 이것을 "소스 실측"이라고 부릅니다.</p>
+
+<div class="wrap-x">
+<table>
+  <thead><tr><th>이름</th><th>만든 곳</th><th>한 줄 소개</th></tr></thead>
+  <tbody>
+    <tr><td><b>antd-mobile</b></td><td>Ant Group (중국)</td><td>모바일 웹 전용으로 만든 대형 오픈소스</td></tr>
+    <tr><td><b>Seed</b></td><td>당근 (한국)</td><td>당근 앱의 웹뷰 화면을 위한 시스템</td></tr>
+    <tr><td><b>VKUI</b></td><td>VK (러시아)</td><td>러시아 최대 SNS 앱 속 미니앱용 시스템</td></tr>
+    <tr><td><b>Base Web</b></td><td>Uber</td><td>Uber 웹 서비스용 시스템</td></tr>
+    <tr><td><b>Primer</b></td><td>GitHub</td><td>GitHub 웹사이트용 시스템</td></tr>
+    <tr><td><b>Mantine</b></td><td>오픈소스 커뮤니티</td><td>범용 React 컴포넌트 모음</td></tr>
+    <tr><td><b>Semi Design</b></td><td>ByteDance (중국)</td><td>사내 업무 도구용 시스템</td></tr>
+    <tr><td><b>ABC Def</b></td><td>-</td><td>Tailwind 기반의 최신 시스템</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="term">
+  <span class="term-name">용어: 웹뷰(WebView)</span>
+  <p>네이티브 앱(iOS, Android 앱) 안에 웹페이지를 띄우는 화면입니다. 앱처럼 보이지만 속은 웹입니다. 우리가 만들 새 디자인 시스템은 이 웹뷰 화면을 위한 것입니다. 그래서 "모바일에서 잘 동작하는가"가 조사의 핵심 기준입니다.</p>
+</div>
+</section>
+
+<!-- ─────────────────────────────── 결론 ─────────────────────────────── -->
+<section id="conclusion">
+<span class="section-no">결론 요약</span>
+<h2>보고서의 결론은 세 문장입니다</h2>
+<div class="keybox">
+  <p><b>1. "모바일 지원"이라고 말하는 시스템 8개 중, 코드까지 진짜 모바일인 시스템은 3개뿐이었다.</b> antd-mobile, Seed, VKUI입니다. 나머지는 데스크톱 기준으로 만들어져 있었습니다. 판단은 문서가 아니라 코드로 해야 합니다. (1장)</p>
+  <p><b>2. 버튼 같은 부품의 옵션은 "서로 독립인 축 몇 개"로 설계하는 것이 8개 시스템의 공통 답이었다.</b> 그리고 "확인 버튼"처럼 용도가 정해진 부품은 옵션이 아니라 별도 부품으로 만듭니다. (3장, 4장)</p>
+  <p><b>3. 모바일 시스템 3개가 서로 베끼지 않았는데도 똑같이 도달한 기반 5가지가 있다.</b> 서로 모르는 팀들이 같은 답을 냈다면, 그 답은 검증된 것입니다. 새 시스템은 이 5가지를 고민 없이 채택합니다. (5장)</p>
+</div>
+</section>
+
+<!-- ─────────────────────────────── 1장 ─────────────────────────────── -->
+<section id="classification">
+<span class="section-no">1장</span>
+<h2>"모바일 지원"이라는 문서를 믿지 말고, 코드를 보세요</h2>
+
+<p>많은 디자인 시스템이 문서에 "모바일 대응"이라고 씁니다. 그런데 코드를 열어 보면 사실이 아닌 경우가 있었습니다. 조사에서는 코드에서 직접 셀 수 있는 신호 5가지로 판정했습니다. 하나씩 보겠습니다.</p>
+
+<h3>신호 1. safe-area를 처리하는가</h3>
+
+<div class="term">
+  <span class="term-name">용어: safe-area</span>
+  <p>요즘 폰은 화면 위에 카메라 구멍(노치)이 있고, 아래에 홈 표시줄이 있습니다. 그 영역을 피한 "안전한 영역"이 safe-area입니다. CSS에서 이렇게 읽습니다.</p>
+  <pre><code>/* 홈 표시줄 높이만큼 아래 여백을 확보 */
+padding-bottom: env(safe-area-inset-bottom);</code></pre>
+</div>
+
+<figure>
+  <svg viewBox="0 0 620 330" role="img" aria-label="safe-area를 처리하지 않은 폰은 하단 탭바가 홈 표시줄과 겹치고, 처리한 폰은 탭바가 홈 표시줄 위로 올라온다">
+    <!-- 왼쪽 폰: 잘못된 예 -->
+    <g fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="60" y="20" width="170" height="290" rx="22"/>
+    </g>
+    <rect x="115" y="28" width="60" height="12" rx="6" fill="currentColor" opacity="0.8"/>
+    <rect x="61" y="262" width="168" height="47" style="fill:var(--bad)" opacity="0.14"/>
+    <g fill="none" stroke="currentColor" stroke-width="1.2">
+      <line x1="61" y1="272" x2="229" y2="272"/>
+    </g>
+    <text x="145" y="252" text-anchor="middle" font-size="11" style="fill:var(--bad)">탭바가 홈 표시줄에 깔림 ↓</text>
+    <rect x="115" y="298" width="60" height="5" rx="2.5" fill="currentColor"/>
+    <g fill="currentColor" opacity="0.5">
+      <rect x="80" y="277" width="14" height="14" rx="4"/>
+      <rect x="125" y="277" width="14" height="14" rx="4"/>
+      <rect x="170" y="277" width="14" height="14" rx="4"/>
+    </g>
+    <text x="145" y="326" text-anchor="middle" font-size="12" style="fill:var(--bad)" font-weight="700">처리 안 함</text>
+
+    <!-- 오른쪽 폰: 잘된 예 -->
+    <g fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="330" y="20" width="170" height="290" rx="22"/>
+    </g>
+    <rect x="385" y="28" width="60" height="12" rx="6" fill="currentColor" opacity="0.8"/>
+    <g fill="none" stroke="currentColor" stroke-width="1.2">
+      <line x1="331" y1="252" x2="499" y2="252"/>
+    </g>
+    <g fill="currentColor">
+      <rect x="352" y="260" width="16" height="16" rx="4" opacity="0.5"/>
+      <rect x="407" y="260" width="16" height="16" rx="4" style="fill:var(--demo-brand)" opacity="1"/>
+      <rect x="462" y="260" width="16" height="16" rx="4" opacity="0.5"/>
+    </g>
+    <rect x="331" y="286" width="168" height="23" style="fill:var(--ok)" opacity="0.14"/>
+    <rect x="385" y="298" width="60" height="5" rx="2.5" fill="currentColor"/>
+    <text x="415" y="326" text-anchor="middle" font-size="12" style="fill:var(--ok)" font-weight="700">safe-area 확보</text>
+
+    <!-- 주석 -->
+    <text x="513" y="298" font-size="11" fill="currentColor">← 이만큼 띄움</text>
+    <text x="513" y="313" font-size="11" fill="currentColor">(inset-bottom)</text>
+  </svg>
+  <figcaption>같은 탭바인데 왼쪽은 홈 표시줄과 겹쳐서 누르기 어렵습니다. 모바일 시스템 3개는 이 여백 확보가 기본 내장입니다.</figcaption>
+</figure>
+
+<h3>신호 2. hover에 기대는가, pressed를 챙기는가</h3>
+
+<div class="term">
+  <span class="term-name">용어: hover와 pressed</span>
+  <p><b>hover</b>는 마우스 커서를 올려둔 상태입니다. <b>pressed</b>는 손가락이나 마우스로 누르고 있는 순간입니다. 손가락에는 "올려두기"가 없으므로, 모바일에는 hover가 존재하지 않습니다.</p>
+  <pre><code>.button:hover  { ... }  /* 마우스 전용. 폰에서는 발동하지 않거나 오작동 */
+.button:active { ... }  /* 누르는 순간. 폰에서도 동작 */</code></pre>
+</div>
+
+<figure>
+  <svg viewBox="0 0 620 220" role="img" aria-label="데스크톱은 커서를 올려둔 hover 상태가 있지만, 폰은 손가락으로 누르는 pressed 상태만 있다">
+    <!-- 데스크톱 -->
+    <g fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="30" y="30" width="240" height="140" rx="10"/>
+      <line x1="120" y1="170" x2="180" y2="170"/>
+      <line x1="100" y1="184" x2="200" y2="184" stroke-width="3"/>
+    </g>
+    <rect x="90" y="80" width="120" height="40" rx="10" style="fill:var(--demo-brand)" opacity="0.55"/>
+    <text x="150" y="105" text-anchor="middle" font-size="13" fill="currentColor">버튼</text>
+    <polygon points="196,66 196,88 202,83 208,94 213,91 208,81 216,80" fill="currentColor"/>
+    <text x="150" y="52" text-anchor="middle" font-size="12" fill="currentColor">커서를 올려두면 :hover</text>
+    <text x="150" y="212" text-anchor="middle" font-size="12.5" fill="currentColor" font-weight="700">데스크톱: hover 있음</text>
+
+    <!-- 폰 -->
+    <g fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="400" y="16" width="130" height="188" rx="18"/>
+    </g>
+    <rect x="425" y="96" width="80" height="40" rx="10" style="fill:var(--demo-brand)"/>
+    <text x="465" y="121" text-anchor="middle" font-size="13" style="fill:var(--demo-on-solid)">버튼</text>
+    <circle cx="492" cy="118" r="22" fill="currentColor" opacity="0.28"/>
+    <circle cx="492" cy="118" r="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="465" y="60" text-anchor="middle" font-size="12" fill="currentColor">누르는 순간만 있다</text>
+    <text x="465" y="78" text-anchor="middle" font-size="12" fill="currentColor">= :active (pressed)</text>
+    <text x="465" y="220" text-anchor="middle" font-size="12.5" fill="currentColor" font-weight="700" transform="translate(0,-4)">모바일: hover 없음</text>
+  </svg>
+  <figcaption>hover 스타일을 조건 없이 쓴 시스템은 데스크톱용입니다. 실제로 데스크톱 판정을 받은 Semi Design은 코드에 <code>:hover</code>가 279번 나왔고, 모바일 판정을 받은 antd-mobile은 0번이었습니다.</figcaption>
+</figure>
+
+<h3>신호 3. 기본 버튼 높이가 44px 이상인가</h3>
+
+<p>손가락 끝이 화면에 닿는 면적은 지름 약 10mm, 화면 픽셀로 약 38px입니다. 그래서 Apple과 Google 모두 <b>누를 수 있는 요소는 최소 44px 안팎</b>을 권장합니다. 이 크기를 "터치 타깃"이라고 부릅니다. 아래는 실물 크기입니다. 폰에서 이 문서를 열었다면 직접 눌러 보세요.</p>
+
+<figure>
+  <div class="target-demo" role="img" aria-label="높이 24, 32, 44, 52픽셀 버튼을 실물 크기로 비교. 44픽셀부터 손가락 접촉면을 담을 수 있다">
+    <div class="target-item">
+      <div class="bar" style="height:24px">24px</div>
+      <div class="lab">Semi 소형<br><span class="bad-t">손가락보다 작음</span></div>
+    </div>
+    <div class="target-item">
+      <div class="bar" style="height:32px">32px</div>
+      <div class="lab">ABC Def 기본<br><span class="bad-t">여전히 작음</span></div>
+    </div>
+    <div class="target-item">
+      <div class="bar good" style="height:44px"><span>44px</span><span class="finger"></span></div>
+      <div class="lab">모바일 권장선<br><span class="ok-t">손가락이 들어감</span></div>
+    </div>
+    <div class="target-item">
+      <div class="bar good" style="height:52px">52px</div>
+      <div class="lab">Seed 대형<br><span class="ok-t">여유 있음</span></div>
+    </div>
+  </div>
+  <figcaption>점선 원이 평균적인 손가락 접촉면(약 38px)입니다. 24px, 32px 버튼은 접촉면보다 작아서 옆 버튼을 잘못 누르기 쉽습니다.</figcaption>
+</figure>
+
+<h3>신호 4와 5. 터치 제스처와 모바일 전용 부품이 있는가</h3>
+
+<p>나머지 두 신호는 "모바일에서만 필요한 것을 시스템이 직접 만들어 두었는가"입니다.</p>
+<ul>
+  <li><b>터치 제스처</b>: 당겨서 새로고침, 밀어서 삭제 같은 손가락 동작. 데스크톱용 시스템에는 이 코드 자체가 없습니다.</li>
+  <li><b>모바일 전용 부품</b>: 바텀시트, 액션시트, 탭바처럼 폰 화면에만 있는 부품. 아래 그림이 그 세 가지입니다.</li>
+</ul>
+
+<figure>
+  <div class="phones" role="img" aria-label="바텀시트, 액션시트, 탭바 세 가지 모바일 전용 부품의 화면 예시">
+    <div>
+      <div class="phone">
+        <div class="screen-dim"></div>
+        <div class="sheet" style="height:120px">
+          <div class="handle"></div>
+          <div class="row" style="width:70%"></div>
+          <div class="row" style="width:90%"></div>
+          <div class="row" style="width:55%"></div>
+        </div>
+      </div>
+      <div class="phone-cap"><b>바텀시트</b><br>아래에서 올라오는 반쪽 화면</div>
+    </div>
+    <div>
+      <div class="phone">
+        <div class="screen-dim"></div>
+        <div class="sheet" style="height:100px">
+          <div class="row" style="margin-top:2px"></div>
+          <div class="row danger"></div>
+          <div class="row"></div>
+        </div>
+      </div>
+      <div class="phone-cap"><b>액션시트</b><br>선택지 목록 (빨강 = 삭제)</div>
+    </div>
+    <div>
+      <div class="phone">
+        <div class="tabbar">
+          <div class="tab on"></div>
+          <div class="tab"></div>
+          <div class="tab"></div>
+          <div class="tab"></div>
+        </div>
+      </div>
+      <div class="phone-cap"><b>탭바</b><br>하단 고정 메뉴</div>
+    </div>
+  </div>
+  <figcaption>이런 부품이 목록에 몇 개나 있는지 세면, 그 시스템이 어떤 화면을 위해 만들어졌는지 드러납니다.</figcaption>
+</figure>
+
+<h3>판정 결과</h3>
+
+<div class="verdict-groups">
+  <div class="vg g-ok">
+    <h4>진짜 모바일 (3개)</h4>
+    <ul><li>antd-mobile</li><li>Seed</li><li>VKUI</li></ul>
+    <p class="why">신호 5개를 모두 통과. 새 시스템의 주 참고 대상.</p>
+  </div>
+  <div class="vg g-warn">
+    <h4>데스크톱이 먼저, 모바일은 대응 (3개)</h4>
+    <ul><li>Base Web</li><li>Primer</li><li>Mantine</li></ul>
+    <p class="why">hover 중심이고 safe-area가 거의 없음. 부분 기법만 참고.</p>
+  </div>
+  <div class="vg g-bad">
+    <h4>사실상 데스크톱 전용 (2개)</h4>
+    <ul><li>Semi Design</li><li>ABC Def</li></ul>
+    <p class="why">문서는 모바일 대응을 말하지만 코드는 아니었음.</p>
+  </div>
+</div>
+
+<div class="warnbox">
+  <b>이 장에서 얻은 교훈.</b> 앞으로 외부 시스템을 참고하거나 부품을 가져올 때, 문서 대신 5가지를 확인합니다. safe-area 처리가 있는가. 조건 없는 <code>:hover</code>를 쓰는가. 기본 높이가 44px 이상인가. 터치 제스처 코드가 있는가. 바텀시트와 탭바 같은 부품이 정식으로 있는가.
+</div>
+
+<details>
+  <summary>원본 판정표 전체 보기 (시스템 8개 × 신호 5개)</summary>
+  <div class="wrap-x">
+  <table>
+    <thead>
+      <tr><th>시스템</th><th>판정</th><th>safe-area</th><th>hover 의존</th><th>기본 터치 타깃</th><th>터치 제스처</th><th>모바일 부품 수</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>antd-mobile</b></td><td class="ok-t">모바일 우선</td><td>전용 부품 + 기본 내장</td><td>:hover 0건, :active만</td><td>44px급</td><td>전용 부품 10개</td><td>15+</td></tr>
+      <tr><td><b>Seed</b></td><td class="ok-t">모바일 우선</td><td>값을 전역 변수 한 곳에 모아 둠</td><td>전용 코드로 hover 차단</td><td>대형 52px</td><td>당겨서 새로고침 직접 구현</td><td>11+</td></tr>
+      <tr><td><b>VKUI</b></td><td class="ok-t">모바일 우선</td><td>전역 변수 + 탭바가 사용</td><td>색 정의에 hover용/눌림용 분리 내장</td><td>44px급</td><td>스와이프 뒤로가기 직접 구현</td><td>14+</td></tr>
+      <tr><td>Base Web</td><td class="warn-t">데스크톱 먼저</td><td>0건</td><td>@media(hover:hover) 조건 사용</td><td>터치 영역만 48px로 넓힘</td><td>일부</td><td>9</td></tr>
+      <tr><td>Primer</td><td class="warn-t">데스크톱 먼저</td><td>1곳</td><td>38개 파일</td><td>터치용 44px 크기 정의가 있음</td><td>없음</td><td>0</td></tr>
+      <tr><td>Mantine</td><td class="warn-t">데스크톱 먼저</td><td>1곳</td><td>hover 코드 18개 파일</td><td>36px (소형 22px)</td><td>없음</td><td>0</td></tr>
+      <tr><td>Semi Design</td><td class="bad-t">데스크톱</td><td>0건</td><td>:hover 279회</td><td>24~40px</td><td>없음</td><td>0</td></tr>
+      <tr><td>ABC Def</td><td class="bad-t">데스크톱</td><td>0건</td><td>CSS 49개 중 24개</td><td>32px (최소 24px)</td><td>1개</td><td>1</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="footnote">ABC Def는 키보드 안내(kbd), 메뉴바, 마우스 올림 카드(hover-card)처럼 데스크톱에서만 쓰는 부품을 갖고 있고, 눌림 상태용 색 정의가 없습니다. 두 시스템 모두 색 이름 체계(3장)는 배울 가치가 있지만, 부품의 크기와 상태 설계는 가져오면 안 됩니다.</p>
+</details>
+</section>
+
+<!-- ─────────────────────────────── 2장 ─────────────────────────────── -->
+<section id="tokens">
+<span class="section-no">2장</span>
+<h2>토큰: 색과 크기에 이름을 붙이는 기술</h2>
+
+<p>버튼 색을 코드에 <code>#FF6F0F</code>라고 직접 쓰면 두 가지 문제가 생깁니다. 브랜드 색이 바뀌면 수백 곳을 고쳐야 합니다. 다크 모드에서는 다른 값이 필요한데 분기할 방법이 없습니다. 그래서 모든 디자인 시스템은 값에 <b>이름을 붙여서</b> 씁니다. 이 이름 붙인 값이 <b>토큰</b>입니다.</p>
+
+<div class="term">
+  <span class="term-name">용어: 디자인 토큰(design token)</span>
+  <p>색, 크기, 간격 같은 디자인 값에 붙인 이름입니다. 코드에서는 주로 CSS 변수로 구현합니다.</p>
+  <pre><code>:root { --bg-brand-solid: #FF6F0F; }   /* 이름을 선언 */
+.button { background: var(--bg-brand-solid); }  /* 이름으로 사용 */</code></pre>
+</div>
+
+<h3>8개 시스템 전부, 이름을 3단계로 붙입니다</h3>
+
+<p>조사한 8개 시스템은 만든 곳도 언어도 다른데, 토큰 구조는 전부 같은 3단계였습니다.</p>
+
+<figure class="fig-wide">
+  <svg viewBox="0 0 760 170" role="img" aria-label="원시 색 #FF6F0F가 orange-500이라는 팔레트 이름, bg-brand-solid라는 역할 이름, button-bg라는 부품 이름을 거쳐 실제 버튼에 적용되는 3단계 흐름">
+    <defs>
+      <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+      </marker>
+    </defs>
+    <g fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="10" y="40" width="160" height="70" rx="10"/>
+      <rect x="210" y="40" width="180" height="70" rx="10"/>
+      <rect x="430" y="40" width="160" height="70" rx="10"/>
+    </g>
+    <rect x="24" y="58" width="24" height="24" rx="6" style="fill:var(--demo-brand)"/>
+    <text x="58" y="68" font-size="12" fill="currentColor" font-family="monospace">#FF6F0F</text>
+    <text x="58" y="86" font-size="12" fill="currentColor" font-family="monospace">orange-500</text>
+    <text x="90" y="28" text-anchor="middle" font-size="12.5" font-weight="700" fill="currentColor">1. 팔레트</text>
+    <text x="90" y="132" text-anchor="middle" font-size="11.5" fill="currentColor">그냥 색 목록</text>
+
+    <text x="300" y="70" text-anchor="middle" font-size="12" fill="currentColor" font-family="monospace">--bg-brand-solid</text>
+    <text x="300" y="92" text-anchor="middle" font-size="11.5" fill="currentColor">"브랜드 강조 배경"</text>
+    <text x="300" y="28" text-anchor="middle" font-size="12.5" font-weight="700" fill="currentColor">2. 시맨틱</text>
+    <text x="300" y="132" text-anchor="middle" font-size="11.5" fill="currentColor">역할을 뜻하는 이름</text>
+
+    <text x="510" y="70" text-anchor="middle" font-size="12" fill="currentColor" font-family="monospace">--button-bg</text>
+    <text x="510" y="92" text-anchor="middle" font-size="11.5" fill="currentColor">"버튼의 배경"</text>
+    <text x="510" y="28" text-anchor="middle" font-size="12.5" font-weight="700" fill="currentColor">3. 컴포넌트</text>
+    <text x="510" y="132" text-anchor="middle" font-size="11.5" fill="currentColor">부품별 이름</text>
+
+    <g fill="none" stroke="currentColor" stroke-width="1.5">
+      <line x1="170" y1="75" x2="204" y2="75" marker-end="url(#arr2)"/>
+      <line x1="390" y1="75" x2="424" y2="75" marker-end="url(#arr2)"/>
+      <line x1="590" y1="75" x2="624" y2="75" marker-end="url(#arr2)"/>
+    </g>
+    <rect x="630" y="55" width="118" height="40" rx="10" style="fill:var(--demo-brand)"/>
+    <text x="689" y="80" text-anchor="middle" font-size="13" style="fill:var(--demo-on-solid)">구매하기</text>
+    <text x="689" y="120" text-anchor="middle" font-size="11.5" fill="currentColor">실제 버튼</text>
+  </svg>
+  <figcaption>같은 주황색이 단계마다 다른 이름을 얻습니다. 팔레트는 "무슨 색인지", 시맨틱은 "무슨 역할인지", 컴포넌트는 "어느 부품이 쓰는지"를 말합니다.</figcaption>
+</figure>
+
+<p>왜 굳이 3단계일까요? <b>바꿀 때 편하기 때문입니다.</b> 브랜드 색 교체는 팔레트 1곳만 고칩니다. "위험 버튼의 배경을 더 연하게"는 시맨틱 1곳만 고칩니다. "우리 서비스에서만 버튼을 다르게"는 컴포넌트 토큰만 덮어씁니다. 각 요구가 각자의 층에서 끝납니다.</p>
+
+<h3>다크 모드는 토큰 값만 바꿉니다</h3>
+
+<p>토큰을 쓰면 다크 모드가 간단해집니다. 컴포넌트 코드는 그대로 두고, 토큰의 값만 통째로 바꿉니다.</p>
+
+<pre><code>html { --bg-page: #FFFFFF; --text-main: #222222; }
+html[data-theme="dark"] { --bg-page: #17171B; --text-main: #E6E9EC; }</code></pre>
+
+<figure>
+  <div class="theme-demo" role="img" aria-label="라이트 모드와 다크 모드에서 같은 토큰 이름이 다른 색 값을 갖는 비교">
+    <div class="theme-card light">
+      <b>라이트 모드</b><br>
+      <span class="sw" style="background:#FFFFFF"></span>--bg-page: #FFFFFF<br>
+      <span class="sw" style="background:#222222"></span>--text-main: #222222<br>
+      <span class="sw" style="background:#FF6F0F"></span>--bg-brand-solid: #FF6F0F
+    </div>
+    <div class="theme-card dark">
+      <b>다크 모드</b><br>
+      <span class="sw" style="background:#17171B"></span>--bg-page: #17171B<br>
+      <span class="sw" style="background:#E6E9EC"></span>--text-main: #E6E9EC<br>
+      <span class="sw" style="background:#FF8A3D"></span>--bg-brand-solid: #FF8A3D
+    </div>
+  </div>
+  <figcaption>토큰 이름은 같고 값만 다릅니다. <code>html</code> 태그의 속성 하나로 전체 화면이 전환됩니다. 지금 보는 이 문서도 같은 방식입니다.</figcaption>
+</figure>
+
+<h3>시스템들이 갈린 지점: 눌림 색을 어디에 두는가</h3>
+
+<p>3단계 구조는 8개 모두 같았습니다. 차이는 <b>눌렀을 때의 색을 누가 정하느냐</b>였습니다. 모바일 우선 시스템인 Seed는 시맨틱 토큰을 만들 때부터 눌림 색을 짝으로 함께 만듭니다.</p>
+
+<pre><code>--bg-brand-solid:         #FF6F0F;  /* 평상시 */
+--bg-brand-solid-pressed: #D95A00;  /* 눌림. 항상 짝으로 존재 */</code></pre>
+<p class="code-note">이 문서의 3장 버튼 데모도 이 방식으로 만들었습니다. 버튼을 눌러 보세요.</p>
+
+<p>반대로 데스크톱 판정을 받은 ABC Def에는 hover용 색만 있고 눌림용 색이 아예 없었습니다. 토큰 사전에 눌림이 없으면, 부품을 만드는 사람마다 눌림 색을 즉흥적으로 정하게 됩니다.</p>
+
+<div class="keybox">
+  <b>새 시스템에 적용할 결정.</b> 3단계 토큰 구조를 쓴다. 시맨틱 토큰은 Seed처럼 눌림 색을 짝으로 내장한다. hover용 토큰은 만들지 않는다. 스타일 배포는 이렇게 한다: 빌드 시점에 CSS 파일을 미리 만들고, 색은 CSS 변수로 열어 두고, 다크 모드는 <code>html</code> 속성으로 전환한다.
+</div>
+
+<details>
+  <summary>원본 근거 보기 (시스템 8개의 토큰 구조 비교)</summary>
+  <div class="wrap-x">
+  <table>
+    <thead><tr><th>시스템</th><th>3단계 구성</th><th>눌림 상태의 위치</th><th>스타일 배포 방식</th></tr></thead>
+    <tbody>
+      <tr><td><b>Seed</b></td><td>팔레트 → 시맨틱 → 컴포넌트 (Figma→YAML→자동 생성)</td><td class="ok-t">시맨틱 토큰에 눌림 짝 내장</td><td>CSS 변수 + html 속성</td></tr>
+      <tr><td><b>VKUI</b></td><td>원시 JSON → 시맨틱 → 테마 상속(69종)</td><td class="ok-t">토큰 값 자체에 hover/active 분리 내장</td><td>CSS 변수, 루트 클래스 교체</td></tr>
+      <tr><td><b>antd-mobile</b></td><td>전역 변수 → 컴포넌트 공개 변수 → 인스턴스 변수</td><td>:active CSS 코드에서 처리</td><td>정적 CSS + CSS 변수</td></tr>
+      <tr><td>Primer</td><td>base → functional → component (테마 14종)</td><td>CSS 코드에서 처리. 마우스용과 터치용 크기 토큰을 따로 둠</td><td>CSS 변수 + data 속성</td></tr>
+      <tr><td>Mantine</td><td>JS 테마 → 전역 CSS 변수 → 컴포넌트 변수</td><td>CSS 코드에서 처리. 색 계산 함수를 중앙화</td><td>CSS 변수 + data 속성</td></tr>
+      <tr><td>Semi</td><td>RGB 채널 팔레트 → 시맨틱 → 컴포넌트 SCSS</td><td class="warn-t">hover 중심. 크기가 빌드 시점에 고정되는 한계</td><td>CSS 변수(색만)</td></tr>
+      <tr><td>ABC Def</td><td>Tailwind 원시 → 시맨틱 → 컴포넌트(자동 생성)</td><td class="bad-t">hover용만 있고 눌림용 없음</td><td>작성된 CSS + 클래스 계약</td></tr>
+      <tr><td>Base Web</td><td>색만 4단계, 함수 합성으로 재계산</td><td class="warn-t">CSS 변수를 안 쓰고 JS 객체 교체</td><td>런타임 CSS-in-JS</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="footnote">Base Web만 "런타임 CSS-in-JS"를 씁니다. JS가 실행되는 순간에 스타일을 만들어 끼우는 방식인데, 실행 비용이 들고 다른 환경으로 옮기기 어렵습니다. 나머지 7개는 빌드 시점에 CSS 파일을 미리 만들어 배포합니다. 새 시스템도 후자를 따릅니다.</p>
+</details>
+</section>
+
+<!-- ─────────────────────────────── 3장 ─────────────────────────────── -->
+<section id="variants">
+<span class="section-no">3장</span>
+<h2>버튼 종류가 폭발하지 않게, 옵션을 축으로 나누기</h2>
+
+<p>버튼 하나에도 종류가 많습니다. 주황 강조 버튼, 회색 보조 버튼, 빨간 삭제 버튼, 테두리만 있는 버튼. 이 종류를 어떻게 정리하느냐가 이번 장의 주제입니다. 디자인 시스템은 이 "부품의 종류 옵션"을 <b>variant</b>라고 부릅니다.</p>
+
+<p class="footnote">주의: 업계에서는 variant를 두 가지로 씁니다. 옵션 전반을 부르는 일반 용어이기도 하고, 특정 옵션 축의 이름이기도 합니다. 이 문서에서 축 이름 variant는 "칠하는 강도" 축을 가리킵니다. 아래 그림에서 확인할 수 있습니다.</p>
+
+<p>실패하는 방법부터 보겠습니다. 종류가 생길 때마다 이름을 하나씩 추가하는 방식입니다.</p>
+
+<figure class="fig-wide">
+  <svg viewBox="0 0 720 300" role="img" aria-label="옵션을 한 축에 나열하면 값이 계속 늘어나고, 두 축으로 나누면 7개 값으로 12개 조합을 만든다">
+    <!-- 왼쪽: 한 축 -->
+    <g fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="20" y="46" width="230" height="234" rx="10"/>
+    </g>
+    <text x="135" y="30" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">축 1개에 전부 나열 (실패)</text>
+    <g font-size="12.5" fill="currentColor" font-family="monospace">
+      <text x="40" y="76">kind="primary"</text>
+      <text x="40" y="100">kind="secondary"</text>
+      <text x="40" y="124">kind="danger"</text>
+      <text x="40" y="148">kind="dangerSecondary"</text>
+      <text x="40" y="172">kind="tertiary"</text>
+      <text x="40" y="196">kind="dangerTertiary"</text>
+    </g>
+    <text x="40" y="226" font-size="12.5" style="fill:var(--bad)" font-weight="700">"위험 + 테두리형"이 필요할</text>
+    <text x="40" y="246" font-size="12.5" style="fill:var(--bad)" font-weight="700">때마다 조합 이름이 늘어남</text>
+    <text x="40" y="268" font-size="12" fill="currentColor">Base Web이 실제로 이 상태</text>
+
+    <!-- 오른쪽: 두 축 -->
+    <text x="510" y="30" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">독립인 축 2개로 분리 (성공)</text>
+    <text x="330" y="98" font-size="12" fill="currentColor">tone</text>
+    <text x="330" y="116" font-size="11" fill="currentColor">(색의 의미)</text>
+    <g font-size="11.5" fill="currentColor" text-anchor="end">
+      <text x="438" y="130">brand</text>
+      <text x="438" y="170">neutral</text>
+      <text x="438" y="210">critical</text>
+    </g>
+    <g font-size="11.5" fill="currentColor" text-anchor="middle">
+      <text x="480" y="100">solid</text>
+      <text x="540" y="100">weak</text>
+      <text x="600" y="100">outline</text>
+      <text x="660" y="100">ghost</text>
+    </g>
+    <text x="570" y="66" text-anchor="middle" font-size="12" fill="currentColor">variant (칠하는 강도)</text>
+    <g>
+      <rect x="458" y="112" width="44" height="26" rx="6" style="fill:var(--demo-brand)"/>
+      <rect x="518" y="112" width="44" height="26" rx="6" style="fill:var(--demo-brand)" opacity="0.25"/>
+      <rect x="578" y="112" width="44" height="26" rx="6" fill="none" style="stroke:var(--demo-brand)" stroke-width="1.5"/>
+      <rect x="638" y="112" width="44" height="26" rx="6" style="fill:var(--demo-brand)" opacity="0.1"/>
+      <rect x="458" y="152" width="44" height="26" rx="6" fill="currentColor" opacity="0.75"/>
+      <rect x="518" y="152" width="44" height="26" rx="6" fill="currentColor" opacity="0.2"/>
+      <rect x="578" y="152" width="44" height="26" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <rect x="638" y="152" width="44" height="26" rx="6" fill="currentColor" opacity="0.08"/>
+      <rect x="458" y="192" width="44" height="26" rx="6" style="fill:var(--demo-critical)"/>
+      <rect x="518" y="192" width="44" height="26" rx="6" style="fill:var(--demo-critical)" opacity="0.25"/>
+      <rect x="578" y="192" width="44" height="26" rx="6" fill="none" style="stroke:var(--demo-critical)" stroke-width="1.5"/>
+      <rect x="638" y="192" width="44" height="26" rx="6" style="fill:var(--demo-critical)" opacity="0.1"/>
+    </g>
+    <text x="450" y="252" font-size="12.5" style="fill:var(--ok)" font-weight="700">값 3 + 4 = 7개만 정의하면</text>
+    <text x="450" y="272" font-size="12.5" style="fill:var(--ok)" font-weight="700">조합 3 × 4 = 12종이 나온다</text>
+  </svg>
+  <figcaption>왼쪽은 의미(위험)와 강도(테두리형)가 한 축에 섞여서 조합마다 새 이름이 필요합니다. 오른쪽은 두 성질을 서로 독립인 축으로 나눠서, 값 7개로 12가지를 표현합니다.</figcaption>
+</figure>
+
+<p>오른쪽 방식의 축 두 개를 실제 버튼으로 만들면 이렇게 됩니다. <b>모든 버튼을 직접 눌러 보세요.</b> 눌림 색(2장의 pressed 토큰 짝)이 전부 준비되어 있습니다.</p>
+
+<figure class="fig-wide">
+  <div style="overflow-x:auto">
+  <div class="btn-matrix">
+    <span class="axis"></span>
+    <span class="axis">solid<br>가득 칠함</span>
+    <span class="axis">weak<br>연하게 칠함</span>
+    <span class="axis">outline<br>테두리만</span>
+    <span class="axis">ghost<br>글자만</span>
+    <span class="axis row-l">brand<br>강조</span>
+    <button type="button" class="demo-btn b-brand v-solid">구매하기</button>
+    <button type="button" class="demo-btn b-brand v-weak">구매하기</button>
+    <button type="button" class="demo-btn b-brand v-outline">구매하기</button>
+    <button type="button" class="demo-btn b-brand v-ghost">구매하기</button>
+    <span class="axis row-l">neutral<br>보통</span>
+    <button type="button" class="demo-btn b-neutral v-solid">닫기</button>
+    <button type="button" class="demo-btn b-neutral v-weak">닫기</button>
+    <button type="button" class="demo-btn b-neutral v-outline">닫기</button>
+    <button type="button" class="demo-btn b-neutral v-ghost">닫기</button>
+    <span class="axis row-l">critical<br>위험</span>
+    <button type="button" class="demo-btn b-critical v-solid">삭제</button>
+    <button type="button" class="demo-btn b-critical v-weak">삭제</button>
+    <button type="button" class="demo-btn b-critical v-outline">삭제</button>
+    <button type="button" class="demo-btn b-critical v-ghost">삭제</button>
+  </div>
+  </div>
+  <figcaption>세로축 tone은 "무슨 의미의 색인가", 가로축 variant는 "얼마나 세게 칠하는가"입니다. 여기에 size 축(높이)을 더한 3축이 원본 보고서의 권고안입니다. 코드로는 <code>&lt;Button tone="critical" variant="outline"&gt;</code>처럼 씁니다.</figcaption>
+</figure>
+
+<h3>색 계산은 함수 한 곳에 모읍니다</h3>
+
+<p>위 매트릭스에서 버튼 한 칸은 색 4가지가 필요합니다. 배경, 글자, 테두리, 눌림 배경입니다. 이 계산을 버튼, 태그, 알림 배너 등 부품마다 따로 하면 금방 어긋납니다. Mantine이 좋은 선례를 보여 줍니다. <b>(tone, variant)를 넣으면 색 4가지를 돌려주는 함수 하나</b>를 두는 방식입니다.</p>
+
+<pre><code>function resolveColors(tone, variant) {
+  // 예: ("critical", "outline")
+  //  → { bg: 투명, text: 빨강, border: 빨강, pressedBg: 연빨강 }
+}</code></pre>
+<p class="code-note">variant를 하나 추가할 때, 부품 N개를 고치는 대신 이 함수에 분기 1개만 더하면 됩니다.</p>
+
+<div class="keybox">
+  <b>새 시스템에 적용할 결정.</b> 버튼은 tone(3종) × variant(4종) × size(3~4종)의 독립 3축으로 시작한다. 의미와 강도를 한 축에 섞지 않는다. 색 계산은 중앙 함수 1개로 모은다. 쓰면 안 되는 조합이 있다면, Seed처럼 유효한 조합만 골라서 공개한다.
+</div>
+
+<details>
+  <summary>원본 근거 보기 (시스템 8개의 버튼 옵션 축 비교)</summary>
+  <div class="wrap-x">
+  <table>
+    <thead><tr><th>시스템</th><th>버튼의 축</th><th>평가</th></tr></thead>
+    <tbody>
+      <tr><td>Semi</td><td>type(의미 5) × theme(강도 4) × size(3)</td><td class="ok-t">의미와 강도를 독립 분리. 2축으로 20조합</td></tr>
+      <tr><td>VKUI</td><td>mode(강조 수준 5) × appearance(색 의미 6) × size(3)</td><td class="ok-t">같은 분리 철학</td></tr>
+      <tr><td>antd-mobile</td><td>color(5) × fill(3) × size(4) × shape(3)</td><td class="ok-t">독립 4축 + 로딩 자동 처리</td></tr>
+      <tr><td>Seed</td><td>variant 7값 × size(4) × layout(2)</td><td class="ok-t">유효 조합 7개만 골라서 공개. 사용 규칙을 주석으로 명시</td></tr>
+      <tr><td>Primer</td><td>variant(5) × size(3). 아이콘 버튼은 별도 부품</td><td class="ok-t">축을 더 늘리지 않고, 새 용도는 별도 부품으로</td></tr>
+      <tr><td>Mantine</td><td>variant(시각 톤 8) × color(자유) × size(10)</td><td class="warn-t">유연하지만 "위험" 같은 의미 축이 없음</td></tr>
+      <tr><td>ABC Def</td><td>variant(6) × size(10) × rounded(5)</td><td class="warn-t">size 10종은 아이콘 변형까지 한 축에 뭉친 결과</td></tr>
+      <tr><td>Base Web</td><td>kind(6: 의미와 강도가 한 축에 뭉침) × shape(7) × size(옛 이름과 새 이름이 함께 남은 7종)</td><td class="bad-t">실패에서 배울 사례. 축 설계 실패는 공개 옵션 이름에 그대로 남아 되돌리기 어렵다</td></tr>
+    </tbody>
+  </table>
+  </div>
+</details>
+</section>
+
+<!-- ─────────────────────────────── 4장 ─────────────────────────────── -->
+<section id="usecase">
+<span class="section-no">4장</span>
+<h2>만능 부품과 용도 부품, 두 층으로 나누기</h2>
+
+<p>3장의 버튼은 어디에나 쓸 수 있는 만능 부품입니다. 그런데 실제 제품에는 "확인 다이얼로그의 확인 버튼"처럼 <b>용도가 정해진</b> 자리가 반복해서 나옵니다. 이 용도를 시스템이 어디까지 책임질까요? 8개 시스템의 선택이 하나의 스펙트럼 위에 놓입니다.</p>
+
+<div class="term">
+  <span class="term-name">용어: primitive와 use-case</span>
+  <p><b>primitive(프리미티브)</b>는 용도를 정하지 않은 만능 부품입니다. Button, Input이 여기 속합니다. <b>use-case(유스케이스) 컴포넌트</b>는 용도가 이름에 박힌 부품입니다. 보통 primitive에 옵션을 미리 채워서 만듭니다.</p>
+  <pre><code>// primitive: 옵션이 열려 있음
+&lt;Button tone="brand" variant="solid"&gt;확인&lt;/Button&gt;
+
+// use-case: primitive를 감싸고 옵션을 고정함
+function ConfirmButton(props) {
+  return &lt;Button tone="brand" variant="solid" {...props} /&gt;;
+}</code></pre>
+</div>
+
+<div class="spectrum">
+  <div>
+    <b>만능 부품만 제공</b>
+    <span class="pos">Mantine</span>
+    용도 개념이 없다. 삭제 버튼도 사용자가 "빨간 버튼"을 조합해서 만든다.
+  </div>
+  <div>
+    <b>용도 부품이 살짝</b>
+    <span class="pos">ABC Def · antd-mobile</span>
+    다이얼로그의 확인 버튼 정도만 미리 조합해 둔다.
+  </div>
+  <div class="picked">
+    <b>용도 부품을 정식 제공</b>
+    <span class="pos">Primer · Semi · Base Web · VKUI</span>
+    ConfirmationDialog처럼 용도가 이름이 된 부품이 목록에 정식으로 있다.
+  </div>
+  <div>
+    <b>용도 부품이 기본</b>
+    <span class="pos">Seed</span>
+    이름 없는 만능 Button이 없다. 기본 버튼조차 "액션 실행"이라는 용도를 이름에 단 ActionButton이고, 토글과 반응은 별도 부품이다.
+  </div>
+</div>
+<p class="footnote">파란 테두리가 새 시스템의 권고 위치입니다. 오른쪽 끝의 Seed 방식은 "우리 제품에 어떤 용도가 있는지"를 이미 아는 조직에 맞습니다. 신규 제품은 만능 부품을 유지하는 쪽이 재작업 위험이 작습니다.</p>
+
+<h3>권고: 3층으로 쌓는다</h3>
+
+<div class="layers">
+  <div class="layer">
+    <span class="l-name">L1 · 만능 부품 (primitive)</span>
+    <p>Button, Input, Popup, List. 3장에서 본 독립 축 옵션만 갖습니다.</p>
+  </div>
+  <div class="layer">
+    <span class="l-name">L2 · 용도 부품 (use-case)</span>
+    <p>ConfirmButton, EmptyState(빈 화면), PageError(오류 화면). L1을 감싸고 옵션을 고정합니다. 제품이 크면서 이 층이 계속 늘어납니다.</p>
+  </div>
+  <div class="layer">
+    <span class="l-name">L3 · 도메인 부품</span>
+    <p>우리 제품에만 있는 부품. 당근으로 치면 매너온도 표시가 여기입니다. 같은 패키지에 두되 이름 공간(네임스페이스)을 분리해서 섞이지 않게 합니다.</p>
+  </div>
+</div>
+
+<p>실측에서 확인한 중요한 사실이 하나 있습니다. 용도 부품을 가장 적극적으로 만드는 Seed조차, <b>용도를 옵션(variant)으로 풀지 않았습니다.</b> "공유용 버튼"이 필요하면 Button에 <code>usage="share"</code> 옵션을 추가하는 것이 아니라, 부품을 새로 만듭니다. 그 덕에 부품 하나의 옵션 축은 3개 이하로 유지됩니다.</p>
+
+<details>
+  <summary>원본 근거 보기 (관찰 사례)</summary>
+  <ul>
+    <li>VKUI는 만능 Button과 용도 부품(PanelHeaderSubmit, CellButton, WriteBar)이 충돌 없이 공존함을 보여 줍니다. 용도 옵션의 예외는 액션시트 항목의 <code>destructive | cancel</code> 하나뿐입니다.</li>
+    <li>antd-mobile의 ErrorBlock(기본, 연결 끊김, 빈 목록, 서버 혼잡 4종)은 "상태 안내 화면" 자체를 용도 부품으로 만든 사례입니다.</li>
+    <li>Seed의 부품 87개를 이 3층으로 분류하면 L1 40개, L2 44개, L3 3개입니다. 상세: <code>seed-component-tiers.md</code></li>
+    <li>후속 조사: 옵션(variant)과 부품 분리의 경계 기준, 11개 시스템 비교는 <code>variant-vs-compound.html</code></li>
+  </ul>
+</details>
+</section>
+
+<!-- ─────────────────────────────── 5장 ─────────────────────────────── -->
+<section id="foundations">
+<span class="section-no">5장</span>
+<h2>모바일 3사가 똑같이 도달한 기반 5가지</h2>
+
+<p>antd-mobile(중국), Seed(한국), VKUI(러시아)는 서로 참고한 흔적이 없습니다. 그런데 아래 5가지에서 같은 결론에 도달했습니다. 독립적으로 세 번 검증된 답이므로, 새 시스템은 그대로 채택합니다.</p>
+
+<div class="wrap-x">
+<table>
+  <thead><tr><th>기반</th><th>내용</th><th>자세히</th></tr></thead>
+  <tbody>
+    <tr><td><b>1. safe-area 전역 처리</b></td><td>노치와 홈 표시줄을 피하는 여백을 전역 변수 한 곳에서 정의하고, 하단 부품(탭바, 바텀시트)이 기본으로 사용한다.</td><td>1장 신호 1</td></tr>
+    <tr><td><b>2. 눌림 우선, hover 차단</b></td><td>눌림 색을 토큰 짝으로 정식 지원한다. hover는 마우스 환경에서만 켠다.</td><td>1장 신호 2, 2장</td></tr>
+    <tr><td><b>3. 미리 만든 CSS + 변수 테마</b></td><td>스타일은 빌드 시점에 CSS 파일로 만든다. 다크 모드는 변수 값 교체로 처리한다.</td><td>2장</td></tr>
+    <tr><td><b>4. 오버레이 상속 구조</b></td><td>아래 그림.</td><td>이 장</td></tr>
+    <tr><td><b>5. 터치 타깃 44px 이상</b></td><td>기본 버튼 높이를 44px 이상으로 잡는다.</td><td>1장 신호 3</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>기반 4. 오버레이는 상속 구조로 만듭니다</h3>
+
+<div class="term">
+  <span class="term-name">용어: 오버레이(overlay)</span>
+  <p>화면 위에 겹쳐서 뜨는 모든 것입니다. 다이얼로그(확인 창), 바텀시트, 액션시트, 토스트가 전부 오버레이입니다.</p>
+</div>
+
+<p>오버레이는 종류가 많지만, 공통 숙제는 같습니다. 뒤 화면을 어둡게 하기, 뒤 화면의 스크롤 잠그기, 키보드 초점을 안에 가두기. 이 숙제를 오버레이마다 따로 풀면 품질이 제각각이 됩니다. 모바일 3사는 모두 <b>공통 숙제를 아래층 한 곳에서 풀고, 위층이 물려받는 구조</b>를 만들었습니다.</p>
+
+<figure>
+  <svg viewBox="0 0 640 300" role="img" aria-label="Mask가 배경 어둡게와 스크롤 잠금을 담당하고, 그 위의 Popup이 위치 잡기를 담당하고, 그 위에서 바텀시트, 액션시트, 다이얼로그가 각자의 모양만 얹는 상속 구조">
+    <defs>
+      <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+      </marker>
+    </defs>
+    <g fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="200" y="20" width="240" height="52" rx="10"/>
+      <rect x="200" y="112" width="240" height="52" rx="10"/>
+      <rect x="60" y="216" width="150" height="52" rx="10" style="stroke:var(--accent)" stroke-width="2"/>
+      <rect x="245" y="216" width="150" height="52" rx="10" style="stroke:var(--accent)" stroke-width="2"/>
+      <rect x="430" y="216" width="150" height="52" rx="10" style="stroke:var(--accent)" stroke-width="2"/>
+    </g>
+    <text x="320" y="41" text-anchor="middle" font-size="13.5" font-weight="700" fill="currentColor">Mask</text>
+    <text x="320" y="60" text-anchor="middle" font-size="11.5" fill="currentColor">배경 어둡게 + 스크롤 잠금 + 초점 가두기</text>
+    <text x="320" y="133" text-anchor="middle" font-size="13.5" font-weight="700" fill="currentColor">Popup</text>
+    <text x="320" y="152" text-anchor="middle" font-size="11.5" fill="currentColor">어디에 띄울지(아래, 중앙, 위) 위치 잡기</text>
+    <text x="135" y="238" text-anchor="middle" font-size="12.5" font-weight="700" style="fill:var(--accent)">BottomSheet</text>
+    <text x="135" y="256" text-anchor="middle" font-size="11" fill="currentColor">끌 수 있는 손잡이</text>
+    <text x="320" y="238" text-anchor="middle" font-size="12.5" font-weight="700" style="fill:var(--accent)">ActionSheet</text>
+    <text x="320" y="256" text-anchor="middle" font-size="11" fill="currentColor">선택지 목록</text>
+    <text x="505" y="238" text-anchor="middle" font-size="12.5" font-weight="700" style="fill:var(--accent)">Dialog</text>
+    <text x="505" y="256" text-anchor="middle" font-size="11" fill="currentColor">확인/취소 창</text>
+    <g fill="none" stroke="currentColor" stroke-width="1.5">
+      <line x1="320" y1="72" x2="320" y2="106" marker-end="url(#arr3)"/>
+      <line x1="270" y1="164" x2="150" y2="210" marker-end="url(#arr3)"/>
+      <line x1="320" y1="164" x2="320" y2="210" marker-end="url(#arr3)"/>
+      <line x1="370" y1="164" x2="490" y2="210" marker-end="url(#arr3)"/>
+    </g>
+    <text x="320" y="94" text-anchor="middle" font-size="11" fill="currentColor">물려받음</text>
+    <text x="480" y="188" font-size="11" fill="currentColor">모양만 각자 얹음</text>
+  </svg>
+  <figcaption>공통 숙제(어둡게, 스크롤 잠금, 초점)는 Mask 한 곳에만 있습니다. 새 오버레이를 추가해도 그 부분은 다시 만들지 않습니다.</figcaption>
+</figure>
+
+<h3>추가 항목: 웹뷰는 네이티브 앱과 대화가 필요합니다</h3>
+
+<p>웹뷰 화면은 네이티브 앱 안에 들어 있으므로, 앱의 설정을 전달받아야 합니다. 대표 사례가 다크 모드입니다. 폰의 다크 모드 설정은 앱이 알고 있고, 웹뷰는 전달받아야 압니다. 이 전달 통로를 <b>브리지</b>라고 부릅니다.</p>
+
+<figure>
+  <svg viewBox="0 0 620 250" role="img" aria-label="네이티브 앱이 브리지를 통해 웹뷰에 다크 모드 설정을 전달하고, 웹뷰는 html 속성을 바꿔 토큰 값을 전환한다">
+    <defs>
+      <marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+      </marker>
+    </defs>
+    <g fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="30" y="20" width="240" height="210" rx="18"/>
+    </g>
+    <text x="150" y="48" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">네이티브 앱 (iOS/Android)</text>
+    <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4">
+      <rect x="52" y="66" width="196" height="140" rx="10"/>
+    </g>
+    <text x="150" y="92" text-anchor="middle" font-size="12.5" fill="currentColor">웹뷰</text>
+    <text x="150" y="112" text-anchor="middle" font-size="11.5" fill="currentColor">(우리 웹페이지가 그려짐)</text>
+    <rect x="80" y="130" width="140" height="30" rx="8" style="fill:var(--demo-brand)"/>
+    <text x="150" y="149" text-anchor="middle" font-size="12" style="fill:var(--demo-on-solid)">DS 컴포넌트</text>
+    <text x="150" y="188" text-anchor="middle" font-size="11" fill="currentColor">html[data-theme]로 전환</text>
+
+    <g fill="none" stroke="currentColor" stroke-width="1.5">
+      <line x1="278" y1="110" x2="370" y2="110" marker-end="url(#arr4)"/>
+      <line x1="370" y1="150" x2="278" y2="150" marker-end="url(#arr4)"/>
+    </g>
+    <text x="324" y="98" text-anchor="middle" font-size="11.5" fill="currentColor">브리지</text>
+
+    <g fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="378" y="70" width="216" height="120" rx="10"/>
+    </g>
+    <text x="486" y="98" text-anchor="middle" font-size="12.5" font-weight="700" fill="currentColor">앱이 아는 정보</text>
+    <text x="486" y="124" text-anchor="middle" font-size="12" fill="currentColor">"지금 다크 모드야"</text>
+    <text x="486" y="146" text-anchor="middle" font-size="12" fill="currentColor">"여기는 iOS야"</text>
+    <text x="486" y="168" text-anchor="middle" font-size="12" fill="currentColor">"safe-area는 34px야"</text>
+  </svg>
+  <figcaption>Seed는 화면을 그리기 전에 브리지로 설정을 읽어 <code>html</code> 속성을 세팅하는 작은 스크립트를 제공합니다. 이 순서 덕분에 밝은 화면이 번쩍였다가 어두워지는 문제가 없습니다.</figcaption>
+</figure>
+
+<details>
+  <summary>원본 근거 보기 (5가지 기반의 시스템별 구현)</summary>
+  <div class="wrap-x">
+  <table>
+    <thead><tr><th>기반</th><th>구현 지침</th><th>출처</th></tr></thead>
+    <tbody>
+      <tr><td><b>safe-area 전역 처리</b></td><td><code>env(safe-area-inset-*)</code>를 전역 CSS 변수 1곳에서 감싼다. 하단 고정 부품이 그 변수를 사용하고 기본 내장한다. 네이티브 쪽이 이미 여백을 처리한 화면을 위한 끄기 옵션을 둔다.</td><td>Seed, VKUI, antd-mobile</td></tr>
+      <tr><td><b>눌림 우선, hover 차단</b></td><td>눌림은 <code>:active</code>와 눌림 토큰으로 설계한다. hover는 <code>@media (hover: hover)</code> 조건 아래에만 두고, 조건 없는 <code>:hover</code>는 검사 도구로 금지한다. 탭 시 파란 깜빡임(tap-highlight)도 전역에서 제거한다.</td><td>Seed, antd-mobile, Base Web, Mantine</td></tr>
+      <tr><td><b>정적 CSS + 변수 테마</b></td><td>실행 중에 스타일을 만드는 방식(런타임 CSS-in-JS)을 쓰지 않는다. 화면이 그려지기 전에 테마를 세팅하는 스크립트를 제공한다.</td><td>Base Web을 뺀 전부</td></tr>
+      <tr><td><b>오버레이 상속 구조</b></td><td>Mask → Popup → 목적별 오버레이 순서로 만든다. 최상위에 <code>Dialog.confirm()</code>처럼 함수 한 번으로 띄우는 API를 얹는다.</td><td>antd-mobile, Mantine, Seed</td></tr>
+      <tr><td><b>터치 타깃 44px+</b></td><td>기본 높이 44px 이상. 시각적으로 작아야 하면 보이지 않는 터치 영역만 넓힌다(Base Web의 minHitArea 기법).</td><td>Primer, Base Web, Seed</td></tr>
+      <tr><td><b>웹뷰 브리지</b></td><td>테마 스크립트가 브리지로 플랫폼과 색 모드를 감지해 html 속성을 세팅한다. 네이티브 설정과의 동기화 통로를 열어 둔다.</td><td>Seed, Mantine</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="footnote">보류한 결정이 하나 있습니다. VKUI는 화면 전환(뒤로가기 스와이프, 스크롤 위치 복원)까지 디자인 시스템이 담당합니다. 효과는 크지만 라우터와 얽힙니다. 1단계에서는 상단 바(AppBar)와 탭바까지만 시스템이 담당하고, 화면 전환은 앱 코드에 남깁니다.</p>
+</details>
+</section>
+
+<!-- ─────────────────────────────── 6장 ─────────────────────────────── -->
+<section id="inventory">
+<span class="section-no">6장</span>
+<h2>그래서, 무엇부터 만들까</h2>
+
+<p>모바일 3사가 공통으로 가진 부품에서 출발합니다. 세 시스템이 모두 만들었다면 웹뷰 제품에 꼭 필요한 부품이라는 뜻이기 때문입니다.</p>
+
+<div class="wrap-x">
+<table>
+  <thead><tr><th>묶음</th><th>부품</th><th>메모</th></tr></thead>
+  <tbody>
+    <tr><td rowspan="3"><b>기반</b></td><td>SafeArea, ConfigProvider</td><td>1장의 safe-area 변수와 테마/언어 설정 전달</td></tr>
+    <tr><td>Box, Flex, Stack, Grid, Divider</td><td>배치용 레이아웃 부품</td></tr>
+    <tr><td>Text(글자 크기 체계), Icon</td><td>모든 시스템이 보유</td></tr>
+    <tr><td rowspan="4"><b>L1 만능</b></td><td>Button(tone × variant × size), IconButton</td><td>3장 권고안</td></tr>
+    <tr><td>Input, Checkbox, Radio, Switch, Slider, TextArea</td><td>폼 입력 기본</td></tr>
+    <tr><td>Mask, Popup, Toast</td><td>5장 오버레이 상속 구조의 아래층</td></tr>
+    <tr><td>List(눌림 상태 내장), Tag, Badge, Avatar, Image</td><td>목록 항목도 44px과 눌림을 지킴</td></tr>
+    <tr><td rowspan="4"><b>L2 용도</b></td><td>BottomSheet, ActionSheet, Dialog(.confirm/.alert)</td><td>오버레이 위층</td></tr>
+    <tr><td>AppBar(뒤로/닫기/완료 자리), TabBar</td><td>safe-area 기본 내장</td></tr>
+    <tr><td>PullToRefresh, InfiniteScroll, SwipeAction</td><td>1장 신호 4의 터치 제스처</td></tr>
+    <tr><td>EmptyState, ErrorBlock, Result, Skeleton</td><td>빈 화면, 오류 화면, 로딩 뼈대</td></tr>
+    <tr><td><b>L3 도메인</b></td><td>제품 확정 후</td><td>이름 공간 분리</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="footnote">2차 후보(수요 확인 후): 날짜/옵션 선택기(Picker), Calendar, 숫자 키패드, 인증번호 입력, IndexBar, Stepper, SearchBar.</p>
+
+<details>
+  <summary>시스템별로 배울 점과 피할 점 (원본 보고서의 "가져올 것 / 가져오면 안 되는 것" 표)</summary>
+  <div class="wrap-x">
+  <table>
+    <thead><tr><th>시스템</th><th>가져올 것</th><th>가져오면 안 되는 것</th></tr></thead>
+    <tbody>
+      <tr><td><b>Seed</b></td><td>눌림 토큰 짝, 웹뷰 브리지 스크립트, 목적별 오버레이 분리, 용도 부품 원칙(축 3개 이하 + 주석으로 사용 규칙)</td><td>만능 Button 제거(신규 제품에는 과격), 도메인 부품을 같은 층에 두기</td></tr>
+      <tr><td><b>antd-mobile</b></td><td>오버레이 상속 구조, <code>Dialog.confirm()</code> 함수형 API, SafeArea 기본 내장, 상태 안내 화면(ErrorBlock) 패턴</td><td>Less 기반 빌드(오래된 도구)</td></tr>
+      <tr><td><b>VKUI</b></td><td>만능 부품과 용도 부품의 공존 규칙, safe-area 사용 방식, 화면 크기별로 시트/메뉴를 갈아 끼우는 구조</td><td>화면 전환까지 전부 담당(1단계 보류), 테마 69종 상속(과잉)</td></tr>
+      <tr><td><b>Primer</b></td><td>3단계 토큰 문법, 터치용 44px 토큰, 용도 부품 층(ConfirmationDialog)</td><td>데스크톱을 먼저 만들고 모바일을 나중에 붙이는 순서</td></tr>
+      <tr><td><b>Mantine</b></td><td>색 계산 중앙 함수, 부품별 CSS 변수 공개, 오버레이 공통 층 분리, 색 모드 동기화 통로</td><td>36px 기본 높이, 의미 축 없는 variant 8종</td></tr>
+      <tr><td><b>Semi</b></td><td>의미 × 강도의 2축 분리, RGB 채널 팔레트(반투명 색 변형을 값 하나로 처리), 층별 배경 밝기 토큰(bg-0~4)</td><td>빌드 시점에 크기가 고정되는 구조, 조건 없는 hover 279곳</td></tr>
+      <tr><td><b>ABC Def</b></td><td>컴포넌트 토큰을 자동 생성 파일 1개로 모아 덮어쓰기 지점을 문서화, 스타일과 프레임워크 패키지 분리</td><td>눌림 토큰 부재, 32px 높이, size 10종 뭉침</td></tr>
+      <tr><td><b>Base Web</b></td><td>보이지 않는 터치 영역 확장(minHitArea), hover 전면 조건 처리, 용도 부품은 조합으로 만든다는 원칙</td><td>런타임 CSS-in-JS, 의미와 강도가 한 축에 뭉친 옵션, 옛 이름과 새 이름의 공존</td></tr>
+    </tbody>
+  </table>
+  </div>
+</details>
+</section>
+
+<hr class="soft">
+
+<section id="glossary">
+<span class="section-no">부록</span>
+<h2>용어 한 장 정리</h2>
+<div class="wrap-x">
+<table>
+  <thead><tr><th>용어</th><th>한 줄 뜻</th></tr></thead>
+  <tbody>
+    <tr><td><b>디자인 시스템</b></td><td>UI 부품과 규칙을 한 곳에 모아, 모든 화면이 가져다 쓰게 하는 부품 창고</td></tr>
+    <tr><td><b>웹뷰</b></td><td>네이티브 앱 안에 띄우는 웹페이지 화면</td></tr>
+    <tr><td><b>safe-area</b></td><td>폰의 노치와 홈 표시줄을 피한 안전 영역</td></tr>
+    <tr><td><b>hover / pressed</b></td><td>커서를 올려둔 상태 / 누르고 있는 순간. 모바일에는 hover가 없다</td></tr>
+    <tr><td><b>터치 타깃</b></td><td>손가락으로 누를 수 있는 영역. 44px 이상 권장</td></tr>
+    <tr><td><b>토큰</b></td><td>색, 크기 같은 디자인 값에 붙인 이름. CSS 변수로 구현</td></tr>
+    <tr><td><b>팔레트 / 시맨틱 / 컴포넌트 토큰</b></td><td>토큰 이름의 3단계: 무슨 색인지 / 무슨 역할인지 / 어느 부품이 쓰는지</td></tr>
+    <tr><td><b>variant</b></td><td>한 부품의 종류 옵션. 서로 독립인 축으로 나눠 설계한다. 이 문서에서 축 이름으로 쓸 때는 "칠하는 강도" 축을 가리킨다</td></tr>
+    <tr><td><b>primitive</b></td><td>용도를 정하지 않은 만능 부품 (Button, Input)</td></tr>
+    <tr><td><b>use-case 컴포넌트</b></td><td>용도가 이름에 박힌 부품 (ConfirmButton, EmptyState)</td></tr>
+    <tr><td><b>오버레이</b></td><td>화면 위에 겹쳐 뜨는 것 전부 (다이얼로그, 바텀시트, 토스트)</td></tr>
+    <tr><td><b>브리지</b></td><td>네이티브 앱과 웹뷰 사이의 메시지 통로</td></tr>
+    <tr><td><b>런타임 CSS-in-JS</b></td><td>JS 실행 중에 스타일을 만들어 끼우는 방식. 새 시스템에서는 쓰지 않는다</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p class="footnote">더 깊은 근거가 필요하면 원본 보고서 <code>analysis/next-candidates/insights.html</code>과 시스템별 상세 문서 <code>systems/*.md</code> 8건을 보세요. 상세 문서에는 파일 경로와 줄 번호까지 있습니다.</p>
+</section>
+
+</main>
+</body>
+</html>
