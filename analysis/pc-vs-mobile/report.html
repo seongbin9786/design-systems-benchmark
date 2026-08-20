@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC vs 모바일 UI/UX — 차이와 해결 패턴</title>
+<style>
+  :root {
+    --bg: #f7f7f9;
+    --card: #ffffff;
+    --text: #1a1a24;
+    --muted: #6b6b76;
+    --line: #e4e4ea;
+    --accent: #3557d4;
+    --accent-soft: #eef1fc;
+    --pc: #8a5a00;
+    --pc-soft: #fdf3e0;
+    --mobile: #0b6e4f;
+    --mobile-soft: #e6f4ee;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Segoe UI", sans-serif;
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 48px 24px 96px; }
+  h1 { font-size: 30px; line-height: 1.3; letter-spacing: -0.5px; }
+  .subtitle { color: var(--muted); margin-top: 8px; }
+  .meta { color: var(--muted); font-size: 13px; margin-top: 16px; }
+  .meta code { background: #ececf1; padding: 1px 6px; border-radius: 4px; font-size: 12px; }
+
+  h2 {
+    font-size: 22px; letter-spacing: -0.3px;
+    margin: 72px 0 8px; padding-top: 24px;
+    border-top: 2px solid var(--text);
+  }
+  h2 .num { color: var(--accent); margin-right: 8px; }
+  .lead { color: #3c3c46; margin: 8px 0 24px; max-width: 780px; }
+  .lead strong { background: var(--accent-soft); padding: 0 4px; border-radius: 3px; }
+
+  /* TOC */
+  .toc { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px 24px; margin-top: 32px; }
+  .toc ol { margin-left: 20px; }
+  .toc a { color: var(--accent); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* 근본 제약 테이블 */
+  table { border-collapse: collapse; width: 100%; background: var(--card); border-radius: 8px; overflow: hidden; font-size: 14px; }
+  th, td { border: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top; }
+  th { background: #f0f0f4; font-size: 13px; }
+  td .src { font-size: 12px; }
+
+  /* 케이스 카드 */
+  .case {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 24px; margin-bottom: 20px;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px;
+  }
+  .case.full { grid-template-columns: 1fr; }
+  .case h3 { font-size: 17px; margin-bottom: 10px; letter-spacing: -0.2px; }
+  .case h3 .en { color: var(--muted); font-weight: 500; font-size: 13px; margin-left: 6px; }
+  .kv { margin-bottom: 8px; }
+  .kv b { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 10px; margin-right: 6px; vertical-align: 1px; }
+  .kv b.pc { background: var(--pc-soft); color: var(--pc); }
+  .kv b.mo { background: var(--mobile-soft); color: var(--mobile); }
+  .kv b.ev { background: #ececf1; color: #55555f; }
+  .kv b.ds { background: var(--accent-soft); color: var(--accent); }
+  .kv a { color: var(--accent); }
+  .figs { display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+  figure { width: 190px; }
+  figure.web { width: 400px; max-width: 100%; }
+  figure img {
+    width: 100%; border-radius: 10px; border: 1px solid var(--line);
+    display: block; background: #fff;
+  }
+  figcaption { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+  figcaption .app { font-weight: 600; color: var(--text); }
+  figcaption a { color: var(--accent); text-decoration: none; }
+  figcaption a:hover { text-decoration: underline; }
+  .tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 0 5px; border-radius: 3px; margin-right: 4px; }
+  .tag.ios { background: var(--mobile-soft); color: var(--mobile); }
+  .tag.web { background: var(--pc-soft); color: var(--pc); }
+
+  /* 대비 블록 (PC vs 모바일 쌍) */
+  .versus { background: linear-gradient(180deg, #fdfaf3, #ffffff); }
+
+  details { margin: 8px 0 0; }
+  summary { cursor: pointer; color: var(--accent); font-size: 13px; }
+  details .inner { padding: 10px 0 0; font-size: 14px; color: #3c3c46; }
+
+  .sources { font-size: 13px; columns: 2; column-gap: 32px; }
+  .sources li { margin-bottom: 6px; break-inside: avoid; }
+  .sources a { color: var(--accent); text-decoration: none; }
+  .sources a:hover { text-decoration: underline; }
+  .note { font-size: 13px; color: var(--muted); background: #f0f0f4; border-radius: 8px; padding: 12px 16px; margin: 16px 0; }
+
+  @media (max-width: 860px) {
+    .case { grid-template-columns: 1fr; }
+    .sources { columns: 1; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>PC vs 모바일 UI/UX — 차이와 해결 패턴</h1>
+<p class="subtitle">같은 목적의 화면이 왜 다르게 생겼는가. 실물 스크린 60장으로 확인한다.</p>
+<p class="meta">
+  작성일 2026-08-16 · 근거: <a href="https://mobbin.com">Mobbin</a> 실물 스크린 60장(로컬 저장: <code>captures/</code>),
+  <a href="../next-candidates/mobile-component-benchmark.html">모바일 3사 DS 실측 문서</a>, 외부 연구(§6).
+  모든 스크린은 원본 Mobbin 페이지로 링크한다.
+</p>
+
+<nav class="toc">
+  <b>차례</b>
+  <ol>
+    <li><a href="#s0">왜 다른가 — 근본 제약 5가지</a></li>
+    <li><a href="#s1">입력: 타이핑을 없애는 사다리</a></li>
+    <li><a href="#s2">내비게이션: 메뉴 트리를 엄지 존으로 압축</a></li>
+    <li><a href="#s3">모바일 컴포넌트 세트 — 각각이 해결하는 문제</a></li>
+    <li><a href="#s4">모바일에만 있는 것들</a></li>
+    <li><a href="#s6">참고 자료</a></li>
+  </ol>
+</nav>
+
+<!-- ============================================================ -->
+<h2 id="s0"><span class="num">0</span>왜 다른가 — 근본 제약 5가지</h2>
+<p class="lead">
+  결론부터. 모바일 UI의 모든 차이는 아래 5가지 제약에서 나온다.
+  이 표를 먼저 읽으면 뒤의 사례 40여 개가 전부 같은 원인의 변주임을 알 수 있다.
+</p>
+<table>
+  <tr><th style="width:130px">제약</th><th>PC</th><th>모바일</th><th>결과</th></tr>
+  <tr>
+    <td><b>포인터 정밀도</b></td>
+    <td>마우스 커서. 픽셀 단위로 정확하다.</td>
+    <td>손가락. 접촉면이 넓고 시야를 가린다.</td>
+    <td>터치 타깃 최소 크기 규정이 생겼다. Apple 44×44pt, Material 48×48dp.
+      <div class="src"><a href="https://developer.apple.com/design/human-interface-guidelines">Apple HIG</a> · <a href="https://m3.material.io/foundations/designing/structure">Material 3</a></div></td>
+  </tr>
+  <tr>
+    <td><b>호버 없음</b></td>
+    <td>올려놓기만 해도 툴팁·메뉴·상태가 미리 보인다.</td>
+    <td>탭하기 전에는 아무것도 모른다.</td>
+    <td>모든 상태를 겉으로 노출해야 한다. 셀의 화살표(chevron), 상시 노출 버튼, 스와이프로 숨긴 액션이 그 대체물이다.</td>
+  </tr>
+  <tr>
+    <td><b>화면 키보드</b></td>
+    <td>물리 키보드. 화면을 가리지 않는다. 약 52 WPM.</td>
+    <td>화면 절반을 덮는다. 평균 36~38 WPM.</td>
+    <td>"타이핑을 없애라"가 모바일 입력 설계의 제1원칙이 됐다. §1 전체가 이 원칙의 사다리다.
+      <div class="src"><a href="https://www.bbc.com/news/technology-49933204">BBC — 모바일 타이핑 속도 연구</a></div></td>
+  </tr>
+  <tr>
+    <td><b>엄지 존</b></td>
+    <td>커서는 화면 어디든 같은 비용으로 간다. 가장자리는 오히려 "무한 타깃"이다(Fitts's law).</td>
+    <td>상호작용의 75%가 엄지다. 49%는 한 손 사용이다. 하단은 편하고 상단은 멀다.</td>
+    <td>핵심 조작이 전부 하단으로 내려왔다. 탭바·바텀시트·FAB가 그 결과다.
+      <div class="src"><a href="https://www.smashingmagazine.com/2016/09/the-thumb-zone-designing-for-mobile-users">Hoober, The Thumb Zone</a> · <a href="https://www.nngroup.com/articles/fitts-law">NN/g, Fitts's Law</a></div></td>
+  </tr>
+  <tr>
+    <td><b>화면·센서</b></td>
+    <td>넓은 가로 화면. 센서는 거의 없다.</td>
+    <td>좁은 세로 화면. 대신 카메라·GPS·가속도계·진동이 있다.</td>
+    <td>화면은 한 번에 한 작업만 보여준다. 대신 센서로 타이핑과 탐색 자체를 건너뛴다(§1.9, §4).</td>
+  </tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="s1"><span class="num">1</span>입력: 타이핑을 없애는 사다리</h2>
+<p class="lead">
+  모바일 입력 설계의 원칙은 하나다. <strong>타이핑을 줄이고, 줄일 수 없으면 없앤다.</strong>
+  아래 사례는 사다리 순서다. ① 타이핑 부담을 줄이고 → ② 키보드를 최적화하고 →
+  ③ 타이핑을 선택으로 바꾸고 → ④ 카메라·생체인증으로 입력 자체를 제거한다.
+</p>
+
+<div class="case versus">
+  <div>
+    <h3>먼저, PC의 입력은 어떤가 <span class="en">baseline</span></h3>
+    <p class="kv"><b class="pc">PC 전제</b>화면이 넓고 키보드가 화면을 가리지 않는다. 그래서 필드 5개를 한 화면에 나란히 놓아도 문제가 없다. 달력 그리드 전체를 펼쳐도 마우스로 바로 클릭한다.</p>
+    <p class="kv"><b class="mo">모바일에서 무너지는 지점</b>같은 폼을 모바일에 그대로 옮기면 키보드가 화면 절반을 덮는다. 지금 입력하는 필드 말고는 보이지 않는다. 이 간극이 §1 전체의 출발점이다.</p>
+  </div>
+  <div class="figs">
+    <figure class="web">
+      <img src="captures/s1-xero-web-form.webp" alt="Xero 웹 폼">
+      <figcaption><span class="tag web">WEB</span><span class="app">Xero</span> — 국가·주소·도시·주·우편번호 5개 필드가 한 화면에 동시에 보인다. <a href="https://mobbin.com/screens/e7f55b06-58b6-4908-849a-8c65c123e7cf">원본</a></figcaption>
+    </figure>
+    <figure class="web">
+      <img src="captures/s1-linear-web-datepicker.webp" alt="Linear 웹 날짜 선택">
+      <figcaption><span class="tag web">WEB</span><span class="app">Linear</span> — 달력 그리드 전체가 팝오버로 펼쳐진다. 마우스로 날짜를 바로 클릭한다. <a href="https://mobbin.com/screens/38362b03-3661-4e35-807a-e504a0a0b1b6">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>① 단계 분할 폼 — 한 화면에 한 질문 <span class="en">one thing per screen</span></h3>
+    <p class="kv"><b class="pc">문제</b>키보드가 화면 절반을 가려서 여러 필드를 동시에 볼 수 없다.</p>
+    <p class="kv"><b class="mo">해결</b>질문 하나당 화면 하나로 폼을 쪼갠다. 사용자는 한 번에 한 가지만 입력하고 다음으로 넘어간다.</p>
+    <p class="kv"><b class="ev">근거</b>NN/g 모바일 입력 체크리스트: "키보드가 떠 있을 때도 필드가 보이는가"를 별도 항목으로 검사한다. <a href="https://www.nngroup.com/articles/mobile-input-checklist">NN/g</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s1-opal-single-input.webp" alt="Opal 이름 입력">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Opal</span> — 이름 하나만 묻는다. 필드 하나, 버튼 하나. <a href="https://mobbin.com/screens/282b5de2-6b1b-4a77-8706-472aeaa0605b">원본</a></figcaption>
+    </figure>
+    <figure>
+      <img src="captures/s1-matter-keyboard.webp" alt="Matter 키보드가 화면을 덮음">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Matter</span> — 키보드가 화면 절반 이상을 덮는 모습. 분할이 필요한 이유다. <a href="https://mobbin.com/screens/f303524d-07d6-425f-ac21-398467032e66">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>② 입력 타입별 전용 키보드 <span class="en">input-type keyboards</span></h3>
+    <p class="kv"><b class="pc">문제</b>PC 키보드는 하나뿐이라 전환 비용이 없다. 모바일 문자 키보드로 숫자를 넣으려면 자판을 전환해야 한다. 느리고 오타가 잦다.</p>
+    <p class="kv"><b class="mo">해결</b>필드 타입에 맞는 키보드를 자동으로 띄운다. 카드 번호에는 숫자 패드, 이메일에는 @ 키보드.</p>
+    <p class="kv"><b class="ev">근거</b>NN/g 체크리스트: "이 필드에 맞는 키보드는 무엇인가". <a href="https://www.nngroup.com/articles/mobile-input-checklist">NN/g</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s1-qonto-numpad.webp" alt="Qonto 숫자 패드">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Qonto</span> — 수표 번호 입력에 문자 키보드 대신 숫자 패드가 뜬다. <a href="https://mobbin.com/screens/df1715bf-6a18-4e19-84da-8feed7d09678">원본</a></figcaption>
+    </figure>
+    <figure>
+      <img src="captures/s1-lyft-card-numpad.webp" alt="Lyft 카드 등록">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Lyft</span> — 카드 번호란을 탭하면 숫자 패드가 자동으로 뜬다. <a href="https://mobbin.com/screens/82937404-9340-440f-a42a-2bb08af0f1bb">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>③ OTP 자동 분할 입력 <span class="en">passcode boxes</span></h3>
+    <p class="kv"><b class="pc">문제</b>6자리 코드를 입력창 하나에 넣으면 자리 구분이 안 돼 오탈자를 찾기 어렵다.</p>
+    <p class="kv"><b class="mo">해결</b>자리마다 박스를 나눈다. 한 자리를 넣으면 자동으로 다음 칸으로 넘어간다. SMS 코드 자동 채움도 함께 지원한다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s1-brick-otp.webp" alt="Brick OTP 입력">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Brick</span> — 박스 6개에 한 자리씩 채워진다. 숫자 패드가 같이 뜬다. <a href="https://mobbin.com/screens/100c684d-99c9-472d-a6bc-165dc4597936">원본</a></figcaption>
+    </figure>
+    <figure>
+      <img src="captures/s1-paypal-otp.webp" alt="PayPal OTP 입력">
+      <figcaption><span class="tag ios">iOS</span><span class="app">PayPal</span> — 빈 박스 6개가 입력 진행 상태를 보여준다. <a href="https://mobbin.com/screens/ffeb4963-d9dc-4e4b-9564-82461ea10cb6">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>④ 휠 피커 — select 드롭다운의 모바일 번역 <span class="en">wheel picker</span></h3>
+    <p class="kv"><b class="pc">문제</b>PC의 <code>&lt;select&gt;</code> 드롭다운은 마우스로 훑기 쉽다. 모바일에서 같은 목록은 항목이 작아 오탭이 잦다.</p>
+    <p class="kv"><b class="mo">해결</b>손가락으로 굴리는 드럼 롤. 항목 하나하나가 큰 터치 영역이 된다. 목록을 펼치지 않고도 정밀하게 고른다.</p>
+    <p class="kv"><b class="ev">근거</b>터치 타깃이 44pt/48dp보다 작으면 오탭이 급증한다. <a href="https://developer.apple.com/design/human-interface-guidelines/pickers">Apple HIG — Pickers</a> · <a href="https://tetralogical.com/blog/2022/12/20/foundations-target-size">TetraLogical, target size</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s1-posh-wheel-picker.webp" alt="Posh 휠 피커">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Posh</span> — 생일을 월/일/년 3열 휠 피커로 받는다. <a href="https://mobbin.com/screens/aa9f90cb-e008-4c3a-b0e5-df81a43e7144">원본</a></figcaption>
+    </figure>
+    <figure>
+      <img src="captures/s1-cleo-wheel-picker.webp" alt="Cleo 휠 피커">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Cleo AI</span> — 필드를 탭하면 휠 피커가 화면 아래에서 올라온다. <a href="https://mobbin.com/screens/ff7144be-7e75-446f-965c-d59233b06d12">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>⑤ 바텀시트로 드롭다운 메뉴 대체 <span class="en">bottom sheet select</span></h3>
+    <p class="kv"><b class="pc">문제</b>PC 드롭다운은 호버와 정밀 클릭을 전제한다. 모바일에서는 목록이 잘리고 항목이 너무 작다.</p>
+    <p class="kv"><b class="mo">해결</b>화면 아래에서 시트가 올라와 목록 전체를 크게 보여준다. 항목마다 충분한 터치 영역을 준다. 엄지에서 가장 가까운 위치다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s1-oura-bottomsheet.webp" alt="Oura 바텀시트 선택">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Oura</span> — 식사 종류 선택지 6개를 바텀시트로 한 번에 보여준다. <a href="https://mobbin.com/screens/58b0bbcd-592e-41be-9245-b7de09f0e4a9">원본</a></figcaption>
+    </figure>
+    <figure>
+      <img src="captures/s1-starbucks-bottomsheet.webp" alt="Starbucks 바텀시트 옵션">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Starbucks</span> — 토핑 옵션을 바텀시트 리스트로 제시한다. <a href="https://mobbin.com/screens/b884901e-2f0e-4b01-b835-1c8d5ceefdee">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>⑥ 칩·세그먼트로 라디오버튼 대체 <span class="en">chips / segmented</span></h3>
+    <p class="kv"><b class="pc">문제</b>작은 원형 라디오 버튼은 커서 전제의 컨트롤이다. 손가락으로 정확히 누르기 어렵다.</p>
+    <p class="kv"><b class="mo">해결</b>알약 모양 칩은 라벨 전체가 터치 영역이다. 정밀도 없이도 선택이 된다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s1-grab-chips.webp" alt="Grab 필터 칩">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Grab</span> — 별점·가격 필터를 칩으로 제시해 탭 영역을 넓혔다. <a href="https://mobbin.com/screens/3da2747e-7007-4d0f-84e5-df7295276651">원본</a></figcaption>
+    </figure>
+    <figure>
+      <img src="captures/s1-agoda-toggles.webp" alt="Agoda 토글과 칩">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Agoda</span> — 카테고리별 토글과 칩으로 다중 선택을 처리한다. <a href="https://mobbin.com/screens/6267a569-43ab-45ec-a112-e08c0aebda9c">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>⑦ 스테퍼 — 숫자 타이핑 제거 <span class="en">stepper</span></h3>
+    <p class="kv"><b class="pc">문제</b>PC는 수량을 타이핑으로 넣는다. 모바일에서는 키보드를 띄우는 것 자체가 비용이다.</p>
+    <p class="kv"><b class="mo">해결</b>+/- 버튼 탭만으로 수량을 조절한다. 키보드가 아예 뜨지 않는다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s1-subway-stepper.webp" alt="Subway 수량 스테퍼">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Subway</span> — 장바구니 수량을 +/- 버튼으로 바꾼다. <a href="https://mobbin.com/screens/e8a6021e-719b-4af1-8665-85b9fa6e51a4">원본</a></figcaption>
+    </figure>
+    <figure>
+      <img src="captures/s1-foodpanda-stepper.webp" alt="foodpanda 스테퍼">
+      <figcaption><span class="tag ios">iOS</span><span class="app">foodpanda</span> — 상품별 수량 조절에 스테퍼를 쓴다. <a href="https://mobbin.com/screens/79da67fd-b123-4ac1-82fa-f9b54bf32985">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>⑧ 소셜 로그인·생체인증 — 타이핑 자체를 제거 <span class="en">SSO / biometrics</span></h3>
+    <p class="kv"><b class="pc">문제</b>모바일 타이핑은 평균 36~38 WPM으로 PC(약 52 WPM)의 70% 수준이다. 아이디·비밀번호 입력은 로그인 이탈로 이어진다.</p>
+    <p class="kv"><b class="mo">해결</b>Sign in with Apple은 탭 한 번, Face ID는 얼굴 인식 한 번으로 끝낸다. 입력 단계가 0이 된다.</p>
+    <p class="kv"><b class="ev">근거</b><a href="https://www.bbc.com/news/technology-49933204">BBC — Aalto 대학 3.7만 명 타이핑 속도 연구</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s1-yubo-apple-signin.webp" alt="Yubo Apple 로그인">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Yubo</span> — Continue with Apple 버튼 하나가 회원가입 폼을 대체한다. <a href="https://mobbin.com/screens/cc5a9a90-7c52-40e2-bb0a-c2602a838db1">원본</a></figcaption>
+    </figure>
+    <figure>
+      <img src="captures/s1-paypal-faceid.webp" alt="PayPal Face ID">
+      <figcaption><span class="tag ios">iOS</span><span class="app">PayPal</span> — 비밀번호 대신 Face ID 로그인을 제공한다. <a href="https://mobbin.com/screens/aac8b496-1568-4ece-bb18-578ef25d7e99">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>⑨ 카메라·음성 입력 — 센서가 키보드를 이긴다 <span class="en">camera / voice input</span></h3>
+    <p class="kv"><b class="pc">문제</b>카드 번호·바코드 같은 긴 문자열은 손으로 치면 느리고 오타율이 높다.</p>
+    <p class="kv"><b class="mo">해결</b>카메라로 스캔하거나 음성으로 말한다. PC에 없는 센서로 타이핑을 통째로 건너뛴다. §0의 다섯 번째 제약(센서)이 여기서는 우위가 된다.</p>
+    <p class="kv"><b class="ev">근거</b>NN/g 체크리스트: "카메라·GPS·음성으로 필드를 자동 채울 수 있는가". <a href="https://www.nngroup.com/articles/mobile-input-checklist">NN/g</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s1-paypal-barcode-scan.webp" alt="PayPal 바코드 스캔">
+      <figcaption><span class="tag ios">iOS</span><span class="app">PayPal</span> — 카메라로 멤버십 카드 바코드를 스캔해 등록한다. <a href="https://mobbin.com/screens/f55ae516-7944-4884-b8a3-24526dd7ce67">원본</a></figcaption>
+    </figure>
+    <figure>
+      <img src="captures/s1-notion-voice.webp" alt="Notion 음성 입력">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Notion</span> — 검색창에 마이크 아이콘을 둬 음성 입력을 받는다. <a href="https://mobbin.com/screens/f7efabb4-f1f3-41e7-a92b-77bc94abe2b3">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s2"><span class="num">2</span>내비게이션: 메뉴 트리를 엄지 존으로 압축</h2>
+<p class="lead">
+  PC는 사이드바·상단 GNB·브레드크럼을 <strong>동시에</strong> 펼쳐 둔다.
+  모바일은 그 트리를 <strong>하단 탭 3~5개 + 뒤로가기 + 검색</strong>으로 압축한다.
+  기준은 빈도다. 고빈도 메뉴는 엄지 존에, 저빈도 메뉴는 드로어 뒤에 둔다.
+</p>
+
+<div class="case versus full">
+  <div>
+    <h3>같은 서비스, 두 개의 내비게이션 <span class="en">same product, two navigations</span></h3>
+    <p class="kv"><b class="pc">PC</b>화면 가장자리는 커서가 멈추는 "무한 타깃"이다(Fitts's law). 그래서 사이드바·상단 GNB·메가 메뉴를 상시 펼쳐도 비용이 없다.</p>
+    <p class="kv"><b class="mo">모바일</b>같은 서비스가 모바일에서는 메뉴 전체를 하단 탭과 검색창으로 압축한다. 아래 Airbnb·Etsy 쌍이 그 번역 과정을 그대로 보여준다.</p>
+  </div>
+  <div class="figs">
+    <figure class="web">
+      <img src="captures/s2-airbnb-web-gnb.webp" alt="Airbnb 웹 상단 GNB">
+      <figcaption><span class="tag web">WEB</span><span class="app">Airbnb</span> — 상단 GNB와 계정 드롭다운으로 메뉴 전체를 동시에 노출한다. <a href="https://mobbin.com/screens/c0fd4ff1-6269-4cea-9289-bc44c726e24c">원본</a></figcaption>
+    </figure>
+    <figure>
+      <img src="captures/s2-airbnb-ios-tabs.webp" alt="Airbnb iOS 하단 탭">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Airbnb</span> — 같은 서비스를 하단 탭 3개(Homes/Experiences/Services)로 압축했다. <a href="https://mobbin.com/screens/2df6111d-0888-47ab-8d35-6a2f20d66eb2">원본</a></figcaption>
+    </figure>
+    <figure class="web">
+      <img src="captures/s2-etsy-web-sidebar.webp" alt="Etsy 웹 사이드바">
+      <figcaption><span class="tag web">WEB</span><span class="app">Etsy</span> — 셀러 대시보드는 좌측 사이드바에 전체 메뉴를 상시 노출한다. <a href="https://mobbin.com/screens/db3cebf1-d12e-47e1-9991-ab751270038e">원본</a></figcaption>
+    </figure>
+    <figure class="web">
+      <img src="captures/s2-artlist-web-megamenu.webp" alt="Artlist 메가 메뉴">
+      <figcaption><span class="tag web">WEB</span><span class="app">Artlist</span> — 메가 메뉴 하나에 제품·솔루션·리소스를 한 화면에 펼친다. 모바일에는 불가능한 밀도다. <a href="https://mobbin.com/screens/ea5aee09-049c-49bf-a258-c1cd781afc58">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>① 하단 탭바 <span class="en">bottom tab bar</span></h3>
+    <p class="kv"><b class="pc">PC 대응물</b>좌측 사이드바 내비게이션.</p>
+    <p class="kv"><b class="mo">해결</b>핵심 메뉴 3~5개만 남겨 하단에 고정한다. 엄지가 가장 쉽게 닿는 위치에 상시 노출한다.</p>
+    <p class="kv"><b class="ev">근거</b>모바일 상호작용의 75%는 엄지, 49%는 한 손이다(Hoober, 1,333명 관찰). <a href="https://www.smashingmagazine.com/2016/09/the-thumb-zone-designing-for-mobile-users">Smashing Magazine</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s2-depop-tabbar.webp" alt="Depop 하단 탭바">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Depop</span> — 홈·검색·판매·인박스·마이페이지 5개 탭을 하단에 고정했다. <a href="https://mobbin.com/screens/abd1f751-a1ed-489b-ab2a-84431ba7f116">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>② 상단 내비바 + 뒤로가기 <span class="en">nav bar, not breadcrumb</span></h3>
+    <p class="kv"><b class="pc">PC 대응물</b>브레드크럼. 계층 전체를 한 줄에 보여준다.</p>
+    <p class="kv"><b class="mo">해결</b>좁은 폭에 긴 경로를 못 넣는다. 대신 뒤로가기 화살표 하나로 "한 단계씩 복귀"만 남긴다. 경로 전체 대신 직전 화면만 기억하게 한다.</p>
+    <p class="kv"><b class="ev">근거</b>NN/g 모바일 내비게이션 패턴 정리. <a href="https://www.nngroup.com/articles/mobile-navigation-patterns">NN/g</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s2-substack-navbar.webp" alt="Substack 상단 내비바">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Substack</span> — 좌상단 화살표만 남기고 경로 정보는 생략했다. <a href="https://mobbin.com/screens/83521510-c38d-4395-8e4c-80edca5b80f7">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>③ 햄버거 메뉴 / 드로어 — 대가가 있는 압축 <span class="en">drawer</span></h3>
+    <p class="kv"><b class="pc">PC 대응물</b>사이드바에 저빈도 메뉴까지 전부 펼쳐 둔다.</p>
+    <p class="kv"><b class="mo">해결</b>저빈도 메뉴를 아이콘 뒤에 숨긴다. 탭하면 옆에서 드로어가 열린다.</p>
+    <p class="kv"><b class="ev">근거(경고)</b>숨긴 내비게이션은 발견율을 20% 이상 떨어뜨리고, 과제 시간을 모바일에서 15% 늦춘다(NN/g, 179명 실험). 그래서 고빈도 메뉴는 탭바에, 저빈도만 드로어에 두는 이원화가 표준이 됐다. <a href="https://www.nngroup.com/articles/hamburger-menus">NN/g</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s2-oura-drawer.webp" alt="Oura 드로어 메뉴">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Oura</span> — 저빈도 설정·연동 메뉴를 드로어에 모아 숨겼다. <a href="https://mobbin.com/screens/4fe777cd-de1f-41c2-bac3-92bc18aadca2">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>④ 바텀시트 내비게이션 — 지도 위의 목록 <span class="en">draggable sheet</span></h3>
+    <p class="kv"><b class="pc">PC 대응물</b>지도와 사이드 패널을 좌우로 나란히 배치한다.</p>
+    <p class="kv"><b class="mo">해결</b>세로 화면에는 나란히 놓을 폭이 없다. 지도 위에 드래그 가능한 시트를 겹치고, 엄지로 지도-목록 비중을 조절하게 한다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s2-starbucks-map-sheet.webp" alt="Starbucks 지도 바텀시트">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Starbucks</span> — 매장 지도 위에 Nearby/Previous/Favorites 시트를 겹쳤다. <a href="https://mobbin.com/screens/6137bdfc-9652-483d-b11e-15f10d0edcb2">원본</a></figcaption>
+    </figure>
+    <figure>
+      <img src="captures/s2-googlemaps-sheet.webp" alt="Google Maps 바텀시트">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Google Maps</span> — 장소 카드가 지도 하단에서 시트로 올라온다. <a href="https://mobbin.com/screens/cd507621-d0ef-4273-b584-3ae7a41477c3">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>⑤ 스택 내비게이션 + 스와이프 백 <span class="en">stack + edge swipe</span></h3>
+    <p class="kv"><b class="pc">PC 대응물</b>브라우저 뒤로가기 버튼. 커서가 화면 밖 상단 바까지 이동한다.</p>
+    <p class="kv"><b class="mo">해결</b>화면을 카드처럼 쌓는다(스택). 왼쪽 가장자리 전체를 스와이프 영역으로 만들어, 버튼 없이 이전 화면으로 돌아간다.</p>
+    <p class="kv"><b class="ev">근거</b>가장자리는 Fitts's law의 "무한 타깃"이다. iOS는 이를 시스템 제스처로 채택했다. VKUI는 이 스와이프 백을 View 컴포넌트로 직접 구현한다(<a href="../next-candidates/mobile-component-benchmark.html">3사 실측 문서</a> §0.5). <a href="https://www.nngroup.com/articles/fitts-law">NN/g</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s2-bond-swipe-back.webp" alt="Bond 스와이프 백">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Bond</span> — 좌상단 뒤로가기 버튼과 함께, 왼쪽 가장자리 스와이프로도 같은 동작이 된다. <a href="https://mobbin.com/screens/dd994481-e3a8-4064-a814-278af78d9c81">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>⑥ 검색 중심 내비게이션 <span class="en">search-first</span></h3>
+    <p class="kv"><b class="pc">PC 대응물</b>메뉴 트리 탐색. 넓은 화면에서 카테고리를 펼쳐 훑는다.</p>
+    <p class="kv"><b class="mo">해결</b>모바일에서 깊은 메뉴는 탭 횟수를 늘린다. 홈 최상단에 검색창을 고정해 트리를 건너뛰게 한다.</p>
+    <p class="kv"><b class="ev">근거</b>구조가 클수록 검색 진입이 메뉴 탐색보다 빠르다. <a href="https://www.nngroup.com/articles/mobile-navigation-patterns">NN/g</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s2-etsy-search-home.webp" alt="Etsy 검색 중심 홈">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Etsy</span> — 홈 맨 위에 검색창을 두고 카테고리는 보조로 내렸다. <a href="https://mobbin.com/screens/be2752f9-e8ea-415f-be29-bcf2c56c9d5c">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>⑦ 가로 스크롤 탭 <span class="en">scrollable tabs</span></h3>
+    <p class="kv"><b class="pc">PC 대응물</b>상단바에 카테고리 탭을 한 줄로 전부 노출한다.</p>
+    <p class="kv"><b class="mo">해결</b>좁은 폭에서 넘치는 탭을 가로 스크롤로 밀어 접근한다. 세로 공간은 쓰지 않는다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s2-comet-scroll-tabs.webp" alt="Comet 가로 스크롤 탭">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Comet</span> — 주제 칩을 가로로 길게 배치해 스크롤로 탐색한다. <a href="https://mobbin.com/screens/21e1b418-1f21-4971-abd5-5c47f0f9b7ac">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>⑧ FAB — 핵심 행동 1개를 엄지 존에 고정 <span class="en">floating action button</span></h3>
+    <p class="kv"><b class="pc">PC 대응물</b>헤더·툴바의 "새로 만들기" 버튼. 위치가 자유롭다.</p>
+    <p class="kv"><b class="mo">해결</b>모바일은 위치에 따라 도달 비용이 크게 다르다. 핵심 행동 1개만 원형 버튼으로 하단 우측(자연 도달 영역)에 띄운다.</p>
+    <p class="kv"><b class="ev">근거</b>Hoober의 3영역 모델. 상단(stretch zone)은 도달이 어렵고, 하단 우측이 정확도·속도가 가장 높다. <a href="https://www.smashingmagazine.com/2016/09/the-thumb-zone-designing-for-mobile-users">Smashing Magazine</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s2-wisprflow-fab.webp" alt="Wispr Flow FAB">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Wispr Flow</span> — 새 메모 작성 하나를 원형 + 버튼으로 하단 우측에 고정했다. <a href="https://mobbin.com/screens/6c71cfb0-d860-4dc7-9298-5223a2c0f574">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>⑨ 제스처 내비게이션 — 화면 전체가 버튼 <span class="en">gesture navigation</span></h3>
+    <p class="kv"><b class="pc">PC 대응물</b>없음. PC는 클릭할 대상이 항상 화면에 보여야 한다.</p>
+    <p class="kv"><b class="mo">해결</b>화면 전체를 입력 영역으로 쓴다. 스와이프 방향에 의미(좋아요/패스)를 부여해, 버튼 없이 전환한다. 화면 공간을 UI 요소로 소모하지 않는다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s2-tinder-swipe.webp" alt="Tinder 스와이프">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Tinder</span> — 카드를 좌우로 밀어 패스/좋아요를 구분한다. 버튼은 보조다. <a href="https://mobbin.com/screens/f8bd6e4f-d68c-4a73-9d18-1129f40c6890">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s3"><span class="num">3</span>모바일 컴포넌트 세트 — 각각이 해결하는 문제</h2>
+<p class="lead">
+  이 섹션의 뼈대는 이 저장소의 <a href="../next-candidates/mobile-component-benchmark.html">3사 실측 문서</a>다.
+  antd-mobile(Ant Group)·Seed(당근)·VKUI(VK) 세 모바일 디자인 시스템을 전수 조사하면
+  <strong>19개 개념이 교집합</strong>으로 나온다. 서로 독립적으로 만든 3사가 같은 세트에 수렴했다.
+  아래는 그중 모바일 고유성이 강한 12개다. 각 컴포넌트의 <b>3사 이름 · PC 대응물 · 의도</b>를 실물 스크린과 함께 정리한다.
+</p>
+
+<div class="case">
+  <div>
+    <h3>바텀시트 <span class="en">Bottom Sheet</span></h3>
+    <p class="kv"><b class="ds">3사 이름</b>floating-panel(antd-mobile) · BottomSheet(Seed) · ModalPage(VKUI)</p>
+    <p class="kv"><b class="pc">PC 대응물</b>중앙 모달. 기능은 겹치지만 드래그로 높이를 바꾸지 못한다.</p>
+    <p class="kv"><b class="mo">의도</b>PC 모달이 뜨는 화면 중앙은, 모바일 한 손 조작에서 가장 먼 위치다. 바텀시트는 조작 영역을 엄지 옆으로 가져온다. 드래그 핸들이 높이 조절 제스처를 알려준다.</p>
+    <p class="kv"><b class="ev">가이드</b><a href="https://developer.apple.com/design/human-interface-guidelines/sheets">HIG Sheets</a> · <a href="https://m3.material.io/components/bottom-sheets/guidelines">M3 Bottom sheets</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s3-sofi-bottomsheet.webp" alt="SoFi 바텀시트">
+      <figcaption><span class="tag ios">iOS</span><span class="app">SoFi</span> — 드래그 핸들이 있는 시트로 필터를 고른다. <a href="https://mobbin.com/screens/f94d8489-d85a-42ea-998c-cdcb22cc8fc3">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>액션시트 <span class="en">Action Sheet</span></h3>
+    <p class="kv"><b class="ds">3사 이름</b>action-sheet · ActionSheet(Seed) · ActionSheet(VKUI)</p>
+    <p class="kv"><b class="pc">PC 대응물</b>우클릭 컨텍스트 메뉴.</p>
+    <p class="kv"><b class="mo">의도</b>모바일에는 우클릭이 없다. 액션시트가 탭 하나로 같은 역할을 한다. 파괴적 동작(삭제)은 빨간색으로 구분하고 취소 버튼을 분리해, 실수 탭을 막는다.</p>
+    <p class="kv"><b class="ev">가이드</b><a href="https://developer.apple.com/design/human-interface-guidelines/action-sheets">HIG Action sheets</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s3-applenews-actionsheet.webp" alt="Apple News 액션시트">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Apple News</span> — 공유·차단·알림 동작을 묶어 아래에서 올린다. <a href="https://mobbin.com/screens/a84b85bb-5198-40e3-9077-d3d4823fc8da">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>당겨서 새로고침 <span class="en">Pull-to-Refresh</span></h3>
+    <p class="kv"><b class="ds">3사 이름</b>pull-to-refresh · PullToRefresh · PullToRefresh — 3사가 유일하게 이름까지 일치하는 컴포넌트다.</p>
+    <p class="kv"><b class="pc">PC 대응물</b>새로고침 버튼, F5. 대응 제스처는 없다.</p>
+    <p class="kv"><b class="mo">의도</b>새로고침 버튼을 둘 여백이 없다. 리스트를 아래로 당기는 동작은 스크롤과 같은 손동작이라 배우지 않아도 발견된다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s3-starling-ptr.webp" alt="Starling 당겨서 새로고침">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Starling</span> — 목록을 당기면 스피너가 돌며 다시 불러온다. <a href="https://mobbin.com/screens/0911e6ca-df14-4298-899b-2a65f8896e86">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>스낵바 / 토스트 <span class="en">Snackbar / Toast</span></h3>
+    <p class="kv"><b class="ds">3사 이름</b>toast · Snackbar(Seed) · Snackbar(VKUI)</p>
+    <p class="kv"><b class="pc">PC 대응물</b>MUI Snackbar 등 PC에도 있다. 다만 PC는 우상단, 모바일은 하단(탭바 위)에 뜬다.</p>
+    <p class="kv"><b class="mo">의도</b>좁은 화면에서 알림창을 새로 띄우면 콘텐츠를 가린다. 짧게 떴다 사라지는 토스트는 사용자의 다음 동작을 막지 않고 결과만 알린다.</p>
+    <p class="kv"><b class="ev">가이드</b><a href="https://m3.material.io/components/snackbar/guidelines">M3 Snackbar</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s3-starbucks-toast.webp" alt="Starbucks 토스트">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Starbucks</span> — 주문 접수를 알리는 짧은 확인 배너(상단 변형). <a href="https://mobbin.com/screens/c123b3e9-3949-4434-a90b-7216adcae41b">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>하단 탭바 <span class="en">Bottom Tab Bar</span></h3>
+    <p class="kv"><b class="ds">3사 이름</b>tab-bar · <u>Seed에는 없음</u>(당근 앱은 탭바가 네이티브) · Tabbar(VKUI)</p>
+    <p class="kv"><b class="pc">PC 대응물</b>좌측 사이드바.</p>
+    <p class="kv"><b class="mo">의도</b>좁은 세로 공간에서 최상위 이동 경로를 항상 보이게 유지한다. Seed의 부재가 역으로 교훈이다. 웹뷰가 네이티브 앱 안에 임베드되면 탭바는 앱(네이티브) 몫이고 DS에는 필요 없다.</p>
+    <p class="kv"><b class="ev">가이드</b><a href="https://developer.apple.com/design/human-interface-guidelines/tab-bars">HIG Tab bars</a> · <a href="https://m3.material.io/components/navigation-bar/guidelines">M3 Navigation bar</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s3-monzo-tabbar.webp" alt="Monzo 탭바">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Monzo</span> — 아이콘+라벨 5개를 하단에 고정했다. <a href="https://mobbin.com/screens/62a3cbc6-6b14-480f-a547-701850f7ff72">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>상단 내비바 <span class="en">Nav Bar</span></h3>
+    <p class="kv"><b class="ds">3사 이름</b>nav-bar · AppBar(Seed, stackflow 패키지) · PanelHeader+부속 7종(VKUI)</p>
+    <p class="kv"><b class="pc">PC 대응물</b>헤더 바 + 브레드크럼. PC는 뒤로가기 버튼이 필수가 아니다.</p>
+    <p class="kv"><b class="mo">의도</b>모바일 화면은 스택으로 쌓인다. "이전 화면" 개념이 PC보다 강하다. 브라우저 뒤로가기가 없는 네이티브 환경에서, 좌측 화살표가 유일한 복귀 수단이다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s3-vestiaire-navbar.webp" alt="Vestiaire 내비바">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Vestiaire Collective</span> — 좌측 화살표와 중앙 제목만 남긴 상단 바. <a href="https://mobbin.com/screens/ec09ce94-33cf-4c44-8690-29cb5b678821">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>리스트 셀 <span class="en">List Cell</span></h3>
+    <p class="kv"><b class="ds">3사 이름</b>list · List(Seed) · Cell 계열 6종(VKUI: Cell·SimpleCell·RichCell·MiniInfoCell·CellButton·HorizontalCell)</p>
+    <p class="kv"><b class="pc">PC 대응물</b>테이블 행. 다만 PC 테이블은 데이터 비교용이고, 모바일 셀은 탭 한 번으로 이동하는 내비게이션 단위다.</p>
+    <p class="kv"><b class="mo">의도</b>호버가 없으니 "누를 수 있음"을 겉으로 보여야 한다. 셀 전체가 탭 영역이 되고, 우측 화살표(chevron)가 이동 가능성을 표시한다. 3사 실측 문서의 결론 4번: <b>모바일 UI의 기본 단위는 버튼이 아니라 셀이다.</b> VKUI가 셀을 6종으로 분화한 것이 그 증거다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s3-paypal-cell.webp" alt="PayPal 리스트 셀">
+      <figcaption><span class="tag ios">iOS</span><span class="app">PayPal</span> — 아이콘·제목·화살표로 구성된 셀이 목록을 이룬다. <a href="https://mobbin.com/screens/a7d9e860-ef8f-471f-bae1-d38becf9712d">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>휠 피커 <span class="en">Wheel Picker</span></h3>
+    <p class="kv"><b class="ds">3사 이름</b>picker 계열 8종(antd-mobile) · 내부 구현만(Seed, private) · <u>VKUI에는 없음</u>(Calendar·NativeSelect로 대체)</p>
+    <p class="kv"><b class="pc">PC 대응물</b><code>&lt;select&gt;</code> 드롭다운.</p>
+    <p class="kv"><b class="mo">의도</b>iOS 관습을 얼마나 채택할지가 3사에서 갈렸다. antd-mobile은 정면 채택(전체의 10%가 picker), VKUI는 거부. 채택 여부 자체가 제품 전략의 문제라는 사례다.</p>
+    <p class="kv"><b class="ev">가이드</b><a href="https://developer.apple.com/design/human-interface-guidelines/pickers">HIG Pickers</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s3-posh-wheel-picker.webp" alt="Posh 휠 피커">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Posh</span> — 일·월·연도 3열을 굴리는 드럼 롤 피커. <a href="https://mobbin.com/screens/aa9f90cb-e008-4c3a-b0e5-df81a43e7144">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>스와이프 액션 <span class="en">Swipe Action</span></h3>
+    <p class="kv"><b class="ds">3사 이름</b>swipe-action(antd-mobile만) · Seed 없음 · VKUI 없음 — 3사 중 1사만 보유한 예외 사례다.</p>
+    <p class="kv"><b class="pc">PC 대응물</b>행 위에 마우스를 올리면 나타나는 호버 버튼.</p>
+    <p class="kv"><b class="mo">의도</b>호버 버튼의 모바일 번역이다. 셀을 옆으로 미는 제스처 뒤에 삭제·보관을 숨겨, 상시 노출 버튼 없이 리스트를 깔끔하게 유지한다. 참고 구현이 하나뿐이므로 채택 시 위험을 안고 간다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s3-quo-swipe-action.webp" alt="Quo 스와이프 액션">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Quo</span> — 항목을 왼쪽으로 밀어 이름 변경·삭제 버튼을 노출한다. <a href="https://mobbin.com/screens/7e60ef54-bf2f-4a54-ae6f-81111337e610">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>FAB <span class="en">Floating Action Button</span></h3>
+    <p class="kv"><b class="ds">3사 이름</b>floating-bubble · Fab 계열 4종(Seed) · <u>VKUI에는 없음</u></p>
+    <p class="kv"><b class="pc">PC 대응물</b>없음. PC는 헤더·툴바에 상시 버튼을 둔다.</p>
+    <p class="kv"><b class="mo">의도</b>콘텐츠로 꽉 찬 화면에서 자리를 만들지 않고 핵심 생성 동작을 항상 보이게 한다. 단, Apple HIG에는 FAB 패턴이 아예 없다. Material(Google) 관습이다. 플랫폼 관습 충돌의 대표 사례다.</p>
+    <p class="kv"><b class="ev">가이드</b><a href="https://m3.material.io/components/floating-action-button/guidelines">M3 FAB</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s3-substack-fab.webp" alt="Substack FAB">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Substack</span> — 피드 우하단 + 버튼으로 새 글 작성에 바로 진입한다. <a href="https://mobbin.com/screens/bbec53ca-ca76-4c3f-b266-1b41a9b004a3">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>세그먼티드 컨트롤 <span class="en">Segmented Control</span></h3>
+    <p class="kv"><b class="ds">3사 이름</b>segmented · SegmentedControl(Seed) · SegmentedControl(VKUI)</p>
+    <p class="kv"><b class="pc">PC 대응물</b>라디오 버튼 그룹, 상단 탭.</p>
+    <p class="kv"><b class="mo">의도</b>세로로 나열하는 라디오 목록은 좁은 화면에서 자리를 많이 먹는다. 상호 배타적 선택지를 가로 한 줄로 압축하고, 각 칸 전체를 터치 영역으로 만든다.</p>
+    <p class="kv"><b class="ev">가이드</b><a href="https://developer.apple.com/design/human-interface-guidelines/segmented-controls">HIG Segmented controls</a> · <a href="https://m3.material.io/components/segmented-buttons/guidelines">M3 Segmented buttons</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s3-starbucks-segmented.webp" alt="Starbucks 세그먼트">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Starbucks</span> — 두 보기를 알약 컨트롤로 전환한다. <a href="https://mobbin.com/screens/d14db928-3edb-4269-b609-464e2c49157f">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>스켈레톤 <span class="en">Skeleton</span></h3>
+    <p class="kv"><b class="ds">3사 이름</b>skeleton · Skeleton(Seed) · Skeleton(VKUI)</p>
+    <p class="kv"><b class="pc">PC 대응물</b>스피너. 개념은 PC에도 있지만, 스켈레톤은 모바일 앱과 함께 퍼진 패턴이다.</p>
+    <p class="kv"><b class="mo">의도</b>모바일 네트워크는 느리고 자주 끊긴다. 빈 화면은 멈춘 것처럼 보인다. 콘텐츠의 윤곽을 미리 그려 "레이아웃은 이미 정해져 있다"는 인상을 주고, 체감 대기 시간을 줄인다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s3-grab-skeleton.webp" alt="Grab 스켈레톤">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Grab</span> — 카드·아이콘 자리를 회색 블록으로 미리 그린다. <a href="https://mobbin.com/screens/7c2679a0-c95a-453d-8a53-f3cdd9ea649f">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<details>
+  <summary>19개 교집합 전체 목록과 3사 이름 대조표 보기</summary>
+  <div class="inner">
+    <p>당겨서 새로고침 · 액션시트 · 바텀시트 · 다이얼로그 · 토스트/스낵바 · 상단 내비바 · 탭 · 세그먼트 · 리스트/셀 · 텍스트 입력 · 선택 컨트롤(체크박스·라디오·스위치) · 슬라이더 · 셀렉트 · 날짜 입력 · 업로더 · 아바타 · 배지 · 스켈레톤/로딩 · 빈 상태.
+    전체 대조표와 부재/고유 컴포넌트 분석은 <a href="../next-candidates/mobile-component-benchmark.html">모바일 3사 컴포넌트 교차 벤치마크</a> §3~§5를 보라.</p>
+  </div>
+</details>
+
+<!-- ============================================================ -->
+<h2 id="s4"><span class="num">4</span>모바일에만 있는 것들</h2>
+<p class="lead">
+  PC 웹에는 대응물 자체가 없는 요소들이다. 원인은 두 갈래다.
+  <strong>하드웨어</strong>(터치스크린·카메라·GPS·가속도계·진동)와
+  <strong>사용 맥락</strong>(이동 중, 한 손, 흘끗 보기, 불안정한 네트워크).
+</p>
+
+<div class="case">
+  <div>
+    <h3>세이프 에어리어 <span class="en">safe area</span></h3>
+    <p class="kv"><b class="mo">무엇</b>노치·홈 인디케이터와 겹치지 않도록 콘텐츠를 배치하는 예약 영역. 하단 탭바가 화면 맨 끝에 붙지 않고 떠 있는 이유다.</p>
+    <p class="kv"><b class="pc">왜 PC에 없나</b>PC 화면에는 하드웨어가 파고든 영역이 없다. 시스템 제스처와 앱 UI가 같은 가장자리를 두고 경쟁하지도 않는다.</p>
+    <p class="kv"><b class="ev">근거</b>Apple HIG는 화면 가장자리를 시스템 제스처용으로 예약하라고 명시한다. antd-mobile은 safe-area를 아예 컴포넌트로 판다. <a href="https://developer.apple.com/design/human-interface-guidelines/gestures">HIG Gestures</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s4-starbucks-safearea.webp" alt="Starbucks 세이프 에어리어">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Starbucks</span> — 탭바가 홈 인디케이터 위에 알약 모양으로 떠 있다. <a href="https://mobbin.com/screens/a3bf1299-c0ea-435e-bec0-680b7b89295b">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>당겨서 새로고침의 역사 <span class="en">pull-to-refresh</span></h3>
+    <p class="kv"><b class="mo">무엇</b>리스트 맨 위를 당겼다 놓으면 새로고침된다. 2009년 Loren Brichter가 Tweetie 앱에서 발명했고, Twitter가 특허를 인수했다.</p>
+    <p class="kv"><b class="pc">왜 PC에 없나</b>마우스에는 "화면을 물리적으로 당기는" 동작이 없다. 발명된 지 17년이 지나도 PC로 역수입되지 않았다. 제스처 어휘가 하드웨어에 종속된다는 증거다.</p>
+    <p class="kv"><b class="ev">근거</b><a href="https://en.wikipedia.org/wiki/Loren_Brichter">Wikipedia — Loren Brichter</a> · <a href="https://www.figma.com/blog/software-is-culture/pull-to-refresh">Figma, Software Is Culture</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s4-starling-ptr.webp" alt="Starling 당겨서 새로고침">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Starling</span> — 당긴 뒤 스피너가 화면 상단에 뜬다. <a href="https://mobbin.com/screens/0911e6ca-df14-4298-899b-2a65f8896e86">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>스와이프 액션 <span class="en">swipe to reveal</span></h3>
+    <p class="kv"><b class="mo">무엇</b>리스트 항목을 옆으로 밀면 보관·삭제 버튼이 나타난다.</p>
+    <p class="kv"><b class="pc">왜 PC에 없나</b>PC는 우클릭 메뉴와 호버 버튼이 같은 일을 한다. 항목 하나를 "미는" 물리 동작이 마우스에 없다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s4-fiverr-swipe.webp" alt="Fiverr 스와이프 액션">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Fiverr</span> — 메시지를 밀면 Archive·Star·More가 나타난다. <a href="https://mobbin.com/screens/d6624e4d-927d-46b3-a3f1-d763ef7dd04a">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>스토리 UI <span class="en">stories</span></h3>
+    <p class="kv"><b class="mo">무엇</b>상단에 분할 진행 바. 탭하면 다음으로, 길게 누르면 정지. 풀스크린 몰입을 전제한 조작 문법이다.</p>
+    <p class="kv"><b class="pc">왜 PC에 없나</b>화면 전체를 손가락으로 직접 조작하는 것이 전제다. PC 브라우저는 창 모드가 기본이고, "화면 아무 데나 탭"이라는 입력이 없다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s4-bond-story.webp" alt="Bond 스토리 UI">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Bond</span> — 상단 분할 진행 바가 있는 스토리 화면. <a href="https://mobbin.com/screens/3182f7a8-55f1-4a29-ae0e-edad0ba132f3">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>더블탭 좋아요, 길게 누르기 메뉴 <span class="en">double-tap / long-press</span></h3>
+    <p class="kv"><b class="mo">무엇</b>사진을 두 번 탭하면 좋아요. 메시지를 길게 누르면 반응 이모지와 답장·복사·삭제 메뉴가 뜬다.</p>
+    <p class="kv"><b class="pc">왜 PC에 없나</b>더블클릭은 PC에도 있지만 "감정 표현" 트리거로 쓰이지 않는다. 길게 누르기는 시간 기반 제스처로, 우클릭이 이미 있는 PC에서는 필요가 없었다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s4-instagram-doubletap.webp" alt="Instagram 더블탭 좋아요">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Instagram</span> — 사진 더블탭으로 하트가 켜진다. <a href="https://mobbin.com/screens/2cf7034c-65cf-45f3-93c6-35ea9c5ed673">원본</a></figcaption>
+    </figure>
+    <figure>
+      <img src="captures/s4-xchat-longpress.webp" alt="XChat 길게 누르기 메뉴">
+      <figcaption><span class="tag ios">iOS</span><span class="app">XChat</span> — 길게 누르면 반응·답장·복사·삭제 메뉴가 뜬다. <a href="https://mobbin.com/screens/64cdcbe2-42ad-4dfc-98fe-82e598ac9653">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>햅틱, 흔들어서 실행 <span class="en">haptics / shake</span></h3>
+    <p class="kv"><b class="mo">무엇</b>진동으로 조작 결과를 손에 알려준다. 폰을 흔들면 실행 취소나 신고 화면이 뜬다.</p>
+    <p class="kv"><b class="pc">왜 PC에 없나</b>PC에는 가속도계도, 진동 모터도 없다. 입력(흔들기)과 출력(진동) 모두 하드웨어가 없다.</p>
+    <p class="kv"><b class="ev">근거</b><a href="https://developer.apple.com/design/human-interface-guidelines/gestures">Apple HIG — Gestures</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s4-ebay-shake.webp" alt="eBay 흔들어서 신고">
+      <figcaption><span class="tag ios">iOS</span><span class="app">eBay</span> — Shake to Report 설정 화면. <a href="https://mobbin.com/screens/9c5066be-26d2-4af5-83dc-bf85fbaee56b">원본</a></figcaption>
+    </figure>
+    <figure>
+      <img src="captures/s4-focusflight-haptics.webp" alt="FocusFlight 햅틱 설정">
+      <figcaption><span class="tag ios">iOS</span><span class="app">FocusFlight</span> — 소리와 햅틱을 따로 켜고 끄는 설정 시트. <a href="https://mobbin.com/screens/98d9f924-677d-487d-939a-17135bf79858">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>카메라 스캔과 AR 가이드 <span class="en">camera scan</span></h3>
+    <p class="kv"><b class="mo">무엇</b>카메라 화면 위에 가이드 프레임과 안내 화살표를 겹쳐, 실물(문서·QR·카드)을 UI 입력으로 끌어들인다.</p>
+    <p class="kv"><b class="pc">왜 PC에 없나</b>실물을 카메라 앞에 가져가는 행동 자체가 "손에 든 기기" 전제다. PC 웹캠은 위치가 고정되어 스캔에 부적합하다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s4-qonto-scan.webp" alt="Qonto 문서 스캔">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Qonto</span> — 문서를 프레임에 맞추라고 화살표로 안내한다. <a href="https://mobbin.com/screens/04c5ba06-9a74-43b5-b0c5-fdfdb44a81db">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>위치 기반 "내 주변" UI <span class="en">nearby</span></h3>
+    <p class="kv"><b class="mo">무엇</b>GPS로 내 위치를 중심에 놓고 주변 사용자·장소를 배치한다.</p>
+    <p class="kv"><b class="pc">왜 PC에 없나</b>PC는 GPS가 없거나 정확도가 낮다. "지금, 여기"라는 개념은 이동하는 기기에서만 의미가 있다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s4-yubo-nearby.webp" alt="Yubo 주변 탐색">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Yubo</span> — 내 위치 중심으로 주변 사용자를 지도에 표시한다. <a href="https://mobbin.com/screens/f249e428-0156-45d5-9369-fe46f36dd593">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>권한 요청 프라이밍 <span class="en">permission priming</span></h3>
+    <p class="kv"><b class="mo">무엇</b>OS 권한 팝업을 띄우기 전에, 앱이 만든 화면으로 "왜 필요한지"를 먼저 설명한다.</p>
+    <p class="kv"><b class="pc">왜 PC에 없나</b>모바일 OS는 권한 거부 후 재요청이 사실상 불가능하다. 첫 요청을 최적화하는 UX 단계가 통째로 생겼다. 브라우저 권한 팝업에는 이런 관행이 약하다.</p>
+    <p class="kv"><b class="ev">근거</b>프라이밍 화면을 거친 알림 권한 요청은 평균 65% 수락률을 기록했다(Adjust 데이터). <a href="https://www.adexchanger.com/data-driven-thinking/perfect-your-ios-14-opt-in-strategy-with-pre-permission-prompts-built-with-context-and-trust">AdExchanger</a></p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s4-koho-priming.webp" alt="KOHO 알림 프라이밍">
+      <figcaption><span class="tag ios">iOS</span><span class="app">KOHO</span> — 알림 미리보기를 보여주며 권한 수락을 유도한다. <a href="https://mobbin.com/screens/2589b1f0-bba1-4f6d-b6f7-c1983d073f21">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>오프라인 상태 UI <span class="en">offline state</span></h3>
+    <p class="kv"><b class="mo">무엇</b>연결이 끊기면 배너나 전용 화면으로 알리고 "다시 시도"를 준다. 3사 교집합의 "빈 상태(empty/error)" 컴포넌트가 이 상황을 담당한다.</p>
+    <p class="kv"><b class="pc">왜 PC에 약하나</b>PC는 유선·안정 와이파이 전제라 끊김이 드물다. 모바일은 이동 중 신호가 끊기는 것이 일상이라, 오프라인이 정식 UI 상태로 승격됐다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s4-sesame-offline.webp" alt="Sesame 오프라인 배너">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Sesame</span> — 연결이 끊겼다고 알리는 오류 배너. <a href="https://mobbin.com/screens/2d85e6ae-5a90-44c0-9ceb-d0cff29fb561">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>잠금화면 라이브 액티비티 <span class="en">live activity</span></h3>
+    <p class="kv"><b class="mo">무엇</b>앱을 열지 않아도 잠금화면에 실시간 상태 카드(주문 진행, 비행 현황)가 뜬다. "앱 밖의 UI"다.</p>
+    <p class="kv"><b class="pc">왜 PC에 없나</b>PC에는 "주머니에서 꺼내 흘끗 본다"는 사용 맥락이 없다. UI가 앱 경계 밖(잠금화면·위젯·다이내믹 아일랜드)으로 확장된 것은 모바일 고유 현상이다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s4-starbucks-live-activity.webp" alt="Starbucks 라이브 액티비티">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Starbucks</span> — 잠금화면에 주문 진행 상태 카드가 뜬다. <a href="https://mobbin.com/screens/17ed493c-ff1a-4cf8-92cc-4339f98b3775">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<div class="case">
+  <div>
+    <h3>시트 위의 시트 — 모바일식 레이어링 <span class="en">stacked sheets</span></h3>
+    <p class="kv"><b class="mo">무엇</b>바텀시트를 연 상태에서 그 위로 또 다른 시트가 겹쳐 올라온다.</p>
+    <p class="kv"><b class="pc">왜 PC에 없나</b>PC는 중앙 모달을 겹쳐 쌓는 것을 안티패턴으로 본다. 모바일은 시트가 "아래에서 위로 쌓인다"는 물리 은유가 있어, 겹침이 자연스러운 문법이 됐다.</p>
+  </div>
+  <div class="figs">
+    <figure>
+      <img src="captures/s4-flighty-stacked-sheets.webp" alt="Flighty 겹친 시트">
+      <figcaption><span class="tag ios">iOS</span><span class="app">Flighty</span> — 설정 시트 위에 다른 시트가 다시 겹친다. <a href="https://mobbin.com/screens/9c112935-590d-4303-a5a5-402ebe3e0fde">원본</a></figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s6"><span class="num">5</span>참고 자료</h2>
+
+<p class="note">
+  스크린 출처: 모든 스크린은 <a href="https://mobbin.com">Mobbin</a>에서 수집했다(2026-08-16).
+  각 캡션의 "원본" 링크가 해당 스크린의 Mobbin 페이지다. 이미지 파일은 <code>captures/</code>에 로컬 저장했다.
+  내부 근거 문서: <a href="../next-candidates/mobile-component-benchmark.html">모바일 3사 컴포넌트 교차 벤치마크</a> ·
+  <a href="../next-candidates/insights.html">차기 후보 insights 리포트</a>.
+</p>
+
+<h3 style="margin:24px 0 12px">외부 연구·가이드라인</h3>
+<ul class="sources">
+  <li><a href="https://www.nngroup.com/articles/mobile-input-checklist">NN/g — A Checklist for Designing Mobile Input Fields</a></li>
+  <li><a href="https://www.nngroup.com/articles/mobile-navigation-patterns">NN/g — Basic Patterns for Mobile Navigation</a></li>
+  <li><a href="https://www.nngroup.com/articles/hamburger-menus">NN/g — Hamburger Menus and Hidden Navigation Hurt UX Metrics</a></li>
+  <li><a href="https://www.nngroup.com/articles/fitts-law">NN/g — Fitts's Law and Its Applications in UX</a></li>
+  <li><a href="https://www.smashingmagazine.com/2016/09/the-thumb-zone-designing-for-mobile-users">Smashing Magazine — The Thumb Zone (Hoober 연구 정리)</a></li>
+  <li><a href="https://www.bbc.com/news/technology-49933204">BBC — 모바일 타이핑 속도 연구 (Aalto Univ., 37,000명)</a></li>
+  <li><a href="https://www.lukew.com/ff/entry.asp?1085=">LukeW — Touch Target Sizes</a></li>
+  <li><a href="https://tetralogical.com/blog/2022/12/20/foundations-target-size">TetraLogical — Foundations: target size</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Fitts%27s_law">Wikipedia — Fitts's law</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Loren_Brichter">Wikipedia — Loren Brichter (pull-to-refresh)</a></li>
+  <li><a href="https://www.figma.com/blog/software-is-culture/pull-to-refresh">Figma — Software Is Culture: Pull-to-refresh</a></li>
+  <li><a href="https://www.theverge.com/2013/5/21/4350826/twitter-pull-to-refresh-patent-innovators-patent-agreement-announced">The Verge — Twitter pull-to-refresh 특허</a></li>
+  <li><a href="https://www.adexchanger.com/data-driven-thinking/perfect-your-ios-14-opt-in-strategy-with-pre-permission-prompts-built-with-context-and-trust">AdExchanger — Pre-permission prompts</a></li>
+  <li><a href="https://developer.apple.com/design/human-interface-guidelines/sheets">Apple HIG — Sheets</a></li>
+  <li><a href="https://developer.apple.com/design/human-interface-guidelines/action-sheets">Apple HIG — Action sheets</a></li>
+  <li><a href="https://developer.apple.com/design/human-interface-guidelines/tab-bars">Apple HIG — Tab bars</a></li>
+  <li><a href="https://developer.apple.com/design/human-interface-guidelines/pickers">Apple HIG — Pickers</a></li>
+  <li><a href="https://developer.apple.com/design/human-interface-guidelines/segmented-controls">Apple HIG — Segmented controls</a></li>
+  <li><a href="https://developer.apple.com/design/human-interface-guidelines/gestures">Apple HIG — Gestures</a></li>
+  <li><a href="https://m3.material.io/components/bottom-sheets/guidelines">Material 3 — Bottom sheets</a></li>
+  <li><a href="https://m3.material.io/components/snackbar/guidelines">Material 3 — Snackbar</a></li>
+  <li><a href="https://m3.material.io/components/navigation-bar/guidelines">Material 3 — Navigation bar</a></li>
+  <li><a href="https://m3.material.io/components/floating-action-button/guidelines">Material 3 — FAB</a></li>
+  <li><a href="https://m3.material.io/components/segmented-buttons/guidelines">Material 3 — Segmented buttons</a></li>
+</ul>
+
+</div>
+</body>
+</html>
